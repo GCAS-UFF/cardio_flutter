@@ -69,7 +69,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               "  ${widget.title}",
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 15,
+                fontSize: Dimensions.getTextSize(context, 15),
               ),
             ),
           ),
@@ -95,6 +95,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               TextFormField(
                 controller: widget.textEditingController,
                 textAlign: widget.textAlign,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: Dimensions.getTextSize(context, 20),
+                ),
                 maxLength: widget.maxLength,
                 keyboardType: widget.keyboardType,
                 obscureText: widget.obscureText,
@@ -109,7 +113,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   ),
                   hintStyle: TextStyle(
                     color: Colors.black45,
-                    fontSize: 20,
+                    fontSize: Dimensions.getTextSize(context, 20),
                   ),
                   counterText: "",
                   border: InputBorder.none,
