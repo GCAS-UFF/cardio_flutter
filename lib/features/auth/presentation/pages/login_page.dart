@@ -1,11 +1,34 @@
-import 'package:cardio_flutter/core/widgets/custom_form_text.dart';
+import 'package:cardio_flutter/core/input_validators/email_input_validator.dart';
+import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/form_cardio.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _LoginPageState();
+  }
+}
+
+class _LoginPageState extends State<LoginPage> {
+  static const String LABEL_EMAIL = "LABEL_EMAIL";
+  static const String LABEL_PASSWORD = "LABEL_PASSWORD";
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final Map<String, dynamic> _formData = Map<String, dynamic>();
+  TextEditingController _emailController;
+
+  @override
+  initState() {
+    _emailController = TextEditingController(text: _formData[LABEL_EMAIL]);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,16 +65,29 @@ class LoginPage extends StatelessWidget {
                       scale: 4,
                     ),
                     FormCardio(
+                      formKey: _formKey,
                       buttonTitle: Strings.login_button,
                       submitForm: () {},
                       formItems: <Widget>[
-                        CustomFormText(
-                          hint: Strings.email_hint,
+                        CustomTextFormField(
+                          textEditingController: _emailController,
+                          hintText: Strings.email_hint,
                           title: Strings.email_title,
+                          isRequired: true,
+                          validator: EmailInputValidator(),
+                          onChanged: (value) {
+                            _formData[LABEL_EMAIL] = value;
+                          },
+                          keyboardType: TextInputType.emailAddress,
                         ),
-                        CustomFormText(
-                          hint: Strings.password_hint,
+                        CustomTextFormField(
+                          hintText: Strings.password_hint,
                           title: Strings.password_title,
+                          isRequired: true,
+                          obscureText: true,
+                          onChanged: (value) {
+                            _formData[LABEL_PASSWORD] = value;
+                          },
                         ),
                       ],
                     ),
