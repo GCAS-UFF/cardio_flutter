@@ -15,15 +15,18 @@ class Button extends StatelessWidget {
         decoration: BoxDecoration(boxShadow: <BoxShadow>[
           BoxShadow(color: Colors.indigo, offset: Offset(3, 3), blurRadius: 5)
         ], borderRadius: BorderRadius.circular(5), color: Colors.teal),
-        height: Dimensions.getConvertedHeightSize(context, 50),
-        width: Dimensions.getConvertedWidthSize(context, 150),
+       height: Dimensions.getConvertedHeightSize(context, 50),
+     width: Dimensions.getConvertedWidthSize(context, 150),
         alignment: Alignment.center,
-        child: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: Dimensions.getTextSize(context, 20),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Dimensions.getTextSize(context, 20),
+            ),
           ),
         ),
       ),

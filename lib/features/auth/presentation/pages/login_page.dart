@@ -1,6 +1,7 @@
+import 'package:cardio_flutter/core/widgets/form_cardio.dart';
 import 'package:cardio_flutter/core/input_validators/email_input_validator.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
-import 'package:cardio_flutter/core/widgets/form_cardio.dart';
+import 'package:cardio_flutter/core/widgets/dialog.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -97,7 +98,14 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: Dimensions.getTextSize(context, 15),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                     showDialog(
+                      context: context,
+                      builder: (context) {
+                        return DialogLoginPage();
+                      
+                      });
+                    },
                 ),
                 SizedBox(
                   height: Dimensions.getConvertedHeightSize(context, 10),
