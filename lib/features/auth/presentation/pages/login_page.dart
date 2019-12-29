@@ -1,11 +1,13 @@
+import 'package:cardio_flutter/core/widgets/dialog_widget.dart';
 import 'package:cardio_flutter/core/widgets/form_cardio.dart';
 import 'package:cardio_flutter/core/input_validators/email_input_validator.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
-import 'package:cardio_flutter/core/widgets/dialog.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../resources/strings.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -99,13 +101,18 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   onPressed: () {
-                     showDialog(
+                    showDialog(
                       context: context,
                       builder: (context) {
-                        return DialogLoginPage();
-                      
-                      });
-                    },
+                        return DialogWidget(
+                          text: Strings.signup_warning,
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/signUp");
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
                 SizedBox(
                   height: Dimensions.getConvertedHeightSize(context, 10),
