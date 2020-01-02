@@ -1,5 +1,6 @@
+import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:cardio_flutter/core/widgets/custom_text_form_field_sign_up.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/home_page.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -16,33 +17,35 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Colors.lightBlueAccent[100],
+        backgroundColor: Color(0xffc9fffd),
         appBar: AppBar(
-          title: Text(Strings.app_name),
-          backgroundColor: Colors.lightBlueAccent,
-        ),
+        actions: <Widget>[Icon(Icons.exit_to_app), Text("    ")],
+        title: Text(Strings.app_name, style: TextStyle(fontSize: Dimensions.getTextSize(context, 20)),),
+        backgroundColor: Colors.lightBlueAccent[100],
+      ),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              CustomTextFormFieldSignUp(
+              SizedBox(height: Dimensions.getConvertedHeightSize(context, 10),),
+              CustomTextFormField(
                 hintText: Strings.name_hint,
                 title: Strings.name_title,
               ),
-              CustomTextFormFieldSignUp(
+              CustomTextFormField(
                 hintText: Strings.cpf_hint,
                 title: Strings.cpf_title,
               ),
-              CustomTextFormFieldSignUp(
+              CustomTextFormField(
                 hintText: "",
                 title: Strings.adress,
               ),
-              CustomTextFormFieldSignUp(
+              CustomTextFormField(
                 hintText: "",
                 title: Strings.birth,
               ),
-              CustomTextFormFieldSignUp(
+              CustomTextFormField(
                 hintText: Strings.email_hint,
                 title: Strings.email_title,
               ),
@@ -56,7 +59,12 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
                     return HomePage();
                   }));
                 },
-                child: Container(
+                child: Button( title: Strings.new_patient_done, onTap: () {
+                  Navigator.pushNamed(context, "/homePage");
+                },)
+                
+                
+                 /*Container(
                   decoration: BoxDecoration(
                     boxShadow: <BoxShadow>[
                       BoxShadow(
@@ -76,7 +84,7 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
                     Strings.new_patient_done,
                     style: TextStyle(fontSize: 18, color: Colors.teal[900]),
                   ),
-                ),
+                ),*/
               ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),

@@ -1,5 +1,5 @@
 import 'package:cardio_flutter/core/widgets/button.dart';
-import 'package:cardio_flutter/features/auth/presentation/pages/home_page.dart';
+
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:flutter/material.dart';
 
@@ -44,9 +44,8 @@ class FormCardio extends StatelessWidget {
                 }
                 formKey.currentState.save();
                 submitForm();
-                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                  return HomePage();
-                }));
+                Navigator.pushNamed(context, "/homePage");
+                
               },
             ),
           )

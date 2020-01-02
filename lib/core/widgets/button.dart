@@ -19,7 +19,7 @@ class Button extends StatelessWidget {
      width: Dimensions.getConvertedWidthSize(context, 150),
         alignment: Alignment.center,
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: Dimensions.getEdgeInsetsAll(context, 15),
           child: Text(
             title,
             textAlign: TextAlign.center,
