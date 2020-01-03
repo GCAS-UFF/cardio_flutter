@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         "/": (BuildContext context) => LoginPage(),
         "/signUp": (BuildContext context) => SignUpPage(),
         "/homePage": (BuildContext context) => HomePage(),
-        "patientSignUp": (BuildContext context) => PatientSignUpPage(),
+        "/patientSignUp": (BuildContext context) => PatientSignUpPage(),
       },
     );
   }

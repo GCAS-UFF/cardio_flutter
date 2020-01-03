@@ -16,17 +16,14 @@ class Button extends StatelessWidget {
           BoxShadow(color: Colors.indigo, offset: Offset(3, 3), blurRadius: 5)
         ], borderRadius: BorderRadius.circular(5), color: Colors.teal),
        height: Dimensions.getConvertedHeightSize(context, 50),
-     width: Dimensions.getConvertedWidthSize(context, 150),
+     width: Dimensions.getConvertedWidthSize(context, 180),
         alignment: Alignment.center,
-        child: Padding(
-          padding: Dimensions.getEdgeInsetsAll(context, 15),
-          child: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: Dimensions.getTextSize(context, 20),
-            ),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: Dimensions.getTextSize(context, 20),
           ),
         ),
       ),

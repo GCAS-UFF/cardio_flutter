@@ -1,7 +1,5 @@
-import 'package:cardio_flutter/core/widgets/appbar_cardio.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/core/widgets/patient_tile.dart';
-import 'package:cardio_flutter/features/auth/presentation/pages/patient_sign_up_page.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 
@@ -54,10 +52,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             onTap: () {
-              return Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                return PatientSignUpPage();
-              }));
+              return Navigator.pushNamed(context, "/patientSignUp");
             },
           ),
           SizedBox(
