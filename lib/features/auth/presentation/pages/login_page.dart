@@ -35,89 +35,96 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffc9fffd),
+    backgroundColor: Color(0xffc9fffd),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: Dimensions.getConvertedHeightSize(context, 30),
-                ),
-                Container(
-                  height: Dimensions.getConvertedHeightSize(context, 100),
-                  width: Dimensions.getConvertedWidthSize(context, 300),
-                  color: Colors.transparent,
-                  alignment: Alignment.center,
-                  child: Text(
-                    Strings.app_name,
-                    style: TextStyle(
-                      color: Colors.indigo,
-                      fontSize: Dimensions.getTextSize(context, 30),
-                    ),
-                  ),
-                ),
-                Image.asset(
-                  Images.app_logo,
-                  scale: 4,
-                ),
-                FormCardio(
-                  formKey: _formKey,
-                  buttonTitle: Strings.login_button,
-                  submitForm: () {},
-                  formItems: <Widget>[
-                    CustomTextFormField(
-                      textEditingController: _emailController,
-                      hintText: Strings.email_hint,
-                      title: Strings.email_title,
-                      isRequired: true,
-                      validator: EmailInputValidator(),
-                      onChanged: (value) {
-                        _formData[LABEL_EMAIL] = value;
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    CustomTextFormField(
-                      hintText: Strings.password_hint,
-                      title: Strings.password_title,
-                      isRequired: true,
-                      obscureText: true,
-                      onChanged: (value) {
-                        _formData[LABEL_PASSWORD] = value;
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: Dimensions.getConvertedHeightSize(context, 10),
-                ),
-                FlatButton(
-                  child: Text(
-                    Strings.sign_up_button,
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: Dimensions.getTextSize(context, 15),
-                    ),
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return DialogWidget(
-                          text: Strings.signup_warning,
-                          onPressed: () {
-                            Navigator.pushNamed(context, "/signUp");
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: Dimensions.getConvertedHeightSize(context, 10),
-                ),
+            child: Container(
+              height: Dimensions.getConvertedHeightSize(context, 592),
+              decoration: BoxDecoration(gradient: LinearGradient(colors: <Color>[
+                Color(0xffc9fffd),Colors.white
               ],
+              begin: Alignment.topLeft,end: Alignment.bottomRight)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: Dimensions.getConvertedHeightSize(context, 30),
+                  ),
+                  Container(
+                    height: Dimensions.getConvertedHeightSize(context, 100),
+                    width: Dimensions.getConvertedWidthSize(context, 300),
+                    color: Colors.transparent,
+                    alignment: Alignment.center,
+                    child: Text(
+                      Strings.app_name,
+                      style: TextStyle(
+                        color: Colors.indigo,
+                        fontSize: Dimensions.getTextSize(context, 30),
+                      ),
+                    ),
+                  ),
+                  Image.asset(
+                    Images.app_logo,
+                    scale: 4,
+                  ),
+                  FormCardio(
+                    formKey: _formKey,
+                    buttonTitle: Strings.login_button,
+                    submitForm: () {},
+                    formItems: <Widget>[
+                      CustomTextFormField(
+                        textEditingController: _emailController,
+                        hintText: Strings.email_hint,
+                        title: Strings.email_title,
+                        isRequired: true,
+                        validator: EmailInputValidator(),
+                        onChanged: (value) {
+                          _formData[LABEL_EMAIL] = value;
+                        },
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      CustomTextFormField(
+                        hintText: Strings.password_hint,
+                        title: Strings.password_title,
+                        isRequired: true,
+                        obscureText: true,
+                        onChanged: (value) {
+                          _formData[LABEL_PASSWORD] = value;
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: Dimensions.getConvertedHeightSize(context, 10),
+                  ),
+                  FlatButton(
+                    child: Text(
+                      Strings.sign_up_button,
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: Dimensions.getTextSize(context, 15),
+                      ),
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return DialogWidget(
+                            text: Strings.signup_warning,
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/signUp");
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: Dimensions.getConvertedHeightSize(context, 10),
+                  ),
+                ],
+              ),
             ),
           );
         },
