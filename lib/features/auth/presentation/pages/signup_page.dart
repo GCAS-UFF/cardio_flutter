@@ -1,5 +1,6 @@
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -12,16 +13,8 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PgFoudation(
         backgroundColor: Color(0xffc9fffd),
-        appBar: AppBar(
-          actions: <Widget>[Icon(Icons.exit_to_app), Text("    ")],
-          title: Text(
-            Strings.app_name,
-            style: TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
-          ),
-          backgroundColor: Colors.lightBlueAccent[100],
-        ),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

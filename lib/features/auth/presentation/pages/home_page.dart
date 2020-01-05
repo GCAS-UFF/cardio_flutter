@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/features/auth/presentation/pages/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/core/widgets/patient_tile.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
@@ -11,12 +12,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[Icon(Icons.exit_to_app), Text("    ")],
-        title: Text(Strings.app_name, style: TextStyle(fontSize: Dimensions.getTextSize(context, 20)),),
-        backgroundColor: Colors.lightBlueAccent[100],
-      ),
+    return PgFoudation(
+      
       backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
