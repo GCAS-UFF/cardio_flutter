@@ -35,6 +35,18 @@ class Strings {
   static const  patient_email = "14/04/1995";
   static const  new_patient_done = "Cadastrar";
 
+  // Menu page
+
+  static const  biometric = " Como estou hoje";
+  static const  liquid = " Líquidos ingeridos";
+  static const  medicine = " Medicações";
+  static const  appointment = " Consultas";
+  static const  exercise = " Exercícios";
+  static const  orientations = " Orientações";
+  static const  about = " Informações";
+  static const  help = " Dúvidas";
+
+
 
 
   

@@ -13,12 +13,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return PgFoudation(
-      
       backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: Dimensions.getConvertedHeightSize(context, 20), width: double.infinity),
+          SizedBox(
+              height: Dimensions.getConvertedHeightSize(context, 20),
+              width: double.infinity),
           InkWell(
             borderRadius: BorderRadius.circular(20),
             child: Container(

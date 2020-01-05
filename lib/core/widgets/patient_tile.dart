@@ -3,11 +3,17 @@ import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 
 class PatientTile extends StatefulWidget {
+ 
+
   @override
   _PatientTileState createState() => _PatientTileState();
 }
 
 class _PatientTileState extends State<PatientTile> {
+ 
+ //final Function onPressed;
+
+  //_PatientTileState(this.onPressed);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,13 +38,20 @@ class _PatientTileState extends State<PatientTile> {
             ),
             backgroundColor: Color(0xffc9fffd),
           ),
-          trailing: Icon(
-            Icons.arrow_right,
-            size: Dimensions.getConvertedHeightSize(context, 50),
+          trailing: IconButton(
+            icon: Icon(
+              Icons.arrow_right,
+              size: Dimensions.getConvertedHeightSize(context, 50),
+            ), onPressed: () {
+              return Navigator.pushNamed(context, "/menuPage");
+            },
+            
           ),
           subtitle: RichText(
             text: TextSpan(
-                style: TextStyle(color: Colors.grey[600], fontSize: Dimensions.getTextSize(context, 12)),
+                style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: Dimensions.getTextSize(context, 12)),
                 children: <TextSpan>[
                   TextSpan(text: Strings.cpf_title),
                   TextSpan(text: Strings.cpf_number),
