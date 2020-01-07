@@ -44,7 +44,7 @@ class FormCardio extends StatelessWidget {
                 }
                 formKey.currentState.save();
                 submitForm();
-                Navigator.pushNamed(context, "/homePage");
+                Navigator.pushReplacementNamed(context, "/homePage");
                 
               },
             ),
