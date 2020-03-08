@@ -42,6 +42,18 @@ class ProfessionalModel extends Professional {
     );
   }
 
+  factory ProfessionalModel.fromEntity(Professional professional) {
+    if (professional == null) return null;
+    return ProfessionalModel(
+      id: professional.id,
+      name: professional.name,
+      cpf: professional.cpf,
+      email: professional.email,
+      expertise: professional.expertise,
+      regionalRecord: professional.regionalRecord,
+    );
+  }
+
   factory ProfessionalModel.fromDataSnapshot(DataSnapshot dataSnapshot) {
     if (dataSnapshot == null) return null;
 

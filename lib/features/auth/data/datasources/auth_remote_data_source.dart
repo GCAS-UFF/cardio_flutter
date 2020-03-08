@@ -2,6 +2,7 @@ import 'package:cardio_flutter/core/error/exception.dart';
 import 'package:cardio_flutter/features/auth/data/models/patient_model.dart';
 import 'package:cardio_flutter/features/auth/data/models/profissional_model.dart';
 import 'package:cardio_flutter/features/auth/data/models/user_model.dart';
+import 'package:cardio_flutter/resources/keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
@@ -57,8 +58,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // Get user id
       String uid = result.user.uid;
       // Save user into firebase
-      await saveUser(
-          UserModel(id: uid, email: patientModel.email, type: "PATIENT"));
+      await saveUser(UserModel(
+          id: uid, email: patientModel.email, type: Keys.PATIENT_TYPE));
       // Get patient reference in firebase
       var ref =
           FirebaseDatabase.instance.reference().child('Patient').child(uid);
@@ -86,7 +87,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       String uid = result.user.uid;
       // Save user into firebase
       await saveUser(UserModel(
-          id: uid, email: professionalModel.email, type: "PROFESSIONAL"));
+          id: uid,
+          email: professionalModel.email,
+          type: Keys.PROFESSIONAL_TYPE));
       // Get professional reference in firebase
       var ref = FirebaseDatabase.instance
           .reference()

@@ -13,9 +13,9 @@ dependencies:
   # Service locator
   get_it: ^2.0.1
   # Bloc for state management
-  flutter_bloc: ^3.1.0
+  flutter_bloc: ^3.2.0
   # Value equality
-  equatable: ^1.0.0
+  equatable: ^1.1.0
   # Functional programming thingies
   dartz: ^0.8.6
   # Remote APIxml 3.7.0

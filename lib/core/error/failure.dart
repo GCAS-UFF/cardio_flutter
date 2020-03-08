@@ -12,3 +12,11 @@ class ServerFailure extends Failure {}
 class CacheFailure extends Failure {}
 
 class NoInternetConnectionFailure extends Failure {}
+
+class PlatformFailure extends Failure {
+  final String message;
+
+  PlatformFailure({this.message});
+
+  List<Object> get props => [message];
+}

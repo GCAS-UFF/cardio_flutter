@@ -44,6 +44,18 @@ class PatientModel extends Patient {
     );
   }
 
+  factory PatientModel.fromEntity(Patient patient) {
+    if (patient == null) return null;
+    return PatientModel(
+      id: patient.id,
+      name: patient.name,
+      address: patient.address,
+      email: patient.email,
+      cpf: patient.cpf,
+      birthdate: patient.birthdate,
+    );
+  }
+
   factory PatientModel.fromDataSnapshot(DataSnapshot dataSnapshot) {
     if (dataSnapshot == null) return null;
 
