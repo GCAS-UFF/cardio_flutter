@@ -1,4 +1,4 @@
-import 'package:cardio_flutter/features/auth/presentation/pages/foundation.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/core/widgets/patient_tile.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return PgFoudation(
+    return BasePage(
       backgroundColor: Colors.white,
       body: Container(
         alignment: Alignment.topCenter,

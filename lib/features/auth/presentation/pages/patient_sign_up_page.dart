@@ -1,6 +1,6 @@
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
-import 'package:cardio_flutter/features/auth/presentation/pages/foundation.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -15,7 +15,7 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PgFoudation(
+    return BasePage(
         key: _scaffoldKey,
         backgroundColor: Color(0xffc9fffd),
        

@@ -6,7 +6,7 @@ import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
 import 'package:cardio_flutter/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:cardio_flutter/features/auth/presentation/pages/foundation.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -175,7 +175,8 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PgFoudation(
+    return BasePage(
+      signOutButton: false,
       backgroundColor: Color(0xffc9fffd),
       body: SingleChildScrollView(
         child: BlocListener<AuthBloc, AuthState>(
