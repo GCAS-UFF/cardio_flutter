@@ -19,7 +19,7 @@ class MenuPage extends StatelessWidget {
               Padding(
                 padding: Dimensions.getEdgeInsetsAll(context, 8),
                 child: Text(
-                  "Paciente: Zé Bonitinho\nIdade: 24",
+                  "Paciente: Paciente Exemplo\nIdade: 24",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,

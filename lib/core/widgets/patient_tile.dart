@@ -37,7 +37,7 @@ class _PatientTileState extends State<PatientTile> {
         title: Padding(
           padding: Dimensions.getEdgeInsetsAll(context, 5),
           child: Text(
-            "Zé Bonitinho",
+            "Paciente Exemplo",
             style: TextStyle(fontSize: Dimensions.getTextSize(context, 18)),
           ),
         ),

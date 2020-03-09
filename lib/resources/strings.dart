@@ -29,7 +29,7 @@ class Strings {
   static const adress = "Endereço";
   static const adress_patient = ": Rua do Paciente\n";
   static const birth = "Data de Nascimento: ";
-  static const birth_date = "14/04/1995";
+  static const birth_date = "09/09/1999";
 
   // Patient Sign Up Page
 
