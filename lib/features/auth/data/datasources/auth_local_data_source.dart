@@ -3,12 +3,12 @@ import 'package:cardio_flutter/resources/keys.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class AuthLocalDatasource {
+abstract class AuthLocalDataSource {
   Future<bool> saveUserId(String id);
   Future<bool> saveUserType(String userType);
 }
 
-class AuthLocalDataSourceImpl implements AuthLocalDatasource {
+class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   final SharedPreferences sharedPreferences;
 
   AuthLocalDataSourceImpl({@required this.sharedPreferences});

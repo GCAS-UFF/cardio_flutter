@@ -35,16 +35,17 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    backgroundColor: Color(0xffc9fffd),
+      backgroundColor: Color(0xffc9fffd),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
             child: Container(
               height: Dimensions.getConvertedHeightSize(context, 592),
-              decoration: BoxDecoration(gradient: LinearGradient(colors: <Color>[
-                Color(0xffc9fffd),Colors.white
-              ],
-              begin: Alignment.topLeft,end: Alignment.bottomRight)),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: <Color>[Color(0xffc9fffd), Colors.white],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -113,7 +114,8 @@ class _LoginPageState extends State<LoginPage> {
                           return DialogWidget(
                             text: Strings.signup_warning,
                             onPressed: () {
-                              Navigator.pushNamed(context, "/signUp");
+                              Navigator.pushNamed(
+                                  context, "/professionalSignUp");
                             },
                           );
                         },

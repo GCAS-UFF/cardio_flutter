@@ -1,12 +1,28 @@
+import 'package:cardio_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/home_page.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/login_page.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/menu_page.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/patient_sign_up_page.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/professional_signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/auth/presentation/pages/login_page.dart';
-import 'features/auth/presentation/pages/signup_page.dart';
+import 'injection_container.dart' as di;
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+          create: (_) => di.sl<AuthBloc>(),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -18,7 +34,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         "/": (BuildContext context) => LoginPage(),
-        "/signUp": (BuildContext context) => SignUpPage(),
+        "/professionalSignUp": (BuildContext context) =>
+            ProfessionalSignUpPage(),
         "/homePage": (BuildContext context) => HomePage(),
         "/patientSignUp": (BuildContext context) => PatientSignUpPage(),
         "/menuPage": (BuildContext context) => MenuPage(),

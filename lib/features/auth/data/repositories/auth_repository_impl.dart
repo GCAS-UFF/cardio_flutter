@@ -15,23 +15,23 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthLocalDatasource local;
-  final AuthRemoteDataSource remote;
+  final AuthLocalDataSource localDataSource;
+  final AuthRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
   AuthRepositoryImpl(
-      {@required this.local,
-      @required this.remote,
+      {@required this.localDataSource,
+      @required this.remoteDataSource,
       @required this.networkInfo});
 
   @override
   Future<Either<Failure, User>> signIn(String email, String password) async {
     if (await networkInfo.isConnected) {
       try {
-        User user = await remote.signIn(email, password);
+        User user = await remoteDataSource.signIn(email, password);
         if (user != null) {
-          await local.saveUserId(user.id);
-          await local.saveUserType(user.type);
+          await localDataSource.saveUserId(user.id);
+          await localDataSource.saveUserType(user.type);
           return Right(user);
         } else {
           return Left(ServerFailure());
@@ -53,11 +53,11 @@ class AuthRepositoryImpl implements AuthRepository {
       Patient patient, String password) async {
     if (await networkInfo.isConnected) {
       try {
-        Patient patientResult = await remote.signUpPatient(
+        Patient patientResult = await remoteDataSource.signUpPatient(
             PatientModel.fromEntity(patient), password);
         if (patient != null) {
-          await local.saveUserId(patient.id);
-          await local.saveUserType(Keys.PATIENT_TYPE);
+          await localDataSource.saveUserId(patient.id);
+          await localDataSource.saveUserType(Keys.PATIENT_TYPE);
           return Right(patientResult);
         } else {
           return Left(ServerFailure());
@@ -79,11 +79,12 @@ class AuthRepositoryImpl implements AuthRepository {
       Professional professional, String password) async {
     if (await networkInfo.isConnected) {
       try {
-        Professional professionalResult = await remote.signUpProfessional(
-            ProfessionalModel.fromEntity(professional), password);
+        Professional professionalResult =
+            await remoteDataSource.signUpProfessional(
+                ProfessionalModel.fromEntity(professional), password);
         if (professional != null) {
-          await local.saveUserId(professional.id);
-          await local.saveUserType(Keys.PROFESSIONAL_TYPE);
+          await localDataSource.saveUserId(professional.id);
+          await localDataSource.saveUserType(Keys.PROFESSIONAL_TYPE);
           return Right(professionalResult);
         } else {
           return Left(ServerFailure());
