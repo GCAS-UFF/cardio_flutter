@@ -47,12 +47,18 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
 
   @override
   void initState() {
-    _nameController = TextEditingController(text: _formData[LABEL_NAME]);
-    _regionalRegisterController =
-        TextEditingController(text: _formData[LABEL_REGIONAL_REGISTER]);
-    _expertiseController =
-        TextEditingController(text: _formData[LABEL_EXPERTISE]);
-    _emailController = TextEditingController(text: _formData[LABEL_EMAIL]);
+    _nameController = TextEditingController(
+      text: _formData[LABEL_NAME],
+    );
+    _regionalRegisterController = TextEditingController(
+      text: _formData[LABEL_REGIONAL_REGISTER],
+    );
+    _expertiseController = TextEditingController(
+      text: _formData[LABEL_EXPERTISE],
+    );
+    _emailController = TextEditingController(
+      text: _formData[LABEL_EMAIL],
+    );
 
     super.initState();
   }

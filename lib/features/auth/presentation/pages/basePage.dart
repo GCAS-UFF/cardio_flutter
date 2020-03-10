@@ -38,16 +38,6 @@ class BasePage extends StatelessWidget {
                   ],
                 )
               : Container()
-
-          /*  IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/");
-            },
-            icon: Icon(
-              Icons.exit_to_app,
-            ),
-          ),
-          Text("    ") */
         ],
         title: Text(
           Strings.app_name,
@@ -56,30 +46,6 @@ class BasePage extends StatelessWidget {
               color: Colors.black87),
         ),
         backgroundColor: Colors.lightBlueAccent[100],
-      ),
-    );
-  }
-}
-
-Widget SignOutButton(signOutButton, context) {
-  bool signOutButton;
-  context = context;
-  if (signOutButton) {
-    return IconButton(
-      onPressed: () {
-        Navigator.pushNamed(context, "/");
-      },
-      icon: Icon(
-        Icons.exit_to_app,
-      ),
-    );
-  } else {
-    return IconButton(
-      onPressed: () {
-        Navigator.pushNamed(context, "/");
-      },
-      icon: Icon(
-        Icons.exit_to_app,
       ),
     );
   }
