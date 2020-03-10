@@ -29,12 +29,18 @@ class Strings {
   static const adress = "Endereço";
   static const adress_patient = ": Rua do Paciente\n";
   static const birth = "Data de Nascimento: ";
-  static const birth_date = "09/09/1999";
+  static const birth_date = "DD/MM/AAAA";
 
   // Patient Sign Up Page
 
-  static const patient_email = "14/04/1995";
+  static const patient_email = "email@email.com";
   static const new_patient_done = "Cadastrar";
+  static const invalid_date_error_message =
+      "A data que você digitou é inválida";
+  static const invalid_mounth_error_message =
+      "O mês que você digitou é inválido";
+  static const invalid_year_error_message = "O ano que você digitou é inválido";
+  static const invalid_day_error_message = "O dia que você digitou é inválido";
 
   // Menu page
 

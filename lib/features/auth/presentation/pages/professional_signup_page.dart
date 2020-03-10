@@ -26,6 +26,7 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
   static const String LABEL_PASSWORD = "LABEL_PASSWORD";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
+  
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _cpfController = new MultimaskedTextController(
@@ -39,7 +40,6 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
           int.tryParse(text.substring(0, 1)) != null);
     },
   ).maskedTextFieldController;
-
   TextEditingController _nameController;
   TextEditingController _regionalRegisterController;
   TextEditingController _expertiseController;

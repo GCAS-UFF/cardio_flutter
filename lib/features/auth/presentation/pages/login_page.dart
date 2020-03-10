@@ -44,7 +44,9 @@ class _LoginPageState extends State<LoginPage> {
     BlocProvider.of<AuthBloc>(context).add(
       SignInEvent(
         password: _formData[LABEL_PASSWORD],
-        email: _formData[LABEL_EMAIL],
+        email: (_formData[LABEL_EMAIL] != null
+            ? _formData[LABEL_EMAIL].toString().trim()
+            : _formData[LABEL_EMAIL]),
       ),
     );
   }
