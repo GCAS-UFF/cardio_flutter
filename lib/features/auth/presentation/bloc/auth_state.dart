@@ -8,7 +8,9 @@ abstract class AuthState extends Equatable {
 
 class Empty extends AuthState {}
 
-class Logged extends AuthState {}
+class LoggedPatient extends AuthState {}
+
+class LoggedProfessional extends AuthState {}
 
 class Loading extends AuthState {}
 

@@ -6,6 +6,8 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/utils/converter.dart';
+
 class SignUpPatient implements UseCase<Patient, Params> {
   final AuthRepository repository;
 
@@ -14,7 +16,8 @@ class SignUpPatient implements UseCase<Patient, Params> {
   @override
   Future<Either<Failure, Patient>> call(Params params) {
     // The patient password is by default his cpf
-    return repository.signUpPatient(params.patient, params.patient.cpf);
+    return repository.signUpPatient(params.patient,
+        params.patient.cpf.replaceAll("-", "").replaceAll(".", ""));
   }
 }
 

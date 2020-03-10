@@ -1,4 +1,4 @@
-import 'package:cardio_flutter/features/auth/presentation/pages/foundation.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -8,7 +8,7 @@ import 'package:cardio_flutter/core/widgets/menu_item.dart';
 class MenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PgFoudation(
+    return BasePage(
       backgroundColor: Colors.blue[900],
       body: SingleChildScrollView(
         child: Container(

@@ -6,7 +6,7 @@ import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
 import 'package:cardio_flutter/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:cardio_flutter/features/auth/presentation/pages/foundation.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -26,6 +26,7 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
   static const String LABEL_PASSWORD = "LABEL_PASSWORD";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
+  
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _cpfController = new MultimaskedTextController(
@@ -39,7 +40,6 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
           int.tryParse(text.substring(0, 1)) != null);
     },
   ).maskedTextFieldController;
-
   TextEditingController _nameController;
   TextEditingController _regionalRegisterController;
   TextEditingController _expertiseController;
@@ -47,12 +47,18 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
 
   @override
   void initState() {
-    _nameController = TextEditingController(text: _formData[LABEL_NAME]);
-    _regionalRegisterController =
-        TextEditingController(text: _formData[LABEL_REGIONAL_REGISTER]);
-    _expertiseController =
-        TextEditingController(text: _formData[LABEL_EXPERTISE]);
-    _emailController = TextEditingController(text: _formData[LABEL_EMAIL]);
+    _nameController = TextEditingController(
+      text: _formData[LABEL_NAME],
+    );
+    _regionalRegisterController = TextEditingController(
+      text: _formData[LABEL_REGIONAL_REGISTER],
+    );
+    _expertiseController = TextEditingController(
+      text: _formData[LABEL_EXPERTISE],
+    );
+    _emailController = TextEditingController(
+      text: _formData[LABEL_EMAIL],
+    );
 
     super.initState();
   }
@@ -175,11 +181,13 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PgFoudation(
+    return BasePage(
+      signOutButton: false,
       backgroundColor: Color(0xffc9fffd),
       body: SingleChildScrollView(
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
+            print(state);
             if (state is Error) {
               Scaffold.of(context).showSnackBar(
                 SnackBar(
@@ -187,7 +195,8 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
                 ),
               );
             } else if (state is SignedUp) {
-              Navigator.pushNamed(context, '/');
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/homePage', (r) => false);
             }
           },
           child: BlocBuilder<AuthBloc, AuthState>(
