@@ -177,7 +177,7 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
                 ),
               );
             } else if (state is SignedUp) {
-              Navigator.pushNamed(context, '/');
+              Navigator.pushNamed(context, '/homePage');
             }
           },
           child: BlocBuilder<AuthBloc, AuthState>(

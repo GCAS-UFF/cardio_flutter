@@ -12,13 +12,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return BasePage(
-      backgroundColor: Colors.white,
-      body: Container(
-        alignment: Alignment.topCenter,
-        height: Dimensions.getConvertedHeightSize(context, 592),
-        child: SingleChildScrollView(
-                  child: Column(
+    return SingleChildScrollView(
+      child: BasePage(
+        backgroundColor: Colors.white,
+        body: Container(
+          alignment: Alignment.topCenter,
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               SizedBox(
