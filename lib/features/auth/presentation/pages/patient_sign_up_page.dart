@@ -130,6 +130,7 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
               hintText: Strings.birth_date,
               title: Strings.birth,
               validator: DateInputValidator(),
+              keyboardType: TextInputType.number,
               onChanged: (value) {
                 setState(() {
                   _formData[LABEL_BIRTHDATE] = value.toString();
@@ -177,7 +178,7 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
                 ),
               );
             } else if (state is SignedUp) {
-              Navigator.pushNamed(context, '/homePage');
+              Navigator.pop(context);
             }
           },
           child: BlocBuilder<AuthBloc, AuthState>(

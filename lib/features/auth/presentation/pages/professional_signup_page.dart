@@ -187,6 +187,7 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
       body: SingleChildScrollView(
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
+            print(state);
             if (state is Error) {
               Scaffold.of(context).showSnackBar(
                 SnackBar(
@@ -194,7 +195,8 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
                 ),
               );
             } else if (state is SignedUp) {
-              Navigator.pushNamed(context, '/');
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/homePage', (r) => false);
             }
           },
           child: BlocBuilder<AuthBloc, AuthState>(

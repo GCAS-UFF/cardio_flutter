@@ -16,6 +16,9 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../resources/keys.dart';
+import '../../../../resources/strings.dart';
+
 part 'auth_event.dart';
 part 'auth_state.dart';
 
@@ -62,7 +65,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     yield userOrFailure.fold((failure) {
       return Error(message: Converter.convertFailureToMessage(failure));
     }, (user) {
-      return Logged();
+      if (user.type == Keys.PATIENT_TYPE){
+      return LoggedPatient();
+      } else if (user.type == Keys.PROFESSIONAL_TYPE) {
+        return LoggedProfessional();
+      } else {
+        return Error(message: Strings.invalid_user_type);
+      }
     });
   }
 

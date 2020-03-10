@@ -14,6 +14,7 @@ class Strings {
       "Caso seja um paciente ainda não cadastrado, entre em contato com seu profissional de saúde para que faça seu cadastro.\n\nCaso seja um profissional de saúde autorizado basta clicar em \"OK\" e seguir com seu cadastro";
   static const okbutton = "OK";
   static const warning = " Atenção";
+  static const invalid_user_type = "Usuário inválido";
 
   // Sign Up Page
   static const name_hint = "Nome Completo";

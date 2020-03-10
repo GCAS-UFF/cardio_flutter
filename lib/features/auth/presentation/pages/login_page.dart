@@ -12,6 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 
 import '../bloc/auth_bloc.dart';
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -64,8 +66,12 @@ class _LoginPageState extends State<LoginPage> {
                   content: Text(state.message),
                 ),
               );
-            } else if (state is Logged) {
-              Navigator.pushNamed(context, '/homePage');
+            } else if (state is LoggedProfessional) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/homePage', (r) => false);
+            }else if (state is LoggedPatient) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/menuPage', (r) => false);
             }
           },
           child: BlocBuilder<AuthBloc, AuthState>(
