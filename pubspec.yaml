@@ -9,7 +9,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  rxdart: ^0.23.0
+  # Service locator
+  get_it: ^2.0.1
+  # Bloc for state management
+  flutter_bloc: ^3.2.0
+  # Value equality
+  equatable: ^1.1.0
+  # Functional programming thingies
+  dartz: ^0.8.6
+  # Remote APIxml 3.7.0
+  data_connection_checker: ^0.3.4
+  http: ^0.12.0+2
+  # Local cache
+  shared_preferences: ^0.5.3+4
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -17,6 +30,7 @@ dependencies:
   firebase_core: ^0.4.2
   cloud_firestore: ^0.12.10
   firebase_auth: ^0.14.0+5
+  firebase_database: ^3.1.1
 
 dev_dependencies:
   flutter_test:

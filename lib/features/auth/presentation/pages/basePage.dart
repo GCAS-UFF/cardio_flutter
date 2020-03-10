@@ -2,12 +2,17 @@ import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 
-class PgFoudation extends StatelessWidget {
+class BasePage extends StatelessWidget {
   final Widget body;
   final Color backgroundColor;
+  final bool signOutButton;
 
-  const PgFoudation({Key key, this.body, this.backgroundColor})
-      : super(key: key);
+  const BasePage({
+    Key key,
+    this.body,
+    this.backgroundColor,
+    this.signOutButton = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +24,20 @@ class PgFoudation extends StatelessWidget {
           color: Colors.black87,
         ),
         actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/");
-            },
-            icon: Icon(
-              Icons.exit_to_app,
-            ),
-          ),
-          Text("    ")
+          (signOutButton)
+              ? Row(
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/");
+                      },
+                      icon: Icon(
+                        Icons.exit_to_app,
+                      ),
+                    ),
+                  ],
+                )
+              : Container()
         ],
         title: Text(
           Strings.app_name,
