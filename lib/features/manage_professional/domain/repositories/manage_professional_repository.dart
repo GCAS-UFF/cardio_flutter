@@ -7,7 +7,6 @@ import 'package:dartz/dartz.dart';
 abstract class ManageProfessionalRepository {
   Future<Either<Failure, List<Patient>>> getPatientList();
   Future<Either<Failure, void>> deletePatientList(Patient patient);
-  Future<Either<Failure, Patient>> addPatientList(Patient patient);
   Future<Either<Failure, Patient>> editPatientList(Patient patient);
   Future<Either<Failure, Professional>> editProfessional(
       Professional professional);
