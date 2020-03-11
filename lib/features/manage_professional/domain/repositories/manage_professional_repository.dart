@@ -4,7 +4,7 @@ import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
 
 import 'package:dartz/dartz.dart';
 
-abstract class PatientListRepository {
+abstract class ManageProfessionalRepository {
   Future<Either<Failure, List<Patient>>> getPatientList();
   Future<Either<Failure, void>> deletePatientList(Patient patient);
   Future<Either<Failure, Patient>> addPatientList(Patient patient);
