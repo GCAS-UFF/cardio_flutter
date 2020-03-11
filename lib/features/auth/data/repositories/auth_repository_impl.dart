@@ -53,15 +53,16 @@ class AuthRepositoryImpl implements AuthRepository {
       Patient patient, String password) async {
     if (await networkInfo.isConnected) {
       try {
-        Patient patientResult = await remoteDataSource.signUpPatient(
-            PatientModel.fromEntity(patient), password);
-        if (patient != null) {
-          await localDataSource.saveUserId(patient.id);
-          await localDataSource.saveUserType(Keys.PATIENT_TYPE);
-          return Right(patientResult);
-        } else {
+        String userId = await localDataSource.getUserId();
+        String userType = await localDataSource.getUserType();
+
+        if (userId == null || userType == null || userType == Keys.PATIENT_TYPE)
           return Left(ServerFailure());
-        }
+
+        Patient patientResult = await remoteDataSource.signUpPatient(
+            userId, PatientModel.fromEntity(patient), password);
+            
+        return Right(patientResult);
       } on PlatformException catch (e) {
         return Left(PlatformFailure(message: e.message));
       } on ServerException {

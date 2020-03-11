@@ -14,7 +14,7 @@ abstract class AuthRemoteDataSource {
   Future<void> saveUser(UserModel userModel);
 
   Future<PatientModel> signUpPatient(
-      PatientModel patientModel, String password);
+      String professionalId, PatientModel patientModel, String password);
 
   Future<ProfessionalModel> signUpProfessional(
       ProfessionalModel professionalModel, String password);
@@ -50,7 +50,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<PatientModel> signUpPatient(
-      PatientModel patientModel, String password) async {
+      String professionalId, PatientModel patientModel, String password) async {
+    // Withou professional we cant save patients
+    if (professionalId == null) throw ServerException();
     try {
       // Make sign up
       AuthResult result = await firebaseAuth.createUserWithEmailAndPassword(
@@ -65,6 +67,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           FirebaseDatabase.instance.reference().child('Patient').child(uid);
       // Save patient into firebase
       await ref.set(patientModel.toJson());
+      // Get patient reference inside professional colection
+      var refPatientList = FirebaseDatabase.instance
+          .reference()
+          .child('Professional')
+          .child(professionalId)
+          .child("PatientList");
+      // Save patient reference inside professional colection
+      await refPatientList.set({uid: uid});
       // Get patient from reference and return
       DataSnapshot patientSnapshot = await ref.once();
       return PatientModel.fromDataSnapshot(patientSnapshot);
