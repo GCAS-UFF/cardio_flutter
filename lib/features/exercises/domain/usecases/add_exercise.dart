@@ -14,16 +14,17 @@ class AddExercise extends UseCase<Exercise, Params> {
   @override
   Future<Either<Failure, Exercise>> call(Params params) async {
 
-    return await repository.addExercise(params.patient);
+    return await repository.addExercise(params.patient, params.exercise);
   }
 }
 
 class Params extends Equatable {
   final Patient patient; 
+  final Exercise exercise;
 
-  Params({@required this.patient}) : super();
+  Params({@required this.patient, @required this.exercise}) : super();
 
   @override
   
-  List<Object> get props => [patient];
+  List<Object> get props => [patient, exercise];
 }

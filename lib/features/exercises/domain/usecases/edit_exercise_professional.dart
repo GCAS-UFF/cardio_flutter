@@ -1,6 +1,7 @@
 
 import 'package:cardio_flutter/core/error/failure.dart';
 import 'package:cardio_flutter/core/usecases/usecase.dart';
+import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/exercises/domain/repository/exercise_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -15,15 +16,16 @@ class EditExerciseProfessional extends UseCase<Exercise, Params > {
 
   Future<Either<Failure, Exercise>> call(Params params) async {
 
-    return await repository.editExerciseProfessional(params.exerciseId);
+    return await repository.editExerciseProfessional(params.exercise, params.patient);
   }
 }
 class Params extends Equatable {
-  final String exerciseId; 
+  final Exercise exercise; 
+  final Patient patient; 
 
-  Params({@required this.exerciseId}) : super();
+  Params({@required this.exercise, @required this.patient}) : super();
 
   @override
   
-  List<Object> get props => [exerciseId];
+  List<Object> get props => [exercise, patient];
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 class Exercise extends Equatable {
-  final String exerciseId;
+  final String id;
   final String name;
   final int frequency;
   final String intensity;
@@ -17,12 +17,12 @@ class Exercise extends Equatable {
   final bool bodyPain;
 
   Exercise(
-      {@required this.timeOfDay,
-      @required this.exerciseId,
-      @required this.shortnessOfBreath,
-      @required this.excessiveFatigue,
-      @required this.dizziness,
-      @required this.bodyPain,
+      {this.timeOfDay,
+      this.id,
+      this.shortnessOfBreath,
+       this.excessiveFatigue,
+      this.dizziness,
+      this.bodyPain,
       @required this.name,
       @required this.frequency,
       @required this.intensity,
@@ -43,6 +43,6 @@ class Exercise extends Equatable {
         durationInMinutes,
         inicialDate,
         finalDate,
-        exerciseId
+        id
       ];
 }
