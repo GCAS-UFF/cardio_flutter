@@ -7,6 +7,7 @@ import 'package:cardio_flutter/features/auth/presentation/pages/professional_sig
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/auth/presentation/pages/login_page.dart';
+import 'features/manage_professional/presentation/bloc/manage_professional_bloc.dart';
 import 'injection_container.dart' as di;
 
 Future<void> main() async {
@@ -17,6 +18,9 @@ Future<void> main() async {
       providers: [
         BlocProvider<AuthBloc>(
           create: (_) => di.sl<AuthBloc>(),
+        ),
+        BlocProvider<ManageProfessionalBloc>(
+          create: (_) => di.sl<ManageProfessionalBloc>(),
         ),
       ],
       child: MyApp(),
