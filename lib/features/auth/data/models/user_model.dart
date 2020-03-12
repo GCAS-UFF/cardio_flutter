@@ -24,6 +24,11 @@ class UserModel extends User {
     );
   }
 
+  factory UserModel.fromEntity(User user) {
+    if (user == null) return null;
+    return UserModel(id: user.id, email: user.email, type: user.type);
+  }
+
   factory UserModel.fromDataSnapshot(DataSnapshot dataSnapshot) {
     if (dataSnapshot == null) return null;
 

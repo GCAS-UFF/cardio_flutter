@@ -7,9 +7,9 @@ import 'package:dartz/dartz.dart';
 abstract class AuthRepository {
   Future<Either<Failure, User>> signIn(String email, String password);
 
-  Future<Either<Failure, Patient>> signUpPatient(
+  Future<Either<Failure, User>> signUpPatient(
       Patient patient, String password);
 
-  Future<Either<Failure, Professional>> signUpProfessional(
+  Future<Either<Failure, User>> signUpProfessional(
       Professional professional, String password);
 }

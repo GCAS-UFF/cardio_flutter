@@ -1,7 +1,9 @@
+import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
-import 'package:cardio_flutter/core/utils/date-helper.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
+import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
+    as professional;
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -71,7 +73,7 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
           name: _formData[LABEL_NAME],
           address: _formData[LABEL_ADRESS],
           birthdate: DateHelper.convertStringToDate(
-            (_formData[LABEL_BIRTHDATE]),
+            _formData[LABEL_BIRTHDATE],
           ),
         ),
       ),
@@ -178,6 +180,8 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
                 ),
               );
             } else if (state is SignedUp) {
+              BlocProvider.of<professional.ManageProfessionalBloc>(context)
+                  .add(professional.Refresh());
               Navigator.pop(context);
             }
           },

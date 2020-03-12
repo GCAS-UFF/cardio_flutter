@@ -23,7 +23,7 @@ class ProfessionalModel extends Professional {
     if (id != null) json['id'] = id;
     if (name != null) json['name'] = name;
     if (cpf != null) json['cpf'] = cpf;
-    if (regionalRecord != null) json['regionalRecord'] = cpf;
+    if (regionalRecord != null) json['regionalRecord'] = regionalRecord;
     if (expertise != null) json['expertise'] = expertise;
     if (email != null) json['email'] = email;
 
