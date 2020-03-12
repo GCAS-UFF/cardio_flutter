@@ -6,10 +6,10 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class DeletetePatientFromList extends UseCase<Patient, Params> {
+class DeletePatientFromList extends UseCase<Patient, Params> {
   final ManageProfessionalRepository repository;
 
-  DeletetePatientFromList(this.repository);
+  DeletePatientFromList(this.repository);
   @override
   Future<Either<Failure, Patient>> call(Params params) async {
     return await repository.deletePatientList(params.patient);

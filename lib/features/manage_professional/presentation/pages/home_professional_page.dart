@@ -12,10 +12,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class HomeProfessionalPage extends StatelessWidget {
   Widget _buildBody(BuildContext context, Professional professional,
       List<Patient> patientList) {
-    return IntrinsicHeight(
-      child: Container(
-        alignment: Alignment.topCenter,
-        child: Column(
+    return Container(
+      alignment: Alignment.topCenter,
+      child: SingleChildScrollView(
+              child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(
@@ -81,8 +81,9 @@ class HomeProfessionalPage extends StatelessWidget {
     return Padding(
       padding: Dimensions.getEdgeInsetsAll(context, 8),
       child: Text(
-        "$name\nEspecialidade:$expertise",
-        style: TextStyle(fontSize: Dimensions.getTextSize(context, 18)),
+    
+        "Médico: $name\nEspecialidade: $expertise", textAlign: TextAlign.center,
+        style: TextStyle(fontSize: Dimensions.getTextSize(context, 18),),
       ),
     );
   }

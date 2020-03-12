@@ -22,7 +22,7 @@ part 'manage_professional_state.dart';
 
 class ManageProfessionalBloc
     extends Bloc<ManageProfessionalEvent, ManageProfessionalState> {
-  final delete_patient.DeletetePatientFromList deletetePatientFromList;
+  final delete_patient.DeletePatientFromList deletePatientFromList;
   final edit_patient.EditPatientFromList editPatientFromList;
   final GetPatientList getPatientList;
   final edit_professional.EditProfessional editProfessional;
@@ -31,12 +31,12 @@ class ManageProfessionalBloc
   Professional _currentProfessional;
 
   ManageProfessionalBloc(
-      {@required this.deletetePatientFromList,
+      {@required this.deletePatientFromList,
       @required this.editPatientFromList,
       @required this.getPatientList,
       @required this.editProfessional,
       @required this.getProfessional})
-      : assert(deletetePatientFromList != null),
+      : assert(deletePatientFromList != null),
         assert(editPatientFromList != null),
         assert(getPatientList != null),
         assert(editProfessional != null),
@@ -95,7 +95,7 @@ class ManageProfessionalBloc
       });
     } else if (event is DeletePatientEvent) {
       yield Loading();
-      var voidOrError = await deletetePatientFromList(
+      var voidOrError = await deletePatientFromList(
           delete_patient.Params(patient: event.patient));
       yield voidOrError.fold((failure) {
         return Error(message: Converter.convertFailureToMessage(failure));

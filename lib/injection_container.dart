@@ -82,7 +82,7 @@ void initManageProfessional() {
   sl.registerFactory(
     () => ManageProfessionalBloc(
       editPatientFromList: sl(),
-      deletetePatientFromList: sl(),
+      deletePatientFromList: sl(),
       getPatientList: sl(),
       editProfessional: sl(),
       getProfessional: sl(),
@@ -91,7 +91,7 @@ void initManageProfessional() {
 
   // Use Cases
   sl.registerLazySingleton(() => EditPatientFromList(sl()));
-  sl.registerLazySingleton(() => DeletetePatientFromList(sl()));
+  sl.registerLazySingleton(() => DeletePatientFromList(sl()));
   sl.registerLazySingleton(() => GetPatientList(sl()));
   sl.registerLazySingleton(() => EditProfessional(sl()));
   sl.registerLazySingleton(() => GetProfessional(sl()));
