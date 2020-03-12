@@ -1,9 +1,9 @@
 import 'package:cardio_flutter/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:cardio_flutter/features/auth/presentation/pages/home_page.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/home_patient_page.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/login_page.dart';
-import 'package:cardio_flutter/features/auth/presentation/pages/menu_page.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/patient_sign_up_page.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/professional_signup_page.dart';
+import 'package:cardio_flutter/features/manage_professional/presentation/pages/home_professional_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/auth/presentation/pages/login_page.dart';
@@ -41,9 +41,9 @@ class MyApp extends StatelessWidget {
         "/": (BuildContext context) => LoginPage(),
         "/professionalSignUp": (BuildContext context) =>
             ProfessionalSignUpPage(),
-        "/homePage": (BuildContext context) => HomePage(),
+        "/homeProfessionalPage": (BuildContext context) => HomeProfessionalPage(),
         "/patientSignUp": (BuildContext context) => PatientSignUpPage(),
-        "/menuPage": (BuildContext context) => MenuPage(),
+        "/homePatientPage": (BuildContext context) => HomePatientPage(),
       },
     );
   }

@@ -68,10 +68,10 @@ class _LoginPageState extends State<LoginPage> {
               );
             } else if (state is LoggedProfessional) {
               Navigator.pushNamedAndRemoveUntil(
-                  context, '/homePage', (r) => false);
+                  context, '/homeProfessionalPage', (r) => false);
             }else if (state is LoggedPatient) {
               Navigator.pushNamedAndRemoveUntil(
-                  context, '/menuPage', (r) => false);
+                  context, '/homePatientPage', (r) => false);
             }
           },
           child: BlocBuilder<AuthBloc, AuthState>(

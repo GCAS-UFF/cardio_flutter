@@ -4,12 +4,12 @@ import 'package:cardio_flutter/core/widgets/patient_tile.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 
-class HomePage extends StatefulWidget {
+class HomeProfessionalPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeProfessionalPagetate createState() => _HomeProfessionalPagetate();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeProfessionalPagetate extends State<HomeProfessionalPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(

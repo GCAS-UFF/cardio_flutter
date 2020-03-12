@@ -5,7 +5,7 @@ import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/core/widgets/menu_item.dart';
 
-class MenuPage extends StatelessWidget {
+class HomePatientPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
@@ -31,56 +31,56 @@ class MenuPage extends StatelessWidget {
                 text: Strings.biometric,
                 image: Images.ico_biometric,
                 destination: () {
-                  return Navigator.pushNamed(context, "/homePage");
+                  return Navigator.pushNamed(context, "/homePatientPage");
                 },
               ),
               ItemMenu(
                 text: Strings.liquid,
                 image: Images.ico_liquid,
                 destination: () {
-                  return Navigator.pushNamed(context, "/homePage");
+                  return Navigator.pushNamed(context, "/homePatientPage");
                 },
               ),
               ItemMenu(
                 text: Strings.medicine,
                 image: Images.ico_medicine,
                 destination: () {
-                  return Navigator.pushNamed(context, "/homePage");
+                  return Navigator.pushNamed(context, "/homePatientPage");
                 },
               ),
               ItemMenu(
                 text: Strings.appointment,
                 image: Images.ico_appointment,
                 destination: () {
-                  return Navigator.pushNamed(context, "/homePage");
+                  return Navigator.pushNamed(context, "/homePatientPage");
                 },
               ),
               ItemMenu(
                 text: Strings.exercise,
                 image: Images.ico_exercise,
                 destination: () {
-                  return Navigator.pushNamed(context, "/homePage");
+                  return Navigator.pushNamed(context, "/homePatientPage");
                 },
               ),
               ItemMenu(
                 text: Strings.orientations,
                 image: Images.ico_orientations,
                 destination: () {
-                  return Navigator.pushNamed(context, "/homePage");
+                  return Navigator.pushNamed(context, "/homePatientPage");
                 },
               ),
               ItemMenu(
                 text: Strings.about,
                 image: Images.ico_about,
                 destination: () {
-                  return Navigator.pushNamed(context, "/homePage");
+                  return Navigator.pushNamed(context, "/homePatientPage");
                 },
               ),
               ItemMenu(
                 text: Strings.help,
                 image: Images.ico_help,
                 destination: () {
-                  return Navigator.pushNamed(context, "/homePage");
+                  return Navigator.pushNamed(context, "/homePatientPage");
                 },
               ),
               SizedBox(height: Dimensions.getConvertedHeightSize(context, 15),)

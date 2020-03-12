@@ -9,14 +9,11 @@ class PatientTile extends StatefulWidget {
 
 class _PatientTileState extends State<PatientTile> {
   @override
-  
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: Dimensions.getEdgeInsetsAll(context, 8),
       child: ExpansionTile(
-        
         children: <Widget>[
           RichText(
             text: TextSpan(
@@ -58,8 +55,7 @@ class _PatientTileState extends State<PatientTile> {
             size: Dimensions.getConvertedHeightSize(context, 50),
           ),
           onPressed: () {
-            
-            return Navigator.pushNamed(context, "/menuPage");
+            return Navigator.pushNamed(context, "/homePatientPage");
           },
         ),
       ),

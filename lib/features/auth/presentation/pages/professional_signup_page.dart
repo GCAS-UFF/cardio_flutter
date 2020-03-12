@@ -196,7 +196,7 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
               );
             } else if (state is SignedUp) {
               Navigator.pushNamedAndRemoveUntil(
-                  context, '/homePage', (r) => false);
+                  context, '/homeProfessionalPage', (r) => false);
             }
           },
           child: BlocBuilder<AuthBloc, AuthState>(
