@@ -72,7 +72,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           .child("PatientList");
       // Save patient reference inside professional colection
       DataSnapshot patientListSnapshot = await refPatientList.once();
-      Map<dynamic, dynamic> patientListMap = patientListSnapshot.value;
+      Map<dynamic, dynamic> patientListMap = Map<dynamic, dynamic>();
+      if (patientListSnapshot.value != null)
+        patientListMap.addAll(patientListSnapshot.value);
       patientListMap[uid] = uid;
       await refPatientList.set(patientListMap);
       // Save user into firebase and return

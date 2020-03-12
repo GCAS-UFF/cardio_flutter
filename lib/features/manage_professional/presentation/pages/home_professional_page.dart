@@ -71,9 +71,11 @@ class HomeProfessionalPage extends StatelessWidget {
 
   Widget _buildProfessionalHeader(
       BuildContext context, Professional professional) {
-    String name =
-        (professional != null) ? professional.name : "Sem Nome Especificado";
-    String expertise = ((professional != null))
+    if (professional == null) return Container();
+    String name = (professional.name != null)
+        ? professional.name
+        : "Sem Nome Especificado";
+    String expertise = ((professional.expertise != null))
         ? professional.expertise
         : "Sem Especialidade Especificada";
     return Padding(

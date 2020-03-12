@@ -97,10 +97,12 @@ class ManageProfessionalRemoteDataSourceImpl
           patientListSnapshot.value as Map<dynamic, dynamic>;
 
       // For each string will be returned one patient
-      for (MapEntry<dynamic, dynamic> entry in objectMap.entries) {
-        var refPatient = patientRootRef.child(entry.key);
-        DataSnapshot patientSnapshot = await refPatient.once();
-        result.add(PatientModel.fromDataSnapshot(patientSnapshot));
+      if (objectMap != null) {
+        for (MapEntry<dynamic, dynamic> entry in objectMap.entries) {
+          var refPatient = patientRootRef.child(entry.key);
+          DataSnapshot patientSnapshot = await refPatient.once();
+          result.add(PatientModel.fromDataSnapshot(patientSnapshot));
+        }
       }
 
       return result;
@@ -113,7 +115,7 @@ class ManageProfessionalRemoteDataSourceImpl
   }
 
   @override
-  Future<ProfessionalModel> getProfessional(UserModel userModel) async{
+  Future<ProfessionalModel> getProfessional(UserModel userModel) async {
     if (userModel == null ||
         userModel.type == null ||
         userModel.type != Keys.PROFESSIONAL_TYPE) throw ServerException();
