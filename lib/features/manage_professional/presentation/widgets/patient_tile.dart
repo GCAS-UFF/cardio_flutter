@@ -1,10 +1,10 @@
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
-import 'package:cardio_flutter/features/manage_professional/data/repositories/manage_professional_repository_impl.dart';
-import 'package:cardio_flutter/features/manage_professional/domain/repositories/manage_professional_repository.dart';
-import 'package:cardio_flutter/features/manage_professional/domain/usecases/delete_patient_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
+import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
+    as professional;
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PatientTile extends StatefulWidget {
   final Patient patient;
@@ -72,65 +72,64 @@ class _PatientTileState extends State<PatientTile> {
           ),
         ),
       ),
-      onTap: (){
-        _showOptions(context, widget.patient );
+      onTap: () {
+        _showOptions(context, widget.patient);
       },
-
     );
   }
 }
 
- void _showOptions(BuildContext context, Patient patient) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return BottomSheet(
-            onClosing: () {},
-            builder: (context) {
-              return Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: FlatButton(
-                          onPressed: () {
-
-                            Navigator.popAndPushNamed(context, "/homePatientPage");
-                          },
-                          child: Text(
-                            "Abrir",
-                            style: TextStyle(color: Colors.red, fontSize: 20),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: FlatButton(
-                          onPressed: () {
-                            
-                          },
-                          child: Text(
-                            "Editar",
-                            style: TextStyle(color: Colors.red, fontSize: 20),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: FlatButton(
-                          onPressed: () {
-
-                            ManageProfessionalRepositoryImpl.deletePatientList(patient);
-                          },
-                          child: Text(
-                            "Excluir ",
-                            style: TextStyle(color: Colors.red, fontSize: 20),
-                          )),
-                    ),
-                  ],
-                ),
-              );
-            });
-      },
-    );
-  }
+void _showOptions(BuildContext context, Patient patient) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return BottomSheet(
+          onClosing: () {},
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                        onPressed: () {
+                          Navigator.popAndPushNamed(
+                              context, "/homePatientPage");
+                        },
+                        child: Text(
+                          "Abrir",
+                          style: TextStyle(color: Colors.red, fontSize: 20),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Editar",
+                          style: TextStyle(color: Colors.red, fontSize: 20),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                        onPressed: () {
+                          BlocProvider.of<professional.ManageProfessionalBloc>(
+                                  context)
+                              .add(professional.DeletePatientEvent(
+                                  patient: patient));
+                        },
+                        child: Text(
+                          "Excluir ",
+                          style: TextStyle(color: Colors.red, fontSize: 20),
+                        )),
+                  ),
+                ],
+              ),
+            );
+          });
+    },
+  );
+}
