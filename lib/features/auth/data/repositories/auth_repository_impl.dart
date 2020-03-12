@@ -49,7 +49,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, Patient>> signUpPatient(
+  Future<Either<Failure, User>> signUpPatient(
       Patient patient, String password) async {
     if (await networkInfo.isConnected) {
       try {
@@ -59,10 +59,10 @@ class AuthRepositoryImpl implements AuthRepository {
         if (userId == null || userType == null || userType == Keys.PATIENT_TYPE)
           return Left(ServerFailure());
 
-        Patient patientResult = await remoteDataSource.signUpPatient(
+        User userResult = await remoteDataSource.signUpPatient(
             userId, PatientModel.fromEntity(patient), password);
-            
-        return Right(patientResult);
+
+        return Right(userResult);
       } on PlatformException catch (e) {
         return Left(PlatformFailure(message: e.message));
       } on ServerException {
@@ -76,17 +76,16 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, Professional>> signUpProfessional(
+  Future<Either<Failure, User>> signUpProfessional(
       Professional professional, String password) async {
     if (await networkInfo.isConnected) {
       try {
-        Professional professionalResult =
-            await remoteDataSource.signUpProfessional(
-                ProfessionalModel.fromEntity(professional), password);
+        User userResult = await remoteDataSource.signUpProfessional(
+            ProfessionalModel.fromEntity(professional), password);
         if (professional != null) {
           await localDataSource.saveUserId(professional.id);
           await localDataSource.saveUserType(Keys.PROFESSIONAL_TYPE);
-          return Right(professionalResult);
+          return Right(userResult);
         } else {
           return Left(ServerFailure());
         }

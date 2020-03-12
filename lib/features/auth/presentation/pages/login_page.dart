@@ -10,9 +10,9 @@ import '../../../../core/widgets/button.dart';
 import '../../../../resources/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
+import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
+    as professional;
 
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_bloc.dart';
 import '../bloc/auth_bloc.dart';
 
 class LoginPage extends StatefulWidget {
@@ -67,6 +67,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             } else if (state is LoggedProfessional) {
+              BlocProvider.of<professional.ManageProfessionalBloc>(context)
+                  .add(professional.Start(user: state.user));
               Navigator.pushNamedAndRemoveUntil(
                   context, '/homeProfessionalPage', (r) => false);
             }else if (state is LoggedPatient) {

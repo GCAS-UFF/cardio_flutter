@@ -66,9 +66,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       return Error(message: Converter.convertFailureToMessage(failure));
     }, (user) {
       if (user.type == Keys.PATIENT_TYPE){
-      return LoggedPatient();
+      return LoggedPatient(user: user);
       } else if (user.type == Keys.PROFESSIONAL_TYPE) {
-        return LoggedProfessional();
+        return LoggedProfessional(user: user);
       } else {
         return Error(message: Strings.invalid_user_type);
       }
@@ -80,7 +80,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     yield userOrFailure.fold((failure) {
       return Error(message: Converter.convertFailureToMessage(failure));
     }, (result) {
-      return SignedUp();
+      return SignedUp(user: result);
     });
   }
 }

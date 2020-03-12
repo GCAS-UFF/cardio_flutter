@@ -4,8 +4,10 @@ import 'package:cardio_flutter/core/platform/network_info.dart';
 import 'package:cardio_flutter/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:cardio_flutter/features/auth/data/models/patient_model.dart';
 import 'package:cardio_flutter/features/auth/data/models/profissional_model.dart';
+import 'package:cardio_flutter/features/auth/data/models/user_model.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
+import 'package:cardio_flutter/features/auth/domain/entities/user.dart';
 import 'package:cardio_flutter/features/manage_professional/data/datasources/manage_professional_remote_data_source.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/repositories/manage_professional_repository.dart';
 import 'package:cardio_flutter/resources/keys.dart';
@@ -96,6 +98,24 @@ class ManageProfessionalRepositoryImpl implements ManageProfessionalRepository {
             userType != Keys.PROFESSIONAL_TYPE) return Left(ServerFailure());
 
         return Right(await remoteDataSource.getPatientList(userId));
+      } on PlatformException catch (e) {
+        return Left(PlatformFailure(message: e.message));
+      } on ServerException {
+        return Left(ServerFailure());
+      } on CacheException {
+        return Left(CacheFailure());
+      }
+    } else {
+      return Left(NoInternetConnectionFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Professional>> getProfessional(User user) async{
+    if (await networkInfo.isConnected) {
+      try {
+        return Right(await remoteDataSource
+            .getProfessional(UserModel.fromEntity(user)));
       } on PlatformException catch (e) {
         return Left(PlatformFailure(message: e.message));
       } on ServerException {

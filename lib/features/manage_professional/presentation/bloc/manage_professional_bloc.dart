@@ -5,6 +5,7 @@ import 'package:cardio_flutter/core/usecases/usecase.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
+import 'package:cardio_flutter/features/auth/domain/entities/user.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/delete_patient_list.dart'
     as delete_patient;
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit_patient.dart'
@@ -12,6 +13,7 @@ import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit_professional.dart'
     as edit_professional;
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_patient_list.dart';
+import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_professional.dart' as get_professional;
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -24,6 +26,7 @@ class ManageProfessionalBloc
   final edit_patient.EditPatientFromList editPatientFromList;
   final GetPatientList getPatientList;
   final edit_professional.EditProfessional editProfessional;
+  final get_professional.GetProfessional getProfessional;
 
   Professional _currentProfessional;
 
@@ -31,11 +34,13 @@ class ManageProfessionalBloc
       {@required this.deletetePatientFromList,
       @required this.editPatientFromList,
       @required this.getPatientList,
-      @required this.editProfessional})
+      @required this.editProfessional,
+      @required this.getProfessional})
       : assert(deletetePatientFromList != null),
         assert(editPatientFromList != null),
         assert(getPatientList != null),
-        assert(editProfessional != null);
+        assert(editProfessional != null),
+        assert(getProfessional != null);
 
   @override
   ManageProfessionalState get initialState => Empty();
@@ -44,11 +49,20 @@ class ManageProfessionalBloc
   Stream<ManageProfessionalState> mapEventToState(
     ManageProfessionalEvent event,
   ) async* {
-    if (event is Refresh) {
+    if (event is Start) {
+      yield Loading();
+      var professionalOrError = await getProfessional(
+          get_professional.Params(user: event.user));
+      yield professionalOrError.fold((failure) {
+        return Error(message: Converter.convertFailureToMessage(failure));
+      }, (result) {
+        _currentProfessional = result;
+        this.add(Refresh());
+        return Loading();
+      });
+    } else if (event is Refresh) {
       // Show loading for the user
       yield Loading();
-      // Save current professional in the bloc
-      _currentProfessional = event.professional;
       // Get current patient list
       var patientListOrError = await getPatientList(NoParams());
       // Test if the result was success or error
@@ -65,7 +79,7 @@ class ManageProfessionalBloc
       yield patientOrError.fold((failure) {
         return Error(message: Converter.convertFailureToMessage(failure));
       }, (result) {
-        this.add(Refresh(professional: _currentProfessional));
+        this.add(Refresh());
         return Loading();
       });
     } else if (event is EditProfessionalEvent) {
@@ -76,7 +90,7 @@ class ManageProfessionalBloc
         return Error(message: Converter.convertFailureToMessage(failure));
       }, (result) {
         _currentProfessional = result;
-        this.add(Refresh(professional: _currentProfessional));
+        this.add(Refresh());
         return Loading();
       });
     } else if (event is DeletePatientEvent) {
@@ -86,7 +100,7 @@ class ManageProfessionalBloc
       yield voidOrError.fold((failure) {
         return Error(message: Converter.convertFailureToMessage(failure));
       }, (result) {
-        this.add(Refresh(professional: _currentProfessional));
+        this.add(Refresh());
         return Loading();
       });
     }

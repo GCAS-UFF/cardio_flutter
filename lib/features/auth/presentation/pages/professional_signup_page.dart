@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
+    as professional;
 
 class ProfessionalSignUpPage extends StatefulWidget {
   @override
@@ -195,6 +197,8 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
                 ),
               );
             } else if (state is SignedUp) {
+              BlocProvider.of<professional.ManageProfessionalBloc>(context)
+                  .add(professional.Start(user: state.user));
               Navigator.pushNamedAndRemoveUntil(
                   context, '/homeProfessionalPage', (r) => false);
             }

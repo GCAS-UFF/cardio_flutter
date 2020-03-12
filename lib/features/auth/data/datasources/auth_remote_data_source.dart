@@ -11,12 +11,12 @@ import 'package:meta/meta.dart';
 abstract class AuthRemoteDataSource {
   Future<UserModel> signIn(String email, String password);
 
-  Future<void> saveUser(UserModel userModel);
+  Future<UserModel> saveUser(UserModel userModel);
 
-  Future<PatientModel> signUpPatient(
+  Future<UserModel> signUpPatient(
       String professionalId, PatientModel patientModel, String password);
 
-  Future<ProfessionalModel> signUpProfessional(
+  Future<UserModel> signUpProfessional(
       ProfessionalModel professionalModel, String password);
 }
 
@@ -49,7 +49,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<PatientModel> signUpPatient(
+  Future<UserModel> signUpPatient(
       String professionalId, PatientModel patientModel, String password) async {
     // Withou professional we cant save patients
     if (professionalId == null) throw ServerException();
@@ -59,9 +59,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           email: patientModel.email, password: password);
       // Get user id
       String uid = result.user.uid;
-      // Save user into firebase
-      await saveUser(UserModel(
-          id: uid, email: patientModel.email, type: Keys.PATIENT_TYPE));
       // Get patient reference in firebase
       var ref =
           FirebaseDatabase.instance.reference().child('Patient').child(uid);
@@ -74,10 +71,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           .child(professionalId)
           .child("PatientList");
       // Save patient reference inside professional colection
-      await refPatientList.set({uid: uid});
-      // Get patient from reference and return
-      DataSnapshot patientSnapshot = await ref.once();
-      return PatientModel.fromDataSnapshot(patientSnapshot);
+      DataSnapshot patientListSnapshot = await refPatientList.once();
+      Map<dynamic, dynamic> patientListMap = patientListSnapshot.value;
+      patientListMap[uid] = uid;
+      await refPatientList.set(patientListMap);
+      // Save user into firebase and return
+      return await saveUser(UserModel(
+          id: uid, email: patientModel.email, type: Keys.PATIENT_TYPE));
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
@@ -87,7 +87,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<ProfessionalModel> signUpProfessional(
+  Future<UserModel> signUpProfessional(
       ProfessionalModel professionalModel, String password) async {
     try {
       // Make sign up
@@ -95,11 +95,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           email: professionalModel.email, password: password);
       // Get user id
       String uid = result.user.uid;
-      // Save user into firebase
-      await saveUser(UserModel(
-          id: uid,
-          email: professionalModel.email,
-          type: Keys.PROFESSIONAL_TYPE));
       // Get professional reference in firebase
       var ref = FirebaseDatabase.instance
           .reference()
@@ -107,9 +102,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           .child(uid);
       // Save professional into firebase
       await ref.set(professionalModel.toJson());
-      // Get professional from reference and return
-      DataSnapshot professionalSnapshot = await ref.once();
-      return ProfessionalModel.fromDataSnapshot(professionalSnapshot);
+      // Save user into firebase and return
+      return await saveUser(UserModel(
+          id: uid,
+          email: professionalModel.email,
+          type: Keys.PROFESSIONAL_TYPE));
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
@@ -119,13 +116,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> saveUser(UserModel userModel) async {
+  Future<UserModel> saveUser(UserModel userModel) async {
     try {
-      await FirebaseDatabase.instance
+      // Get user reference
+      var userRef = FirebaseDatabase.instance
           .reference()
           .child('User')
-          .child(userModel.id)
-          .set(userModel.toJson());
+          .child(userModel.id);
+      // Save user into firebase
+      await userRef.set(userModel.toJson());
+      // Get user from firebase
+      DataSnapshot userSnapshot = await userRef.once();
+      return UserModel.fromDataSnapshot(userSnapshot);
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {

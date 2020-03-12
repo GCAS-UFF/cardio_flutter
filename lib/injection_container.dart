@@ -8,6 +8,7 @@ import 'package:cardio_flutter/features/manage_professional/domain/usecases/dele
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit_patient.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit_professional.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_patient_list.dart';
+import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_professional.dart';
 import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -84,6 +85,7 @@ void initManageProfessional() {
       deletetePatientFromList: sl(),
       getPatientList: sl(),
       editProfessional: sl(),
+      getProfessional: sl(),
     ),
   );
 
@@ -92,6 +94,7 @@ void initManageProfessional() {
   sl.registerLazySingleton(() => DeletetePatientFromList(sl()));
   sl.registerLazySingleton(() => GetPatientList(sl()));
   sl.registerLazySingleton(() => EditProfessional(sl()));
+  sl.registerLazySingleton(() => GetProfessional(sl()));
 
   // Repositories
   sl.registerLazySingleton<ManageProfessionalRepository>(

@@ -1,8 +1,14 @@
+import 'package:cardio_flutter/core/utils/converter.dart';
+import 'package:cardio_flutter/core/utils/date_helper.dart';
+import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 
 class PatientTile extends StatefulWidget {
+  final Patient patient;
+
+  PatientTile({@required this.patient});
   @override
   _PatientTileState createState() => _PatientTileState();
 }
@@ -22,11 +28,15 @@ class _PatientTileState extends State<PatientTile> {
                     fontSize: Dimensions.getTextSize(context, 12)),
                 children: <TextSpan>[
                   TextSpan(text: Strings.cpf_title),
-                  TextSpan(text: Strings.cpf_number),
+                  TextSpan(
+                      text: Converter.convertStringToMaskedString(
+                          value: widget.patient.cpf, mask: "xxx.xxx.xxx-xx")),
                   TextSpan(text: Strings.adress),
-                  TextSpan(text: Strings.adress_patient),
+                  TextSpan(text: widget.patient.address),
                   TextSpan(text: Strings.birth),
-                  TextSpan(text: Strings.birth_date),
+                  TextSpan(
+                      text: DateHelper.convertDateToString(
+                          widget.patient.birthdate)),
                   TextSpan(text: "\n"),
                 ]),
           ),
@@ -34,14 +44,14 @@ class _PatientTileState extends State<PatientTile> {
         title: Padding(
           padding: Dimensions.getEdgeInsetsAll(context, 5),
           child: Text(
-            "Paciente Exemplo",
+            widget.patient.name,
             style: TextStyle(fontSize: Dimensions.getTextSize(context, 18)),
           ),
         ),
         leading: CircleAvatar(
           radius: Dimensions.getConvertedHeightSize(context, 25),
           child: Text(
-            "Z",
+            widget.patient.name.substring(0, 1).toUpperCase(),
             style: TextStyle(
               color: Colors.black,
               fontSize: Dimensions.getTextSize(context, 20),

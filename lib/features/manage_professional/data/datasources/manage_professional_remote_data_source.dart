@@ -1,6 +1,8 @@
 import 'package:cardio_flutter/core/error/exception.dart';
 import 'package:cardio_flutter/features/auth/data/models/patient_model.dart';
 import 'package:cardio_flutter/features/auth/data/models/profissional_model.dart';
+import 'package:cardio_flutter/features/auth/data/models/user_model.dart';
+import 'package:cardio_flutter/resources/keys.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
@@ -11,6 +13,7 @@ abstract class ManageProfessionalRemoteDataSource {
   Future<List<PatientModel>> getPatientList(String professionalId);
   Future<ProfessionalModel> editProfessional(
       ProfessionalModel professionalModel);
+  Future<ProfessionalModel> getProfessional(UserModel userModel);
 }
 
 class ManageProfessionalRemoteDataSourceImpl
@@ -101,6 +104,25 @@ class ManageProfessionalRemoteDataSourceImpl
       }
 
       return result;
+    } on PlatformException catch (e) {
+      throw e;
+    } catch (e) {
+      print("[ManageProfessionalRemoteDataSourceImpl] ${e.toString()}");
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<ProfessionalModel> getProfessional(UserModel userModel) async{
+    if (userModel == null ||
+        userModel.type == null ||
+        userModel.type != Keys.PROFESSIONAL_TYPE) throw ServerException();
+
+    try {
+      var refProfessional = professionalRootRef.child(userModel.id);
+
+      DataSnapshot professionalSnapshot = await refProfessional.once();
+      return ProfessionalModel.fromDataSnapshot(professionalSnapshot);
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
