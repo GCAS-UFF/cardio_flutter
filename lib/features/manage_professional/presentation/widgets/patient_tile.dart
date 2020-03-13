@@ -1,5 +1,6 @@
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/home_patient_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
@@ -95,8 +96,12 @@ void _showOptions(BuildContext context, Patient patient) {
                     padding: const EdgeInsets.all(10.0),
                     child: FlatButton(
                         onPressed: () {
-                          Navigator.popAndPushNamed(
-                              context, "/homePatientPage");
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      HomePatientPage(patient: patient)),
+                              (r) => false);
                         },
                         child: Text(
                           "Abrir",
