@@ -3,6 +3,13 @@ import 'package:cardio_flutter/features/auth/domain/repositories/auth_repository
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_in.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_patient.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_professional.dart';
+import 'package:cardio_flutter/features/exercises/data/datasources/exercise_remote_data_source.dart';
+import 'package:cardio_flutter/features/exercises/data/repository/exercise_repository_impl.dart';
+import 'package:cardio_flutter/features/exercises/domain/usecases/add_exercise.dart';
+import 'package:cardio_flutter/features/exercises/domain/usecases/edit_exercise_professional.dart';
+import 'package:cardio_flutter/features/exercises/domain/usecases/execute_exercise.dart';
+import 'package:cardio_flutter/features/exercises/domain/usecases/get_exercise_list.dart';
+import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
 import 'package:cardio_flutter/features/manage_professional/data/datasources/manage_professional_remote_data_source.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/delete_patient_list.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit_patient.dart';
@@ -20,6 +27,7 @@ import 'core/platform/network_info.dart';
 import 'features/auth/data/datasources/auth_local_data_source.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/exercises/domain/repository/exercise_repository.dart';
 import 'features/manage_professional/data/repositories/manage_professional_repository_impl.dart';
 import 'features/manage_professional/domain/repositories/manage_professional_repository.dart';
 
@@ -108,6 +116,40 @@ void initManageProfessional() {
   // Data sources
   sl.registerLazySingleton<ManageProfessionalRemoteDataSource>(
     () => ManageProfessionalRemoteDataSourceImpl(
+      firebaseDatabase: sl(),
+    ),
+  );
+}
+
+void initExerxise() {
+  // Bloc
+  sl.registerFactory(
+    () => ExerciseBloc(
+      editExerciseProfessional: sl(),
+      addExercise: sl(),
+      getExerciseList: sl(),
+      executeExercise: sl(),
+    ),
+  );
+
+  // Use Cases
+  sl.registerLazySingleton(() => ExecuteExercise(sl()));
+  sl.registerLazySingleton(() => AddExercise(sl()));
+  sl.registerLazySingleton(() => GetExerciseList(sl()));
+  sl.registerLazySingleton(() => EditExerciseProfessional(sl()));
+  
+
+  // Repositories
+  sl.registerLazySingleton<ExerciseRepository>(
+    () => ExerciseRepositoryImpl(
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<ExerciseRemoteDataSource>(
+    () => ExerciseRemoteDataSourceImpl(
       firebaseDatabase: sl(),
     ),
   );
