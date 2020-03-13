@@ -30,7 +30,7 @@ class Strings {
   static const adress = "Endereço";
   static const adress_patient = ": Rua do Paciente\n";
   static const birth = "Data de Nascimento: ";
-  static const birth_date = "DD/MM/AAAA";
+  static const date = "DD/MM/AAAA";
 
   // Patient Sign Up Page
 
@@ -69,4 +69,16 @@ class Strings {
 
   // Empty validator
   static const empty_fild_message = "Esse campo é obrigatório";
+
+  // Add Exercise Page
+  static const phycical_activity =  "Atividade Física";
+  static const frequency =  "Frequência";
+  static const intensity =  "Intensidade";
+  static const duration =  "Duração";
+  static const initial_date = "Data Inicial";
+  static const final_date =  "Data Final";
+  static const hint_duration =  "min";
+  static const hint_frequency = "vezes ao dia";
+
+
 }

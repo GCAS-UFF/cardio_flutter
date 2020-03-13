@@ -59,7 +59,7 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.exercise,
                 image: Images.ico_exercise,
                 destination: () {
-                  return Navigator.pushNamed(context, "/homePatientPage");
+                  return Navigator.pushNamed(context, "/exercisePage");
                 },
               ),
               ItemMenu(

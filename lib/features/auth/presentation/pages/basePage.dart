@@ -6,17 +6,29 @@ class BasePage extends StatelessWidget {
   final Widget body;
   final Color backgroundColor;
   final bool signOutButton;
+  final Function addFunction;
 
   const BasePage({
     Key key,
     this.body,
     this.backgroundColor,
     this.signOutButton = true,
+    this.addFunction,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: (addFunction != null)
+          ? FloatingActionButton(
+              onPressed: addFunction,
+              child: Icon(
+                Icons.add,
+                color: Colors.black,
+              ),
+              backgroundColor: Colors.lightBlueAccent[200],
+            )
+          : null,
       body: body,
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -25,17 +37,13 @@ class BasePage extends StatelessWidget {
         ),
         actions: <Widget>[
           (signOutButton)
-              ? Row(
-                  children: <Widget>[
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/");
-                      },
-                      icon: Icon(
-                        Icons.exit_to_app,
-                      ),
-                    ),
-                  ],
+              ? IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/");
+                  },
+                  icon: Icon(
+                    Icons.exit_to_app,
+                  ),
                 )
               : Container()
         ],
