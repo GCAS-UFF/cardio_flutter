@@ -7,7 +7,6 @@ import 'package:cardio_flutter/features/auth/data/models/patient_model.dart';
 import 'package:cardio_flutter/features/auth/data/models/profissional_model.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
-import 'package:cardio_flutter/features/auth/domain/entities/user.dart';
 import 'package:cardio_flutter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:dartz/dartz.dart';
@@ -25,13 +24,22 @@ class AuthRepositoryImpl implements AuthRepository {
       @required this.networkInfo});
 
   @override
-  Future<Either<Failure, User>> signIn(String email, String password) async {
+  Future<Either<Failure, dynamic>> signIn(String email, String password) async {
     if (await networkInfo.isConnected) {
       try {
-        User user = await remoteDataSource.signIn(email, password);
+        dynamic user = await remoteDataSource.signIn(email, password);
+        String type;
+        if (user is PatientModel) {
+          type = Keys.PATIENT_TYPE;
+        } else if (user is ProfessionalModel) {
+          type = Keys.PROFESSIONAL_TYPE;
+        } else {
+          type = "UNDEFINED";
+        }
+
         if (user != null) {
           await localDataSource.saveUserId(user.id);
-          await localDataSource.saveUserType(user.type);
+          await localDataSource.saveUserType(type);
           return Right(user);
         } else {
           return Left(ServerFailure());
@@ -49,7 +57,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, User>> signUpPatient(
+  Future<Either<Failure, Patient>> signUpPatient(
       Patient patient, String password) async {
     if (await networkInfo.isConnected) {
       try {
@@ -59,10 +67,10 @@ class AuthRepositoryImpl implements AuthRepository {
         if (userId == null || userType == null || userType == Keys.PATIENT_TYPE)
           return Left(ServerFailure());
 
-        User userResult = await remoteDataSource.signUpPatient(
+        Patient result = await remoteDataSource.signUpPatient(
             userId, PatientModel.fromEntity(patient), password);
 
-        return Right(userResult);
+        return Right(result);
       } on PlatformException catch (e) {
         return Left(PlatformFailure(message: e.message));
       } on ServerException {
@@ -76,16 +84,16 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, User>> signUpProfessional(
+  Future<Either<Failure, Professional>> signUpProfessional(
       Professional professional, String password) async {
     if (await networkInfo.isConnected) {
       try {
-        User userResult = await remoteDataSource.signUpProfessional(
+        Professional result = await remoteDataSource.signUpProfessional(
             ProfessionalModel.fromEntity(professional), password);
         if (professional != null) {
           await localDataSource.saveUserId(professional.id);
           await localDataSource.saveUserType(Keys.PROFESSIONAL_TYPE);
-          return Right(userResult);
+          return Right(result);
         } else {
           return Left(ServerFailure());
         }

@@ -5,7 +5,6 @@ import 'package:cardio_flutter/core/usecases/usecase.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
-import 'package:cardio_flutter/features/auth/domain/entities/user.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/delete_patient_list.dart'
     as delete_patient;
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit_patient.dart'
@@ -51,15 +50,9 @@ class ManageProfessionalBloc
   ) async* {
     if (event is Start) {
       yield Loading();
-      var professionalOrError = await getProfessional(
-          get_professional.Params(user: event.user));
-      yield professionalOrError.fold((failure) {
-        return Error(message: Converter.convertFailureToMessage(failure));
-      }, (result) {
-        _currentProfessional = result;
+     
+        _currentProfessional = event.professional;
         this.add(Refresh());
-        return Loading();
-      });
     } else if (event is Refresh) {
       // Show loading for the user
       yield Loading();

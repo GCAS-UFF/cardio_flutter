@@ -9,14 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<UserModel> signIn(String email, String password);
+  Future<dynamic> signIn(String email, String password);
 
   Future<UserModel> saveUser(UserModel userModel);
 
-  Future<UserModel> signUpPatient(
+  Future<PatientModel> signUpPatient(
       String professionalId, PatientModel patientModel, String password);
 
-  Future<UserModel> signUpProfessional(
+  Future<ProfessionalModel> signUpProfessional(
       ProfessionalModel professionalModel, String password);
 }
 
@@ -28,7 +28,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       {@required this.firebaseAuth, @required this.firebaseDatabase});
 
   @override
-  Future<UserModel> signIn(String email, String password) async {
+  Future<dynamic> signIn(String email, String password) async {
     try {
       AuthResult result = await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -39,7 +39,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           .child(uid)
           .once();
 
-      return UserModel.fromDataSnapshot(userSnapshot);
+      UserModel userModel = UserModel.fromDataSnapshot(userSnapshot);
+      if (userModel.type == Keys.PATIENT_TYPE) {
+        var ref =
+            FirebaseDatabase.instance.reference().child('Patient').child(uid);
+        DataSnapshot patientSnapshot = await ref.once();
+        return PatientModel.fromDataSnapshot(patientSnapshot);
+      } else if (userModel.type == Keys.PROFESSIONAL_TYPE) {
+        var ref = FirebaseDatabase.instance
+            .reference()
+            .child('Professional')
+            .child(uid);
+        DataSnapshot professionalSnapshot = await ref.once();
+        return ProfessionalModel.fromDataSnapshot(professionalSnapshot);
+      } else {
+        throw ServerException();
+      }
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
@@ -49,7 +64,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<UserModel> signUpPatient(
+  Future<PatientModel> signUpPatient(
       String professionalId, PatientModel patientModel, String password) async {
     // Withou professional we cant save patients
     if (professionalId == null) throw ServerException();
@@ -77,9 +92,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         patientListMap.addAll(patientListSnapshot.value);
       patientListMap[uid] = uid;
       await refPatientList.set(patientListMap);
-      // Save user into firebase and return
-      return await saveUser(UserModel(
+      // Save user into firebase
+      await saveUser(UserModel(
           id: uid, email: patientModel.email, type: Keys.PATIENT_TYPE));
+      // Get patient from database
+      DataSnapshot patientSnapshot = await ref.once();
+      return PatientModel.fromDataSnapshot(patientSnapshot);
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
@@ -89,7 +107,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<UserModel> signUpProfessional(
+  Future<ProfessionalModel> signUpProfessional(
       ProfessionalModel professionalModel, String password) async {
     try {
       // Make sign up
@@ -104,11 +122,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           .child(uid);
       // Save professional into firebase
       await ref.set(professionalModel.toJson());
-      // Save user into firebase and return
-      return await saveUser(UserModel(
+      // Save user into firebase
+      await saveUser(UserModel(
           id: uid,
           email: professionalModel.email,
           type: Keys.PROFESSIONAL_TYPE));
+      // Get professional from database
+      DataSnapshot professionalsnapshot = await ref.once();
+      return ProfessionalModel.fromDataSnapshot(professionalsnapshot);
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {

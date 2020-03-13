@@ -129,7 +129,7 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
             CustomTextFormField(
               isRequired: true,
               textEditingController: _birthDateController,
-              hintText: Strings.birth_date,
+              hintText: Strings.date,
               title: Strings.birth,
               validator: DateInputValidator(),
               keyboardType: TextInputType.number,
