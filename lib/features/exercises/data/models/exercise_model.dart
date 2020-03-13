@@ -4,20 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 class ExerciseModel extends Exercise {
-  ExerciseModel(
-      { DateTime timeOfDay,
-       String id,
-       bool shortnessOfBreath,
-       bool excessiveFatigue,
-       bool dizziness,
-       bool bodyPain,
-      @required String name,
-      @required int frequency,
-      @required String intensity,
-      @required int durationInMinutes,
-      @required DateTime inicialDate,
-      @required DateTime finalDate})
-      : super(
+  ExerciseModel({
+    DateTime timeOfDay,
+    String id,
+    DateTime realizationDay,
+    bool shortnessOfBreath,
+    bool excessiveFatigue,
+    bool dizziness,
+    bool bodyPain,
+    @required String name,
+    @required int frequency,
+    @required String intensity,
+    @required int durationInMinutes,
+    @required DateTime inicialDate,
+    @required DateTime finalDate,
+  }) : super(
           timeOfDay: timeOfDay,
           id: id,
           shortnessOfBreath: shortnessOfBreath,
@@ -30,6 +31,7 @@ class ExerciseModel extends Exercise {
           durationInMinutes: durationInMinutes,
           inicialDate: inicialDate,
           finalDate: finalDate,
+          realizationDay: realizationDay
         );
 
   Map<dynamic, dynamic> toJson() {
@@ -39,6 +41,7 @@ class ExerciseModel extends Exercise {
       json['inicialDate'] = inicialDate.millisecondsSinceEpoch;
     if (finalDate != null) json['finalDate'] = finalDate.millisecondsSinceEpoch;
     if (name != null) json['name'] = name;
+    if (realizationDay != null) json['realizationDay'] = realizationDay;
     if (id != null) json['id'] = id;
     if (frequency != null) json['frequency'] = frequency;
     if (intensity != null) json['intensity'] = intensity;
@@ -69,6 +72,7 @@ class ExerciseModel extends Exercise {
       name: json['name'],
       frequency: json['frequency'],
       intensity: json['intensity'],
+      realizationDay: json['realizationDay'],
       durationInMinutes: json['durationInMinutes'],
       shortnessOfBreath: json['shortnessOfBreath'],
       excessiveFatigue: json['excessiveFatigue'],
@@ -87,6 +91,7 @@ class ExerciseModel extends Exercise {
       excessiveFatigue: exercise.excessiveFatigue,
       id: exercise.id,
       finalDate: exercise.finalDate,
+      realizationDay: exercise.realizationDay,
       frequency: exercise.frequency,
       inicialDate: exercise.inicialDate,
       intensity: exercise.intensity,

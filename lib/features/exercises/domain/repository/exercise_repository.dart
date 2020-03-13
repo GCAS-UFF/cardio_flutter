@@ -7,6 +7,6 @@ import 'package:dartz/dartz.dart';
 abstract class ExerciseRepository {
   Future<Either<Failure, Exercise>> addExercise(Patient patient, Exercise exercise);
   Future<Either<Failure, Exercise>> editExerciseProfessional(Exercise exercise, Patient patient);
-  Future<Either<Failure, List<Exercise>>> checkExercise(Patient patient);
-  Future<Either<Failure, Exercise>> executeExercise(String exerciseId);
+  Future<Either<Failure, List<Exercise>>> getExerciseList(Patient patient);
+  Future<Either<Failure, Exercise>> executeExercise(Exercise exercise, Patient patient);
 }

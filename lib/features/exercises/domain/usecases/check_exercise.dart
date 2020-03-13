@@ -7,13 +7,13 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
-class CheckExercise extends UseCase<List<Exercise>, Params> {
+class GetExerciseList extends UseCase<List<Exercise>, Params> {
   final ExerciseRepository repository;
 
-  CheckExercise(this.repository);
+  GetExerciseList(this.repository);
   @override
   Future<Either<Failure, List<Exercise>>> call(Params params) async {
-    return await repository.checkExercise(params.patient);
+    return await repository.getExerciseList(params.patient);
   }
 }
 
