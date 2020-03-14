@@ -16,21 +16,19 @@ class Refresh extends ExerciseEvent {}
 
 class AddExerciseEvent extends ExerciseEvent {
   final Exercise exercise;
-  final Patient patient;
-
-  AddExerciseEvent({@required this.exercise, @required this.patient});
+  AddExerciseEvent({
+    @required this.exercise,
+  });
   List<Object> get props => [exercise];
 }
 
 class EditExerciseProfessionalEvent extends ExerciseEvent {
   final Exercise exercise;
-  final Patient patient;
 
   EditExerciseProfessionalEvent({
     @required this.exercise,
-    @required this.patient,
   });
-  List<Object> get props => [exercise, patient];
+  List<Object> get props => [exercise];
 }
 
 class ExecuteExerciseEvent extends ExerciseEvent {

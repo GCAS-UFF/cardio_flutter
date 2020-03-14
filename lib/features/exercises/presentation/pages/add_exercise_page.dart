@@ -1,11 +1,16 @@
 import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
+import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
+import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
+import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
+import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddExercisePage extends StatefulWidget {
   @override
@@ -21,6 +26,14 @@ class _AddExercisePageState extends State<AddExercisePage> {
   static const String LABEL_DURATION = "LABEL_DURATION";
   static const String LABEL_INITIAL_DATE = "LABEL_INITIAL_DATE";
   static const String LABEL_FINAL_DATE = "LABEL_FINAL_DATE";
+  static const String LABEL_BODY_PAIN = "LABEL_BODY_PAIN";
+  static const String LABEL_DIZZINESS = "DIZZINESS";
+  static const String LABEL_SHORTNESS_OF_BREATH = "LABEL_SHORTNESS_OF_BREATH";
+  static const String LABEL_EXCESSIVE_FATIGUE = "LABEL_EXCESSIVE_FATIGUE";
+  static const String LABEL_DONE = "LABEL_DONE";
+  static const String LABEL_ID = "LABEL_ID";
+  static const String LABEL_REALIZATIONDAY = "LABEL_REALIZATIONDAY";
+  static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
@@ -60,15 +73,40 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BasePage(body: _buildForm(context),
-    backgroundColor: Color(0xffc9fffd) ,);
+    return BasePage(
+      backgroundColor: Color(0xffc9fffd),
+      body: SingleChildScrollView(
+        child: BlocListener<ExerciseBloc, ExerciseState>(
+          listener: (context, state) {
+            if (state is Error) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            } else if (state is Loaded) {
+              Navigator.pop(context);
+            }
+          },
+          child: BlocBuilder<ExerciseBloc, ExerciseState>(
+            builder: (context, state) {
+              if (state is Loading) {
+                return LoadingWidget(_buildForm(context));
+              } else {
+                return _buildForm(context);
+              }
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildForm(BuildContext context) {
     return Form(
         key: _formKey,
         child: SingleChildScrollView(
-                  child: Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -150,9 +188,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: Strings.new_patient_done,
+                title: Strings.add,
                 onTap: () {
-                  // _submitForm();
+                  _submitForm();
                 },
               ),
               SizedBox(
@@ -162,26 +200,33 @@ class _AddExercisePageState extends State<AddExercisePage> {
           ),
         ));
   }
-/* 
 
   void _submitForm() {
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
-    BlocProvider.of<AuthBloc>(context).add(
+    BlocProvider.of<ExerciseBloc>(context).add(
       AddExerciseEvent(
-        patient: Patient(
-          cpf: _formData[LABEL_CPF],
-          email: _formData[LABEL_EMAIL],
+        exercise: Exercise(
           name: _formData[LABEL_NAME],
-          address: _formData[LABEL_ADRESS],
-          birthdate: DateHelper.convertStringToDate(
-            _formData[LABEL_BIRTHDATE],
-          ),
+          done: _formData[LABEL_DONE],
+          durationInMinutes: _formData[LABEL_DURATION],
+          id: _formData[LABEL_ID],
+          dizziness: _formData[LABEL_DIZZINESS],
+          shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
+          bodyPain: _formData[LABEL_BODY_PAIN],
+          intensity: _formData[LABEL_INTENSITY],
+          excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
+          frequency: _formData[LABEL_FREQUENCY],
+          finalDate:
+              DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+          inicialDate:
+              DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+          realizationDay:
+              DateHelper.convertStringToDate(_formData[LABEL_REALIZATIONDAY]),
         ),
       ),
     );
-  } */
-
+  }
 }

@@ -61,7 +61,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       yield Loading();
       var exerciseOrError = await editExerciseProfessional(
           edit_exercise_professional.Params(
-              exercise: event.exercise, patient: event.patient));
+              exercise: event.exercise, patient: _currentPatient));
       yield exerciseOrError.fold((failure) {
         return Error(message: Converter.convertFailureToMessage(failure));
       }, (result) {
@@ -81,7 +81,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
     } else if (event is AddExerciseEvent) {
       yield Loading();
       var exerciseOrError = await addExercise(add_exercise.Params(
-          patient: event.patient, exercise: event.exercise));
+          exercise: event.exercise, patient: _currentPatient));
       yield exerciseOrError.fold((failure) {
         return Error(message: Converter.convertFailureToMessage(failure));
       }, (result) {

@@ -79,6 +79,7 @@ class Strings {
   static const final_date =  "Data Final";
   static const hint_duration =  "min";
   static const hint_frequency = "vezes ao dia";
+  static const add = "Adicionar";
 
 
 }
