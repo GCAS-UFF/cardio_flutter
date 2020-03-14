@@ -16,20 +16,24 @@ class Exercise extends Equatable {
   final bool excessiveFatigue;
   final bool dizziness;
   final bool bodyPain;
+  final bool done;
 
-  Exercise(
-      {this.realizationDay,this.timeOfDay,
-      this.id,
-      this.shortnessOfBreath,
-      this.excessiveFatigue,
-      this.dizziness,
-      this.bodyPain,
-      @required this.name,
-      @required this.frequency,
-      @required this.intensity,
-      @required this.durationInMinutes,
-      @required this.inicialDate,
-      @required this.finalDate,});
+  Exercise({
+    this.realizationDay,
+    this.timeOfDay,
+    this.id,
+    this.shortnessOfBreath,
+    this.excessiveFatigue,
+    this.dizziness,
+    this.bodyPain,
+    @required this.name,
+    @required this.frequency,
+    @required this.intensity,
+    @required this.durationInMinutes,
+    @required this.inicialDate,
+    @required this.finalDate,
+    @required this.done,
+  });
 
   @override
   List<Object> get props => [
@@ -45,5 +49,6 @@ class Exercise extends Equatable {
         inicialDate,
         finalDate,
         id,
+        done,
       ];
 }

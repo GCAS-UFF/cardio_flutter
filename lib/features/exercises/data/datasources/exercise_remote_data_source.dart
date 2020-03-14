@@ -3,6 +3,7 @@ import 'package:cardio_flutter/features/auth/data/models/patient_model.dart';
 import 'package:cardio_flutter/features/exercises/data/models/exercise_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 
 abstract class ExerciseRemoteDataSource {
   Future<ExerciseModel> addExercise(
@@ -21,27 +22,26 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
   final DatabaseReference professionalRootRef =
       FirebaseDatabase.instance.reference().child('Professional');
 
-  ExerciseRemoteDataSourceImpl(this.firebaseDatabase);
+  ExerciseRemoteDataSourceImpl({@required this.firebaseDatabase});
 
   @override
   Future<ExerciseModel> addExercise(
       PatientModel patientModel, ExerciseModel exerciseModel) async {
     try {
-      DatabaseReference patientRef =
-          firebaseDatabase.reference().child('Patient').child(patientModel.id);
-      patientRef.child('ToDo').child('Exercise').set(exerciseModel.toJson());
-      DataSnapshot exerciseRef = await patientRef
+      DatabaseReference exerciseRef = patientRootRef
+          .child(patientModel.id)
           .child('ToDo')
           .child('Exercise')
-          .child(exerciseModel.id)
-          .once();
-      var result = ExerciseModel.fromDataSnapshot(exerciseRef);
+          .push();
+      await exerciseRef.set(exerciseModel.toJson());
+      DataSnapshot exerciseSnapshot = await exerciseRef.once();
+      var result = ExerciseModel.fromDataSnapshot(exerciseSnapshot, false);
 
       return result;
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
-      print("[ManageProfessionalRemoteDataSourceImpl] ${e.toString()}");
+      print("[ExerciseRemoteDataSource] ${e.toString()}");
       throw ServerException();
     }
   }
@@ -49,28 +49,25 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
   @override
   Future<List<ExerciseModel>> getExerciseList(PatientModel patientModel) async {
     try {
-      var refExerciseList =
-          patientRootRef.child(patientModel.id).child('ToDo').child('Exercise');
       List<ExerciseModel> result = List<ExerciseModel>();
-      DataSnapshot exerciseListSnapshot = await refExerciseList.once();
-      Map<dynamic, dynamic> objectMap =
-          exerciseListSnapshot.value as Map<dynamic, dynamic>;
-      if (objectMap != null) {
-        for (MapEntry<dynamic, dynamic> entry in objectMap.entries) {
-          var refExercise = patientRootRef
-              .child(patientModel.id)
-              .child('ToDo')
-              .child('Exercise')
-              .child(entry.key);
-          DataSnapshot exerciseSnapshot = await refExercise.once();
-          result.add(ExerciseModel.fromDataSnapshot(exerciseSnapshot));
-        }
-      }
+
+      DatabaseReference refExerciseToDoList =
+          patientRootRef.child(patientModel.id).child('ToDo').child('Exercise');
+      DataSnapshot exerciseToDoListSnapshot = await refExerciseToDoList.once();
+      result.addAll(
+          ExerciseModel.fromDataSnapshotList(exerciseToDoListSnapshot, false));
+
+      DatabaseReference refExerciseDoneList =
+          patientRootRef.child(patientModel.id).child('Done').child('Exercise');
+      DataSnapshot exerciseDoneListSnapshot = await refExerciseDoneList.once();
+      result.addAll(
+          ExerciseModel.fromDataSnapshotList(exerciseDoneListSnapshot, true));
+
       return result;
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
-      print("[ManageProfessionalRemoteDataSourceImpl] ${e.toString()}");
+      print("[ExerciseRemoteDataSource] ${e.toString()}");
       throw ServerException();
     }
   }
@@ -86,12 +83,13 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
           .child(exerciseModel.id);
       await exerciseref.set(exerciseModel.toJson());
       DataSnapshot exerciseSnapshot = await exerciseref.once();
-      var result = ExerciseModel.fromDataSnapshot(exerciseSnapshot);
+      ExerciseModel result =
+          ExerciseModel.fromDataSnapshot(exerciseSnapshot, false);
       return result;
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
-      print("[ManageProfessionalRemoteDataSourceImpl] ${e.toString()}");
+      print("[ExerciseRemoteDataSource] ${e.toString()}");
       throw ServerException();
     }
   }
@@ -100,26 +98,21 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
   Future<ExerciseModel> executeExercise(
       ExerciseModel exerciseModel, PatientModel patientModel) async {
     try {
-      var _exerciseModel = await patientRootRef
-          .child(patientModel.id)
-          .child('ToDo')
-          .child('Exercise')
-          .child(exerciseModel.id)
-          .once();
-      var aux = ExerciseModel.fromDataSnapshot(_exerciseModel);
-      var exerciseRef = patientRootRef
+      DatabaseReference exerciseDoneRef = patientRootRef
           .child(patientModel.id)
           .child('Done')
-          .child('Exercise');
-      await exerciseRef.set(aux.toJson());
+          .child('Exercise')
+          .push();
+      await exerciseDoneRef.set(exerciseModel.toJson());
 
-      DataSnapshot exerciseSnapshot = await exerciseRef.child(aux.id).once();
-      var result = ExerciseModel.fromDataSnapshot(exerciseSnapshot);
+      DataSnapshot exerciseSnapshot = await exerciseDoneRef.once();
+      ExerciseModel result =
+          ExerciseModel.fromDataSnapshot(exerciseSnapshot, true);
       return result;
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
-      print("[ManageProfessionalRemoteDataSourceImpl] ${e.toString()}");
+      print("[ExerciseRemoteDataSource] ${e.toString()}");
       throw ServerException();
     }
   }
