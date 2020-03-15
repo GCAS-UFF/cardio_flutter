@@ -13,6 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddExercisePage extends StatefulWidget {
+  final Exercise exercise;
+
+  AddExercisePage({this.exercise});
+
   @override
   State<StatefulWidget> createState() {
     return _AddExercisePageState();
@@ -31,7 +35,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
   static const String LABEL_SHORTNESS_OF_BREATH = "LABEL_SHORTNESS_OF_BREATH";
   static const String LABEL_EXCESSIVE_FATIGUE = "LABEL_EXCESSIVE_FATIGUE";
   static const String LABEL_DONE = "LABEL_DONE";
-  static const String LABEL_ID = "LABEL_ID";
   static const String LABEL_REALIZATIONDAY = "LABEL_REALIZATIONDAY";
   static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
 
@@ -55,6 +58,18 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   @override
   void initState() {
+    if (widget.exercise != null) {
+      _formData[LABEL_NAME] = widget.exercise.name;
+      _formData[LABEL_FREQUENCY] = widget.exercise.frequency.toString();
+      _formData[LABEL_INTENSITY] = widget.exercise.intensity;
+      _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
+      _formData[LABEL_INITIAL_DATE] =
+          DateHelper.convertDateToString(widget.exercise.inicialDate);
+      _formData[LABEL_FINAL_DATE] =
+          DateHelper.convertDateToString(widget.exercise.finalDate);
+      _initialDateController.text = _formData[LABEL_INITIAL_DATE];
+      _finalDateController.text = _formData[LABEL_FINAL_DATE];
+    }
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
     );
@@ -206,27 +221,52 @@ class _AddExercisePageState extends State<AddExercisePage> {
       return;
     }
     _formKey.currentState.save();
-    BlocProvider.of<ExerciseBloc>(context).add(
-      AddExerciseEvent(
-        exercise: Exercise(
-          name: _formData[LABEL_NAME],
-          done: _formData[LABEL_DONE],
-          durationInMinutes: _formData[LABEL_DURATION],
-          id: _formData[LABEL_ID],
-          dizziness: _formData[LABEL_DIZZINESS],
-          shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
-          bodyPain: _formData[LABEL_BODY_PAIN],
-          intensity: _formData[LABEL_INTENSITY],
-          excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
-          frequency: _formData[LABEL_FREQUENCY],
-          finalDate:
-              DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-          inicialDate:
-              DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-          realizationDay:
-              DateHelper.convertStringToDate(_formData[LABEL_REALIZATIONDAY]),
+
+    if (widget.exercise == null) {
+      BlocProvider.of<ExerciseBloc>(context).add(
+        AddExerciseEvent(
+          exercise: Exercise(
+            name: _formData[LABEL_NAME],
+            done: _formData[LABEL_DONE],
+            durationInMinutes: int.parse(_formData[LABEL_DURATION]),
+            dizziness: _formData[LABEL_DIZZINESS],
+            shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
+            bodyPain: _formData[LABEL_BODY_PAIN],
+            intensity: _formData[LABEL_INTENSITY],
+            excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
+            frequency: int.parse(_formData[LABEL_FREQUENCY]),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            inicialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            realizationDay:
+                DateHelper.convertStringToDate(_formData[LABEL_REALIZATIONDAY]),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      BlocProvider.of<ExerciseBloc>(context).add(
+        EditExerciseProfessionalEvent(
+          exercise: Exercise(
+            id: widget.exercise.id,
+            name: _formData[LABEL_NAME],
+            done: _formData[LABEL_DONE],
+            durationInMinutes: int.parse(_formData[LABEL_DURATION]),
+            dizziness: _formData[LABEL_DIZZINESS],
+            shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
+            bodyPain: _formData[LABEL_BODY_PAIN],
+            intensity: _formData[LABEL_INTENSITY],
+            excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
+            frequency: int.parse(_formData[LABEL_FREQUENCY]),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            inicialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            realizationDay:
+                DateHelper.convertStringToDate(_formData[LABEL_REALIZATIONDAY]),
+          ),
+        ),
+      );
+    }
   }
 }

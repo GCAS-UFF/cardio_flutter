@@ -36,6 +36,7 @@ class Strings {
 
   static const patient_email = "email@email.com";
   static const new_patient_done = "Cadastrar";
+  static const edit_patient_done = "Editar";
   static const invalid_date_error_message =
       "A data que você digitou é inválida";
   static const invalid_mounth_error_message =
@@ -71,15 +72,13 @@ class Strings {
   static const empty_fild_message = "Esse campo é obrigatório";
 
   // Add Exercise Page
-  static const phycical_activity =  "Atividade Física";
-  static const frequency =  "Frequência";
-  static const intensity =  "Intensidade";
-  static const duration =  "Duração";
+  static const phycical_activity = "Atividade Física";
+  static const frequency = "Frequência";
+  static const intensity = "Intensidade";
+  static const duration = "Duração";
   static const initial_date = "Data Inicial";
-  static const final_date =  "Data Final";
-  static const hint_duration =  "min";
+  static const final_date = "Data Final";
+  static const hint_duration = "min";
   static const hint_frequency = "vezes ao dia";
   static const add = "Adicionar";
-
-
 }

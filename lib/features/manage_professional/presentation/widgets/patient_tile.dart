@@ -1,6 +1,8 @@
+import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/home_patient_page.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/patient_sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
@@ -50,7 +52,10 @@ class _PatientTileState extends State<PatientTile> {
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      (widget.patient.email != null) ? widget.patient.name : "",
+                      (widget.patient.cpf != null)
+                          ? Converter.convertStringToMaskedString(
+                              value: widget.patient.cpf, mask: "xxx.xxx.xxx-xx")
+                          : "",
                       style: TextStyle(
                         fontSize: 18,
                       ),
@@ -59,8 +64,8 @@ class _PatientTileState extends State<PatientTile> {
                       (DateHelper.convertDateToString(
                                   widget.patient.birthdate) !=
                               null)
-                          ? DateHelper.convertDateToString(
-                              widget.patient.birthdate)
+                          ? "${DateHelper.ageFromDate(
+                              widget.patient.birthdate).toString()} anos"
                           : "",
                       style: TextStyle(
                         fontSize: 18,
@@ -96,12 +101,14 @@ void _showOptions(BuildContext context, Patient patient) {
                     padding: const EdgeInsets.all(10.0),
                     child: FlatButton(
                         onPressed: () {
+                          Navigator.pop(context);
                           Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      HomePatientPage(patient: patient)),
-                              (r) => false);
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    HomePatientPage(patient: patient)),
+                            (r) => false,
+                          );
                         },
                         child: Text(
                           "Abrir",
@@ -111,7 +118,17 @@ void _showOptions(BuildContext context, Patient patient) {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PatientSignUpPage(
+                                patient: patient,
+                              ),
+                            ),
+                          );
+                        },
                         child: Text(
                           "Editar",
                           style: TextStyle(color: Colors.red, fontSize: 20),
@@ -120,16 +137,21 @@ void _showOptions(BuildContext context, Patient patient) {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: FlatButton(
-                        onPressed: () {
-                          BlocProvider.of<professional.ManageProfessionalBloc>(
-                                  context)
-                              .add(professional.DeletePatientEvent(
-                                  patient: patient));
-                        },
-                        child: Text(
-                          "Excluir ",
-                          style: TextStyle(color: Colors.red, fontSize: 20),
-                        )),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        BlocProvider.of<professional.ManageProfessionalBloc>(
+                                context)
+                            .add(
+                          professional.DeletePatientEvent(
+                            patient: patient,
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Excluir ",
+                        style: TextStyle(color: Colors.red, fontSize: 20),
+                      ),
+                    ),
                   ),
                 ],
               ),

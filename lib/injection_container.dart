@@ -36,6 +36,7 @@ final sl = GetIt.instance;
 Future<void> init() async {
   initAuth();
   initManageProfessional();
+  initExerxise();
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
@@ -117,6 +118,7 @@ void initManageProfessional() {
   sl.registerLazySingleton<ManageProfessionalRemoteDataSource>(
     () => ManageProfessionalRemoteDataSourceImpl(
       firebaseDatabase: sl(),
+      firebaseAuth: sl(),
     ),
   );
 }

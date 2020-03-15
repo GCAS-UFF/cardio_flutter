@@ -16,6 +16,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final TextAlign textAlign;
   final int maxLines;
+  final bool enable;
 
   CustomTextFormField({
     this.textEditingController,
@@ -30,6 +31,7 @@ class CustomTextFormField extends StatefulWidget {
     this.textCapitalization = TextCapitalization.none,
     this.textAlign = TextAlign.start,
     this.maxLines = 1,
+    this.enable = true,
   });
 
   @override
@@ -93,10 +95,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 alignment: Alignment.centerLeft,
               ),
               TextFormField(
+                enabled: widget.enable,
                 controller: widget.textEditingController,
                 textAlign: widget.textAlign,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: (widget.enable)? Colors.black : Colors.black.withOpacity(0.5),
                   fontSize: Dimensions.getTextSize(context, 20),
                 ),
                 maxLength: widget.maxLength,

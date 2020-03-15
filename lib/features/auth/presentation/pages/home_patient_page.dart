@@ -1,11 +1,14 @@
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
+import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart'
+    as exercise;
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/core/widgets/menu_item.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePatientPage extends StatelessWidget {
   final Patient patient;
@@ -83,6 +86,8 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.exercise,
                 image: Images.ico_exercise,
                 destination: () {
+                  BlocProvider.of<exercise.ExerciseBloc>(context)
+                      .add(exercise.Start(patient: patient));
                   return Navigator.pushNamed(context, "/exercisePage");
                 },
               ),

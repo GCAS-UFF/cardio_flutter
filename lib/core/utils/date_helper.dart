@@ -1,5 +1,6 @@
 class DateHelper {
   static DateTime convertStringToDate(String dateStr) {
+    if (dateStr == null) return null;
     if (dateStr.length != 10) return null;
 
     int day = int.tryParse(dateStr.substring(0, 2));

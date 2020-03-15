@@ -82,7 +82,7 @@ class HomeProfessionalPage extends StatelessWidget {
       padding: Dimensions.getEdgeInsetsAll(context, 8),
       child: Text(
     
-        "Médico: $name\nEspecialidade: $expertise", textAlign: TextAlign.center,
+        "Profissional: $name\nEspecialidade: $expertise", textAlign: TextAlign.center,
         style: TextStyle(fontSize: Dimensions.getTextSize(context, 18),),
       ),
     );
