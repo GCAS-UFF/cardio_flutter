@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:cardio_flutter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_in.dart';
@@ -46,6 +47,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseDatabase.instance);
   sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => DataConnectionChecker());
+  sl.registerLazySingleton(() => Settings( sharedPreferences: sl()));
 }
 
 void initAuth() {

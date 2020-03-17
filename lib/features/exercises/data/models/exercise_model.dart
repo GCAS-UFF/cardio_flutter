@@ -5,9 +5,8 @@ import 'package:meta/meta.dart';
 
 class ExerciseModel extends Exercise {
   ExerciseModel({
-    DateTime timeOfDay,
+    DateTime executionDay,
     String id,
-    DateTime realizationDay,
     bool shortnessOfBreath,
     bool excessiveFatigue,
     bool dizziness,
@@ -20,7 +19,7 @@ class ExerciseModel extends Exercise {
     @required DateTime finalDate,
     @required bool done,
   }) : super(
-          timeOfDay: timeOfDay,
+          executionDay: executionDay,
           id: id,
           shortnessOfBreath: shortnessOfBreath,
           excessiveFatigue: excessiveFatigue,
@@ -32,18 +31,16 @@ class ExerciseModel extends Exercise {
           durationInMinutes: durationInMinutes,
           inicialDate: inicialDate,
           finalDate: finalDate,
-          realizationDay: realizationDay,
           done: done,
         );
 
   Map<dynamic, dynamic> toJson() {
     Map<dynamic, dynamic> json = {};
-    if (timeOfDay != null) json['timeOfDay'] = timeOfDay.millisecondsSinceEpoch;
+    if (executionDay != null) json['executionDay'] = executionDay.millisecondsSinceEpoch;
     if (inicialDate != null)
       json['inicialDate'] = inicialDate.millisecondsSinceEpoch;
     if (finalDate != null) json['finalDate'] = finalDate.millisecondsSinceEpoch;
     if (name != null) json['name'] = name;
-    if (realizationDay != null) json['realizationDay'] = realizationDay;
     if (frequency != null) json['frequency'] = frequency;
     if (intensity != null) json['intensity'] = intensity;
     if (durationInMinutes != null)
@@ -60,9 +57,9 @@ class ExerciseModel extends Exercise {
   factory ExerciseModel.fromJson(Map<dynamic, dynamic> json) {
     if (json == null) return null;
     return ExerciseModel(
-      timeOfDay: (json['timeOfDay'] == null)
+      executionDay: (json['executionDay'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(json['timeOfDay']),
+          : DateTime.fromMillisecondsSinceEpoch(json['executionDay']),
       inicialDate: (json['inicialDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['inicialDate']),
@@ -73,7 +70,6 @@ class ExerciseModel extends Exercise {
       name: json['name'],
       frequency: json['frequency'],
       intensity: json['intensity'],
-      realizationDay: json['realizationDay'],
       durationInMinutes: json['durationInMinutes'],
       shortnessOfBreath: json['shortnessOfBreath'],
       excessiveFatigue: json['excessiveFatigue'],
@@ -93,12 +89,11 @@ class ExerciseModel extends Exercise {
         excessiveFatigue: exercise.excessiveFatigue,
         id: exercise.id,
         finalDate: exercise.finalDate,
-        realizationDay: exercise.realizationDay,
-        frequency: exercise.frequency,
+         frequency: exercise.frequency,
         inicialDate: exercise.inicialDate,
         intensity: exercise.intensity,
         shortnessOfBreath: exercise.shortnessOfBreath,
-        timeOfDay: exercise.timeOfDay,
+        executionDay: exercise.executionDay,
         done: exercise.done);
   }
 

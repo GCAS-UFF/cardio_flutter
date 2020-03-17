@@ -4,14 +4,13 @@ import 'package:meta/meta.dart';
 
 class Exercise extends Equatable {
   final String id;
-  final DateTime realizationDay;
+  final DateTime executionDay;
   final String name;
   final int frequency;
   final String intensity;
   final int durationInMinutes;
   final DateTime inicialDate;
   final DateTime finalDate;
-  final DateTime timeOfDay;
   final bool shortnessOfBreath;
   final bool excessiveFatigue;
   final bool dizziness;
@@ -19,8 +18,7 @@ class Exercise extends Equatable {
   final bool done;
 
   Exercise({
-    this.realizationDay,
-    this.timeOfDay,
+    this.executionDay,
     this.id,
     this.shortnessOfBreath,
     this.excessiveFatigue,
@@ -37,7 +35,7 @@ class Exercise extends Equatable {
 
   @override
   List<Object> get props => [
-        timeOfDay,
+        executionDay,
         shortnessOfBreath,
         excessiveFatigue,
         dizziness,

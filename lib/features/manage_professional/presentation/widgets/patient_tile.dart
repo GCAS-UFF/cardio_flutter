@@ -64,8 +64,7 @@ class _PatientTileState extends State<PatientTile> {
                       (DateHelper.convertDateToString(
                                   widget.patient.birthdate) !=
                               null)
-                          ? "${DateHelper.ageFromDate(
-                              widget.patient.birthdate).toString()} anos"
+                          ? "${DateHelper.ageFromDate(widget.patient.birthdate).toString()} anos"
                           : "",
                       style: TextStyle(
                         fontSize: 18,
@@ -102,12 +101,11 @@ void _showOptions(BuildContext context, Patient patient) {
                     child: FlatButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          Navigator.pushAndRemoveUntil(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
                                     HomePatientPage(patient: patient)),
-                            (r) => false,
                           );
                         },
                         child: Text(

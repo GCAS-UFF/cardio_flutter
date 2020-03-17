@@ -10,12 +10,14 @@ import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeProfessionalPage extends StatelessWidget {
-  Widget _buildBody(BuildContext context, Professional professional,
-      List<Patient> patientList) {
+
+
+
+  Widget _buildBody(BuildContext context, Professional professional,List<Patient> patientList) {
     return Container(
       alignment: Alignment.topCenter,
       child: SingleChildScrollView(
-              child: Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(
@@ -81,9 +83,11 @@ class HomeProfessionalPage extends StatelessWidget {
     return Padding(
       padding: Dimensions.getEdgeInsetsAll(context, 8),
       child: Text(
-    
-        "Profissional: $name\nEspecialidade: $expertise", textAlign: TextAlign.center,
-        style: TextStyle(fontSize: Dimensions.getTextSize(context, 18),),
+        "Profissional: $name\nEspecialidade: $expertise",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: Dimensions.getTextSize(context, 18),
+        ),
       ),
     );
   }
@@ -129,3 +133,5 @@ class HomeProfessionalPage extends StatelessWidget {
     );
   }
 }
+
+

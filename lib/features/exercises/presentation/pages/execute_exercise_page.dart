@@ -11,19 +11,19 @@ import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meta/meta.dart';
 
-class AddExercisePage extends StatefulWidget {
+class ExecuteExercisePage extends StatefulWidget {
   final Exercise exercise;
 
-  AddExercisePage({this.exercise});
-
+  const ExecuteExercisePage({@required this.exercise});
   @override
   State<StatefulWidget> createState() {
-    return _AddExercisePageState();
+    return _ExecuteExercisePageState();
   }
 }
 
-class _AddExercisePageState extends State<AddExercisePage> {
+class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   static const String LABEL_NAME = "LABEL_NAME";
   static const String LABEL_FREQUENCY = "LABEL_LABEL_FREQUENCY";
   static const String LABEL_INTENSITY = "LABEL_INTENSITY";
@@ -34,7 +34,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
   static const String LABEL_DIZZINESS = "DIZZINESS";
   static const String LABEL_SHORTNESS_OF_BREATH = "LABEL_SHORTNESS_OF_BREATH";
   static const String LABEL_EXCESSIVE_FATIGUE = "LABEL_EXCESSIVE_FATIGUE";
-  static const String LABEL_EXECUTIONDAY = "LABEL_EXECUTIONDAY";
+  static const String LABEL_DONE = "LABEL_DONE";
+  static const String LABEL_ID = "LABEL_ID";
+  static const String LABEL_EXECUTION_DAY = "LABEL_EXECUTION_DAY";
   static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
@@ -42,15 +44,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _nameController;
-  TextEditingController _frequencyController;
   TextEditingController _intensityController;
   TextEditingController _durationController;
-  final TextEditingController _initialDateController =
-      new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
-    onlyDigitsDefault: true,
-  ).maskedTextFieldController;
-  TextEditingController _finalDateController = new MultimaskedTextController(
+  TextEditingController _executionDayController = new MultimaskedTextController(
     maskDefault: "xx/xx/xxxx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
@@ -59,28 +55,25 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void initState() {
     if (widget.exercise != null) {
       _formData[LABEL_NAME] = widget.exercise.name;
-      _formData[LABEL_FREQUENCY] = widget.exercise.frequency.toString();
-      _formData[LABEL_INTENSITY] = widget.exercise.intensity;
+      _formData[LABEL_INTENSITY] = widget.exercise.intensity.toString();
       _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
-      _formData[LABEL_INITIAL_DATE] =
-          DateHelper.convertDateToString(widget.exercise.inicialDate);
-      _formData[LABEL_FINAL_DATE] =
-          DateHelper.convertDateToString(widget.exercise.finalDate);
-      _initialDateController.text = _formData[LABEL_INITIAL_DATE];
-      _finalDateController.text = _formData[LABEL_FINAL_DATE];
     }
+
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
     );
-    _frequencyController = TextEditingController(
-      text: _formData[LABEL_FREQUENCY],
-    );
+
     _intensityController = TextEditingController(
       text: _formData[LABEL_INTENSITY],
     );
     _durationController = TextEditingController(
       text: _formData[LABEL_DURATION],
     );
+
+    _formData[LABEL_SHORTNESS_OF_BREATH] = false;
+    _formData[LABEL_EXCESSIVE_FATIGUE] = false;
+    _formData[LABEL_DIZZINESS] = false;
+    _formData[LABEL_BODY_PAIN] = false;
 
     super.initState();
   }
@@ -141,18 +134,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                keyboardType: TextInputType.number,
-                textEditingController: _frequencyController,
-                hintText: Strings.hint_frequency,
-                title: Strings.frequency,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_FREQUENCY] = value;
-                  });
-                },
-              ),
-              CustomTextFormField(
-                isRequired: true,
                 textEditingController: _intensityController,
                 hintText: "",
                 title: Strings.intensity,
@@ -176,33 +157,64 @@ class _AddExercisePageState extends State<AddExercisePage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                textEditingController: _initialDateController,
+                textEditingController: _executionDayController,
                 validator: DateInputValidator(),
-                hintText: Strings.initial_date,
-                title: Strings.date,
+                hintText: "",
+                title: Strings.time_title,
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_INITIAL_DATE] = value;
-                  });
-                },
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _finalDateController,
-                validator: DateInputValidator(),
-                hintText: Strings.final_date,
-                title: Strings.date,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_FINAL_DATE] = value;
+                    _formData[LABEL_EXECUTION_DAY] = value;
                   });
                 },
               ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
+              Text(
+                "Sintomas:",
+                style: TextStyle(fontSize: 20),
+              ),
+              CheckboxListTile(
+                value: _formData[LABEL_SHORTNESS_OF_BREATH],
+                onChanged: (bool value) {
+                  setState(() {
+                    _formData[LABEL_SHORTNESS_OF_BREATH] = value;
+                  });
+                },
+                title: Text(Strings.shortness_of_breath),
+              ),
+              CheckboxListTile(
+                value: _formData[LABEL_EXCESSIVE_FATIGUE],
+                onChanged: (bool value) {
+                  setState(() {
+                    _formData[LABEL_EXCESSIVE_FATIGUE] = value;
+                  });
+                },
+                title: Text(Strings.excessive_fatigue),
+              ),
+              CheckboxListTile(
+                value: _formData[LABEL_DIZZINESS],
+                onChanged: (bool value) {
+                  setState(() {
+                    _formData[LABEL_DIZZINESS] = value;
+                  });
+                },
+                title: Text(Strings.dizziness),
+              ),
+              CheckboxListTile(
+                value: _formData[LABEL_BODY_PAIN],
+                onChanged: (bool value) {
+                  setState(() {
+                    _formData[LABEL_BODY_PAIN] = value;
+                  });
+                },
+                title: Text(Strings.body_pain),
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 20),
+              ),
               Button(
-                title:(widget.exercise==null)? Strings.add:Strings.edit_patient_done,
+                title: Strings.add,
                 onTap: () {
                   _submitForm();
                 },
@@ -220,52 +232,27 @@ class _AddExercisePageState extends State<AddExercisePage> {
       return;
     }
     _formKey.currentState.save();
-
-    if (widget.exercise == null) {
-      BlocProvider.of<ExerciseBloc>(context).add(
-        AddExerciseEvent(
-          exercise: Exercise(
-            name: _formData[LABEL_NAME],
-            done: false,
-            durationInMinutes: int.parse(_formData[LABEL_DURATION]),
-            dizziness: _formData[LABEL_DIZZINESS],
-            shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
-            bodyPain: _formData[LABEL_BODY_PAIN],
-            intensity: _formData[LABEL_INTENSITY],
-            excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
-            frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            inicialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            executionDay:
-                DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
-          ),
+    BlocProvider.of<ExerciseBloc>(context).add(
+      ExecuteExerciseEvent(
+        exercise: Exercise(
+          done: true,
+          name: _formData[LABEL_NAME],
+          durationInMinutes: int.parse(_formData[LABEL_DURATION]),
+          id: _formData[LABEL_ID],
+          dizziness: _formData[LABEL_DIZZINESS],
+          shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
+          bodyPain: _formData[LABEL_BODY_PAIN],
+          intensity: _formData[LABEL_INTENSITY],
+          excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
+          frequency: _formData[LABEL_FREQUENCY],
+          finalDate:
+              DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+          inicialDate:
+              DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+          executionDay:
+              DateHelper.convertStringToDate(_formData[LABEL_EXECUTION_DAY]),
         ),
-      );
-    } else {
-      BlocProvider.of<ExerciseBloc>(context).add(
-        EditExerciseProfessionalEvent(
-          exercise: Exercise(
-            id: widget.exercise.id,
-            name: _formData[LABEL_NAME],
-            done: false,
-            durationInMinutes: int.parse(_formData[LABEL_DURATION]),
-            dizziness: _formData[LABEL_DIZZINESS],
-            shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
-            bodyPain: _formData[LABEL_BODY_PAIN],
-            intensity: _formData[LABEL_INTENSITY],
-            excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
-            frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            inicialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            executionDay:
-                DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
-          ),
-        ),
-      );
-    }         
+      ),
+    );
   }
 }

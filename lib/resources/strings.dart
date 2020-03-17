@@ -81,4 +81,11 @@ class Strings {
   static const hint_duration = "min";
   static const hint_frequency = "vezes ao dia";
   static const add = "Adicionar";
+  static const time_title = "Horário";
+  static const shortness_of_breath = "Falta de ar excessiva";
+  static const excessive_fatigue = "Fadiga excessiva";
+  static const dizziness = "Tontura";
+  static const body_pain = "Dores Corporais";
+
+
 }
