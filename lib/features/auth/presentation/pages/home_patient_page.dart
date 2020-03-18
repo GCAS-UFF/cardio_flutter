@@ -1,14 +1,21 @@
+import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
+import 'package:cardio_flutter/features/app_info/presentation/pages/app_info_page.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart'
     as exercise;
+import 'package:cardio_flutter/features/help/presentation/pages/patient_help_page.dart';
+import 'package:cardio_flutter/features/help/presentation/pages/professional_help_page.dart';
+import 'package:cardio_flutter/features/orientations/presentation/pages/orientations_page.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
+import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/core/widgets/menu_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class HomePatientPage extends StatelessWidget {
   final Patient patient;
@@ -98,30 +105,32 @@ class HomePatientPage extends StatelessWidget {
                   return Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              HomePatientPage(patient: patient)));
+                          builder: (context) => OrientationsPage()));
                 },
               ),
               ItemMenu(
                 text: Strings.about,
                 image: Images.ico_about,
                 destination: () {
-                  return Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePatientPage(patient: patient)));
+                  return Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AppInfoPage()));
                 },
               ),
               ItemMenu(
                 text: Strings.help,
                 image: Images.ico_help,
                 destination: () {
-                  return Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePatientPage(patient: patient)));
+                  (Provider.of<Settings>(context, listen: false)
+                              .getUserType() ==
+                          Keys.PROFESSIONAL_TYPE)
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfessionalHelpPage()))
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PatientHelpPage()));
                 },
               ),
               SizedBox(
