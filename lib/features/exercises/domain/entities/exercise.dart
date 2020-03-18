@@ -9,7 +9,7 @@ class Exercise extends Equatable {
   final int frequency;
   final String intensity;
   final int durationInMinutes;
-  final DateTime inicialDate;
+  final DateTime initialDate;
   final DateTime finalDate;
   final bool shortnessOfBreath;
   final bool excessiveFatigue;
@@ -28,7 +28,7 @@ class Exercise extends Equatable {
     @required this.frequency,
     @required this.intensity,
     @required this.durationInMinutes,
-    @required this.inicialDate,
+    @required this.initialDate,
     @required this.finalDate,
     @required this.done,
   });
@@ -44,7 +44,7 @@ class Exercise extends Equatable {
         frequency,
         intensity,
         durationInMinutes,
-        inicialDate,
+        initialDate,
         finalDate,
         id,
         done,

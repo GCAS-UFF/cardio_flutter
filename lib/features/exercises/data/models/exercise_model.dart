@@ -15,7 +15,7 @@ class ExerciseModel extends Exercise {
     @required int frequency,
     @required String intensity,
     @required int durationInMinutes,
-    @required DateTime inicialDate,
+    @required DateTime initialDate,
     @required DateTime finalDate,
     @required bool done,
   }) : super(
@@ -29,7 +29,7 @@ class ExerciseModel extends Exercise {
           frequency: frequency,
           intensity: intensity,
           durationInMinutes: durationInMinutes,
-          inicialDate: inicialDate,
+          initialDate: initialDate,
           finalDate: finalDate,
           done: done,
         );
@@ -37,8 +37,8 @@ class ExerciseModel extends Exercise {
   Map<dynamic, dynamic> toJson() {
     Map<dynamic, dynamic> json = {};
     if (executionDay != null) json['executionDay'] = executionDay.millisecondsSinceEpoch;
-    if (inicialDate != null)
-      json['inicialDate'] = inicialDate.millisecondsSinceEpoch;
+    if (initialDate != null)
+      json['initialDate'] = initialDate.millisecondsSinceEpoch;
     if (finalDate != null) json['finalDate'] = finalDate.millisecondsSinceEpoch;
     if (name != null) json['name'] = name;
     if (frequency != null) json['frequency'] = frequency;
@@ -60,9 +60,9 @@ class ExerciseModel extends Exercise {
       executionDay: (json['executionDay'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['executionDay']),
-      inicialDate: (json['inicialDate'] == null)
+      initialDate: (json['initialDate'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(json['inicialDate']),
+          : DateTime.fromMillisecondsSinceEpoch(json['initialDate']),
       finalDate: (json['finalDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['finalDate']),
@@ -90,7 +90,7 @@ class ExerciseModel extends Exercise {
         id: exercise.id,
         finalDate: exercise.finalDate,
          frequency: exercise.frequency,
-        inicialDate: exercise.inicialDate,
+        initialDate: exercise.initialDate,
         intensity: exercise.intensity,
         shortnessOfBreath: exercise.shortnessOfBreath,
         executionDay: exercise.executionDay,

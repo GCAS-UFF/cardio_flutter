@@ -247,7 +247,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
           frequency: _formData[LABEL_FREQUENCY],
           finalDate:
               DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-          inicialDate:
+          initialDate:
               DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
           executionDay:
               DateHelper.convertStringToDate(_formData[LABEL_EXECUTION_DAY]),

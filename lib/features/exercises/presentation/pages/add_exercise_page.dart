@@ -63,7 +63,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
       _formData[LABEL_INTENSITY] = widget.exercise.intensity;
       _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
       _formData[LABEL_INITIAL_DATE] =
-          DateHelper.convertDateToString(widget.exercise.inicialDate);
+          DateHelper.convertDateToString(widget.exercise.initialDate);
       _formData[LABEL_FINAL_DATE] =
           DateHelper.convertDateToString(widget.exercise.finalDate);
       _initialDateController.text = _formData[LABEL_INITIAL_DATE];
@@ -236,7 +236,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
             finalDate:
                 DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            inicialDate:
+            initialDate:
                 DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
             executionDay:
                 DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
@@ -259,7 +259,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
             finalDate:
                 DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            inicialDate:
+            initialDate:
                 DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
             executionDay:
                 DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),

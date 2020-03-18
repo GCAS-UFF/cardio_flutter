@@ -23,7 +23,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         GestureDetector(
           onTap: () {
@@ -65,7 +65,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                         "Exercício:  ${(widget.exercise.name != null) ? widget.exercise.name : ""}\n"
                         "Frequência: ${(widget.exercise.frequency != null) ? widget.exercise.frequency : ""} vezes ao dia\n"
                         "Intensidade: ${(widget.exercise.intensity != null) ? widget.exercise.intensity : ""}\n"
-                        "Data de Início: ${(widget.exercise.inicialDate != null) ? DateHelper.convertDateToString(widget.exercise.inicialDate) : ""}\n"
+                        "Data de Início: ${(widget.exercise.initialDate != null) ? DateHelper.convertDateToString(widget.exercise.initialDate) : ""}\n"
                         "Data de Fim: ${(widget.exercise.finalDate != null) ? DateHelper.convertDateToString(widget.exercise.finalDate) : ""}\n"
                         "Duração:  ${(widget.exercise.durationInMinutes != null) ? widget.exercise.durationInMinutes : ""} min",
                         style: TextStyle(color: Colors.white),

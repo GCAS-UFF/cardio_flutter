@@ -22,7 +22,7 @@ class ExercisePage extends StatelessWidget {
                 Keys.PROFESSIONAL_TYPE)
             ? Navigator.push(context,
                 MaterialPageRoute(builder: (context) => AddExercisePage()))
-            : null;
+            :null;
       },
       backgroundColor: Color(0xffc9fffd),
       body: BlocListener<ExerciseBloc, ExerciseState>(
