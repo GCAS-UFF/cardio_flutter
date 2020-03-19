@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 class Exercise extends Equatable {
   final String id;
   final DateTime executionDay;
+  final String executionTime;
   final String name;
   final int frequency;
   final String intensity;
@@ -24,12 +25,13 @@ class Exercise extends Equatable {
     this.excessiveFatigue,
     this.dizziness,
     this.bodyPain,
+    this.executionTime,
     @required this.name,
-    @required this.frequency,
+    this.frequency,
     @required this.intensity,
     @required this.durationInMinutes,
-    @required this.initialDate,
-    @required this.finalDate,
+    this.initialDate,
+    this.finalDate,
     @required this.done,
   });
 
@@ -48,5 +50,6 @@ class Exercise extends Equatable {
         finalDate,
         id,
         done,
+        executionTime,
       ];
 }

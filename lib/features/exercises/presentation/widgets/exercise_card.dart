@@ -27,19 +27,38 @@ class _ExerciseCardState extends State<ExerciseCard> {
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            if (Provider.of<Settings>(context, listen: false).getUserType() ==
-                Keys.PROFESSIONAL_TYPE) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddExercisePage(
-                    exercise: widget.exercise,
+            if (widget.exercise.done == false) {
+              if (Provider.of<Settings>(context, listen: false).getUserType() ==
+                  (Keys.PROFESSIONAL_TYPE)) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddExercisePage(
+                      exercise: widget.exercise,
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ExecuteExercisePage(
+                            exercise: widget.exercise,
+                          )),
+                );
+              }
             } else {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> ExecuteExercisePage(exercise: widget.exercise,) ),);
-
+              if (Provider.of<Settings>(context, listen: false).getUserType() ==
+                  (Keys.PROFESSIONAL_TYPE)) {
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ExecuteExercisePage(
+                            exercise: widget.exercise,
+                          )),
+                );
+              }
             }
           },
           child: Container(

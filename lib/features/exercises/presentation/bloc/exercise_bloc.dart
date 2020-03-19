@@ -55,6 +55,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       yield exerciseListOrError.fold((failure) {
         return Error(message: Converter.convertFailureToMessage(failure));
       }, (exerciseList) {
+        Converter.convertExerciseToCalendar(exerciseList);
         return Loaded(patient: _currentPatient, exerciseList: exerciseList);
       });
     } else if (event is EditExerciseProfessionalEvent) {

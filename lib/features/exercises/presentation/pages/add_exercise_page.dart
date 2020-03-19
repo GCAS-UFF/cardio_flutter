@@ -178,8 +178,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 isRequired: true,
                 textEditingController: _initialDateController,
                 validator: DateInputValidator(),
-                hintText: Strings.initial_date,
-                title: Strings.date,
+                hintText: Strings.date,
+                title: Strings.initial_date,
                 onChanged: (value) {
                   setState(() {
                     _formData[LABEL_INITIAL_DATE] = value;
@@ -190,8 +190,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 isRequired: true,
                 textEditingController: _finalDateController,
                 validator: DateInputValidator(),
-                hintText: Strings.final_date,
-                title: Strings.date,
+                hintText: Strings.date,
+                title: Strings.final_date,
                 onChanged: (value) {
                   setState(() {
                     _formData[LABEL_FINAL_DATE] = value;

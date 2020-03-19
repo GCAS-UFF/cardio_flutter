@@ -5,12 +5,13 @@ import 'package:meta/meta.dart';
 
 class ExerciseModel extends Exercise {
   ExerciseModel({
-    DateTime executionDay,
-    String id,
-    bool shortnessOfBreath,
-    bool excessiveFatigue,
-    bool dizziness,
-    bool bodyPain,
+    @required DateTime executionDay,
+    @required String id,
+    @required bool shortnessOfBreath,
+    @required bool excessiveFatigue,
+    @required bool dizziness,
+    @required bool bodyPain,
+    @required String executionTime,
     @required String name,
     @required int frequency,
     @required String intensity,
@@ -32,11 +33,13 @@ class ExerciseModel extends Exercise {
           initialDate: initialDate,
           finalDate: finalDate,
           done: done,
+          executionTime: executionTime,
         );
 
   Map<dynamic, dynamic> toJson() {
     Map<dynamic, dynamic> json = {};
-    if (executionDay != null) json['executionDay'] = executionDay.millisecondsSinceEpoch;
+    if (executionDay != null)
+      json['executionDay'] = executionDay.millisecondsSinceEpoch;
     if (initialDate != null)
       json['initialDate'] = initialDate.millisecondsSinceEpoch;
     if (finalDate != null) json['finalDate'] = finalDate.millisecondsSinceEpoch;
@@ -50,6 +53,7 @@ class ExerciseModel extends Exercise {
       json['shortnessOfBreath'] = shortnessOfBreath;
     if (dizziness != null) json['dizziness'] = dizziness;
     if (bodyPain != null) json['bodyPain'] = bodyPain;
+    if (executionTime != null) json['executionTime'] = executionTime;
 
     return json;
   }
@@ -76,25 +80,28 @@ class ExerciseModel extends Exercise {
       dizziness: json['dizziness'],
       bodyPain: json['bodyPain'],
       done: json['done'],
+      executionTime: json['executionTime'],
     );
   }
 
   factory ExerciseModel.fromEntity(Exercise exercise) {
     if (exercise == null) return null;
     return ExerciseModel(
-        name: exercise.name,
-        bodyPain: exercise.bodyPain,
-        dizziness: exercise.dizziness,
-        durationInMinutes: exercise.durationInMinutes,
-        excessiveFatigue: exercise.excessiveFatigue,
-        id: exercise.id,
-        finalDate: exercise.finalDate,
-         frequency: exercise.frequency,
-        initialDate: exercise.initialDate,
-        intensity: exercise.intensity,
-        shortnessOfBreath: exercise.shortnessOfBreath,
-        executionDay: exercise.executionDay,
-        done: exercise.done);
+      name: exercise.name,
+      bodyPain: exercise.bodyPain,
+      dizziness: exercise.dizziness,
+      durationInMinutes: exercise.durationInMinutes,
+      excessiveFatigue: exercise.excessiveFatigue,
+      id: exercise.id,
+      finalDate: exercise.finalDate,
+      frequency: exercise.frequency,
+      initialDate: exercise.initialDate,
+      intensity: exercise.intensity,
+      shortnessOfBreath: exercise.shortnessOfBreath,
+      executionDay: exercise.executionDay,
+      done: exercise.done,
+      executionTime: exercise.executionTime,
+    );
   }
 
   factory ExerciseModel.fromDataSnapshot(DataSnapshot dataSnapshot, bool done) {

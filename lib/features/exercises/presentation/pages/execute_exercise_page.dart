@@ -1,5 +1,4 @@
-import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
-import 'package:cardio_flutter/core/utils/date_helper.dart';
+import 'package:cardio_flutter/core/input_validators/time_of_day_validator.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
@@ -25,18 +24,12 @@ class ExecuteExercisePage extends StatefulWidget {
 
 class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   static const String LABEL_NAME = "LABEL_NAME";
-  static const String LABEL_FREQUENCY = "LABEL_LABEL_FREQUENCY";
   static const String LABEL_INTENSITY = "LABEL_INTENSITY";
   static const String LABEL_DURATION = "LABEL_DURATION";
-  static const String LABEL_INITIAL_DATE = "LABEL_INITIAL_DATE";
-  static const String LABEL_FINAL_DATE = "LABEL_FINAL_DATE";
   static const String LABEL_BODY_PAIN = "LABEL_BODY_PAIN";
   static const String LABEL_DIZZINESS = "DIZZINESS";
   static const String LABEL_SHORTNESS_OF_BREATH = "LABEL_SHORTNESS_OF_BREATH";
   static const String LABEL_EXCESSIVE_FATIGUE = "LABEL_EXCESSIVE_FATIGUE";
-  static const String LABEL_DONE = "LABEL_DONE";
-  static const String LABEL_ID = "LABEL_ID";
-  static const String LABEL_EXECUTION_DAY = "LABEL_EXECUTION_DAY";
   static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
@@ -46,17 +39,28 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   TextEditingController _nameController;
   TextEditingController _intensityController;
   TextEditingController _durationController;
-  TextEditingController _executionDayController = new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
+  TextEditingController _timeOfDayController = new MultimaskedTextController(
+    maskDefault: "xx:xx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
   @override
   void initState() {
-    if (widget.exercise != null) {
-      _formData[LABEL_NAME] = widget.exercise.name;
-      _formData[LABEL_INTENSITY] = widget.exercise.intensity.toString();
-      _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
+    _formData[LABEL_NAME] = widget.exercise.name;
+    _formData[LABEL_INTENSITY] = widget.exercise.intensity.toString();
+    _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
+    _formData[LABEL_TIME_OF_DAY] = widget.exercise.executionTime;
+
+    if (widget.exercise.done) {
+      _formData[LABEL_SHORTNESS_OF_BREATH] = widget.exercise.shortnessOfBreath;
+      _formData[LABEL_EXCESSIVE_FATIGUE] = widget.exercise.excessiveFatigue;
+      _formData[LABEL_DIZZINESS] = widget.exercise.dizziness;
+      _formData[LABEL_BODY_PAIN] = widget.exercise.bodyPain;
+    } else {
+      _formData[LABEL_SHORTNESS_OF_BREATH] = false;
+      _formData[LABEL_EXCESSIVE_FATIGUE] = false;
+      _formData[LABEL_DIZZINESS] = false;
+      _formData[LABEL_BODY_PAIN] = false;
     }
 
     _nameController = TextEditingController(
@@ -69,11 +73,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
     _durationController = TextEditingController(
       text: _formData[LABEL_DURATION],
     );
-
-    _formData[LABEL_SHORTNESS_OF_BREATH] = false;
-    _formData[LABEL_EXCESSIVE_FATIGUE] = false;
-    _formData[LABEL_DIZZINESS] = false;
-    _formData[LABEL_BODY_PAIN] = false;
+    _timeOfDayController.text = _formData[LABEL_TIME_OF_DAY];
 
     super.initState();
   }
@@ -157,13 +157,14 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                textEditingController: _executionDayController,
-                validator: DateInputValidator(),
+                textEditingController: _timeOfDayController,
+                validator: TimeofDayValidator(),
                 hintText: "",
                 title: Strings.time_title,
+                keyboardType: TextInputType.number,
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_EXECUTION_DAY] = value;
+                    _formData[LABEL_TIME_OF_DAY] = value;
                   });
                 },
               ),
@@ -238,19 +239,13 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
           done: true,
           name: _formData[LABEL_NAME],
           durationInMinutes: int.parse(_formData[LABEL_DURATION]),
-          id: _formData[LABEL_ID],
           dizziness: _formData[LABEL_DIZZINESS],
           shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
           bodyPain: _formData[LABEL_BODY_PAIN],
           intensity: _formData[LABEL_INTENSITY],
           excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
-          frequency: _formData[LABEL_FREQUENCY],
-          finalDate:
-              DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-          initialDate:
-              DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-          executionDay:
-              DateHelper.convertStringToDate(_formData[LABEL_EXECUTION_DAY]),
+          executionDay: DateTime.now(),
+          executionTime: _formData[LABEL_TIME_OF_DAY],
         ),
       ),
     );
