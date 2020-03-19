@@ -1,4 +1,15 @@
+import 'dart:convert';
+
 import 'package:cardio_flutter/core/error/failure.dart';
+import 'package:cardio_flutter/core/utils/date_helper.dart';
+import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
+import 'package:cardio_flutter/features/calendar/presentation/models/calendar.dart'
+    as calendar;
+import 'package:cardio_flutter/features/calendar/presentation/models/day.dart';
+import 'package:cardio_flutter/features/calendar/presentation/models/month.dart'
+    as month;
+import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
+import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:meta/meta.dart';
 
@@ -72,5 +83,156 @@ class Converter {
     }
 
     return text;
+  }
+
+  static calendar.Calendar convertExerciseToCalendar(
+      List<Exercise> exerciseList) {
+    calendar.Calendar calendarObject =
+        calendar.Calendar(months: List<month.Month>());
+
+    // Run through all exercice list
+    print(1);
+    for (var i = 0; i < exerciseList.length; i++) {
+      print(2);
+      // if the exercise was not done and doesnt have a initial date we shouldn't bother
+      if (!exerciseList[i].done && exerciseList[i].initialDate != null) {
+        print(3);
+        // Run through all days for the initial date until the final date day by day
+        for (var j = exerciseList[i].initialDate.millisecondsSinceEpoch;
+            j < exerciseList[i].finalDate.millisecondsSinceEpoch;
+            j += 86400000) {
+          print(
+              "initial ${exerciseList[i].initialDate.millisecondsSinceEpoch} final ${exerciseList[i].finalDate.millisecondsSinceEpoch} current $j");
+          print(4);
+          // Get the month and day reference from date
+          DateTime currentDate = DateTime(j);
+          addMonthIncalendar(calendarObject, exerciseList[i], currentDate);
+          print(5);
+        }
+      } else if (exerciseList[i].done && exerciseList[i].initialDate != null) {
+        print(6);
+        addMonthIncalendar(
+            calendarObject, exerciseList[i], exerciseList[i].executionDay);
+      }
+
+      /* for (var k = 1; k <= calendarObject.months.length; k++) {
+          if (!(DateTime.fromMillisecondsSinceEpoch(j).month ==
+                  calendarObject.months[k].id &&
+              calendarObject.months[k].year ==
+                  DateTime.fromMillisecondsSinceEpoch(j).year)) {
+            monthtoadd.id = DateTime.fromMillisecondsSinceEpoch(j).month;
+            monthtoadd.year = DateTime.fromMillisecondsSinceEpoch(j).year;
+            print(monthtoadd);
+            calendarObject.months.add(monthtoadd);
+          }
+        } */
+
+    }
+    print("calendar " + calendarObject.toString());
+    return calendarObject;
+  }
+
+  static addMonthIncalendar(calendar.Calendar calendarObject, Exercise exercise,
+      DateTime currentDate) {
+    int year = currentDate.year;
+    int monthInt = currentDate.month;
+    int day = currentDate.day;
+    //Test if the month is alredy in the calendar
+    int monthIndex = calendarObject.months.indexWhere((monthItem) {
+      return (monthItem.id == monthInt);
+    });
+    // if the mounth doesnt exist in calendar we should add everything
+    if (monthIndex < 0) {
+      calendarObject.months.add(
+        month.Month(
+          id: monthInt,
+          year: year,
+          days: [
+            Day(
+              id: day,
+              activities: [
+                Activity(
+                  informations: exerciseToActivity(exercise),
+                  type: Keys.ACTIVITY_RECOMENDED,
+                  value: exercise,
+                  onClick: () {},
+                ),
+              ],
+            )
+          ],
+        ),
+      );
+    } else {
+      // if the month isn't null we should test if the day exists
+      int dayIndex =
+          calendarObject.months[monthIndex].days.indexWhere((dayItem) {
+        return (dayItem.id == day);
+      });
+      // if the day doensn't exist we should add everything
+      if (dayIndex < 0 ) {
+        calendarObject.months[monthIndex].days.add(
+          Day(
+            id: day,
+            activities: [
+              Activity(
+                informations: exerciseToActivity(exercise),
+                type: Keys.ACTIVITY_RECOMENDED,
+                value: exercise,
+                onClick: () {},
+              ),
+            ],
+          ),
+        );
+      } else {
+        // We should add in the existing day
+        calendarObject.months[monthIndex].days[dayIndex].activities.add(
+          Activity(
+            informations: exerciseToActivity(exercise),
+            type: Keys.ACTIVITY_RECOMENDED,
+            value: exercise,
+            onClick: () {},
+          ),
+        );
+      }
+    }
+  }
+
+  static String symptom(bool symptom) {
+    String string;
+    if (symptom == null) {
+      return null;
+    } else {
+      (symptom == true) ? string = "Houve" : string = "Não houve";
+      return string;
+    }
+  }
+
+  static Map<String, String> exerciseToActivity(Exercise exercise) {
+    Map<String, String> result;
+
+    if (!exercise.done) {
+      result = {
+        "Exercício": exercise.name,
+        "Frequência": exercise.frequency.toString(),
+        "Intensidade": exercise.intensity,
+        "Duração": "${exercise.durationInMinutes} minutos",
+        "Data de Inicio": DateHelper.convertDateToString(exercise.initialDate),
+        "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),
+      };
+    } else {
+      result = {
+        "Hora da Realização": exercise.executionTime,
+        "Exercício": exercise.name,
+        "Intensidade": exercise.intensity,
+        "Duração": "${exercise.durationInMinutes} minutos",
+        "Sintomas": "",
+        "   Falta de Ar Excessiva": symptom(exercise.shortnessOfBreath),
+        "   Fadiga Excessiva": symptom(exercise.excessiveFatigue),
+        "   Tontura": symptom(exercise.dizziness),
+        "   Dores Corporais": symptom(exercise.bodyPain),
+      };
+
+      return result;
+    }
   }
 }

@@ -43,6 +43,8 @@ class Strings {
       "O mês que você digitou é inválido";
   static const invalid_year_error_message = "O ano que você digitou é inválido";
   static const invalid_day_error_message = "O dia que você digitou é inválido";
+  static const invalid_time_error_message =
+      "O horário que você digitou é inválido";
 
   // Menu page
 
@@ -280,34 +282,44 @@ class Strings {
   static const professional_help9 = "Orientações";
   static const professional_help10 = "Informações";
 
-  static const professional_help_answer1 = "Localizado no canto superior direito, o menu está presente em todas as telas do aplicativo, exceto a de logon."
-            "\n\u0009Nele há uma única opção: deslogar da sua conta no aplicativo.";
-  static const professional_help_answer2 = "Nesta tela, você verá uma lista com todos seus pacientes já cadastrados. Ao clicar sobre o nome, sarão exibidos os dados deste paciente como endereço, CPF, data de nascimento, um botão \"dissociar\", para tirar o paciente da sua lista, e \"abrir\", para ir para o menu do paciente e conseguir recomendar ações e ver histórico de ações realizadas."
-            "\n\u0009Além disso, haverá um botão \"Cadastrar paciente\".";
-  static const professional_help_answer3 = "Nesta tela, você poderá cadastrar um novo paciente, informando nome, CPF, endereço, data de nascimento e e-mail."
-            "\n\u0009Não se esqueça de informar ao paciente que a senha de acesso ao sistema dele será o CPF.";
-  static const professional_help_answer4 = "Nesta tela você poderá ver uma lista de ações recomendadas/realizadas organizadas por data. Ao clicar na data, você verá um detalhamento da recomendação daquele dia e das ações realizadas pelo paciente."
-            "\n\u0009Você também poderá adicionar uma recomendação, informando a periodicidade diária em que o paciente deverá aferiri seus dados biométricos, além de informar o período da recomendação através da data inicial e final.";
-  static const professional_help_answer5 = "Nesta tela, você encontrará duas listas: recomendações atuais e recomendações antigas e, em cada, terão as recomendações em cada data."
-            "\n\u0009Ao clicar na data, você verá mais detalhes sobre a recomendação como data de início, data de fim da recomendação, além da quantidade máxima de líquidos para o dia."
-            "\n\u0009Caso você queira, há a possibilidade de informar a realização de uma atividade. Basta clicar na data e, em seguida, no ícone \"+\". A tela pedirá o nome do líquido ingerido, a quantidade (em unidade), a referência (copo, cálice, etc) e o horário que ingeriu."
-            "\n\u0009Ao clicar em \"OK\", a lista atualizará, informando a quantidade total de líquido ingerida até o momento, assim que você atualizar a tela (saindo e voltando)."
-            "\n\n\u0009Você pode adicionar novas recomendações clicando em \"Adicionar recomendação\" e informar, na tela que abrirá, a quantidade máxima a ser ingerida (em mililitros) e o período da recomendação.";
-  static const professional_help_answer6 = "Nesta tela, você encontrará duas listas: recomendações atuais e recomendações antigas e, em cada, terão as recomendações em cada data."
-            "\n\u0009Ao clicar na data, você verá mais detalhes sobre a recomendação como nome do medicamente, dose, quantidade e horários a serem tomados."
-            "\n\u0009Caso você queira, há a possibilidade de informar a realização de uma atividade. Basta clicar na data e, em seguida, no ícone \"+\". A tela que surgir já estará preenchida com os detalhes da recomendação, exceto o horário de consumo de medicamento."
-            "\n\u0009Ao clicar em \"OK\", a lista atualizará assim que você atualizar a tela (saindo e voltando)."
-            "\n\n\u0009Você pode adicionar novas recomendações clicando em \"Adicionar recomendação\" e informar, na tela que abrirá, o nome do medicamento, dosagem, frequência diária, observações (se houverem), dentre outros.";
-  static const professional_help_answer7 = "Nesta tela, você encontrará duas listas: consultasa futuras e consultas passadas."
-            "\n\u0009Ao clicar na data, você verá mais detalhes sobre a(s) consulta(s) como especialidade do profissional de saúde, horário e localização."
-            "\n\u0009Caso você queira, há a possibilidade de informar a realização de uma atividade. Basta clicar na data e, em seguida, no ícone \"+\". A tela que surgir já estará preenchida com os detalhes da recomendação, exceto o horário de comparecimento."
-            "\n\u0009Ao clicar em \"OK\", a lista atualizará assim que você atualizar a tela (saindo e voltando)."
-            "\n\n\u0009Você pode adicionar novas recomendações clicando em \"Adicionar recomendação\" e informar, na tela que abrirá, a data da consulta, o horário, endereço e especialidade do profissional de saúde";
-  static const professional_help_answer8 = "Nesta tela, você encontrará duas listas: recomendações atuais e recomendações antigas e, em cada, terão as recomendações em cada data."
-            "\n\u0009Ao clicar na data, você verá mais detalhes sobre a recomendação como exercício a ser realizado, intensidade, duração e frequência diária."
-            "\n\u0009Caso você queira, há a possibilidade de informar a realização de uma atividade. Basta clicar na data e, em seguida, no ícone \"+\". A tela que surgir já estará preenchida com os detalhes da recomendação, exceto o horário de realização. Além disso, informe se houve se houve algum sintoma ao realizar a atividade física."
-            "\n\u0009Ao clicar em \"OK\", a lista atualizará assim que você atualizar a tela (saindo e voltando)."
-            "\n\n\u0009Você pode adicionar novas recomendações clicando em \"Adicionar recomendação\" e informar, na tela que abrirá, a atividade física, a frequência diária, a intensidade, duração e período da recomendação.";
-  static const professional_help_answer9 = "Nesta tela, você encontrará informações sobre a Insuficiência Cardíaca.";
-  static const professional_help_answer10 = "Nesta tela, você encontrará informações sobre a concepção do aplicativo e seus colaboradores.";
+  static const professional_help_answer1 =
+      "Localizado no canto superior direito, o menu está presente em todas as telas do aplicativo, exceto a de logon."
+      "\n\u0009Nele há uma única opção: deslogar da sua conta no aplicativo.";
+  static const professional_help_answer2 =
+      "Nesta tela, você verá uma lista com todos seus pacientes já cadastrados. Ao clicar sobre o nome, sarão exibidos os dados deste paciente como endereço, CPF, data de nascimento, um botão \"dissociar\", para tirar o paciente da sua lista, e \"abrir\", para ir para o menu do paciente e conseguir recomendar ações e ver histórico de ações realizadas."
+      "\n\u0009Além disso, haverá um botão \"Cadastrar paciente\".";
+  static const professional_help_answer3 =
+      "Nesta tela, você poderá cadastrar um novo paciente, informando nome, CPF, endereço, data de nascimento e e-mail."
+      "\n\u0009Não se esqueça de informar ao paciente que a senha de acesso ao sistema dele será o CPF.";
+  static const professional_help_answer4 =
+      "Nesta tela você poderá ver uma lista de ações recomendadas/realizadas organizadas por data. Ao clicar na data, você verá um detalhamento da recomendação daquele dia e das ações realizadas pelo paciente."
+      "\n\u0009Você também poderá adicionar uma recomendação, informando a periodicidade diária em que o paciente deverá aferiri seus dados biométricos, além de informar o período da recomendação através da data inicial e final.";
+  static const professional_help_answer5 =
+      "Nesta tela, você encontrará duas listas: recomendações atuais e recomendações antigas e, em cada, terão as recomendações em cada data."
+      "\n\u0009Ao clicar na data, você verá mais detalhes sobre a recomendação como data de início, data de fim da recomendação, além da quantidade máxima de líquidos para o dia."
+      "\n\u0009Caso você queira, há a possibilidade de informar a realização de uma atividade. Basta clicar na data e, em seguida, no ícone \"+\". A tela pedirá o nome do líquido ingerido, a quantidade (em unidade), a referência (copo, cálice, etc) e o horário que ingeriu."
+      "\n\u0009Ao clicar em \"OK\", a lista atualizará, informando a quantidade total de líquido ingerida até o momento, assim que você atualizar a tela (saindo e voltando)."
+      "\n\n\u0009Você pode adicionar novas recomendações clicando em \"Adicionar recomendação\" e informar, na tela que abrirá, a quantidade máxima a ser ingerida (em mililitros) e o período da recomendação.";
+  static const professional_help_answer6 =
+      "Nesta tela, você encontrará duas listas: recomendações atuais e recomendações antigas e, em cada, terão as recomendações em cada data."
+      "\n\u0009Ao clicar na data, você verá mais detalhes sobre a recomendação como nome do medicamente, dose, quantidade e horários a serem tomados."
+      "\n\u0009Caso você queira, há a possibilidade de informar a realização de uma atividade. Basta clicar na data e, em seguida, no ícone \"+\". A tela que surgir já estará preenchida com os detalhes da recomendação, exceto o horário de consumo de medicamento."
+      "\n\u0009Ao clicar em \"OK\", a lista atualizará assim que você atualizar a tela (saindo e voltando)."
+      "\n\n\u0009Você pode adicionar novas recomendações clicando em \"Adicionar recomendação\" e informar, na tela que abrirá, o nome do medicamento, dosagem, frequência diária, observações (se houverem), dentre outros.";
+  static const professional_help_answer7 =
+      "Nesta tela, você encontrará duas listas: consultasa futuras e consultas passadas."
+      "\n\u0009Ao clicar na data, você verá mais detalhes sobre a(s) consulta(s) como especialidade do profissional de saúde, horário e localização."
+      "\n\u0009Caso você queira, há a possibilidade de informar a realização de uma atividade. Basta clicar na data e, em seguida, no ícone \"+\". A tela que surgir já estará preenchida com os detalhes da recomendação, exceto o horário de comparecimento."
+      "\n\u0009Ao clicar em \"OK\", a lista atualizará assim que você atualizar a tela (saindo e voltando)."
+      "\n\n\u0009Você pode adicionar novas recomendações clicando em \"Adicionar recomendação\" e informar, na tela que abrirá, a data da consulta, o horário, endereço e especialidade do profissional de saúde";
+  static const professional_help_answer8 =
+      "Nesta tela, você encontrará duas listas: recomendações atuais e recomendações antigas e, em cada, terão as recomendações em cada data."
+      "\n\u0009Ao clicar na data, você verá mais detalhes sobre a recomendação como exercício a ser realizado, intensidade, duração e frequência diária."
+      "\n\u0009Caso você queira, há a possibilidade de informar a realização de uma atividade. Basta clicar na data e, em seguida, no ícone \"+\". A tela que surgir já estará preenchida com os detalhes da recomendação, exceto o horário de realização. Além disso, informe se houve se houve algum sintoma ao realizar a atividade física."
+      "\n\u0009Ao clicar em \"OK\", a lista atualizará assim que você atualizar a tela (saindo e voltando)."
+      "\n\n\u0009Você pode adicionar novas recomendações clicando em \"Adicionar recomendação\" e informar, na tela que abrirá, a atividade física, a frequência diária, a intensidade, duração e período da recomendação.";
+  static const professional_help_answer9 =
+      "Nesta tela, você encontrará informações sobre a Insuficiência Cardíaca.";
+  static const professional_help_answer10 =
+      "Nesta tela, você encontrará informações sobre a concepção do aplicativo e seus colaboradores.";
 }
