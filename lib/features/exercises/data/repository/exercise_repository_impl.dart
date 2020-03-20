@@ -77,4 +77,31 @@ class ExerciseRepositoryImpl implements ExerciseRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteExercise(Patient patient, Exercise exercise)  async {
+    try {
+      return Right(await remoteDataSource.deleteExercise(
+          PatientModel.fromEntity(patient),
+          ExerciseModel.fromEntity(exercise)));
+    } on PlatformException catch (e) {
+      return Left(PlatformFailure(message: e.message));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Exercise>> editExecutedExercise(Exercise exercise, Patient patient) async {
+    try {
+      return Right(await remoteDataSource.editExecutedExercise(
+        ExerciseModel.fromEntity(exercise),
+        PatientModel.fromEntity(patient),
+      ));
+    } on PlatformException catch (e) {
+      return Left(PlatformFailure(message: e.message));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
 }

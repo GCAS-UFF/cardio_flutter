@@ -233,6 +233,8 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
       return;
     }
     _formKey.currentState.save();
+
+     if (!widget.exercise.done) {
     BlocProvider.of<ExerciseBloc>(context).add(
       ExecuteExerciseEvent(
         exercise: Exercise(
@@ -248,6 +250,26 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
           executionTime: _formData[LABEL_TIME_OF_DAY],
         ),
       ),
+    );}else{BlocProvider.of<ExerciseBloc>(context).add(
+      EditExecutedExerciseEvent(
+        exercise: Exercise(
+          id: widget.exercise.id,
+          done: true,
+          name: _formData[LABEL_NAME],
+          durationInMinutes: int.parse(_formData[LABEL_DURATION]),
+          dizziness: _formData[LABEL_DIZZINESS],
+          shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
+          bodyPain: _formData[LABEL_BODY_PAIN],
+          intensity: _formData[LABEL_INTENSITY],
+          excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
+          executionDay: DateTime.now(),
+          executionTime: _formData[LABEL_TIME_OF_DAY],
+        ),
+      ),
     );
+
+
+
+    }
   }
 }

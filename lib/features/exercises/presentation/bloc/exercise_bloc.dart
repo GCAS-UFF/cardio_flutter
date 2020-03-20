@@ -3,13 +3,18 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
+import 'package:cardio_flutter/features/calendar/presentation/models/calendar.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
+import 'package:cardio_flutter/features/exercises/domain/usecases/delete_exercise.dart' as delete_exercise;
+
 import 'package:cardio_flutter/features/exercises/domain/usecases/add_exercise.dart'
     as add_exercise;
 import 'package:cardio_flutter/features/exercises/domain/usecases/get_exercise_list.dart'
     as get_exercise_list;
 import 'package:cardio_flutter/features/exercises/domain/usecases/execute_exercise.dart'
     as execute_exercise;
+import 'package:cardio_flutter/features/exercises/domain/usecases/edit_executed_exercise.dart' as edit_executed_exercise;
+
 import 'package:cardio_flutter/features/exercises/domain/usecases/edit_exercise_professional.dart'
     as edit_exercise_professional;
 
@@ -24,18 +29,25 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
   final edit_exercise_professional.EditExerciseProfessional
       editExerciseProfessional;
   final execute_exercise.ExecuteExercise executeExercise;
+  final edit_executed_exercise.EditExecutedExercise editExecutedExercise;
+  final delete_exercise.DeleteExercise deleteExercise;
   final get_exercise_list.GetExerciseList getExerciseList;
   Patient _currentPatient;
 
   ExerciseBloc(
       {@required this.addExercise,
+      @required this.deleteExercise,
       @required this.editExerciseProfessional,
       @required this.executeExercise,
+      @required this.editExecutedExercise,
       @required this.getExerciseList})
       : assert(addExercise != null),
         assert(editExerciseProfessional != null),
         assert(executeExercise != null),
-        assert(getExerciseList != null);
+        assert(editExecutedExercise != null),
+        assert(getExerciseList != null),
+        assert(deleteExercise != null);
+
 
   @override
   ExerciseState get initialState => Empty();
@@ -55,8 +67,8 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       yield exerciseListOrError.fold((failure) {
         return Error(message: Converter.convertFailureToMessage(failure));
       }, (exerciseList) {
-        Converter.convertExerciseToCalendar(exerciseList);
-        return Loaded(patient: _currentPatient, exerciseList: exerciseList);
+        Calendar calendar = Converter.convertExerciseToCalendar(exerciseList);
+        return Loaded(patient: _currentPatient, calendar: calendar);
       });
     } else if (event is EditExerciseProfessionalEvent) {
       yield Loading();
@@ -79,11 +91,32 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
         this.add(Refresh());
         return Loading();
       });
+    }
+    else if (event is EditExecutedExerciseEvent) {
+      yield Loading();
+      var exerciseOrError = await editExecutedExercise(edit_executed_exercise.Params(
+          exercise: event.exercise, patient: _currentPatient));
+      yield exerciseOrError.fold((failure) {
+        return Error(message: Converter.convertFailureToMessage(failure));
+      }, (result) {
+        this.add(Refresh());
+        return Loading();
+      });
     } else if (event is AddExerciseEvent) {
       yield Loading();
       var exerciseOrError = await addExercise(add_exercise.Params(
           exercise: event.exercise, patient: _currentPatient));
       yield exerciseOrError.fold((failure) {
+        return Error(message: Converter.convertFailureToMessage(failure));
+      }, (result) {
+        this.add(Refresh());
+        return Loading();
+      });
+    }else if (event is DeleteExerciseEvent) {
+      yield Loading();
+      var voidOrError = await deleteExercise(
+          delete_exercise.Params(exercise: event.exercise,patient: _currentPatient));
+      yield voidOrError.fold((failure) {
         return Error(message: Converter.convertFailureToMessage(failure));
       }, (result) {
         this.add(Refresh());

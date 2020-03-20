@@ -37,3 +37,17 @@ class ExecuteExerciseEvent extends ExerciseEvent {
   ExecuteExerciseEvent({@required this.exercise});
   List<Object> get props => [exercise];
 }
+class EditExecutedExerciseEvent extends ExerciseEvent {
+  final Exercise exercise;
+
+  EditExecutedExerciseEvent({@required this.exercise});
+  List<Object> get props => [exercise];
+}
+
+class DeleteExerciseEvent extends ExerciseEvent{
+final Exercise exercise;
+
+  DeleteExerciseEvent({@required this.exercise,});
+  List<Object> get props => [exercise];
+
+}

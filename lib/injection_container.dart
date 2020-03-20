@@ -29,6 +29,8 @@ import 'features/auth/data/datasources/auth_local_data_source.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/exercises/domain/repository/exercise_repository.dart';
+import 'features/exercises/domain/usecases/delete_exercise.dart';
+import 'features/exercises/domain/usecases/edit_executed_exercise.dart';
 import 'features/manage_professional/data/repositories/manage_professional_repository_impl.dart';
 import 'features/manage_professional/domain/repositories/manage_professional_repository.dart';
 
@@ -129,16 +131,20 @@ void initExerxise() {
   // Bloc
   sl.registerFactory(
     () => ExerciseBloc(
+      deleteExercise: sl(),
       editExerciseProfessional: sl(),
       addExercise: sl(),
       getExerciseList: sl(),
       executeExercise: sl(),
+      editExecutedExercise: sl(),
     ),
   );
 
   // Use Cases
   sl.registerLazySingleton(() => ExecuteExercise(sl()));
+  sl.registerLazySingleton(() => EditExecutedExercise(sl()));
   sl.registerLazySingleton(() => AddExercise(sl()));
+  sl.registerLazySingleton(() => DeleteExercise(sl()));
   sl.registerLazySingleton(() => GetExerciseList(sl()));
   sl.registerLazySingleton(() => EditExerciseProfessional(sl()));
   
