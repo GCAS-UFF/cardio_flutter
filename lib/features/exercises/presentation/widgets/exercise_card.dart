@@ -1,19 +1,22 @@
 import 'package:cardio_flutter/core/platform/settings.dart';
-import 'package:cardio_flutter/core/utils/date_helper.dart';
+import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
+import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
 import 'package:cardio_flutter/features/exercises/presentation/pages/add_exercise_page.dart';
 import 'package:cardio_flutter/features/exercises/presentation/pages/execute_exercise_page.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
-import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseCard extends StatefulWidget {
-  final Exercise exercise;
+  final Activity activity;
 
-  const ExerciseCard({@required this.exercise});
+  const ExerciseCard({Key key,@required this.activity}) : super(key: key);
+
+  
 
   @override
   _ExerciseCardState createState() => _ExerciseCardState();
@@ -23,27 +26,20 @@ class _ExerciseCardState extends State<ExerciseCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            if (widget.exercise.done == false) {
+            if (!widget.activity.value.done) {
               if (Provider.of<Settings>(context, listen: false).getUserType() ==
                   (Keys.PROFESSIONAL_TYPE)) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddExercisePage(
-                      exercise: widget.exercise,
-                    ),
-                  ),
-                );
+                return _showOptionsProfessional(context, widget.activity.value);
               } else {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => ExecuteExercisePage(
-                            exercise: widget.exercise,
+                            exercise: widget.activity.value,
                           )),
                 );
               }
@@ -51,65 +47,53 @@ class _ExerciseCardState extends State<ExerciseCard> {
               if (Provider.of<Settings>(context, listen: false).getUserType() ==
                   (Keys.PROFESSIONAL_TYPE)) {
               } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ExecuteExercisePage(
-                            exercise: widget.exercise,
-                          )),
-                );
+               return _showOptionsPatient(context,widget.activity.value);
               }
             }
           },
           child: Container(
             padding: Dimensions.getEdgeInsetsFromLTRB(context, 10, 10, 10, 10),
             decoration: BoxDecoration(
-              color: (!widget.exercise.done)
+              color: (!widget.activity.value.done)
                   ? Colors.lightBlue
                   : Colors.orangeAccent,
               borderRadius: BorderRadius.circular(7),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: (!widget.exercise.done)
+              children: ((!widget.activity.value.done))
                   ? [
                       Text(
                         "Recomendação",
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: Dimensions.getTextSize(context, 16),
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        "Exercício:  ${(widget.exercise.name != null) ? widget.exercise.name : ""}\n"
-                        "Frequência: ${(widget.exercise.frequency != null) ? widget.exercise.frequency : ""} vezes ao dia\n"
-                        "Intensidade: ${(widget.exercise.intensity != null) ? widget.exercise.intensity : ""}\n"
-                        "Data de Início: ${(widget.exercise.initialDate != null) ? DateHelper.convertDateToString(widget.exercise.initialDate) : ""}\n"
-                        "Data de Fim: ${(widget.exercise.finalDate != null) ? DateHelper.convertDateToString(widget.exercise.finalDate) : ""}\n"
-                        "Duração:  ${(widget.exercise.durationInMinutes != null) ? widget.exercise.durationInMinutes : ""} min",
-                        style: TextStyle(color: Colors.white),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: widget.activity.informations.entries.map(
+                          (entry) {
+                            return _buildParameterItem(context, entry);
+                          },
+                        ).toList(),
                       ),
                     ]
                   : [
                       Text(
                         "Realizado",
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: Dimensions.getTextSize(context, 16),
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        "${Strings.exercise}:  ${(widget.exercise.name != null) ? widget.exercise.name : ""}\n"
-                        //Introduzir o horário
-                        "${Strings.intensity}: ${(widget.exercise.intensity != null) ? widget.exercise.intensity : ""}\n"
-                        "${Strings.duration}:  ${(widget.exercise.durationInMinutes != null) ? widget.exercise.durationInMinutes : ""} min\n"
-                        "Sintomas:\n"
-                        "  ${Strings.shortness_of_breath}:  ${(widget.exercise.shortnessOfBreath != null) ? symptom(widget.exercise.shortnessOfBreath) : ""}\n"
-                        "  ${Strings.excessive_fatigue}:  ${(widget.exercise.excessiveFatigue != null) ? symptom(widget.exercise.excessiveFatigue) : ""}\n"
-                        "  ${Strings.dizziness}:  ${(widget.exercise.dizziness != null) ? symptom(widget.exercise.dizziness) : ""}\n"
-                        "  ${Strings.body_pain}:  ${(widget.exercise.bodyPain != null) ? symptom(widget.exercise.bodyPain) : ""}",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: widget.activity.informations.entries.map(
+                          (entry) {
+                            return _buildParameterItem(context, entry);
+                          },
+                        ).toList(),
+                      )
                     ],
             ),
           ),
@@ -122,6 +106,28 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 }
 
+Widget _buildParameterItem(BuildContext context, MapEntry entry) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: <Widget>[
+      Text(
+        " ${entry.key}:",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: Dimensions.getTextSize(context, 16),
+        ),
+      ),
+      Text(
+        " ${entry.value}",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: Dimensions.getTextSize(context, 16),
+        ),
+      )
+    ],
+  );
+}
+
 String symptom(bool symptom) {
   String string;
   if (symptom == null) {
@@ -130,4 +136,116 @@ String symptom(bool symptom) {
     (symptom == true) ? string = "Houve" : string = "Não houve";
     return string;
   }
+}
+
+void _showOptionsPatient(BuildContext context, Exercise exercise) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return BottomSheet(
+          onClosing: () {},
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExecuteExercisePage(
+                                exercise: exercise,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Editar",
+                          style: TextStyle(color: Colors.red, fontSize: 20),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        BlocProvider.of<ExerciseBloc>(context).add(
+                          DeleteExerciseEvent(
+                            exercise: exercise,
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Excluir ",
+                        style: TextStyle(color: Colors.red, fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+    },
+  );
+}
+
+void _showOptionsProfessional(BuildContext context, Exercise exercise) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return BottomSheet(
+          onClosing: () {},
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddExercisePage(
+                                exercise: exercise,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Editar",
+                          style: TextStyle(color: Colors.red, fontSize: 20),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        BlocProvider.of<ExerciseBloc>(context).add(
+                          DeleteExerciseEvent(
+                            exercise: exercise,
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Excluir ",
+                        style: TextStyle(color: Colors.red, fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+    },
+  );
 }

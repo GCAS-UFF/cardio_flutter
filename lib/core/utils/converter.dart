@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cardio_flutter/core/error/failure.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
@@ -91,42 +89,21 @@ class Converter {
         calendar.Calendar(months: List<month.Month>());
 
     // Run through all exercice list
-    print(1);
     for (var i = 0; i < exerciseList.length; i++) {
-      print(2);
       // if the exercise was not done and doesnt have a initial date we shouldn't bother
       if (!exerciseList[i].done && exerciseList[i].initialDate != null) {
-        print(3);
         // Run through all days for the initial date until the final date day by day
         for (var j = exerciseList[i].initialDate.millisecondsSinceEpoch;
-            j < exerciseList[i].finalDate.millisecondsSinceEpoch;
+            j <= exerciseList[i].finalDate.millisecondsSinceEpoch;
             j += 86400000) {
-          print(
-              "initial ${exerciseList[i].initialDate.millisecondsSinceEpoch} final ${exerciseList[i].finalDate.millisecondsSinceEpoch} current $j");
-          print(4);
           // Get the month and day reference from date
-          DateTime currentDate = DateTime(j);
+          DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(j);
           addMonthIncalendar(calendarObject, exerciseList[i], currentDate);
-          print(5);
         }
-      } else if (exerciseList[i].done && exerciseList[i].initialDate != null) {
-        print(6);
+      } else if (exerciseList[i].done && exerciseList[i].executionDay != null) {
         addMonthIncalendar(
             calendarObject, exerciseList[i], exerciseList[i].executionDay);
       }
-
-      /* for (var k = 1; k <= calendarObject.months.length; k++) {
-          if (!(DateTime.fromMillisecondsSinceEpoch(j).month ==
-                  calendarObject.months[k].id &&
-              calendarObject.months[k].year ==
-                  DateTime.fromMillisecondsSinceEpoch(j).year)) {
-            monthtoadd.id = DateTime.fromMillisecondsSinceEpoch(j).month;
-            monthtoadd.year = DateTime.fromMillisecondsSinceEpoch(j).year;
-            print(monthtoadd);
-            calendarObject.months.add(monthtoadd);
-          }
-        } */
-
     }
     print("calendar " + calendarObject.toString());
     return calendarObject;
@@ -135,6 +112,7 @@ class Converter {
   static addMonthIncalendar(calendar.Calendar calendarObject, Exercise exercise,
       DateTime currentDate) {
     int year = currentDate.year;
+    print(year);
     int monthInt = currentDate.month;
     int day = currentDate.day;
     //Test if the month is alredy in the calendar
@@ -169,7 +147,7 @@ class Converter {
         return (dayItem.id == day);
       });
       // if the day doensn't exist we should add everything
-      if (dayIndex < 0 ) {
+      if (dayIndex < 0) {
         calendarObject.months[monthIndex].days.add(
           Day(
             id: day,
@@ -188,7 +166,7 @@ class Converter {
         calendarObject.months[monthIndex].days[dayIndex].activities.add(
           Activity(
             informations: exerciseToActivity(exercise),
-            type: Keys.ACTIVITY_RECOMENDED,
+            type: Keys.ACTIVITY_DONE,
             value: exercise,
             onClick: () {},
           ),
@@ -223,7 +201,7 @@ class Converter {
       result = {
         "Hora da Realização": exercise.executionTime,
         "Exercício": exercise.name,
-        "Intensidade": exercise.intensity,
+        "Intensidade":exercise.intensity,
         "Duração": "${exercise.durationInMinutes} minutos",
         "Sintomas": "",
         "   Falta de Ar Excessiva": symptom(exercise.shortnessOfBreath),
@@ -231,8 +209,7 @@ class Converter {
         "   Tontura": symptom(exercise.dizziness),
         "   Dores Corporais": symptom(exercise.bodyPain),
       };
-
-      return result;
     }
+    return result;
   }
 }

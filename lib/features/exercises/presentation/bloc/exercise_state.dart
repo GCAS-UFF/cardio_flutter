@@ -17,12 +17,12 @@ class Loading extends ExerciseState {
 
 class Loaded extends ExerciseState {
 final Patient patient;
-final List<Exercise> exerciseList;
+final Calendar calendar;
 
-  Loaded({@required this.patient, @required this.exerciseList});
+  Loaded({@required this.patient, @required this.calendar});
 
 
-  List<Object> get props => [patient, exerciseList];
+  List<Object> get props => [patient, calendar];
   
 }
 
