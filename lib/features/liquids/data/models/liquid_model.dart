@@ -22,17 +22,17 @@ class LiquidModel extends Liquid {
             time: time,
             id: id);
 
-  Map<dynamic, dynamic> toJson() {
+  static Map<dynamic, dynamic> toJson(LiquidModel liquidModel) {
     Map<dynamic, dynamic> json = {};
-    if (initialDate != null)
-      json['initialDate'] = initialDate.millisecondsSinceEpoch;
-    if (finalDate != null) json['finalDate'] = finalDate.millisecondsSinceEpoch;
-    if (mililitersPerDay != null) json['mililitersPerDay'] = mililitersPerDay;
-    if (name != null) json['name'] = name;
-    if (quantity != null) json['quantity'] = quantity;
-    if (id != null) json['id'] = id;
-    if (reference != null) json['reference'] = reference;
-    if (time != null) json['time'] = time;
+    if (liquidModel.initialDate != null)
+      json['initialDate'] = liquidModel.initialDate.millisecondsSinceEpoch;
+    if (liquidModel.finalDate != null) json['finalDate'] = liquidModel.finalDate.millisecondsSinceEpoch;
+    if (liquidModel.mililitersPerDay != null) json['mililitersPerDay'] = liquidModel.mililitersPerDay;
+    if (liquidModel.name != null) json['name'] = liquidModel.name;
+    if (liquidModel.quantity != null) json['quantity'] = liquidModel.quantity;
+    if (liquidModel.id != null) json['id'] = liquidModel.id;
+    if (liquidModel.reference != null) json['reference'] = liquidModel.reference;
+    if (liquidModel.time != null) json['time'] = liquidModel.time;
 
     return json;
   }

@@ -7,6 +7,7 @@ import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_blo
     as exercise;
 import 'package:cardio_flutter/features/help/presentation/pages/patient_help_page.dart';
 import 'package:cardio_flutter/features/help/presentation/pages/professional_help_page.dart';
+import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/orientations/presentation/pages/orientations_page.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
@@ -16,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:cardio_flutter/core/widgets/menu_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart'
+    as generic;
 
 class HomePatientPage extends StatelessWidget {
   final Patient patient;
@@ -60,11 +63,9 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.liquid,
                 image: Images.ico_liquid,
                 destination: () {
-                  return Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePatientPage(patient: patient)));
+                  BlocProvider.of<generic.GenericBloc<Liquid>>(context)
+                      .add(generic.Start<Liquid>(patient: patient));
+                  return Navigator.pushNamed(context, "/liquidPage");
                 },
               ),
               ItemMenu(
