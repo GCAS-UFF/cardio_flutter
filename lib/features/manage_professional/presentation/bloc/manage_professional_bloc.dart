@@ -5,7 +5,6 @@ import 'package:cardio_flutter/core/usecases/usecase.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
-import 'package:cardio_flutter/features/auth/domain/entities/user.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/delete_patient_list.dart'
     as delete_patient;
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit_patient.dart'
@@ -13,7 +12,8 @@ import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit_professional.dart'
     as edit_professional;
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_patient_list.dart';
-import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_professional.dart' as get_professional;
+import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_professional.dart'
+    as get_professional;
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -51,15 +51,9 @@ class ManageProfessionalBloc
   ) async* {
     if (event is Start) {
       yield Loading();
-      var professionalOrError = await getProfessional(
-          get_professional.Params(user: event.user));
-      yield professionalOrError.fold((failure) {
-        return Error(message: Converter.convertFailureToMessage(failure));
-      }, (result) {
-        _currentProfessional = result;
-        this.add(Refresh());
-        return Loading();
-      });
+
+      _currentProfessional = event.professional;
+      this.add(Refresh());
     } else if (event is Refresh) {
       // Show loading for the user
       yield Loading();
@@ -75,7 +69,8 @@ class ManageProfessionalBloc
     } else if (event is EditPatientEvent) {
       yield Loading();
       var patientOrError = await editPatientFromList(
-          edit_patient.Params(patient: event.patient));
+        edit_patient.Params(patient: event.patient),
+      );
       yield patientOrError.fold((failure) {
         return Error(message: Converter.convertFailureToMessage(failure));
       }, (result) {

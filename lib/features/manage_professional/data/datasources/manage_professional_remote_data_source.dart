@@ -3,6 +3,7 @@ import 'package:cardio_flutter/features/auth/data/models/patient_model.dart';
 import 'package:cardio_flutter/features/auth/data/models/profissional_model.dart';
 import 'package:cardio_flutter/features/auth/data/models/user_model.dart';
 import 'package:cardio_flutter/resources/keys.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
@@ -19,12 +20,14 @@ abstract class ManageProfessionalRemoteDataSource {
 class ManageProfessionalRemoteDataSourceImpl
     implements ManageProfessionalRemoteDataSource {
   final FirebaseDatabase firebaseDatabase;
+  final FirebaseAuth firebaseAuth;
   final DatabaseReference patientRootRef =
       FirebaseDatabase.instance.reference().child('Patient');
   final DatabaseReference professionalRootRef =
       FirebaseDatabase.instance.reference().child('Professional');
 
-  ManageProfessionalRemoteDataSourceImpl({@required this.firebaseDatabase});
+  ManageProfessionalRemoteDataSourceImpl(
+      {@required this.firebaseDatabase, @required this.firebaseAuth});
 
   @override
   Future<void> deletePatient(

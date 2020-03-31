@@ -198,7 +198,7 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
               );
             } else if (state is SignedUp) {
               BlocProvider.of<professional.ManageProfessionalBloc>(context)
-                  .add(professional.Start(user: state.user));
+                  .add(professional.Start(professional: state.user));
               Navigator.pushNamedAndRemoveUntil(
                   context, '/homeProfessionalPage', (r) => false);
             }

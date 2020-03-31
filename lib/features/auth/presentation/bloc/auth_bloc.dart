@@ -5,7 +5,6 @@ import 'package:cardio_flutter/core/error/failure.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
-import 'package:cardio_flutter/features/auth/domain/entities/user.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_in.dart'
     as sign_in;
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_patient.dart'
@@ -16,7 +15,6 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../resources/keys.dart';
 import '../../../../resources/strings.dart';
 
 part 'auth_event.dart';
@@ -61,14 +59,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Stream<AuthState> _eitherLoggedOrErrorState(
-      Either<Failure, User> userOrFailure) async* {
+      Either<Failure, dynamic> userOrFailure) async* {
     yield userOrFailure.fold((failure) {
       return Error(message: Converter.convertFailureToMessage(failure));
     }, (user) {
-      if (user.type == Keys.PATIENT_TYPE){
-      return LoggedPatient(user: user);
-      } else if (user.type == Keys.PROFESSIONAL_TYPE) {
-        return LoggedProfessional(user: user);
+      if (user is Patient) {
+        return LoggedPatient(patient: user);
+      } else if (user is Professional) {
+        return LoggedProfessional(professional: user);
       } else {
         return Error(message: Strings.invalid_user_type);
       }

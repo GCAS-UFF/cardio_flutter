@@ -5,4 +5,8 @@ class Keys {
   // User Types
   static const String PATIENT_TYPE = "PATIENT";
   static const String PROFESSIONAL_TYPE = "PROFESSIONAL";
+
+  // Activity Type
+  static const String ACTIVITY_RECOMENDED = "ACTIVITY_RECOMENDED";
+  static const String ACTIVITY_DONE = "ACTIVITY_DONE";
 }

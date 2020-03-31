@@ -1,6 +1,7 @@
 import 'package:cardio_flutter/core/widgets/dialog_widget.dart';
 import 'package:cardio_flutter/core/input_validators/email_input_validator.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
+import 'package:cardio_flutter/features/auth/presentation/pages/home_patient_page.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -68,12 +69,16 @@ class _LoginPageState extends State<LoginPage> {
               );
             } else if (state is LoggedProfessional) {
               BlocProvider.of<professional.ManageProfessionalBloc>(context)
-                  .add(professional.Start(user: state.user));
+                  .add(professional.Start(professional: state.professional));
               Navigator.pushNamedAndRemoveUntil(
                   context, '/homeProfessionalPage', (r) => false);
-            }else if (state is LoggedPatient) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/homePatientPage', (r) => false);
+            } else if (state is LoggedPatient) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomePatientPage(patient: state.patient)),
+                  (r) => false);
             }
           },
           child: BlocBuilder<AuthBloc, AuthState>(

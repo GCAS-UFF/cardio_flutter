@@ -8,11 +8,11 @@ abstract class ManageProfessionalEvent extends Equatable {
 class Refresh extends ManageProfessionalEvent{}
 
 class Start extends ManageProfessionalEvent {
-  final User user;
+  final Professional professional;
 
-  Start({@required this.user});
+  Start({@required this.professional});
 
-  List<Object> get props => [user];
+  List<Object> get props => [professional];
 }
 
 class EditPatientEvent extends ManageProfessionalEvent {
