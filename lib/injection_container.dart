@@ -28,6 +28,8 @@ import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_patient_list.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_professional.dart';
 import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart';
+import 'package:cardio_flutter/features/medications/data/models/medication_model.dart';
+import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -56,6 +58,7 @@ Future<void> init() async {
   _initExerxise();
   _initLiquid();
   _initBiometrics();
+  _initMedication();
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
@@ -256,6 +259,46 @@ void _initBiometrics() {
       type: "biometric",
       firebaseDatabase: sl(),
       firebaseTag: "Biometric",
+    ),
+  );
+}
+
+void _initMedication() {
+  // Bloc
+  sl.registerFactory(
+    () => GenericBloc<Medication>(
+      addRecomendation: sl(),
+      editRecomendation: sl(),
+      delete: sl(),
+      getList: sl(),
+      execute: sl(),
+      editExecuted: sl(),
+    ),
+  );
+
+  // Use Cases
+  sl.registerLazySingleton(() => AddRecomendation<Medication>(sl()));
+  sl.registerLazySingleton(() => EditRecomendation<Medication>(sl()));
+  sl.registerLazySingleton(() => Delete<Medication>(sl()));
+  sl.registerLazySingleton(() => GetList<Medication>(sl()));
+  sl.registerLazySingleton(() => Execute<Medication>(sl()));
+  sl.registerLazySingleton(() => EditExecuted<Medication>(sl()));
+
+  // Repositories
+  sl.registerLazySingleton<GenericRepository<Medication>>(
+    () => GenericRepositoryImpl<Medication, MedicationModel>(
+      type: "medication",
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<GenericRemoteDataSource<MedicationModel>>(
+    () => GenericRemoteDataSourceImpl<MedicationModel>(
+      type: "medication",
+      firebaseDatabase: sl(),
+      firebaseTag: "Medication",
     ),
   );
 }

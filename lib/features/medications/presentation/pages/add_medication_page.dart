@@ -3,12 +3,15 @@ import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
+import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddMedicationPage extends StatefulWidget {
   final Medication medication;
@@ -30,8 +33,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   static const String LABEL_FINAL_DATE = "LABEL_FINAL_DATE";
   static const String LABEL_INITIAL_TIME = "LABEL_INITIAL_TIME";
   static const String LABEL_OBSERVATION = "LABEL_OBSERVATION";
-  static const String LABEL_EXECUTION_DAY = "LABEL_EXECUTION_DAY";
-  static const String LABEL_EXECUTION_TIME = "LABEL_EXECUTION_TIME";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
@@ -41,18 +42,23 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   TextEditingController _dosageController;
   TextEditingController _quantityController;
   TextEditingController _frequencyController;
-  TextEditingController _initialdateController = new MultimaskedTextController(
+  final TextEditingController _initialdateController =
+      new MultimaskedTextController(
     maskDefault: "xx/xx/xxxx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
-  TextEditingController _initialTimeController = new MultimaskedTextController(
+  final TextEditingController _finalDateController =
+      new MultimaskedTextController(
+    maskDefault: "xx/xx/xxxx",
+    onlyDigitsDefault: true,
+  ).maskedTextFieldController;
+
+  final TextEditingController _initialTimeController =
+      new MultimaskedTextController(
     maskDefault: "xx:xx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
-  TextEditingController _finalDateController = new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
-    onlyDigitsDefault: true,
-  ).maskedTextFieldController;
+
   TextEditingController _observationController;
 
   @override
@@ -63,29 +69,23 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
           DateHelper.convertDateToString(widget.medication.initialDate);
       _formData[LABEL_FINAL_DATE] =
           DateHelper.convertDateToString(widget.medication.finalDate);
-      _formData[LABEL_INITIAL_TIME] =
-          DateHelper.convertDateToString(widget.medication.initialTime);
+      _formData[LABEL_INITIAL_TIME] = widget.medication.initialTime;
       _formData[LABEL_NAME] = widget.medication.name;
       _formData[LABEL_DOSAGE] = widget.medication.dosage;
       _formData[LABEL_QUANTITY] = widget.medication.quantity;
       _formData[LABEL_OBSERVATION] = widget.medication.observation;
+      _initialdateController.text = _formData[LABEL_INITIAL_DATE];
+      _finalDateController.text = _formData[LABEL_FINAL_DATE];
     }
 
     _frequencyController = TextEditingController(
       text: _formData[LABEL_FREQUENCY],
     );
-    _initialdateController = TextEditingController(
-      text: _formData[LABEL_INITIAL_DATE],
-    );
-    _finalDateController = TextEditingController(
-      text: _formData[LABEL_FINAL_DATE],
-    );
+
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
     );
-    _initialTimeController = TextEditingController(
-      text: _formData[LABEL_INITIAL_TIME],
-    );
+
     _dosageController = TextEditingController(
       text: _formData[LABEL_DOSAGE],
     );
@@ -95,7 +95,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
     _observationController = TextEditingController(
       text: _formData[LABEL_OBSERVATION],
     );
-  
 
     super.initState();
   }
@@ -104,7 +103,31 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   Widget build(BuildContext context) {
     return BasePage(
       backgroundColor: Color(0xffc9fffd),
-      body: SingleChildScrollView(child: _buildForm(context)),
+      body: SingleChildScrollView(
+        child: BlocListener<GenericBloc<Medication>, GenericState<Medication>>(
+          listener: (context, state) {
+            if (state is Error<Medication>) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            } else if (state is Loaded<Medication>) {
+              Navigator.pop(context);
+            }
+          },
+          child: BlocBuilder<GenericBloc<Medication>, GenericState<Medication>>(
+            builder: (context, state) {
+              print(state);
+              if (state is Loading<Medication>) {
+                return LoadingWidget(_buildForm(context));
+              } else {
+                return _buildForm(context);
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -239,5 +262,44 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
       return;
     }
     _formKey.currentState.save();
+
+    if (widget.medication == null) {
+      BlocProvider.of<GenericBloc<Medication>>(context).add(
+        AddRecomendationEvent<Medication>(
+          entity: Medication(
+            done: false,
+            name: _formData[LABEL_NAME],
+            dosage: double.parse(_formData[LABEL_DOSAGE]),
+            quantity: int.parse(_formData[LABEL_QUANTITY]),
+            frequency: int.parse(_formData[LABEL_FREQUENCY]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialTime: _formData[LABEL_INITIAL_TIME],
+            observation: _formData[LABEL_OBSERVATION],
+          ),
+        ),
+      );
+    } else {
+      BlocProvider.of<GenericBloc<Medication>>(context).add(
+        EditRecomendationEvent<Medication>(
+          entity: Medication(
+            id: widget.medication.id,
+            done: false,
+            name: _formData[LABEL_NAME],
+            dosage: double.parse(_formData[LABEL_DOSAGE]),
+            quantity: int.parse(_formData[LABEL_QUANTITY]),
+            frequency: int.parse(_formData[LABEL_FREQUENCY]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialTime: _formData[LABEL_INITIAL_TIME],
+            observation: _formData[LABEL_OBSERVATION],
+          ),
+        ),
+      );
+    }
   }
 }

@@ -32,14 +32,14 @@ class GenericRemoteDataSourceImpl<Model>
   @override
   Future<Model> addRecomendation(PatientModel patientModel, Model model) async {
     try {
-      DatabaseReference recomendaionRef = patientRootRef
+      DatabaseReference recomendationRef = patientRootRef
           .child(patientModel.id)
           .child('ToDo')
           .child(firebaseTag)
           .push();
-      await recomendaionRef
+      await recomendationRef
           .set(GenericConverter.genericToJson<Model>(type, model));
-      DataSnapshot recomendationSnapshot = await recomendaionRef.once();
+      DataSnapshot recomendationSnapshot = await recomendationRef.once();
       var result = GenericConverter.genericFromDataSnapshot(
           type, recomendationSnapshot, false);
 

@@ -7,6 +7,7 @@ import 'package:cardio_flutter/features/calendar/presentation/models/month.dart'
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
+import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 
 class CalendarConverter {
@@ -167,6 +168,29 @@ class CalendarConverter {
           "Pressão Arterial": entity.bloodPressure,
           "Inchaço": entity.swelling,
           "Fadiga": entity.fatigue,
+        };
+      }
+    } else if (entity is Medication) {
+      if (!entity.done) {
+        result = {
+          "Frequência": "${entity.frequency.toString()} vezes ao dia",
+          "Data de Inicio": DateHelper.convertDateToString(entity.initialDate),
+          "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
+          "Nome": entity.name,
+          "Dosagem": entity.dosage.toString(),
+          "Quantidade": entity.quantity.toString(),
+          "Hora de Início": entity.initialTime,
+          "Horários": entity.initialTime,
+          "Observação": entity.observation,
+        };
+      } else {
+        result = {
+          "Hora da Realização": entity.executionTime,
+          "Nome": entity.name,
+          "Dosagem": entity.dosage.toString(),
+          "Quantidade": entity.quantity.toString(),
+          "Ingerido": entity.tookIt.toString(),
+          "Observação": entity.observation,
         };
       }
     }

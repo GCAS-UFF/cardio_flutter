@@ -23,20 +23,20 @@ class LiquidModel extends Liquid {
             reference: reference,
             id: id);
 
-  static Map<dynamic, dynamic> toJson(LiquidModel liquidModel) {
+  static Map<dynamic, dynamic> toJson(LiquidModel model) {
     Map<dynamic, dynamic> json = {};
-    if (liquidModel.initialDate != null)
-      json['initialDate'] = liquidModel.initialDate.millisecondsSinceEpoch;
-    if (liquidModel.finalDate != null)
-      json['finalDate'] = liquidModel.finalDate.millisecondsSinceEpoch;
-    if (liquidModel.mililitersPerDay != null)
-      json['mililitersPerDay'] = liquidModel.mililitersPerDay;
-    if (liquidModel.name != null) json['name'] = liquidModel.name;
-    if (liquidModel.quantity != null) json['quantity'] = liquidModel.quantity;
-    if (liquidModel.reference != null)
-      json['reference'] = liquidModel.reference;
-    if (liquidModel.executedDate != null)
-      json['executedDate'] = liquidModel.executedDate.millisecondsSinceEpoch;
+    if (model.initialDate != null)
+      json['initialDate'] = model.initialDate.millisecondsSinceEpoch;
+    if (model.finalDate != null)
+      json['finalDate'] = model.finalDate.millisecondsSinceEpoch;
+    if (model.mililitersPerDay != null)
+      json['mililitersPerDay'] = model.mililitersPerDay;
+    if (model.name != null) json['name'] = model.name;
+    if (model.quantity != null) json['quantity'] = model.quantity;
+    if (model.reference != null)
+      json['reference'] = model.reference;
+    if (model.executedDate != null)
+      json['executedDate'] = model.executedDate.millisecondsSinceEpoch;
 
     return json;
   }
