@@ -106,6 +106,7 @@ class Strings {
   static const quantity = "Quantidade";
   static const initial_time = "Hora Inicial";
   static const observation = "Observação";
+  static const tookIt = "Consumiu?";
 
   // Biometrics Page
   static const weight_title = "Meu peso";
