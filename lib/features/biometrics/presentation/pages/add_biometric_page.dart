@@ -3,12 +3,15 @@ import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
+import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddBiometricPage extends StatefulWidget {
   final Biometric biometric;
@@ -25,23 +28,20 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
   static const String LABEL_FREQUENCY = "LABEL_FREQUENCY";
   static const String LABEL_INITIAL_DATE = "LABEL_INITIAL_DATE";
   static const String LABEL_FINAL_DATE = "LABEL_FINAL_DATE";
-  static const String LABEL_WEIGHT = "LABEL_WEIGHT";
-  static const String LABEL_BPM = "LABEL_BPM";
-  static const String LABEL_BLOOD_PRESSURE = "LABEL_BLOOD_PRESSURE";
-  static const String LABEL_SWELLING = "LABEL_SWELLING";
-  static const String LABEL_FATIGUE = "LABEL_FATIGUE";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _frequencyController;
-  TextEditingController _initialdateController = new MultimaskedTextController(
-    maskDefault: "xx:xx",
+  final TextEditingController _initialDateController =
+      new MultimaskedTextController(
+    maskDefault: "xx/xx/xxxx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
-  TextEditingController _finalDateController = new MultimaskedTextController(
+  final TextEditingController _finalDateController =
+      new MultimaskedTextController(
     maskDefault: "xx/xx/xxxx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
@@ -49,21 +49,17 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
   @override
   void initState() {
     if (widget.biometric != null) {
-      _formData[LABEL_FREQUENCY] = widget.biometric.frequency;
+      _formData[LABEL_FREQUENCY] = widget.biometric.frequency.toString();
       _formData[LABEL_INITIAL_DATE] =
           DateHelper.convertDateToString(widget.biometric.initialDate);
       _formData[LABEL_FINAL_DATE] =
           DateHelper.convertDateToString(widget.biometric.finalDate);
+      _initialDateController.text = _formData[LABEL_INITIAL_DATE];
+      _finalDateController.text = _formData[LABEL_FINAL_DATE];
     }
 
     _frequencyController = TextEditingController(
       text: _formData[LABEL_FREQUENCY],
-    );
-    _initialdateController = TextEditingController(
-      text: _formData[LABEL_INITIAL_DATE],
-    );
-    _finalDateController = TextEditingController(
-      text: _formData[LABEL_FINAL_DATE],
     );
 
     super.initState();
@@ -73,7 +69,31 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
   Widget build(BuildContext context) {
     return BasePage(
       backgroundColor: Color(0xffc9fffd),
-      body: SingleChildScrollView(child: _buildForm(context)),
+      body: SingleChildScrollView(
+        child: BlocListener<GenericBloc<Biometric>, GenericState<Biometric>>(
+          listener: (context, state) {
+            if (state is Error<Biometric>) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            } else if (state is Loaded<Biometric>) {
+              Navigator.pop(context);
+            }
+          },
+          child: BlocBuilder<GenericBloc<Biometric>, GenericState<Biometric>>(
+            builder: (context, state) {
+              print(state);
+              if (state is Loading<Biometric>) {
+                return LoadingWidget(_buildForm(context));
+              } else {
+                return _buildForm(context);
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -103,7 +123,7 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
-                textEditingController: _initialdateController,
+                textEditingController: _initialDateController,
                 hintText: Strings.date,
                 validator: DateInputValidator(),
                 title: Strings.initial_date,
@@ -149,5 +169,34 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
       return;
     }
     _formKey.currentState.save();
+
+    if (widget.biometric == null) {
+      BlocProvider.of<GenericBloc<Biometric>>(context).add(
+        AddRecomendationEvent<Biometric>(
+          entity: Biometric(
+            done: false,
+            frequency: int.parse(_formData[LABEL_FREQUENCY]),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+          ),
+        ),
+      );
+    } else {
+      BlocProvider.of<GenericBloc<Biometric>>(context).add(
+        EditRecomendationEvent<Biometric>(
+          entity: Biometric(
+            id: widget.biometric.id,
+            done: false,
+            frequency: int.parse(_formData[LABEL_FREQUENCY]),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+          ),
+        ),
+      );
+    }
   }
 }

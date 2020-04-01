@@ -1,39 +1,45 @@
-import 'package:equatable/equatable.dart';
+import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
 import 'package:meta/meta.dart';
 
-class Biometric extends Equatable {
+class Biometric extends BaseEntity {
   final int frequency;
-  final DateTime initialDate;
-  final DateTime finalDate;
-  final double weight;
+  final int weight;
   final int bpm;
-  final String id;
   final String bloodPressure;
   final String swelling;
   final String fatigue;
 
   Biometric({
-    this.id,
     this.fatigue,
     this.weight,
     this.bpm,
     this.bloodPressure,
     this.swelling,
-    @required this.frequency,
-    @required this.initialDate,
-    @required this.finalDate,
-  });
+    id,
+    this.frequency,
+    initialDate,
+    finalDate,
+    executedDate,
+    @required done,
+  }) : super(
+            id: id,
+            initialDate: initialDate,
+            finalDate: finalDate,
+            done: done,
+            executedDate: executedDate);
 
   @override
   List<Object> get props => [
-        frequency,
-        initialDate,
-        finalDate,
+        fatigue,
         weight,
         bpm,
         bloodPressure,
         swelling,
-        fatigue,
-        id
+        id,
+        frequency,
+        initialDate,
+        finalDate,
+        executedDate,
+        done,
       ];
 }

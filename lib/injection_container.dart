@@ -4,6 +4,8 @@ import 'package:cardio_flutter/features/auth/domain/repositories/auth_repository
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_in.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_patient.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_professional.dart';
+import 'package:cardio_flutter/features/biometrics/data/models/biometric_model.dart';
+import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
 import 'package:cardio_flutter/features/exercises/data/datasources/exercise_remote_data_source.dart';
 import 'package:cardio_flutter/features/exercises/data/repository/exercise_repository_impl.dart';
 import 'package:cardio_flutter/features/exercises/domain/usecases/add_exercise.dart';
@@ -49,10 +51,11 @@ import 'features/manage_professional/domain/repositories/manage_professional_rep
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  initAuth();
-  initManageProfessional();
-  initExerxise();
-  initLiquid();
+  _initAuth();
+  _initManageProfessional();
+  _initExerxise();
+  _initLiquid();
+  _initBiometrics();
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
@@ -65,7 +68,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => Settings(sharedPreferences: sl()));
 }
 
-void initAuth() {
+void _initAuth() {
   // Bloc
   sl.registerFactory(
     () => AuthBloc(
@@ -103,7 +106,7 @@ void initAuth() {
   );
 }
 
-void initManageProfessional() {
+void _initManageProfessional() {
   // Bloc
   sl.registerFactory(
     () => ManageProfessionalBloc(
@@ -140,7 +143,7 @@ void initManageProfessional() {
   );
 }
 
-void initExerxise() {
+void _initExerxise() {
   // Bloc
   sl.registerFactory(
     () => ExerciseBloc(
@@ -177,7 +180,7 @@ void initExerxise() {
   );
 }
 
-void initLiquid() {
+void _initLiquid() {
   // Bloc
   sl.registerFactory(
     () => GenericBloc<Liquid>(
@@ -213,6 +216,46 @@ void initLiquid() {
       type: "liquid",
       firebaseDatabase: sl(),
       firebaseTag: "Liquid",
+    ),
+  );
+}
+
+void _initBiometrics() {
+  // Bloc
+  sl.registerFactory(
+    () => GenericBloc<Biometric>(
+      addRecomendation: sl(),
+      editRecomendation: sl(),
+      delete: sl(),
+      getList: sl(),
+      execute: sl(),
+      editExecuted: sl(),
+    ),
+  );
+
+  // Use Cases
+  sl.registerLazySingleton(() => AddRecomendation<Biometric>(sl()));
+  sl.registerLazySingleton(() => EditRecomendation<Biometric>(sl()));
+  sl.registerLazySingleton(() => Delete<Biometric>(sl()));
+  sl.registerLazySingleton(() => GetList<Biometric>(sl()));
+  sl.registerLazySingleton(() => Execute<Biometric>(sl()));
+  sl.registerLazySingleton(() => EditExecuted<Biometric>(sl()));
+
+  // Repositories
+  sl.registerLazySingleton<GenericRepository<Biometric>>(
+    () => GenericRepositoryImpl<Biometric, BiometricModel>(
+      type: "biometric",
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<GenericRemoteDataSource<BiometricModel>>(
+    () => GenericRemoteDataSourceImpl<BiometricModel>(
+      type: "biometric",
+      firebaseDatabase: sl(),
+      firebaseTag: "Biometric",
     ),
   );
 }

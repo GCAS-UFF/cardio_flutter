@@ -1,3 +1,5 @@
+import 'package:cardio_flutter/features/biometrics/data/models/biometric_model.dart';
+import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
 import 'package:cardio_flutter/features/liquids/data/models/liquid_model.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -6,6 +8,8 @@ class GenericConverter {
   static Map<dynamic, dynamic> genericToJson<Model>(String type, Model model) {
     if (type == "liquid") {
       return LiquidModel.toJson(model as LiquidModel);
+    } else if (type == "biometric") {
+      return BiometricModel.toJson(model as BiometricModel);
     } else {
       return null;
     }
@@ -14,6 +18,19 @@ class GenericConverter {
   static Model genericFromJson<Model>(String type, Map<dynamic, dynamic> json) {
     if (type == "liquid") {
       return LiquidModel.fromJson(json) as Model;
+    } else if (type == "biometric") {
+      return BiometricModel.fromJson(json) as Model;
+    } else {
+      return null;
+    }
+  }
+
+  static Model genericModelFromEntity<Entity, Model extends Entity>(
+      String type, Entity entity) {
+    if (type == "liquid") {
+      return (LiquidModel.fromEntity(entity as Liquid) as Model);
+    } else if (type == "biometric") {
+      return (BiometricModel.fromEntity(entity as Biometric) as Model);
     } else {
       return null;
     }
@@ -49,14 +66,5 @@ class GenericConverter {
     }
 
     return result;
-  }
-
-  static Model genericModelFromEntity<Entity, Model extends Entity>(
-      String type, Entity entity) {
-    if (type == "liquid") {
-      return (LiquidModel.fromEntity(entity as Liquid) as Model);
-    } else {
-      return null;
-    }
   }
 }
