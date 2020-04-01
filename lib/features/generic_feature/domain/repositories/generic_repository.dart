@@ -9,4 +9,5 @@ abstract class GenericRepository<Entity extends BaseEntity> {
   Future<Either<Failure, Entity>> editRecomendation(
       Patient patient, Entity entitiy);
   Future<Either<Failure, List<Entity>>> getList(Patient patient);
+  Future<Either<Failure, void>> delete(Patient patient, Entity entity);
 }

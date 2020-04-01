@@ -13,5 +13,6 @@ abstract class BaseEntity extends Equatable {
       @required this.initialDate,
       @required this.finalDate,
       @required this.executedDate,
-      @required this.done});
+      @required this.done})
+      : assert(done != null);
 }

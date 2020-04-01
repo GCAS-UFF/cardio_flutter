@@ -7,6 +7,8 @@ import 'package:cardio_flutter/features/calendar/presentation/models/calendar.da
 import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/add_recomendation.dart'
     as add_recomendation;
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/delete.dart'
+    as delete_class;
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/edit_recomendation.dart'
     as edit_recomendation;
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/get_list.dart'
@@ -23,16 +25,19 @@ class GenericBloc<Entity extends BaseEntity>
   final add_recomendation.AddRecomendation<Entity> addRecomendation;
   final get_list.GetList<Entity> getList;
   final edit_recomendation.EditRecomendation<Entity> editRecomendation;
+  final delete_class.Delete<Entity> delete;
 
   Patient _currentPatient;
 
   GenericBloc(
       {@required this.addRecomendation,
       @required this.getList,
-      @required this.editRecomendation})
+      @required this.editRecomendation,
+      @required this.delete})
       : assert(addRecomendation != null),
         assert(getList != null),
-        assert(editRecomendation != null);
+        assert(editRecomendation != null),
+        assert(delete != null);
 
   @override
   GenericState<Entity> get initialState => Empty<Entity>();
@@ -75,6 +80,17 @@ class GenericBloc<Entity extends BaseEntity>
           edit_recomendation.Params<Entity>(
               entity: event.entity, patient: _currentPatient));
       yield recomendationOrError.fold((failure) {
+        return Error<Entity>(
+            message: Converter.convertFailureToMessage(failure));
+      }, (result) {
+        this.add(Refresh<Entity>());
+        return Loading<Entity>();
+      });
+    } else if (event is DeleteEvent<Entity>) {
+      yield Loading<Entity>();
+      var voidOrError = await delete(delete_class.Params<Entity>(
+          entity: event.entity, patient: _currentPatient));
+      yield voidOrError.fold((failure) {
         return Error<Entity>(
             message: Converter.convertFailureToMessage(failure));
       }, (result) {

@@ -1,11 +1,13 @@
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/liquids/presentation/pages/add_liquid_page.dart';
 import 'package:cardio_flutter/features/liquids/presentation/pages/execute_liquid_page.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
 
@@ -170,11 +172,11 @@ void _showOptionsPatient(BuildContext context, Liquid liquid) {
                     child: FlatButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        // BlocProvider.of<ExerciseBloc>(context).add(
-                        //   DeleteExerciseEvent(
-                        //     exercise: exercise,
-                        //   ),
-                        // );
+                        BlocProvider.of<GenericBloc<Liquid>>(context).add(
+                          DeleteEvent<Liquid>(
+                            entity: liquid,
+                          ),
+                        );
                       },
                       child: Text(
                         "Excluir ",
@@ -226,11 +228,11 @@ void _showOptionsProfessional(BuildContext context, Liquid liquid) {
                   child: FlatButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      // BlocProvider.of<ExerciseBloc>(context).add(
-                      //   DeleteExerciseEvent(
-                      //     exercise: exercise,
-                      //   ),
-                      // );
+                      BlocProvider.of<GenericBloc<Liquid>>(context).add(
+                        DeleteEvent<Liquid>(
+                          entity: liquid,
+                        ),
+                      );
                     },
                     child: Text(
                       "Excluir ",

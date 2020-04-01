@@ -10,6 +10,7 @@ abstract class GenericRemoteDataSource<Model> {
   Future<Model> editRecomendation(
       PatientModel patientModel, Model model, String id);
   Future<List<Model>> getList(PatientModel patientModel);
+  Future<void> delete(PatientModel patientModel, bool done, String id);
 }
 
 class GenericRemoteDataSourceImpl<Model>
@@ -93,6 +94,32 @@ class GenericRemoteDataSourceImpl<Model>
       Model result =
           GenericConverter.genericFromDataSnapshot(type, snapshot, true);
       return result;
+    } on PlatformException catch (e) {
+      throw e;
+    } catch (e) {
+      print("[GenericRemoteDataSource] ${e.toString()}");
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<void> delete(PatientModel patientModel, bool done, String id) async {
+    try {
+      if (!done) {
+        DatabaseReference refDel = patientRootRef
+            .child(patientModel.id)
+            .child("ToDo")
+            .child(firebaseTag)
+            .child(id);
+        await refDel.remove();
+      } else {
+        DatabaseReference refDel = patientRootRef
+            .child(patientModel.id)
+            .child("Done")
+            .child(firebaseTag)
+            .child(id);
+        await refDel.remove();
+      }
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {

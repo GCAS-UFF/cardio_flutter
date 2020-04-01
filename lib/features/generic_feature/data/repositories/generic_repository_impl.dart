@@ -70,4 +70,16 @@ class GenericRepositoryImpl<Entity extends BaseEntity, Model extends Entity>
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, void>> delete(Patient patient, Entity entity) async {
+    try {
+      return Right(await remoteDataSource.delete(
+          PatientModel.fromEntity(patient), entity.done, entity.id));
+    } on PlatformException catch (e) {
+      return Left(PlatformFailure(message: e.message));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
 }
