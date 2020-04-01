@@ -50,7 +50,7 @@ class Strings {
 
   static const biometric = " Como estou hoje";
   static const liquid = " Líquidos ingeridos";
-  static const medicine = " Medicações";
+  static const medication = " Medicações";
   static const appointment = " Consultas";
   static const exercise = " Exercícios";
   static const orientations = " Orientações";

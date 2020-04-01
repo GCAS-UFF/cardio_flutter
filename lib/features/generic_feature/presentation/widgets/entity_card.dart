@@ -126,7 +126,7 @@ class _EntityCardState extends State<EntityCard> {
     );
   }
 
-  String symptom(bool symptom) {
+ /*  String symptom(bool symptom) {
     String string;
     if (symptom == null) {
       return null;
@@ -134,7 +134,7 @@ class _EntityCardState extends State<EntityCard> {
       (symptom == true) ? string = "Houve" : string = "Não houve";
       return string;
     }
-  }
+  } */
 
   void _showOptionsPatient(BuildContext context, BaseEntity entity) {
     showModalBottomSheet(

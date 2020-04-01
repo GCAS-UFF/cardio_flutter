@@ -3,8 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class Month extends Equatable {
-  int year;
-  int id;
+  final int year;
+  final int id;
   final List<Day> days;
 
   Month({@required this.year, @required this.days, @required this.id});

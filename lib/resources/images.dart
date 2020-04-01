@@ -2,7 +2,7 @@ class Images {
   static const String app_logo = "assets/images/app_logo.png";
   static const String ico_biometric = "assets/images/ico_biometric.png";
   static const String ico_liquid = "assets/images/ico_liquid.png";
-  static const String ico_medicine = "assets/images/ico_medicine.png";
+  static const String ico_medication = "assets/images/ico_medication.png";
   static const String ico_appointment = "assets/images/ico_appointment.png";
   static const String ico_exercise = "assets/images/ico_exercise.png";
   static const String ico_orientations = "assets/images/ico_orientations.png";
