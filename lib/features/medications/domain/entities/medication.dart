@@ -7,8 +7,6 @@ class Medication extends BaseEntity {
   final int quantity;
   final int frequency;
   final String observation;
-  final String initialTime;
-  final String executionTime;
   final bool tookIt;
 
   Medication({
@@ -18,10 +16,8 @@ class Medication extends BaseEntity {
     this.frequency,
     initialDate,
     finalDate,
-    this.initialTime,
     executedDate,
     this.observation,
-    this.executionTime,
     this.tookIt,
     id,
     @required done,
@@ -35,7 +31,6 @@ class Medication extends BaseEntity {
 
   @override
   List<Object> get props => [
-        executionTime,
         observation,
         name,
         dosage,
@@ -44,7 +39,6 @@ class Medication extends BaseEntity {
         initialDate,
         finalDate,
         executedDate,
-        initialTime,
         tookIt,
         id,
         done,
