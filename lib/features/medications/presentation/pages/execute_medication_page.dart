@@ -59,7 +59,8 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
       _formData[LABEL_QUANTITY] = widget.medication.quantity;
       _formData[LABEL_EXECUTED_DATE] =
           DateHelper.convertDateToString(widget.medication.executedDate);
-      _formData[LABEL_EXECUTION_TIME] = widget.medication.executionTime;
+      _formData[LABEL_EXECUTION_TIME] =
+          DateHelper.getTimeFromDate(widget.medication.executedDate);
       _formData[LABEL_OBSERVATION] = widget.medication.observation;
       _formData[LABEL_TOOK_IT] = widget.medication.tookIt;
     }
@@ -211,7 +212,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (widget.medication == null)
+                title: (!widget.medication.done)
                     ? Strings.add
                     : Strings.edit_patient_done,
                 onTap: () {
@@ -242,7 +243,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             quantity: int.parse(_formData[LABEL_QUANTITY]),
             executedDate:
                 DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),
-            executionTime: _formData[LABEL_EXECUTION_TIME],
+            // executionTime: _formData[LABEL_EXECUTION_TIME],
             observation: _formData[LABEL_OBSERVATION],
             tookIt: _formData[LABEL_TOOK_IT],
           ),
@@ -250,7 +251,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
       );
     } else {
       BlocProvider.of<GenericBloc<Medication>>(context).add(
-        ExecuteEvent<Medication>(
+        EditExecutedEvent<Medication>(
           entity: Medication(
             id: widget.medication.id,
             done: true,
@@ -259,7 +260,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             quantity: int.parse(_formData[LABEL_QUANTITY]),
             executedDate:
                 DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),
-            executionTime: _formData[LABEL_EXECUTION_TIME],
+            // executionTime: _formData[LABEL_EXECUTION_TIME],
             observation: _formData[LABEL_OBSERVATION],
             tookIt: _formData[LABEL_TOOK_IT],
           ),

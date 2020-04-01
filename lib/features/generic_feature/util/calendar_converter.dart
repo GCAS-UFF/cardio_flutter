@@ -179,13 +179,12 @@ class CalendarConverter {
           "Nome": entity.name,
           "Dosagem": entity.dosage.toString(),
           "Quantidade": entity.quantity.toString(),
-          "Hora de Início": entity.initialTime,
-          "Horários": entity.initialTime,
+          "Hora de Início": DateHelper.getTimeFromDate(entity.initialDate),
           "Observação": entity.observation,
         };
       } else {
         result = {
-          "Hora da Realização": entity.executionTime,
+          "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
           "Nome": entity.name,
           "Dosagem": entity.dosage.toString(),
           "Quantidade": entity.quantity.toString(),

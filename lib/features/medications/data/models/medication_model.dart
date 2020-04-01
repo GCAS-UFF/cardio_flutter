@@ -9,9 +9,7 @@ class MedicationModel extends Medication {
       @required int frequency,
       @required DateTime initialDate,
       @required DateTime finalDate,
-      @required String initialTime,
       @required String observation,
-      @required String executionTime,
       @required bool tookIt,
       @required String id,
       @required bool done,
@@ -23,8 +21,6 @@ class MedicationModel extends Medication {
             frequency: frequency,
             initialDate: initialDate,
             finalDate: finalDate,
-            initialTime: initialTime,
-            executionTime: executionTime,
             observation: observation,
             tookIt: tookIt,
             id: id,
@@ -43,9 +39,6 @@ class MedicationModel extends Medication {
       json['finalDate'] = model.finalDate.millisecondsSinceEpoch;
     if (model.executedDate != null)
       json['executedDate'] = model.executedDate.millisecondsSinceEpoch;
-    if (model.initialTime != null) json['initialTime'] = model.initialTime;
-    if (model.executionTime != null)
-      json['executionTime'] = model.executionTime;
     if (model.observation != null) json['observation'] = model.observation;
     if (model.tookIt != null) json['tookIt'] = model.tookIt;
     if (model.id != null) json['id'] = model.id;
@@ -57,7 +50,9 @@ class MedicationModel extends Medication {
     if (json == null) return null;
     return MedicationModel(
       name: json['name'],
-      dosage: json['dosage'],
+      dosage: (json['dosage'] is int)
+          ? (json['dosage'] as int).toDouble()
+          : json['dosage'],
       frequency: json['frequency'],
       quantity: json['quantity'],
       initialDate: (json['initialDate'] == null)
@@ -69,8 +64,6 @@ class MedicationModel extends Medication {
       executedDate: (json['executedDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['executedDate']),
-      initialTime: json['initialTime'],
-      executionTime: json['executionTime'],
       observation: json['observation'],
       tookIt: json['tookIt'],
       id: json['id'],
@@ -88,8 +81,6 @@ class MedicationModel extends Medication {
         initialDate: medication.initialDate,
         finalDate: medication.finalDate,
         executedDate: medication.executedDate,
-        initialTime: medication.initialTime,
-        executionTime: medication.executionTime,
         observation: medication.observation,
         tookIt: medication.tookIt,
         id: medication.id,
