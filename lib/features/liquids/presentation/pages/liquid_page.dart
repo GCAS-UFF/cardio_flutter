@@ -7,9 +7,10 @@ import 'package:cardio_flutter/features/calendar/presentation/models/calendar.da
 import 'package:cardio_flutter/features/calendar/presentation/models/day.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/month.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/widgets/entity_card.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/liquids/presentation/pages/add_liquid_page.dart';
-import 'package:cardio_flutter/features/liquids/presentation/widgets/liquid_card.dart';
+import 'package:cardio_flutter/features/liquids/presentation/pages/execute_liquid_page.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
@@ -37,7 +38,7 @@ class LiquidPage extends StatelessWidget {
                 content: Text(state.message),
               ),
             );
-          } 
+          }
         },
         child: BlocBuilder<GenericBloc<Liquid>, GenericState<Liquid>>(
           builder: (context, state) {
@@ -58,8 +59,35 @@ class LiquidPage extends StatelessWidget {
     if (activityList == null) return Container();
     return Column(
       children: activityList.map((activity) {
-        return LiquidCard(
+        return EntityCard(
           activity: activity,
+          openExecuted: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ExecuteLiquidPage(
+                  liquid: activity.value,
+                ),
+              ),
+            );
+          },
+          delete: () {
+            BlocProvider.of<GenericBloc<Liquid>>(context).add(
+              DeleteEvent<Liquid>(
+                entity: activity.value,
+              ),
+            );
+          },
+          openRecomendation: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddLiquidPage(
+                  liquid: activity.value,
+                ),
+              ),
+            );
+          },
         );
       }).toList(),
     );
