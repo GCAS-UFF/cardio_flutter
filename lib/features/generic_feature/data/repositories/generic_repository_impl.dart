@@ -53,4 +53,21 @@ class GenericRepositoryImpl<Entity extends BaseEntity, Model extends Entity>
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, Entity>> editRecomendation(
+      Patient patient, Entity recomendation) async {
+    try {
+      return Right(await remoteDataSource.editRecomendation(
+        PatientModel.fromEntity(patient),
+        GenericConverter.genericModelFromEntity<Entity, Model>(
+            type, recomendation),
+        recomendation.id,
+      ));
+    } on PlatformException catch (e) {
+      return Left(PlatformFailure(message: e.message));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
 }

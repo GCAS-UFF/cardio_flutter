@@ -22,3 +22,13 @@ class AddRecomendationEvent<Entity> extends GenericEvent<Entity> {
   });
   List<Object> get props => [entity];
 }
+
+class EditRecomendationEvent<Entity> extends GenericEvent<Entity> {
+  final Entity entity;
+
+  EditRecomendationEvent({
+    @required this.entity,
+  });
+
+  List<Object> get props => [entity];
+}

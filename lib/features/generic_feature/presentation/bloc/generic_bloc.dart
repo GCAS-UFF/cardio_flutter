@@ -7,6 +7,8 @@ import 'package:cardio_flutter/features/calendar/presentation/models/calendar.da
 import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/add_recomendation.dart'
     as add_recomendation;
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/edit_recomendation.dart'
+    as edit_recomendation;
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/get_list.dart'
     as get_list;
 import 'package:cardio_flutter/features/generic_feature/util/calendar_converter.dart';
@@ -20,12 +22,17 @@ class GenericBloc<Entity extends BaseEntity>
     extends Bloc<GenericEvent<Entity>, GenericState<Entity>> {
   final add_recomendation.AddRecomendation<Entity> addRecomendation;
   final get_list.GetList<Entity> getList;
+  final edit_recomendation.EditRecomendation<Entity> editRecomendation;
 
   Patient _currentPatient;
 
-  GenericBloc({@required this.addRecomendation, @required this.getList})
+  GenericBloc(
+      {@required this.addRecomendation,
+      @required this.getList,
+      @required this.editRecomendation})
       : assert(addRecomendation != null),
-        assert(getList != null);
+        assert(getList != null),
+        assert(editRecomendation != null);
 
   @override
   GenericState<Entity> get initialState => Empty<Entity>();
@@ -34,6 +41,7 @@ class GenericBloc<Entity extends BaseEntity>
   Stream<GenericState<Entity>> mapEventToState(
     GenericEvent<Entity> event,
   ) async* {
+    print(event);
     if (event is Start<Entity>) {
       yield Loading<Entity>();
       _currentPatient = event.patient;
@@ -53,6 +61,18 @@ class GenericBloc<Entity extends BaseEntity>
       yield Loading<Entity>();
       var recomendationOrError = await addRecomendation(
           add_recomendation.Params<Entity>(
+              entity: event.entity, patient: _currentPatient));
+      yield recomendationOrError.fold((failure) {
+        return Error<Entity>(
+            message: Converter.convertFailureToMessage(failure));
+      }, (result) {
+        this.add(Refresh<Entity>());
+        return Loading<Entity>();
+      });
+    } else if (event is EditRecomendationEvent<Entity>) {
+      yield Loading<Entity>();
+      var recomendationOrError = await editRecomendation(
+          edit_recomendation.Params<Entity>(
               entity: event.entity, patient: _currentPatient));
       yield recomendationOrError.fold((failure) {
         return Error<Entity>(

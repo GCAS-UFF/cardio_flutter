@@ -28,22 +28,21 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
   static const String LABEL_MILIMITERS_PER_DAY = "LABEL_MILIMITERS_PER_DAY";
   static const String LABEL_INITIAL_DATE = "LABEL_INITIAL_DATE";
   static const String LABEL_FINAL_DATE = "LABEL_FINAL_DATE";
-  static const String LABEL_NAME = "LABEL_NAME";
-  static const String LABEL_QUANTITY = "LABEL_QUANTITY";
-  static const String LABEL_REFERENCE = "LABEL_REFERENCE";
-  static const String LABEL_TIME = "LABEL_TIME";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _milimitersPerDayController;
-  TextEditingController _initialdateController = new MultimaskedTextController(
-    maskDefault: "xx:xx",
+
+  final TextEditingController _initialDateController =
+      new MultimaskedTextController(
+    maskDefault: "xx/xx/xxxx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
-  TextEditingController _finalDateController = new MultimaskedTextController(
+  final TextEditingController _finalDateController =
+      new MultimaskedTextController(
     maskDefault: "xx/xx/xxxx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
@@ -51,21 +50,18 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
   @override
   void initState() {
     if (widget.liquid != null) {
-      _formData[LABEL_MILIMITERS_PER_DAY] = widget.liquid.mililitersPerDay;
+      _formData[LABEL_MILIMITERS_PER_DAY] =
+          widget.liquid.mililitersPerDay.toString();
       _formData[LABEL_INITIAL_DATE] =
           DateHelper.convertDateToString(widget.liquid.initialDate);
       _formData[LABEL_FINAL_DATE] =
           DateHelper.convertDateToString(widget.liquid.finalDate);
+      _initialDateController.text = _formData[LABEL_INITIAL_DATE];
+      _finalDateController.text = _formData[LABEL_FINAL_DATE];
     }
 
     _milimitersPerDayController = TextEditingController(
-      text: (_formData[LABEL_MILIMITERS_PER_DAY] as int).toString(),
-    );
-    _initialdateController = TextEditingController(
-      text: _formData[LABEL_INITIAL_DATE],
-    );
-    _finalDateController = TextEditingController(
-      text: _formData[LABEL_FINAL_DATE],
+      text: _formData[LABEL_MILIMITERS_PER_DAY],
     );
 
     super.initState();
@@ -129,7 +125,7 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
             CustomTextFormField(
               isRequired: true,
               keyboardType: TextInputType.number,
-              textEditingController: _initialdateController,
+              textEditingController: _initialDateController,
               hintText: Strings.date,
               validator: DateInputValidator(),
               title: Strings.initial_date,
@@ -177,20 +173,33 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
     }
     _formKey.currentState.save();
 
-    BlocProvider.of<GenericBloc<Liquid>>(context).add(
-      AddRecomendationEvent<Liquid>(
-        entity: Liquid(
-          done: false,
-          name: _formData[LABEL_NAME],
-          quantity: 0,
-          reference: _formData[LABEL_REFERENCE],
-          mililitersPerDay: int.parse(_formData[LABEL_MILIMITERS_PER_DAY]),
-          finalDate:
-              DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-          initialDate:
-              DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+    if (widget.liquid == null) {
+      BlocProvider.of<GenericBloc<Liquid>>(context).add(
+        AddRecomendationEvent<Liquid>(
+          entity: Liquid(
+            done: false,
+            mililitersPerDay: int.parse(_formData[LABEL_MILIMITERS_PER_DAY]),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      BlocProvider.of<GenericBloc<Liquid>>(context).add(
+        EditRecomendationEvent<Liquid>(
+          entity: Liquid(
+            id: widget.liquid.id,
+            done: true,
+            mililitersPerDay: int.parse(_formData[LABEL_MILIMITERS_PER_DAY]),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+          ),
+        ),
+      );
+    }
   }
 }

@@ -142,7 +142,7 @@ class CalendarConverter {
 
       if (!entity.done) {
         result = {
-          "Quantide em ml": entity.quantity.toString(),
+          "Quantide em ml": entity.mililitersPerDay.toString(),
           "Data de Inicio":
               DateHelper.convertDateToString(entity.initialDate),
           "Data de Fim": DateHelper.convertDateToString(entity.finalDate),

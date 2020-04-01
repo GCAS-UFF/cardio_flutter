@@ -7,6 +7,8 @@ import 'package:meta/meta.dart';
 
 abstract class GenericRemoteDataSource<Model> {
   Future<Model> addRecomendation(PatientModel patientModel, Model model);
+  Future<Model> editRecomendation(
+      PatientModel patientModel, Model model, String id);
   Future<List<Model>> getList(PatientModel patientModel);
 }
 
@@ -35,8 +37,8 @@ class GenericRemoteDataSourceImpl<Model>
       await recomendaionRef
           .set(GenericConverter.genericToJson<Model>(type, model));
       DataSnapshot recomendationSnapshot = await recomendaionRef.once();
-      var result =
-          GenericConverter.genericFromDataSnapshot(type, recomendationSnapshot, false);
+      var result = GenericConverter.genericFromDataSnapshot(
+          type, recomendationSnapshot, false);
 
       return result;
     } on PlatformException catch (e) {
@@ -57,17 +59,39 @@ class GenericRemoteDataSourceImpl<Model>
           .child('ToDo')
           .child(firebaseTag);
       DataSnapshot toDoListSnapshot = await refToDoList.once();
-      result.addAll(
-          GenericConverter.genericFromDataSnapshotList(type, toDoListSnapshot, false));
+      result.addAll(GenericConverter.genericFromDataSnapshotList(
+          type, toDoListSnapshot, false));
 
       DatabaseReference refDoneList = patientRootRef
           .child(patientModel.id)
           .child('Done')
           .child(firebaseTag);
       DataSnapshot doneListSnapshot = await refDoneList.once();
-      result.addAll(
-          GenericConverter.genericFromDataSnapshotList(type, doneListSnapshot, true));
+      result.addAll(GenericConverter.genericFromDataSnapshotList(
+          type, doneListSnapshot, true));
 
+      return result;
+    } on PlatformException catch (e) {
+      throw e;
+    } catch (e) {
+      print("[GenericRemoteDataSource] ${e.toString()}");
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<Model> editRecomendation(
+      PatientModel patientModel, Model model, String id) async {
+    try {
+      DatabaseReference doneRef = patientRootRef
+          .child(patientModel.id)
+          .child('ToDo')
+          .child(firebaseTag)
+          .child(id);
+      await doneRef.set(GenericConverter.genericToJson<Model>(type, model));
+      DataSnapshot snapshot = await doneRef.once();
+      Model result =
+          GenericConverter.genericFromDataSnapshot(type, snapshot, true);
       return result;
     } on PlatformException catch (e) {
       throw e;

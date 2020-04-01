@@ -13,6 +13,7 @@ import 'package:cardio_flutter/features/exercises/domain/usecases/get_exercise_l
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
 import 'package:cardio_flutter/features/generic_feature/data/repositories/generic_repository_impl.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/add_recomendation.dart';
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/edit_recomendation.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/liquids/data/models/liquid_model.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
@@ -178,12 +179,14 @@ void initLiquid() {
   sl.registerFactory(
     () => GenericBloc<Liquid>(
       addRecomendation: sl(),
+      editRecomendation: sl(),
       getList: sl(),
     ),
   );
 
   // Use Cases
   sl.registerLazySingleton(() => AddRecomendation<Liquid>(sl()));
+  sl.registerLazySingleton(() => EditRecomendation<Liquid>(sl()));
   sl.registerLazySingleton(() => GetList<Liquid>(sl()));
 
   // Repositories

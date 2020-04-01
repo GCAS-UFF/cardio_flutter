@@ -6,19 +6,19 @@ class Liquid extends BaseEntity {
   final String name;
   final int quantity;
   final int reference;
-  final String id;
 
   Liquid({
-    this.id,
     this.name,
     this.quantity,
     this.reference,
     this.mililitersPerDay,
+    id,
     initialDate,
     finalDate,
     executedDate,
     @required done,
   }) : super(
+            id: id,
             initialDate: initialDate,
             finalDate: finalDate,
             executedDate: executedDate,
