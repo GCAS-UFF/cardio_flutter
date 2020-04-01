@@ -79,6 +79,7 @@ class Strings {
   static const intensity = "Intensidade";
   static const duration = "Duração";
   static const initial_date = "Data Inicial";
+  static const executed_date = "Data";
   static const final_date = "Data Final";
   static const hint_duration = "min";
   static const hint_frequency = "vezes ao dia";

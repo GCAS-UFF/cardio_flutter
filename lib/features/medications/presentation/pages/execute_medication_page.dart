@@ -1,4 +1,5 @@
 import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
+import 'package:cardio_flutter/core/input_validators/time_of_day_validator.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
@@ -55,15 +56,26 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
   void initState() {
     if (widget.medication != null) {
       _formData[LABEL_NAME] = widget.medication.name;
-      _formData[LABEL_DOSAGE] = widget.medication.dosage;
-      _formData[LABEL_QUANTITY] = widget.medication.quantity;
-      _formData[LABEL_EXECUTED_DATE] =
-          DateHelper.convertDateToString(widget.medication.executedDate);
+      _formData[LABEL_DOSAGE] = (widget.medication.dosage == null)
+          ? null
+          : widget.medication.dosage.toString();
+      _formData[LABEL_QUANTITY] = (widget.medication.quantity == null)
+          ? null
+          : widget.medication.quantity.toString();
+      _formData[LABEL_EXECUTED_DATE] = (!widget.medication.done)
+          ? DateHelper.convertDateToString(DateTime.now())
+          : DateHelper.convertDateToString(widget.medication.executedDate);
       _formData[LABEL_EXECUTION_TIME] =
           DateHelper.getTimeFromDate(widget.medication.executedDate);
-      _formData[LABEL_OBSERVATION] = widget.medication.observation;
+      _formData[LABEL_OBSERVATION] =
+          (!widget.medication.done) ? null : widget.medication.observation;
       _formData[LABEL_TOOK_IT] = widget.medication.tookIt;
+      _executedDateController.text = _formData[LABEL_EXECUTED_DATE];
+      _executionTimeController.text = _formData[LABEL_EXECUTION_TIME];
     }
+
+    _formData[LABEL_TOOK_IT] =
+        (_formData[LABEL_TOOK_IT] == null) ? false : _formData[LABEL_TOOK_IT];
 
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
@@ -166,10 +178,10 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _executedDateController,
-                enable: false,
+                enable: true,
                 hintText: "",
                 validator: DateInputValidator(),
-                title: Strings.initial_date,
+                title: Strings.executed_date,
                 onChanged: (value) {
                   setState(() {
                     _formData[LABEL_EXECUTED_DATE] = value;
@@ -181,6 +193,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 keyboardType: TextInputType.number,
                 textEditingController: _executionTimeController,
                 hintText: "",
+                validator: TimeofDayValidator(),
                 title: Strings.time_title,
                 onChanged: (value) {
                   setState(() {
@@ -189,7 +202,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 },
               ),
               CustomTextFormField(
-                isRequired: true,
+                isRequired: false,
                 textEditingController: _observationController,
                 hintText: "",
                 title: Strings.observation,
@@ -241,9 +254,10 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             name: _formData[LABEL_NAME],
             dosage: double.parse(_formData[LABEL_DOSAGE]),
             quantity: int.parse(_formData[LABEL_QUANTITY]),
-            executedDate:
-                DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),
-            // executionTime: _formData[LABEL_EXECUTION_TIME],
+            executedDate: DateHelper.addTimeToDate(
+              _formData[LABEL_EXECUTION_TIME],
+              DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),
+            ),
             observation: _formData[LABEL_OBSERVATION],
             tookIt: _formData[LABEL_TOOK_IT],
           ),
@@ -258,9 +272,10 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             name: _formData[LABEL_NAME],
             dosage: double.parse(_formData[LABEL_DOSAGE]),
             quantity: int.parse(_formData[LABEL_QUANTITY]),
-            executedDate:
-                DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),
-            // executionTime: _formData[LABEL_EXECUTION_TIME],
+            executedDate: DateHelper.addTimeToDate(
+              _formData[LABEL_EXECUTION_TIME],
+              DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),
+            ),
             observation: _formData[LABEL_OBSERVATION],
             tookIt: _formData[LABEL_TOOK_IT],
           ),

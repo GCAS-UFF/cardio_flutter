@@ -209,7 +209,7 @@ class CalendarConverter {
           "Nome": entity.name,
           "Dosagem": entity.dosage.toString(),
           "Quantidade": entity.quantity.toString(),
-          "Ingerido": entity.tookIt.toString(),
+          "Ingerido": (entity.tookIt != null || entity.tookIt) ? "Sim" : "Não",
           "Observação": entity.observation,
         };
       }

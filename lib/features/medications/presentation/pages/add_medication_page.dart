@@ -1,4 +1,5 @@
 import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
+import 'package:cardio_flutter/core/input_validators/time_of_day_validator.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
@@ -71,7 +72,8 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
           DateHelper.convertDateToString(widget.medication.initialDate);
       _formData[LABEL_FINAL_DATE] =
           DateHelper.convertDateToString(widget.medication.finalDate);
-      _formData[LABEL_INITIAL_TIME] = DateHelper.getTimeFromDate(widget.medication.initialDate);
+      _formData[LABEL_INITIAL_TIME] =
+          DateHelper.getTimeFromDate(widget.medication.initialDate);
       _formData[LABEL_NAME] = widget.medication.name;
       _formData[LABEL_DOSAGE] = (widget.medication.dosage == null)
           ? null
@@ -80,9 +82,10 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
           ? null
           : widget.medication.quantity.toString();
       _formData[LABEL_OBSERVATION] = widget.medication.observation;
-      
+
       _initialdateController.text = _formData[LABEL_INITIAL_DATE];
       _finalDateController.text = _formData[LABEL_FINAL_DATE];
+      _initialTimeController.text = _formData[LABEL_INITIAL_TIME];
     }
 
     _frequencyController = TextEditingController(
@@ -203,6 +206,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 textEditingController: _initialTimeController,
                 hintText: "",
                 title: Strings.initial_time,
+                validator: TimeofDayValidator(),
                 onChanged: (value) {
                   setState(() {
                     _formData[LABEL_INITIAL_TIME] = value;
@@ -276,14 +280,19 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
           entity: Medication(
             done: false,
             name: _formData[LABEL_NAME],
-            dosage: double.parse(_formData[LABEL_DOSAGE]),
+            dosage: (_formData[LABEL_DOSAGE] is int)
+                ? int.parse(_formData[LABEL_DOSAGE]).toDouble()
+                : double.parse(_formData[LABEL_DOSAGE]),
             quantity: int.parse(_formData[LABEL_QUANTITY]),
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            initialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            // initialTime: _formData[LABEL_INITIAL_TIME],
+            initialDate: DateHelper.addTimeToDate(
+              _formData[LABEL_INITIAL_TIME],
+              DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            ),
+            finalDate: DateHelper.addTimeToDate(
+              _formData[LABEL_INITIAL_TIME],
+              DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            ),
             observation: _formData[LABEL_OBSERVATION],
           ),
         ),
@@ -300,11 +309,14 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 : double.parse(_formData[LABEL_DOSAGE]),
             quantity: int.parse(_formData[LABEL_QUANTITY]),
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            initialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            // initialTime: _formData[LABEL_INITIAL_TIME],
+            initialDate: DateHelper.addTimeToDate(
+              _formData[LABEL_INITIAL_TIME],
+              DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            ),
+            finalDate: DateHelper.addTimeToDate(
+              _formData[LABEL_INITIAL_TIME],
+              DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            ),
             observation: _formData[LABEL_OBSERVATION],
           ),
         ),
