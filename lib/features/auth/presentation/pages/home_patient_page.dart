@@ -10,6 +10,7 @@ import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_blo
 import 'package:cardio_flutter/features/help/presentation/pages/patient_help_page.dart';
 import 'package:cardio_flutter/features/help/presentation/pages/professional_help_page.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
+import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
 import 'package:cardio_flutter/features/orientations/presentation/pages/orientations_page.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
@@ -69,14 +70,12 @@ class HomePatientPage extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                text: Strings.medicine,
-                image: Images.ico_medicine,
+                text: Strings.medication,
+                image: Images.ico_medication,
                 destination: () {
-                  return Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePatientPage(patient: patient)));
+                  BlocProvider.of<generic.GenericBloc<Medication>>(context)
+                      .add(generic.Start<Medication>(patient: patient));
+                  return Navigator.pushNamed(context, "/medicationPage");
                 },
               ),
               ItemMenu(

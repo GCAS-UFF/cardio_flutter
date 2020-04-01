@@ -50,7 +50,7 @@ class Strings {
 
   static const biometric = " Como estou hoje";
   static const liquid = " Líquidos ingeridos";
-  static const medicine = " Medicações";
+  static const medication = " Medicações";
   static const appointment = " Consultas";
   static const exercise = " Exercícios";
   static const orientations = " Orientações";
@@ -79,6 +79,7 @@ class Strings {
   static const intensity = "Intensidade";
   static const duration = "Duração";
   static const initial_date = "Data Inicial";
+  static const executed_date = "Data";
   static const final_date = "Data Final";
   static const hint_duration = "min";
   static const hint_frequency = "vezes ao dia";
@@ -106,6 +107,7 @@ class Strings {
   static const quantity = "Quantidade";
   static const initial_time = "Hora Inicial";
   static const observation = "Observação";
+  static const tookIt = "Consumiu?";
 
   // Biometrics Page
   static const weight_title = "Meu peso";
