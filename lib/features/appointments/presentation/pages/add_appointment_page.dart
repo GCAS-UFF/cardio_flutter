@@ -3,11 +3,14 @@ import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
+import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddAppointmentPage extends StatefulWidget {
   final Appointment appointment;
@@ -22,10 +25,8 @@ class AddAppointmentPage extends StatefulWidget {
 
 class _AddAppointmentPageState extends State<AddAppointmentPage> {
   static const String LABEL_APPOINTMENT_DATE = "LABEL_APPOINTMENT_DATE";
-  static const String LABEL_ID = "LABEL_ID";
   static const String LABEL_TIME_OF_APPOINTMENT = "LABEL_TIME_OF_APPOINTMENT";
   static const String LABEL_ADRESS = "LABEL_ADRESS";
-  static const String LABEL_WENT = "LABEL_WENT";
   static const String LABEL_EXPERTISE = "LABEL_EXPERTISE";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
@@ -49,25 +50,20 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
   @override
   void initState() {
     if (widget.appointment != null) {
-      _formData[LABEL_TIME_OF_APPOINTMENT] =
-          widget.appointment.timeOfAppointment;
       _formData[LABEL_ADRESS] = widget.appointment.adress;
       _formData[LABEL_EXPERTISE] = widget.appointment.expertise;
-
       _formData[LABEL_APPOINTMENT_DATE] =
           DateHelper.convertDateToString(widget.appointment.appointmentDate);
+      _formData[LABEL_TIME_OF_APPOINTMENT] =
+          DateHelper.getTimeFromDate(widget.appointment.appointmentDate);
+      _timeOfAppointmentController.text = _formData[LABEL_TIME_OF_APPOINTMENT];
+      _appointmentDateController.text = _formData[LABEL_APPOINTMENT_DATE];
     }
-    _timeOfAppointmentController = TextEditingController(
-      text: _formData[LABEL_TIME_OF_APPOINTMENT],
-    );
     _adressController = TextEditingController(
       text: _formData[LABEL_ADRESS],
     );
     _expertiseController = TextEditingController(
       text: _formData[LABEL_EXPERTISE],
-    );
-    _appointmentDateController = TextEditingController(
-      text: _formData[LABEL_APPOINTMENT_DATE],
     );
 
     super.initState();
@@ -78,8 +74,31 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
     return BasePage(
       backgroundColor: Color(0xffc9fffd),
       body: SingleChildScrollView(
-        child: _buildForm(context)
-              
+        child:
+            BlocListener<GenericBloc<Appointment>, GenericState<Appointment>>(
+          listener: (context, state) {
+            if (state is Error<Appointment>) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            } else if (state is Loaded<Appointment>) {
+              Navigator.pop(context);
+            }
+          },
+          child:
+              BlocBuilder<GenericBloc<Appointment>, GenericState<Appointment>>(
+            builder: (context, state) {
+              print(state);
+              if (state is Loading<Appointment>) {
+                return LoadingWidget(_buildForm(context));
+              } else {
+                return _buildForm(context);
+              }
+            },
+          ),
+        ),
       ),
     );
   }
@@ -112,7 +131,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _timeOfAppointmentController,
-                hintText: Strings.hint_frequency,
+                hintText: "",
                 title: Strings.time_of_appointment,
                 onChanged: (value) {
                   setState(() {
@@ -138,11 +157,11 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                 title: Strings.specialty,
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_EXPERTISE] = value();
+                    _formData[LABEL_EXPERTISE] = value;
                   });
                 },
               ),
-                           SizedBox(
+              SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
@@ -167,6 +186,35 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
     }
     _formKey.currentState.save();
 
-    
+    if (widget.appointment == null) {
+      BlocProvider.of<GenericBloc<Appointment>>(context).add(
+        AddRecomendationEvent<Appointment>(
+          entity: Appointment(
+            done: false,
+            expertise: _formData[LABEL_EXPERTISE],
+            adress: _formData[LABEL_ADRESS],
+            appointmentDate: DateHelper.addTimeToDate(
+              _formData[LABEL_TIME_OF_APPOINTMENT],
+              DateHelper.convertStringToDate(_formData[LABEL_APPOINTMENT_DATE]),
+            ),
+          ),
+        ),
+      );
+    } else {
+      BlocProvider.of<GenericBloc<Appointment>>(context).add(
+        EditRecomendationEvent<Appointment>(
+          entity: Appointment(
+            id: widget.appointment.id,
+            done: false,
+            expertise: _formData[LABEL_EXPERTISE],
+            adress: _formData[LABEL_ADRESS],
+            appointmentDate: DateHelper.addTimeToDate(
+              _formData[LABEL_TIME_OF_APPOINTMENT],
+              DateHelper.convertStringToDate(_formData[LABEL_APPOINTMENT_DATE]),
+            ),
+          ),
+        ),
+      );
+    }
   }
 }

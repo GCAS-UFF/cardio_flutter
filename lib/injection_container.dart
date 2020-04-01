@@ -1,4 +1,6 @@
 import 'package:cardio_flutter/core/platform/settings.dart';
+import 'package:cardio_flutter/features/appointments/data/models/appointment_model.dart';
+import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:cardio_flutter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_in.dart';
@@ -56,6 +58,7 @@ Future<void> init() async {
   _initExerxise();
   _initLiquid();
   _initBiometrics();
+  _initAppointments();
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
@@ -256,6 +259,46 @@ void _initBiometrics() {
       type: "biometric",
       firebaseDatabase: sl(),
       firebaseTag: "Biometric",
+    ),
+  );
+}
+
+void _initAppointments() {
+  // Bloc
+  sl.registerFactory(
+    () => GenericBloc<Appointment>(
+      addRecomendation: sl(),
+      editRecomendation: sl(),
+      delete: sl(),
+      getList: sl(),
+      execute: sl(),
+      editExecuted: sl(),
+    ),
+  );
+
+  // Use Cases
+  sl.registerLazySingleton(() => AddRecomendation<Appointment>(sl()));
+  sl.registerLazySingleton(() => EditRecomendation<Appointment>(sl()));
+  sl.registerLazySingleton(() => Delete<Appointment>(sl()));
+  sl.registerLazySingleton(() => GetList<Appointment>(sl()));
+  sl.registerLazySingleton(() => Execute<Appointment>(sl()));
+  sl.registerLazySingleton(() => EditExecuted<Appointment>(sl()));
+
+  // Repositories
+  sl.registerLazySingleton<GenericRepository<Appointment>>(
+    () => GenericRepositoryImpl<Appointment, AppointmentModel>(
+      type: "appointment",
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<GenericRemoteDataSource<AppointmentModel>>(
+    () => GenericRemoteDataSourceImpl<AppointmentModel>(
+      type: "appointment",
+      firebaseDatabase: sl(),
+      firebaseTag: "Appointment",
     ),
   );
 }

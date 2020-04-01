@@ -1,33 +1,34 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:meta/meta.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 
 class AppointmentModel extends Appointment {
   AppointmentModel(
-      {@required DateTime timeOfAppointment,
+      {
       @required DateTime appointmentDate,
       @required String adress,
       @required String expertise,
-      bool went,
-      String id})
+      @required String went,
+      @required String id,
+      @required bool done, 
+      @required DateTime executedDate})
       : super(
             id: id,
             went: went,
-            timeOfAppointment: timeOfAppointment,
+            executedDate: executedDate,
+            done : done,
             appointmentDate: appointmentDate,
             adress: adress,
             expertise: expertise);
 
-  Map<dynamic, dynamic> toJson() {
+  static Map<dynamic, dynamic> toJson(AppointmentModel appointmentModel) {
     Map<dynamic, dynamic> json = {};
-    if (timeOfAppointment != null)
-      json['timeOfAppointment'] = timeOfAppointment.millisecondsSinceEpoch;
-    if (appointmentDate != null)
-      json['appointmentDate'] = appointmentDate.millisecondsSinceEpoch;
-    if (adress != null) json['adress'] = adress;
-    if (expertise != null) json['expertise'] = expertise;
-    if (went != null) json['went'] = went;
-    if (id != null) json['id'] = id;
+    if (appointmentModel.executedDate != null)
+      json['executedDate'] = appointmentModel.executedDate.millisecondsSinceEpoch;
+    if (appointmentModel.appointmentDate != null)
+      json['appointmentDate'] = appointmentModel.appointmentDate.millisecondsSinceEpoch;
+    if (appointmentModel.adress != null) json['adress'] = appointmentModel.adress;
+    if (appointmentModel.expertise != null) json['expertise'] = appointmentModel.expertise;
+    if (appointmentModel.went != null) json['went'] = appointmentModel.went;
 
     return json;
   }
@@ -39,12 +40,13 @@ class AppointmentModel extends Appointment {
       appointmentDate: (json['appointmentDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['appointmentDate']),
-      timeOfAppointment: (json['timeOfAppointment'] == null)
+      executedDate: (json['executedDate'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(json['appointmentDate']),
+          : DateTime.fromMillisecondsSinceEpoch(json['executedDate']),
       expertise: json['expertise'],
       went: json['went'],
       id: json['id'],
+      done : json['done'],
     );
   }
 
@@ -54,41 +56,9 @@ class AppointmentModel extends Appointment {
         adress: appointment.adress,
         appointmentDate: appointment.appointmentDate,
         expertise: appointment.expertise,
-        timeOfAppointment: appointment.timeOfAppointment,
+        executedDate: appointment.executedDate,
+        done: appointment.done,
         id: appointment.id,
         went: appointment.went);
-  }
-
-  factory AppointmentModel.fromDataSnapshot(
-      DataSnapshot dataSnapshot, bool went) {
-    if (dataSnapshot == null) return null;
-
-    Map<dynamic, dynamic> objectMap =
-        dataSnapshot.value as Map<dynamic, dynamic>;
-
-    objectMap['id'] = dataSnapshot.key;
-    objectMap['went'] = true;
-
-    return AppointmentModel.fromJson(objectMap);
-  }
-
-  static List<AppointmentModel> fromDataSnapshotList(
-      DataSnapshot dataSnapshot, bool went) {
-    if (dataSnapshot == null) return null;
-
-    List<AppointmentModel> result = List<AppointmentModel>();
-    Map<dynamic, dynamic> objectTodoMap =
-        dataSnapshot.value as Map<dynamic, dynamic>;
-    if (objectTodoMap != null) {
-      for (MapEntry<dynamic, dynamic> entry in objectTodoMap.entries) {
-        Map<dynamic, dynamic> appointmentMap = entry.value;
-        appointmentMap['id'] = entry.key;
-        appointmentMap['went'] = true;
-        print(appointmentMap);
-        result.add(AppointmentModel.fromJson(appointmentMap));
-      }
-    }
-
-    return result;
   }
 }

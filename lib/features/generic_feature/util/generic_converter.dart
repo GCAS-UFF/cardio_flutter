@@ -1,3 +1,5 @@
+import 'package:cardio_flutter/features/appointments/data/models/appointment_model.dart';
+import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/biometrics/data/models/biometric_model.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
 import 'package:cardio_flutter/features/liquids/data/models/liquid_model.dart';
@@ -10,6 +12,8 @@ class GenericConverter {
       return LiquidModel.toJson(model as LiquidModel);
     } else if (type == "biometric") {
       return BiometricModel.toJson(model as BiometricModel);
+    } else if (type == "appointment") {
+      return AppointmentModel.toJson(model as AppointmentModel);
     } else {
       return null;
     }
@@ -20,6 +24,8 @@ class GenericConverter {
       return LiquidModel.fromJson(json) as Model;
     } else if (type == "biometric") {
       return BiometricModel.fromJson(json) as Model;
+    } else if (type == "appointment") {
+      return AppointmentModel.fromJson(json) as Model;
     } else {
       return null;
     }
@@ -31,6 +37,8 @@ class GenericConverter {
       return (LiquidModel.fromEntity(entity as Liquid) as Model);
     } else if (type == "biometric") {
       return (BiometricModel.fromEntity(entity as Biometric) as Model);
+    } else if (type == "appointment") {
+      return (AppointmentModel.fromEntity(entity as Appointment) as Model);
     } else {
       return null;
     }

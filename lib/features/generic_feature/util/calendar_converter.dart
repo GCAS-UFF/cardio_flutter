@@ -1,4 +1,5 @@
 import 'package:cardio_flutter/core/utils/date_helper.dart';
+import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/calendar.dart';
@@ -167,6 +168,24 @@ class CalendarConverter {
           "Pressão Arterial": entity.bloodPressure,
           "Inchaço": entity.swelling,
           "Fadiga": entity.fatigue,
+        };
+      }
+    } else if (entity is Appointment) {
+      if (!entity.done) {
+        result = {
+          "Especialidade": entity.expertise,
+          "Data": DateHelper.convertDateToString(entity.appointmentDate),
+          "Horário": DateHelper.getTimeFromDate(entity.appointmentDate),
+          "Localização": entity.adress,
+        };
+      } else {
+        result = {
+          "Especialidade": entity.expertise,
+          "Data Prevista": DateHelper.convertDateToString(entity.appointmentDate),
+          "Horário Previsto": DateHelper.getTimeFromDate(entity.appointmentDate),
+          "Localização": entity.adress,
+          "Compareceu": entity.went,
+          "Respondeu em": DateHelper.convertDateToString(entity.executedDate),
         };
       }
     }

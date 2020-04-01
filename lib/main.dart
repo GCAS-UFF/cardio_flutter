@@ -12,6 +12,8 @@ import 'package:cardio_flutter/features/manage_professional/presentation/pages/h
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'features/appointments/domain/entities/appointment.dart';
+import 'features/appointments/presentation/pages/appointment_page.dart';
 import 'features/auth/presentation/pages/login_page.dart';
 import 'features/biometrics/presentation/pages/biometric_page.dart';
 import 'features/liquids/presentation/pages/liquid_page.dart';
@@ -41,6 +43,9 @@ Future<void> main() async {
           BlocProvider<GenericBloc<Biometric>>(
             create: (_) => di.sl<GenericBloc<Biometric>>(),
           ),
+          BlocProvider<GenericBloc<Appointment>>(
+            create: (_) => di.sl<GenericBloc<Appointment>>(),
+          ),
         ],
         child: MyApp(),
       ),
@@ -67,6 +72,7 @@ class MyApp extends StatelessWidget {
         "/exercisePage": (BuildContext context) => ExercisePage(),
         "/liquidPage": (BuildContext context) => LiquidPage(),
         "/biometricPage": (BuildContext context) => BiometricPage(),
+        "/appointmentPage": (BuildContext context) => AppointmentPage(),
       },
     );
   }

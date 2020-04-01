@@ -1,6 +1,7 @@
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/app_info/presentation/pages/app_info_page.dart';
+import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
@@ -82,11 +83,9 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.appointment,
                 image: Images.ico_appointment,
                 destination: () {
-                  return Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePatientPage(patient: patient)));
+                  BlocProvider.of<generic.GenericBloc<Appointment>>(context)
+                      .add(generic.Start<Appointment>(patient: patient));
+                  return Navigator.pushNamed(context, "/appointmentPage");
                 },
               ),
               ItemMenu(
