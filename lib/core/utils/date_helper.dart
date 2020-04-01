@@ -38,4 +38,24 @@ class DateHelper {
     }
     return age;
   }
+
+  static DateTime addTimeToCurrentDate(String time) {
+    if (time == null || time.length != 5) return null;
+
+    int hour = int.tryParse(time.substring(0, 2));
+    int minute = int.tryParse(time.substring(3, 5));
+
+    DateTime result = DateTime.now();
+
+    return DateTime(result.year, result.month, result.day, hour, minute);
+  }
+
+  static String getTimeFromDate(DateTime dateTime) {
+    if (dateTime == null) return "";
+    String hour =
+        (dateTime.hour < 10) ? "0${dateTime.hour}" : "${dateTime.hour}";
+    String minute =
+        (dateTime.minute < 10) ? "0${dateTime.minute}" : "${dateTime.minute}";
+    return "$hour:$minute";
+  }
 }

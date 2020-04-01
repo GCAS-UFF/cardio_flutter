@@ -11,6 +11,14 @@ import 'package:cardio_flutter/features/exercises/domain/usecases/edit_exercise_
 import 'package:cardio_flutter/features/exercises/domain/usecases/execute_exercise.dart';
 import 'package:cardio_flutter/features/exercises/domain/usecases/get_exercise_list.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
+import 'package:cardio_flutter/features/generic_feature/data/repositories/generic_repository_impl.dart';
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/add_recomendation.dart';
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/delete.dart';
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/edit_recomendation.dart';
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/execute.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
+import 'package:cardio_flutter/features/liquids/data/models/liquid_model.dart';
+import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/manage_professional/data/datasources/manage_professional_remote_data_source.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/delete_patient_list.dart';
 import 'package:cardio_flutter/features/manage_professional/domain/usecases/edit_patient.dart';
@@ -31,6 +39,10 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/exercises/domain/repository/exercise_repository.dart';
 import 'features/exercises/domain/usecases/delete_exercise.dart';
 import 'features/exercises/domain/usecases/edit_executed_exercise.dart';
+import 'features/generic_feature/data/datasources/generic_remote_data_source.dart';
+import 'features/generic_feature/domain/repositories/generic_repository.dart';
+import 'features/generic_feature/domain/usecases/edit_executed.dart';
+import 'features/generic_feature/domain/usecases/get_list.dart';
 import 'features/manage_professional/data/repositories/manage_professional_repository_impl.dart';
 import 'features/manage_professional/domain/repositories/manage_professional_repository.dart';
 
@@ -40,6 +52,7 @@ Future<void> init() async {
   initAuth();
   initManageProfessional();
   initExerxise();
+  initLiquid();
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
@@ -49,7 +62,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseDatabase.instance);
   sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => DataConnectionChecker());
-  sl.registerLazySingleton(() => Settings( sharedPreferences: sl()));
+  sl.registerLazySingleton(() => Settings(sharedPreferences: sl()));
 }
 
 void initAuth() {
@@ -147,7 +160,6 @@ void initExerxise() {
   sl.registerLazySingleton(() => DeleteExercise(sl()));
   sl.registerLazySingleton(() => GetExerciseList(sl()));
   sl.registerLazySingleton(() => EditExerciseProfessional(sl()));
-  
 
   // Repositories
   sl.registerLazySingleton<ExerciseRepository>(
@@ -161,6 +173,46 @@ void initExerxise() {
   sl.registerLazySingleton<ExerciseRemoteDataSource>(
     () => ExerciseRemoteDataSourceImpl(
       firebaseDatabase: sl(),
+    ),
+  );
+}
+
+void initLiquid() {
+  // Bloc
+  sl.registerFactory(
+    () => GenericBloc<Liquid>(
+      addRecomendation: sl(),
+      editRecomendation: sl(),
+      delete: sl(),
+      getList: sl(),
+      execute: sl(),
+      editExecuted: sl(),
+    ),
+  );
+
+  // Use Cases
+  sl.registerLazySingleton(() => AddRecomendation<Liquid>(sl()));
+  sl.registerLazySingleton(() => EditRecomendation<Liquid>(sl()));
+  sl.registerLazySingleton(() => Delete<Liquid>(sl()));
+  sl.registerLazySingleton(() => GetList<Liquid>(sl()));
+  sl.registerLazySingleton(() => Execute<Liquid>(sl()));
+  sl.registerLazySingleton(() => EditExecuted<Liquid>(sl()));
+
+  // Repositories
+  sl.registerLazySingleton<GenericRepository<Liquid>>(
+    () => GenericRepositoryImpl<Liquid, LiquidModel>(
+      type: "liquid",
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<GenericRemoteDataSource<LiquidModel>>(
+    () => GenericRemoteDataSourceImpl<LiquidModel>(
+      type: "liquid",
+      firebaseDatabase: sl(),
+      firebaseTag: "Liquid",
     ),
   );
 }

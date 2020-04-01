@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Dimensions {
+  //The height size of the base screen.
+  //The base screen is the screen of the cellphone using to define the designs
+  static final double baseScreenHeight = 592.0;
+  //The width size of the base screen.
+  //The base screen is the screen of the tablet using to define the designs
+  static final double baseScreenWidth = 360.0;
+
   static double getConvertedHeightSize(
       BuildContext context, double sizeInPixel) {
-    //The height size of the base screen.
-    //The base screen is the screen of the cellphone using to define the designs
-    double baseScreenHeight = 592.0;
-
     //Getting the current screen height
     MediaQueryData queryData = MediaQuery.of(context);
     double currentScreenHeight = queryData.size.height;
@@ -18,10 +21,6 @@ class Dimensions {
 
   static double getConvertedWidthSize(
       BuildContext context, double sizeInPixel) {
-    //The width size of the base screen.
-    //The base screen is the screen of the tablet using to define the designs
-    double baseScreenWidth = 360.0;
-
     //Getting the current screen width
     MediaQueryData queryData = MediaQuery.of(context);
     double currentScreenWidth = queryData.size.width;

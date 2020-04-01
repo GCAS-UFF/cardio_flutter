@@ -5,11 +5,14 @@ import 'package:cardio_flutter/features/auth/presentation/pages/patient_sign_up_
 import 'package:cardio_flutter/features/auth/presentation/pages/professional_signup_page.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
 import 'package:cardio_flutter/features/exercises/presentation/pages/exercise_page.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
+import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/manage_professional/presentation/pages/home_professional_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'features/auth/presentation/pages/login_page.dart';
+import 'features/liquids/presentation/pages/liquid_page.dart';
 import 'features/manage_professional/presentation/bloc/manage_professional_bloc.dart';
 import 'injection_container.dart' as di;
 
@@ -29,6 +32,9 @@ Future<void> main() async {
           ),
           BlocProvider<ExerciseBloc>(
             create: (_) => di.sl<ExerciseBloc>(),
+          ),
+          BlocProvider<GenericBloc<Liquid>>(
+            create: (_) => di.sl<GenericBloc<Liquid>>(),
           ),
         ],
         child: MyApp(),
@@ -54,6 +60,7 @@ class MyApp extends StatelessWidget {
             HomeProfessionalPage(),
         "/patientSignUp": (BuildContext context) => PatientSignUpPage(),
         "/exercisePage": (BuildContext context) => ExercisePage(),
+        "/liquidPage": (BuildContext context) => LiquidPage(),
       },
     );
   }
