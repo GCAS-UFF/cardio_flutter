@@ -38,6 +38,7 @@ import 'features/exercises/domain/usecases/delete_exercise.dart';
 import 'features/exercises/domain/usecases/edit_executed_exercise.dart';
 import 'features/generic_feature/data/datasources/generic_remote_data_source.dart';
 import 'features/generic_feature/domain/repositories/generic_repository.dart';
+import 'features/generic_feature/domain/usecases/get_list.dart';
 import 'features/manage_professional/data/repositories/manage_professional_repository_impl.dart';
 import 'features/manage_professional/domain/repositories/manage_professional_repository.dart';
 
@@ -177,11 +178,13 @@ void initLiquid() {
   sl.registerFactory(
     () => GenericBloc<Liquid>(
       addRecomendation: sl(),
+      getList: sl(),
     ),
   );
 
   // Use Cases
   sl.registerLazySingleton(() => AddRecomendation<Liquid>(sl()));
+  sl.registerLazySingleton(() => GetList<Liquid>(sl()));
 
   // Repositories
   sl.registerLazySingleton<GenericRepository<Liquid>>(

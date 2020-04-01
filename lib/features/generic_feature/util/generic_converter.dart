@@ -11,13 +11,44 @@ class GenericConverter {
     }
   }
 
-  static Model genericFromDataSnapshot<Model>(
-      String type, DataSnapshot snapshot) {
+  static Model genericFromJson<Model>(String type, Map<dynamic, dynamic> json) {
     if (type == "liquid") {
-      return (LiquidModel.fromDataSnapshot(snapshot) as Model);
+      return LiquidModel.fromJson(json) as Model;
     } else {
       return null;
     }
+  }
+
+  static Model genericFromDataSnapshot<Model>(
+      String type, DataSnapshot dataSnapshot, bool done) {
+    if (dataSnapshot == null) return null;
+
+    Map<dynamic, dynamic> objectMap =
+        dataSnapshot.value as Map<dynamic, dynamic>;
+
+    objectMap['id'] = dataSnapshot.key;
+    objectMap['done'] = done;
+
+    return genericFromJson<Model>(type, objectMap);
+  }
+
+  static List<Model> genericFromDataSnapshotList<Model>(
+      String type, DataSnapshot dataSnapshot, bool done) {
+    if (dataSnapshot == null) return null;
+
+    List<Model> result = List<Model>();
+    Map<dynamic, dynamic> objectTodoMap =
+        dataSnapshot.value as Map<dynamic, dynamic>;
+    if (objectTodoMap != null) {
+      for (MapEntry<dynamic, dynamic> entry in objectTodoMap.entries) {
+        Map<dynamic, dynamic> map = entry.value;
+        map['id'] = entry.key;
+        map['done'] = done;
+        result.add(genericFromJson(type, map));
+      }
+    }
+
+    return result;
   }
 
   static Model genericModelFromEntity<Entity, Model extends Entity>(

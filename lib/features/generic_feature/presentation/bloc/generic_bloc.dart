@@ -4,20 +4,28 @@ import 'package:bloc/bloc.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/calendar.dart';
-import 'package:cardio_flutter/features/generic_feature/domain/usecases/add_recomendation.dart';
+import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/add_recomendation.dart'
+    as add_recomendation;
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/get_list.dart'
+    as get_list;
+import 'package:cardio_flutter/features/generic_feature/util/calendar_converter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 part 'generic_event.dart';
 part 'generic_state.dart';
 
-class GenericBloc<Entity>
+class GenericBloc<Entity extends BaseEntity>
     extends Bloc<GenericEvent<Entity>, GenericState<Entity>> {
-  final AddRecomendation<Entity> addRecomendation;
+  final add_recomendation.AddRecomendation<Entity> addRecomendation;
+  final get_list.GetList<Entity> getList;
+
   Patient _currentPatient;
 
-  GenericBloc({@required this.addRecomendation})
-      : assert(addRecomendation != null);
+  GenericBloc({@required this.addRecomendation, @required this.getList})
+      : assert(addRecomendation != null),
+        assert(getList != null);
 
   @override
   GenericState<Entity> get initialState => Empty<Entity>();
@@ -32,18 +40,20 @@ class GenericBloc<Entity>
       this.add(Refresh<Entity>());
     } else if (event is Refresh<Entity>) {
       yield Loading<Entity>();
-      // var recomendationListOrError = await getExerciseList(
-      //     get_exercise_list.Params(patient: _currentPatient));
-      // yield exerciseListOrError.fold((failure) {
-      //   return Error(message: Converter.convertFailureToMessage(failure));
-      // }, (exerciseList) {
-      //   Calendar calendar = Converter.convertExerciseToCalendar(exerciseList);
-      yield Loaded(patient: _currentPatient, calendar: Calendar());
-      // });
+      var listOrError =
+          await getList(get_list.Params(patient: _currentPatient));
+      yield listOrError.fold((failure) {
+        return Error<Entity>(
+            message: Converter.convertFailureToMessage(failure));
+      }, (list) {
+        Calendar calendar = CalendarConverter.convertEntityListToCalendar(list);
+        return Loaded(patient: _currentPatient, calendar: calendar);
+      });
     } else if (event is AddRecomendationEvent<Entity>) {
       yield Loading<Entity>();
       var recomendationOrError = await addRecomendation(
-          Params<Entity>(entity: event.entity, patient: _currentPatient));
+          add_recomendation.Params<Entity>(
+              entity: event.entity, patient: _currentPatient));
       yield recomendationOrError.fold((failure) {
         return Error<Entity>(
             message: Converter.convertFailureToMessage(failure));

@@ -59,7 +59,7 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
     }
 
     _milimitersPerDayController = TextEditingController(
-      text: _formData[LABEL_MILIMITERS_PER_DAY],
+      text: (_formData[LABEL_MILIMITERS_PER_DAY] as int).toString(),
     );
     _initialdateController = TextEditingController(
       text: _formData[LABEL_INITIAL_DATE],
@@ -180,6 +180,7 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
     BlocProvider.of<GenericBloc<Liquid>>(context).add(
       AddRecomendationEvent<Liquid>(
         entity: Liquid(
+          done: false,
           name: _formData[LABEL_NAME],
           quantity: 0,
           reference: _formData[LABEL_REFERENCE],

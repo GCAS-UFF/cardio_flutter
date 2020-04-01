@@ -7,23 +7,22 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
-class AddRecomendation<Entity extends BaseEntity> extends UseCase<Entity, Params> {
+class GetList<Entity extends BaseEntity> extends UseCase<List<Entity>, Params> {
   final GenericRepository<Entity> repository;
 
-  AddRecomendation(this.repository);
+  GetList(this.repository);
 
   @override
-  Future<Either<Failure, Entity>> call(Params params) async {
-    return await repository.addRecomendation(params.patient, params.entity);
+  Future<Either<Failure, List<Entity>>> call(Params params) async {
+    return await repository.getList(params.patient);
   }
 }
 
-class Params<Entity> extends Equatable {
+class Params extends Equatable {
   final Patient patient;
-  final Entity entity;
 
-  Params({@required this.patient, @required this.entity}) : super();
+  Params({@required this.patient}) : super();
 
   @override
-  List<Object> get props => [patient, entity];
+  List<Object> get props => [patient];
 }

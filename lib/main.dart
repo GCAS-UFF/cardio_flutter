@@ -7,12 +7,12 @@ import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_blo
 import 'package:cardio_flutter/features/exercises/presentation/pages/exercise_page.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
-import 'package:cardio_flutter/features/liquids/presentation/pages/add_liquid_page.dart';
 import 'package:cardio_flutter/features/manage_professional/presentation/pages/home_professional_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'features/auth/presentation/pages/login_page.dart';
+import 'features/liquids/presentation/pages/liquid_page.dart';
 import 'features/manage_professional/presentation/bloc/manage_professional_bloc.dart';
 import 'injection_container.dart' as di;
 
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
             HomeProfessionalPage(),
         "/patientSignUp": (BuildContext context) => PatientSignUpPage(),
         "/exercisePage": (BuildContext context) => ExercisePage(),
-        "/liquidPage": (BuildContext context) => AddLiquidPage(),
+        "/liquidPage": (BuildContext context) => LiquidPage(),
       },
     );
   }

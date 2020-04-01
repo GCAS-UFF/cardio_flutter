@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 
 abstract class GenericRemoteDataSource<Model> {
   Future<Model> addRecomendation(PatientModel patientModel, Model model);
+  Future<List<Model>> getList(PatientModel patientModel);
 }
 
 class GenericRemoteDataSourceImpl<Model>
@@ -35,13 +36,43 @@ class GenericRemoteDataSourceImpl<Model>
           .set(GenericConverter.genericToJson<Model>(type, model));
       DataSnapshot recomendationSnapshot = await recomendaionRef.once();
       var result =
-          GenericConverter.genericFromDataSnapshot(type, recomendationSnapshot);
+          GenericConverter.genericFromDataSnapshot(type, recomendationSnapshot, false);
 
       return result;
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
       print("[GenericRemoteDataSourceImpl] ${e.toString()}");
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<Model>> getList(PatientModel patientModel) async {
+    try {
+      List<Model> result = List<Model>();
+
+      DatabaseReference refToDoList = patientRootRef
+          .child(patientModel.id)
+          .child('ToDo')
+          .child(firebaseTag);
+      DataSnapshot toDoListSnapshot = await refToDoList.once();
+      result.addAll(
+          GenericConverter.genericFromDataSnapshotList(type, toDoListSnapshot, false));
+
+      DatabaseReference refDoneList = patientRootRef
+          .child(patientModel.id)
+          .child('Done')
+          .child(firebaseTag);
+      DataSnapshot doneListSnapshot = await refDoneList.once();
+      result.addAll(
+          GenericConverter.genericFromDataSnapshotList(type, doneListSnapshot, true));
+
+      return result;
+    } on PlatformException catch (e) {
+      throw e;
+    } catch (e) {
+      print("[GenericRemoteDataSource] ${e.toString()}");
       throw ServerException();
     }
   }

@@ -1,14 +1,11 @@
-import 'package:equatable/equatable.dart';
+import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
 import 'package:meta/meta.dart';
 
-class Liquid extends Equatable {
+class Liquid extends BaseEntity {
   final int mililitersPerDay;
-  final DateTime initialDate;
-  final DateTime finalDate;
   final String name;
   final int quantity;
-  final String reference;
-  final DateTime time;
+  final int reference;
   final String id;
 
   Liquid({
@@ -16,20 +13,26 @@ class Liquid extends Equatable {
     this.name,
     this.quantity,
     this.reference,
-    this.time,
-    @required this.mililitersPerDay,
-    @required this.initialDate,
-    @required this.finalDate,
-  });
+    this.mililitersPerDay,
+    initialDate,
+    finalDate,
+    executedDate,
+    @required done,
+  }) : super(
+            initialDate: initialDate,
+            finalDate: finalDate,
+            executedDate: executedDate,
+            done: done);
 
   @override
   List<Object> get props => [
         mililitersPerDay,
         initialDate,
         finalDate,
+        executedDate,
+        done,
         name,
         quantity,
         reference,
-        time
       ];
 }
