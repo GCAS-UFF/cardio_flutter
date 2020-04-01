@@ -82,4 +82,35 @@ class GenericRepositoryImpl<Entity extends BaseEntity, Model extends Entity>
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, Entity>> editExecuted(
+      Patient patient, Entity entity) async {
+    try {
+      return Right(await remoteDataSource.editExecuted(
+        PatientModel.fromEntity(patient),
+        GenericConverter.genericModelFromEntity<Entity, Model>(type, entity),
+        entity.id,
+      ));
+    } on PlatformException catch (e) {
+      return Left(PlatformFailure(message: e.message));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Entity>> execute(
+      Patient patient, Entity entity) async {
+    try {
+      return Right(await remoteDataSource.execute(
+        PatientModel.fromEntity(patient),
+        GenericConverter.genericModelFromEntity<Entity, Model>(type, entity),
+      ));
+    } on PlatformException catch (e) {
+      return Left(PlatformFailure(message: e.message));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
 }

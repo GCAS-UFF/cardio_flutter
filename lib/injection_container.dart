@@ -15,6 +15,7 @@ import 'package:cardio_flutter/features/generic_feature/data/repositories/generi
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/add_recomendation.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/delete.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/edit_recomendation.dart';
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/execute.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/liquids/data/models/liquid_model.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
@@ -40,6 +41,7 @@ import 'features/exercises/domain/usecases/delete_exercise.dart';
 import 'features/exercises/domain/usecases/edit_executed_exercise.dart';
 import 'features/generic_feature/data/datasources/generic_remote_data_source.dart';
 import 'features/generic_feature/domain/repositories/generic_repository.dart';
+import 'features/generic_feature/domain/usecases/edit_executed.dart';
 import 'features/generic_feature/domain/usecases/get_list.dart';
 import 'features/manage_professional/data/repositories/manage_professional_repository_impl.dart';
 import 'features/manage_professional/domain/repositories/manage_professional_repository.dart';
@@ -183,6 +185,8 @@ void initLiquid() {
       editRecomendation: sl(),
       delete: sl(),
       getList: sl(),
+      execute: sl(),
+      editExecuted: sl(),
     ),
   );
 
@@ -191,6 +195,8 @@ void initLiquid() {
   sl.registerLazySingleton(() => EditRecomendation<Liquid>(sl()));
   sl.registerLazySingleton(() => Delete<Liquid>(sl()));
   sl.registerLazySingleton(() => GetList<Liquid>(sl()));
+  sl.registerLazySingleton(() => Execute<Liquid>(sl()));
+  sl.registerLazySingleton(() => EditExecuted<Liquid>(sl()));
 
   // Repositories
   sl.registerLazySingleton<GenericRepository<Liquid>>(

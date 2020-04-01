@@ -10,4 +10,6 @@ abstract class GenericRepository<Entity extends BaseEntity> {
       Patient patient, Entity entitiy);
   Future<Either<Failure, List<Entity>>> getList(Patient patient);
   Future<Either<Failure, void>> delete(Patient patient, Entity entity);
+  Future<Either<Failure, Entity>> execute(Patient patient, Entity entity);
+  Future<Either<Failure, Entity>> editExecuted(Patient patient, Entity entity);
 }

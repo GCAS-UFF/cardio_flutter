@@ -9,8 +9,12 @@ import 'package:cardio_flutter/features/generic_feature/domain/usecases/add_reco
     as add_recomendation;
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/delete.dart'
     as delete_class;
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/edit_executed.dart'
+    as edit_executed;
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/edit_recomendation.dart'
     as edit_recomendation;
+import 'package:cardio_flutter/features/generic_feature/domain/usecases/execute.dart'
+    as execute_class;
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/get_list.dart'
     as get_list;
 import 'package:cardio_flutter/features/generic_feature/util/calendar_converter.dart';
@@ -26,6 +30,8 @@ class GenericBloc<Entity extends BaseEntity>
   final get_list.GetList<Entity> getList;
   final edit_recomendation.EditRecomendation<Entity> editRecomendation;
   final delete_class.Delete<Entity> delete;
+  final execute_class.Execute<Entity> execute;
+  final edit_executed.EditExecuted<Entity> editExecuted;
 
   Patient _currentPatient;
 
@@ -33,11 +39,15 @@ class GenericBloc<Entity extends BaseEntity>
       {@required this.addRecomendation,
       @required this.getList,
       @required this.editRecomendation,
-      @required this.delete})
+      @required this.delete,
+      @required this.execute,
+      @required this.editExecuted})
       : assert(addRecomendation != null),
         assert(getList != null),
         assert(editRecomendation != null),
-        assert(delete != null);
+        assert(delete != null),
+        assert(execute != null),
+        assert(editExecuted != null);
 
   @override
   GenericState<Entity> get initialState => Empty<Entity>();
@@ -91,6 +101,28 @@ class GenericBloc<Entity extends BaseEntity>
       var voidOrError = await delete(delete_class.Params<Entity>(
           entity: event.entity, patient: _currentPatient));
       yield voidOrError.fold((failure) {
+        return Error<Entity>(
+            message: Converter.convertFailureToMessage(failure));
+      }, (result) {
+        this.add(Refresh<Entity>());
+        return Loading<Entity>();
+      });
+    } else if (event is ExecuteEvent<Entity>) {
+      yield Loading<Entity>();
+      var entityOrError = await execute(execute_class.Params<Entity>(
+          entity: event.entity, patient: _currentPatient));
+      yield entityOrError.fold((failure) {
+        return Error<Entity>(
+            message: Converter.convertFailureToMessage(failure));
+      }, (result) {
+        this.add(Refresh<Entity>());
+        return Loading<Entity>();
+      });
+    } else if (event is EditExecutedEvent<Entity>) {
+      yield Loading<Entity>();
+      var entityOrError = await editExecuted(edit_executed.Params<Entity>(
+          entity: event.entity, patient: _currentPatient));
+      yield entityOrError.fold((failure) {
         return Error<Entity>(
             message: Converter.convertFailureToMessage(failure));
       }, (result) {

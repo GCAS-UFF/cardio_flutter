@@ -1,11 +1,15 @@
+import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
+import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExecuteLiquidPage extends StatefulWidget {
   final Liquid liquid;
@@ -19,13 +23,10 @@ class ExecuteLiquidPage extends StatefulWidget {
 }
 
 class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
-  static const String LABEL_MILIMITERS_PER_DAY = "LABEL_MILIMITERS_PER_DAY";
-  static const String LABEL_INITIAL_DATE = "LABEL_INITIAL_DATE";
-  static const String LABEL_FINAL_DATE = "LABEL_FINAL_DATE";
   static const String LABEL_NAME = "LABEL_NAME";
   static const String LABEL_QUANTITY = "LABEL_QUANTITY";
   static const String LABEL_REFERENCE = "LABEL_REFERENCE";
-  static const String LABEL_TIME = "LABEL_TIME";
+  static const String LABEL_TIME = "LABEL_EXECUTED_DATE";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
@@ -42,7 +43,18 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
 
   @override
   void initState() {
-    if (widget.liquid != null) {}
+    if (widget.liquid != null) {
+      _formData[LABEL_NAME] = widget.liquid.name;
+      _formData[LABEL_QUANTITY] = (widget.liquid.quantity == null)
+          ? null
+          : widget.liquid.quantity.toString();
+      _formData[LABEL_REFERENCE] = (widget.liquid.reference == null)
+          ? null
+          : widget.liquid.reference.toString();
+      _formData[LABEL_TIME] =
+          DateHelper.getTimeFromDate(widget.liquid.executedDate);
+      _timeController.text = _formData[LABEL_TIME];
+    }
 
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
@@ -61,7 +73,31 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   Widget build(BuildContext context) {
     return BasePage(
       backgroundColor: Color(0xffc9fffd),
-      body: SingleChildScrollView(child: _buildForm(context)),
+      body: SingleChildScrollView(
+        child: BlocListener<GenericBloc<Liquid>, GenericState<Liquid>>(
+          listener: (context, state) {
+            if (state is Error<Liquid>) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            } else if (state is Loaded<Liquid>) {
+              Navigator.pop(context);
+            }
+          },
+          child: BlocBuilder<GenericBloc<Liquid>, GenericState<Liquid>>(
+            builder: (context, state) {
+              print(state);
+              if (state is Loading<Liquid>) {
+                return LoadingWidget(_buildForm(context));
+              } else {
+                return _buildForm(context);
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -102,6 +138,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
               CustomTextFormField(
                 isRequired: true,
                 textEditingController: _referenceController,
+                keyboardType: TextInputType.number,
                 hintText: "",
                 title: Strings.reference,
                 onChanged: (value) {
@@ -113,7 +150,6 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
-
                 textEditingController: _timeController,
                 hintText: "",
                 title: Strings.time_title,
@@ -127,7 +163,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (widget.liquid == null)
+                title: (!widget.liquid.done)
                     ? Strings.add
                     : Strings.edit_patient_done,
                 onTap: () {
@@ -147,5 +183,34 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
       return;
     }
     _formKey.currentState.save();
+
+    if (!widget.liquid.done) {
+      BlocProvider.of<GenericBloc<Liquid>>(context).add(
+        ExecuteEvent(
+          entity: Liquid(
+            done: true,
+            name: _formData[LABEL_NAME],
+            quantity: int.parse(_formData[LABEL_QUANTITY]),
+            reference: int.parse(_formData[LABEL_REFERENCE]),
+            executedDate:
+                DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
+          ),
+        ),
+      );
+    } else {
+      BlocProvider.of<GenericBloc<Liquid>>(context).add(
+        EditExecutedEvent(
+          entity: Liquid(
+            id: widget.liquid.id,
+            done: true,
+            name: _formData[LABEL_NAME],
+            quantity: int.parse(_formData[LABEL_QUANTITY]),
+            reference: int.parse(_formData[LABEL_REFERENCE]),
+            executedDate:
+                DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
+          ),
+        ),
+      );
+    }
   }
 }

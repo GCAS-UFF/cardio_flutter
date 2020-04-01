@@ -42,3 +42,23 @@ class DeleteEvent<Entity> extends GenericEvent<Entity> {
 
   List<Object> get props => [entity];
 }
+
+class ExecuteEvent<Entity> extends GenericEvent<Entity> {
+  final Entity entity;
+
+  ExecuteEvent({
+    @required this.entity,
+  });
+
+  List<Object> get props => [entity];
+}
+
+class EditExecutedEvent<Entity> extends GenericEvent<Entity> {
+  final Entity entity;
+
+  EditExecutedEvent({
+    @required this.entity,
+  });
+
+  List<Object> get props => [entity];
+}

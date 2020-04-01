@@ -36,7 +36,7 @@ class LiquidModel extends Liquid {
     if (liquidModel.reference != null)
       json['reference'] = liquidModel.reference;
     if (liquidModel.executedDate != null)
-      json['executedDate'] = liquidModel.executedDate;
+      json['executedDate'] = liquidModel.executedDate.millisecondsSinceEpoch;
 
     return json;
   }
@@ -55,7 +55,9 @@ class LiquidModel extends Liquid {
       quantity: json['quantity'],
       id: json['id'],
       reference: json['reference'],
-      executedDate: json['executedDate'],
+      executedDate: (json['executedDate'] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(json['executedDate']),
       done: json['done'],
     );
   }
