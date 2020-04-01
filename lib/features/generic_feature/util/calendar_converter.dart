@@ -1,4 +1,5 @@
 import 'package:cardio_flutter/core/utils/date_helper.dart';
+import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/calendar.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/day.dart';
@@ -139,18 +140,33 @@ class CalendarConverter {
         };
       }
     } else if (entity is Liquid) {
-
       if (!entity.done) {
         result = {
           "Quantide em ml": entity.mililitersPerDay.toString(),
-          "Data de Inicio":
-              DateHelper.convertDateToString(entity.initialDate),
+          "Data de Inicio": DateHelper.convertDateToString(entity.initialDate),
           "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
         };
       } else {
         result = {
-          "Quantidade Ingerida": (entity.reference * entity.quantity).toString(),
+          "Quantidade Ingerida":
+              (entity.reference * entity.quantity).toString(),
           "Bebida": entity.name,
+        };
+      }
+    } else if (entity is Biometric) {
+      if (!entity.done) {
+        result = {
+          "Frequência": entity.frequency.toString(),
+          "Data de Inicio": DateHelper.convertDateToString(entity.initialDate),
+          "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
+        };
+      } else {
+        result = {
+          "Peso": "${entity.weight} kg",
+          "Batimentos Cardíacos": "${entity.bpm} bpm",
+          "Pressão Arterial": entity.bloodPressure,
+          "Inchaço": entity.swelling,
+          "Fadiga": entity.fatigue,
         };
       }
     }

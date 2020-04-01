@@ -1,5 +1,4 @@
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:meta/meta.dart';
 
 class BiometricModel extends Biometric {
@@ -7,12 +6,14 @@ class BiometricModel extends Biometric {
       {@required int frequency,
       @required DateTime initialDate,
       @required DateTime finalDate,
-      double weight,
-      int bpm,
-      String id,
-      String bloodPressure,
-      String swelling,
-      String fatigue})
+      @required DateTime executedDate,
+      @required bool done,
+      @required int weight,
+      @required int bpm,
+      @required String id,
+      @required String bloodPressure,
+      @required String swelling,
+      @required String fatigue})
       : super(
             frequency: frequency,
             initialDate: initialDate,
@@ -22,20 +23,25 @@ class BiometricModel extends Biometric {
             bloodPressure: bloodPressure,
             swelling: swelling,
             fatigue: fatigue,
-            id: id);
+            id: id,
+            executedDate: executedDate,
+            done: done);
 
-  Map<dynamic, dynamic> toJson() {
+  static Map<dynamic, dynamic> toJson(BiometricModel model) {
     Map<dynamic, dynamic> json = {};
-    if (initialDate != null)
-      json['initialDate'] = initialDate.millisecondsSinceEpoch;
-    if (finalDate != null) json['finalDate'] = finalDate.millisecondsSinceEpoch;
-    if (frequency != null) json['frequency'] = frequency;
-    if (weight != null) json['weight'] = weight;
-    if (bloodPressure != null) json['bloodPressure'] = bloodPressure;
-    if (bpm != null) json['bpm'] = bpm;
-    if (swelling != null) json['swelling'] = swelling;
-    if (fatigue != null) json['fatigue'] = fatigue;
-    if (id != null) json['id'] = id;
+    if (model.initialDate != null)
+      json['initialDate'] = model.initialDate.millisecondsSinceEpoch;
+    if (model.finalDate != null)
+      json['finalDate'] = model.finalDate.millisecondsSinceEpoch;
+    if (model.executedDate != null)
+      json['executedDate'] = model.executedDate.millisecondsSinceEpoch;
+    if (model.frequency != null) json['frequency'] = model.frequency;
+    if (model.weight != null) json['weight'] = model.weight;
+    if (model.bloodPressure != null)
+      json['bloodPressure'] = model.bloodPressure;
+    if (model.bpm != null) json['bpm'] = model.bpm;
+    if (model.swelling != null) json['swelling'] = model.swelling;
+    if (model.fatigue != null) json['fatigue'] = model.fatigue;
 
     return json;
   }
@@ -50,12 +56,16 @@ class BiometricModel extends Biometric {
       finalDate: (json['finalDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['finalDate']),
+      executedDate: (json['executedDate'] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(json['executedDate']),
       weight: json['weight'],
       bloodPressure: json['bloodPressure'],
       bpm: json['bpm'],
       swelling: json['swelling'],
       fatigue: json['fatigue'],
       id: json['id'],
+      done: json['done'],
     );
   }
 
@@ -70,33 +80,8 @@ class BiometricModel extends Biometric {
         bpm: biometric.bpm,
         swelling: biometric.swelling,
         fatigue: biometric.fatigue,
-        id: biometric.id);
-  }
-
-  factory BiometricModel.fromDataSnapshot(DataSnapshot dataSnapshot) {
-    if (dataSnapshot == null) return null;
-    Map<dynamic, dynamic> objectMap =
-        dataSnapshot.value as Map<dynamic, dynamic>;
-    objectMap['id'] = dataSnapshot.key;
-    return BiometricModel.fromJson(objectMap);
-  }
-
-  static List<BiometricModel> fromDataSnapshotList(
-    DataSnapshot dataSnapshot,
-  ) {
-    if (dataSnapshot == null) return null;
-
-    List<BiometricModel> result = List<BiometricModel>();
-    Map<dynamic, dynamic> objectTodoMap =
-        dataSnapshot.value as Map<dynamic, dynamic>;
-    if (objectTodoMap != null) {
-      for (MapEntry<dynamic, dynamic> entry in objectTodoMap.entries) {
-        Map<dynamic, dynamic> biometricMap = entry.value;
-        biometricMap['id'] = entry.key;
-        print(biometricMap);
-        result.add(BiometricModel.fromJson(biometricMap));
-      }
-    }
-    return result;
+        id: biometric.id,
+        done: biometric.done,
+        executedDate: biometric.executedDate);
   }
 }

@@ -191,7 +191,7 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
         EditRecomendationEvent<Liquid>(
           entity: Liquid(
             id: widget.liquid.id,
-            done: true,
+            done: false,
             mililitersPerDay: int.parse(_formData[LABEL_MILIMITERS_PER_DAY]),
             finalDate:
                 DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),

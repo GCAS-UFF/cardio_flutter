@@ -3,6 +3,7 @@ import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/app_info/presentation/pages/app_info_page.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
+import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart'
     as exercise;
 import 'package:cardio_flutter/features/help/presentation/pages/patient_help_page.dart';
@@ -52,11 +53,9 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.biometric,
                 image: Images.ico_biometric,
                 destination: () {
-                  return Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePatientPage(patient: patient)));
+                  BlocProvider.of<generic.GenericBloc<Biometric>>(context)
+                      .add(generic.Start<Biometric>(patient: patient));
+                  return Navigator.pushNamed(context, "/biometricPage");
                 },
               ),
               ItemMenu(

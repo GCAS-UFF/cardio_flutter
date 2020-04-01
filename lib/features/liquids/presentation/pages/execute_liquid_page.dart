@@ -26,7 +26,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   static const String LABEL_NAME = "LABEL_NAME";
   static const String LABEL_QUANTITY = "LABEL_QUANTITY";
   static const String LABEL_REFERENCE = "LABEL_REFERENCE";
-  static const String LABEL_TIME = "LABEL_EXECUTED_DATE";
+  static const String LABEL_TIME = "LABEL_TIME";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
@@ -186,7 +186,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
 
     if (!widget.liquid.done) {
       BlocProvider.of<GenericBloc<Liquid>>(context).add(
-        ExecuteEvent(
+        ExecuteEvent<Liquid>(
           entity: Liquid(
             done: true,
             name: _formData[LABEL_NAME],
@@ -199,7 +199,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
       );
     } else {
       BlocProvider.of<GenericBloc<Liquid>>(context).add(
-        EditExecutedEvent(
+        EditExecutedEvent<Liquid>(
           entity: Liquid(
             id: widget.liquid.id,
             done: true,

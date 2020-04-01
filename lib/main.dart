@@ -3,6 +3,7 @@ import 'package:cardio_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/login_page.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/patient_sign_up_page.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/professional_signup_page.dart';
+import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
 import 'package:cardio_flutter/features/exercises/presentation/pages/exercise_page.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'features/auth/presentation/pages/login_page.dart';
+import 'features/biometrics/presentation/pages/biometric_page.dart';
 import 'features/liquids/presentation/pages/liquid_page.dart';
 import 'features/manage_professional/presentation/bloc/manage_professional_bloc.dart';
 import 'injection_container.dart' as di;
@@ -35,6 +37,9 @@ Future<void> main() async {
           ),
           BlocProvider<GenericBloc<Liquid>>(
             create: (_) => di.sl<GenericBloc<Liquid>>(),
+          ),
+          BlocProvider<GenericBloc<Biometric>>(
+            create: (_) => di.sl<GenericBloc<Biometric>>(),
           ),
         ],
         child: MyApp(),
@@ -61,6 +66,7 @@ class MyApp extends StatelessWidget {
         "/patientSignUp": (BuildContext context) => PatientSignUpPage(),
         "/exercisePage": (BuildContext context) => ExercisePage(),
         "/liquidPage": (BuildContext context) => LiquidPage(),
+        "/biometricPage": (BuildContext context) => BiometricPage(),
       },
     );
   }
