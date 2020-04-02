@@ -112,6 +112,12 @@ class Strings {
   static const tookIt = "Consumiu?";
   static const medication_hint = "Ex: Paracetamol";
 
+  // Appointment Page
+  static const went = "Compareceu?";
+
+
+
+
   // Medication Page
 
   static const time_hint = "00:00";

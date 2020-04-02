@@ -187,7 +187,7 @@ class CalendarConverter {
           "Horário Previsto":
               DateHelper.getTimeFromDate(entity.appointmentDate),
           "Localização": entity.adress,
-          "Compareceu": entity.went,
+          "Compareceu": (entity.went != null && entity.went) ? "Sim" : "Não",
           "Respondeu em": DateHelper.convertDateToString(entity.executedDate),
         };
       }
@@ -209,8 +209,8 @@ class CalendarConverter {
           "Nome": entity.name,
           "Dosagem": entity.dosage.toString(),
           "Quantidade": entity.quantity.toString(),
-          "Ingerido": (entity.tookIt != null || entity.tookIt) ? "Sim" : "Não",
-          "Observação": entity.observation,
+          "Ingerido": (entity.tookIt != null && entity.tookIt) ? "Sim" : "Não",
+          "Observação": (entity.observation!=null)?entity.observation:"",
         };
       }
     }

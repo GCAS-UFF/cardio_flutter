@@ -7,7 +7,7 @@ class AppointmentModel extends Appointment {
       @required DateTime appointmentDate,
       @required String adress,
       @required String expertise,
-      @required String went,
+      @required bool went,
       @required String id,
       @required bool done, 
       @required DateTime executedDate})

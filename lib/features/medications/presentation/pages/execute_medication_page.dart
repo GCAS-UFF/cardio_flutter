@@ -179,7 +179,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 keyboardType: TextInputType.number,
                 textEditingController: _executedDateController,
                 enable: true,
-                hintText: "",
+                hintText: Strings.date,
                 validator: DateInputValidator(),
                 title: Strings.executed_date,
                 onChanged: (value) {
@@ -212,14 +212,68 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                   });
                 },
               ),
-              CheckboxListTile(
-                value: _formData[LABEL_TOOK_IT],
-                onChanged: (bool value) {
-                  setState(() {
-                    _formData[LABEL_TOOK_IT] = value;
-                  });
-                },
-                title: Text(Strings.tookIt),
+              SizedBox(
+                height: Dimensions.getTextSize(context, 20),
+              ),
+              Container(
+                  alignment: Alignment.centerLeft,
+                  padding: Dimensions.getEdgeInsets(context, left: 25),
+                  child: Text(
+                    Strings.tookIt,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: Dimensions.getTextSize(context, 15)),
+                  )),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: Dimensions.getEdgeInsets(context, left: 25),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Radio(
+                          value: true,
+                          activeColor: Colors.teal,
+                          groupValue: _formData[LABEL_TOOK_IT],
+                          onChanged: (tookit) {
+                            print(tookit);
+                            setState(() {
+                              _formData[LABEL_TOOK_IT] = tookit;
+                            });
+                          },
+                        ),
+                        Text(
+                    'Sim',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: Dimensions.getTextSize(context, 15)),
+                  )
+                      ],
+                    ), 
+                    Row(
+                      children: <Widget>[
+                        Radio(
+                          activeColor: Colors.teal,
+                          value: false,
+                          groupValue: _formData[LABEL_TOOK_IT],
+                          onChanged: (tookit) {
+                            print(tookit);
+                            setState(() {
+                              _formData[LABEL_TOOK_IT] = tookit;
+                            });
+                          },
+                        ), Text(
+                    'Não',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: Dimensions.getTextSize(context, 15)),
+                  )
+                      ],
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),

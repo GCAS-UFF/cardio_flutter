@@ -5,7 +5,7 @@ class Appointment extends BaseEntity {
   final DateTime appointmentDate;
   final String adress;
   final String expertise;
-  final String went;
+  final bool went;
 
   Appointment({
     id,
