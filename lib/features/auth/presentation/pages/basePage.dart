@@ -1,6 +1,9 @@
+import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
+import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BasePage extends StatelessWidget {
   final Widget body;
@@ -20,14 +23,17 @@ class BasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: (addFunction != null)
-          ? FloatingActionButton(
-              onPressed: addFunction,
-              child: Icon(
-                Icons.add,
-                color: Colors.black,
-              ),
-              backgroundColor: Colors.lightBlueAccent[200],
-            )
+          ? ((Provider.of<Settings>(context, listen: false).getUserType() ==
+                  Keys.PROFESSIONAL_TYPE)
+              ? FloatingActionButton(
+                  onPressed: addFunction,
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.black,
+                  ),
+                  backgroundColor: Colors.lightBlueAccent[200],
+                )
+              : null)
           : null,
       body: body,
       backgroundColor: backgroundColor,
