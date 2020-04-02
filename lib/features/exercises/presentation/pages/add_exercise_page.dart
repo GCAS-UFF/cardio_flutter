@@ -131,7 +131,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 textCapitalization: TextCapitalization.words,
                 isRequired: true,
                 textEditingController: _nameController,
-                hintText: "",
+                hintText:  Strings.phycical_activity_hint,
                 title: Strings.phycical_activity,
                 onChanged: (value) {
                   setState(() {

@@ -119,7 +119,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                 keyboardType: TextInputType.number,
                 textEditingController: _appointmentDateController,
                 validator: DateInputValidator(),
-                hintText: "",
+                hintText: Strings.date,
                 title: Strings.appointment_date,
                 onChanged: (value) {
                   setState(() {
@@ -131,7 +131,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _timeOfAppointmentController,
-                hintText: "",
+                hintText: Strings.time_hint,
                 title: Strings.time_of_appointment,
                 onChanged: (value) {
                   setState(() {

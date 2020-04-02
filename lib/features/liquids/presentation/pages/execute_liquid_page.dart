@@ -116,7 +116,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                 isRequired: true,
                 textEditingController: _nameController,
                 hintText: "",
-                title: Strings.ingested_liquids,
+                title: Strings.liquid,
                 onChanged: (value) {
                   setState(() {
                     _formData[LABEL_NAME] = value;
@@ -151,7 +151,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _timeController,
-                hintText: "",
+                hintText: Strings.time_hint,
                 title: Strings.time_title,
                 onChanged: (value) {
                   setState(() {

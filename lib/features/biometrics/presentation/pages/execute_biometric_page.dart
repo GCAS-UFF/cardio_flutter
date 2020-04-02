@@ -38,10 +38,13 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
     maskDefault: "xx:xx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
-
+  TextEditingController _bloodPressureController =  new MultimaskedTextController(
+    escapeCharacter: "e",
+    maskDefault: "eexee",
+    // onlyDigitsDefault: true,
+  ).maskedTextFieldController;
   TextEditingController _weightController;
   TextEditingController _bpmController;
-  TextEditingController _bloodPressureController;
   TextEditingController _swellingController;
   TextEditingController _fatigueController;
 
@@ -68,9 +71,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
     _bpmController = TextEditingController(
       text: _formData[LABEL_BPM],
     );
-    _bloodPressureController = TextEditingController(
-      text: _formData[LABEL_BLOOD_PRESSURE],
-    );
+   
     _swellingController = TextEditingController(
       text: _formData[LABEL_SWELLING],
     );
@@ -151,6 +152,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
               CustomTextFormField(
                 isRequired: true,
                 textEditingController: _bloodPressureController,
+                keyboardType: TextInputType.number,
                 hintText: Strings.blood_pressure_hint,
                 title: Strings.blood_pressure_title,
                 onChanged: (value) {
@@ -185,7 +187,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _timeController,
-                hintText: "",
+                hintText: Strings.time_hint,
                 title: Strings.time_title,
                 onChanged: (value) {
                   setState(() {

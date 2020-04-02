@@ -155,7 +155,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
               CustomTextFormField(
                 isRequired: true,
                 textEditingController: _nameController,
-                hintText: "",
+                hintText: Strings.medication_hint,
                 title: Strings.medication_name,
                 onChanged: (value) {
                   setState(() {
@@ -167,7 +167,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _dosageController,
-                hintText: "",
+                hintText: Strings.dosage_hint,
                 title: Strings.dosage,
                 onChanged: (value) {
                   setState(() {
@@ -204,7 +204,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _initialTimeController,
-                hintText: "",
+                hintText: Strings.time_hint,
                 title: Strings.initial_time,
                 validator: TimeofDayValidator(),
                 onChanged: (value) {
@@ -241,7 +241,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
               CustomTextFormField(
                 isRequired: true,
                 textEditingController: _observationController,
-                hintText: '',
+                hintText: Strings.observation_hint,
                 title: Strings.observation,
                 onChanged: (value) {
                   setState(() {

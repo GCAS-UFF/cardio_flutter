@@ -75,6 +75,7 @@ class Strings {
 
   // Add Exercise Page
   static const phycical_activity = "Atividade Física";
+  static const phycical_activity_hint = "Ex: Natação, Corrida...";
   static const frequency = "Frequência";
   static const intensity = "Intensidade";
   static const duration = "Duração";
@@ -104,10 +105,22 @@ class Strings {
 
   static const medication_name = "Nome do medicamento";
   static const dosage = "Dosagem";
+  static const dosage_hint = "mg";
   static const quantity = "Quantidade";
   static const initial_time = "Hora Inicial";
   static const observation = "Observação";
   static const tookIt = "Consumiu?";
+  static const medication_hint = "Ex: Paracetamol";
+
+  // Medication Page
+
+  static const time_hint = "00:00";
+  static const observation_hint = "Caso desejado, insira aqui";
+
+
+
+
+
 
   // Biometrics Page
   static const weight_title = "Meu peso";

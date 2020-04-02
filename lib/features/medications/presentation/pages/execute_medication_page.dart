@@ -192,7 +192,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _executionTimeController,
-                hintText: "",
+                hintText: Strings.time_hint,
                 validator: TimeofDayValidator(),
                 title: Strings.time_title,
                 onChanged: (value) {
@@ -204,7 +204,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
               CustomTextFormField(
                 isRequired: false,
                 textEditingController: _observationController,
-                hintText: "",
+                hintText: Strings.observation_hint,
                 title: Strings.observation,
                 onChanged: (value) {
                   setState(() {

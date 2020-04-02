@@ -159,7 +159,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 isRequired: true,
                 textEditingController: _timeOfDayController,
                 validator: TimeofDayValidator(),
-                hintText: "",
+                hintText: Strings.time_hint,
                 title: Strings.time_title,
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
