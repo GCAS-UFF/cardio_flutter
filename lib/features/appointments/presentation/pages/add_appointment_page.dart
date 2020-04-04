@@ -2,15 +2,19 @@ import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cardio_flutter/core/widgets/custom_selector.dart';
 
 class AddAppointmentPage extends StatefulWidget {
   final Appointment appointment;
@@ -33,8 +37,6 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController _adressController;
-  TextEditingController _expertiseController;
   TextEditingController _timeOfAppointmentController =
       new MultimaskedTextController(
     maskDefault: "xx:xx",
@@ -59,12 +61,6 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
       _timeOfAppointmentController.text = _formData[LABEL_TIME_OF_APPOINTMENT];
       _appointmentDateController.text = _formData[LABEL_APPOINTMENT_DATE];
     }
-    _adressController = TextEditingController(
-      text: _formData[LABEL_ADRESS],
-    );
-    _expertiseController = TextEditingController(
-      text: _formData[LABEL_EXPERTISE],
-    );
 
     super.initState();
   }
@@ -139,28 +135,26 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                   });
                 },
               ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _adressController,
-                hintText: "",
-                title: Strings.adress,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_ADRESS] = value;
-                  });
-                },
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _expertiseController,
-                hintText: "",
-                title: Strings.specialty,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_EXPERTISE] = value;
-                  });
-                },
-              ),
+              CustomSelector(
+                  options: Arrays.expertises.keys.toList(),
+                  subtitle: _formData[LABEL_EXPERTISE],
+                  title: Strings.specialty,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_EXPERTISE] =
+                          Arrays.expertises.keys.toList()[value];
+                    });
+                  }),
+              CustomSelector(
+                  options: Arrays.adresses.keys.toList(),
+                  subtitle: _formData[LABEL_ADRESS],
+                  title: Strings.adress,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_ADRESS] =
+                          Arrays.adresses.keys.toList()[value];
+                    });
+                  }),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),

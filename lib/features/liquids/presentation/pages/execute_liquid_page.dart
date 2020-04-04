@@ -1,11 +1,13 @@
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/widgets/custom_selector.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
@@ -31,10 +33,9 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  TextEditingController _nameController;
+ 
+  // TextEditingController _nameController;
   TextEditingController _quantityController;
-  TextEditingController _referenceController;
 
   TextEditingController _timeController = new MultimaskedTextController(
     maskDefault: "xx:xx",
@@ -56,15 +57,13 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
       _timeController.text = _formData[LABEL_TIME];
     }
 
-    _nameController = TextEditingController(
-      text: _formData[LABEL_NAME],
-    );
+    // _nameController = TextEditingController(
+    //   text: _formData[LABEL_NAME],
+    // );
     _quantityController = TextEditingController(
       text: _formData[LABEL_QUANTITY],
     );
-    _referenceController = TextEditingController(
-      text: _formData[LABEL_REFERENCE],
-    );
+   
 
     super.initState();
   }
@@ -112,7 +111,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 10),
               ),
-              CustomTextFormField(
+           /*    CustomTextFormField(
                 isRequired: true,
                 textEditingController: _nameController,
                 hintText: "",
@@ -122,12 +121,37 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                     _formData[LABEL_NAME] = value;
                   });
                 },
+              ), */
+               CustomSelector(
+                title: Strings.liquid,
+                options: Arrays.liquid.keys.toList(),
+                subtitle: _formData[LABEL_NAME],
+                onChanged: (value) {
+                  setState(() {
+                    _formData[LABEL_NAME] =
+                        Arrays.liquid.keys.toList()[value];
+                  });
+                },
+              ),
+
+              CustomSelector(
+                title: Strings.reference,
+                options: Arrays.reference.keys.toList(),
+                subtitle: _formData[LABEL_REFERENCE],
+                onChanged: (value) {
+                  setState(() {
+                    _formData[LABEL_REFERENCE] =
+                        Arrays.reference.keys.toList()[value];
+                  });
+                },
               ),
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _quantityController,
-                hintText: "",
+                hintText: (Arrays.reference[ _formData[LABEL_REFERENCE]]==null)
+                    ? ""
+                    : "Quantidade de ${_formData[LABEL_REFERENCE]}",
                 title: Strings.quantity,
                 onChanged: (value) {
                   setState(() {
@@ -135,18 +159,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                   });
                 },
               ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _referenceController,
-                keyboardType: TextInputType.number,
-                hintText: "",
-                title: Strings.reference,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_REFERENCE] = value;
-                  });
-                },
-              ),
+              
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
@@ -191,7 +204,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
             done: true,
             name: _formData[LABEL_NAME],
             quantity: int.parse(_formData[LABEL_QUANTITY]),
-            reference: int.parse(_formData[LABEL_REFERENCE]),
+            reference: _formData[LABEL_REFERENCE],
             executedDate:
                 DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
           ),
@@ -205,7 +218,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
             done: true,
             name: _formData[LABEL_NAME],
             quantity: int.parse(_formData[LABEL_QUANTITY]),
-            reference: int.parse(_formData[LABEL_REFERENCE]),
+            reference: _formData[LABEL_REFERENCE],
             executedDate:
                 DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
           ),

@@ -9,6 +9,7 @@ import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart'
 import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 
 class CalendarConverter {
@@ -57,7 +58,7 @@ class CalendarConverter {
               id: day,
               activities: [
                 Activity(
-                  informations: entityoActivity(entity),
+                  informations: entitytoActivity(entity),
                   type: Keys.ACTIVITY_RECOMENDED,
                   value: entity,
                   onClick: () {},
@@ -80,7 +81,7 @@ class CalendarConverter {
             id: day,
             activities: [
               Activity(
-                informations: entityoActivity(entity),
+                informations: entitytoActivity(entity),
                 type: Keys.ACTIVITY_RECOMENDED,
                 value: entity,
                 onClick: () {},
@@ -92,7 +93,7 @@ class CalendarConverter {
         // We should add in the existing day
         calendarObject.months[monthIndex].days[dayIndex].activities.add(
           Activity(
-            informations: entityoActivity(entity),
+            informations: entitytoActivity(entity),
             type: Keys.ACTIVITY_DONE,
             value: entity,
             onClick: () {},
@@ -112,7 +113,7 @@ class CalendarConverter {
     }
   }
 
-  static Map<String, String> entityoActivity(BaseEntity entity) {
+  static Map<String, String> entitytoActivity(BaseEntity entity) {
     Map<String, String> result;
 
     if (entity is Exercise) {
@@ -122,7 +123,9 @@ class CalendarConverter {
         result = {
           "Exercício": exercise.name,
           "Frequência": exercise.frequency.toString(),
-          "Intensidade": exercise.intensity,
+          "Intensidade": (Arrays.intensities[exercise.intensity] == null)
+              ? "Não Selecionado"
+              : Arrays.intensities[exercise.intensity],
           "Duração": "${exercise.durationInMinutes} minutos",
           "Data de Inicio":
               DateHelper.convertDateToString(exercise.initialDate),
@@ -132,7 +135,9 @@ class CalendarConverter {
         result = {
           "Hora da Realização": exercise.executionTime,
           "Exercício": exercise.name,
-          "Intensidade": exercise.intensity,
+          "Intensidade": (Arrays.intensities[exercise.intensity] == null)
+              ? "Não Selecionado"
+              : Arrays.intensities[exercise.intensity],
           "Duração": "${exercise.durationInMinutes} minutos",
           "Sintomas": "",
           "   Falta de Ar Excessiva": symptom(exercise.shortnessOfBreath),
@@ -150,8 +155,9 @@ class CalendarConverter {
         };
       } else {
         result = {
-          "Quantidade Ingerida":
-              (entity.reference * entity.quantity).toString(),
+          "Quantidade Ingerida": Arrays.reference[entity.reference] == null
+              ? "Referência não selecionada"
+              : '${(Arrays.reference[entity.reference] * entity.quantity)} ml',
           "Bebida": entity.name,
         };
       }
@@ -167,26 +173,38 @@ class CalendarConverter {
           "Peso": "${entity.weight} kg",
           "Batimentos Cardíacos": "${entity.bpm} bpm",
           "Pressão Arterial": entity.bloodPressure,
-          "Inchaço": entity.swelling,
-          "Fadiga": entity.fatigue,
+          "Inchaço": (Arrays.swelling[entity.swelling] == null)
+              ? "Não Selecionado"
+              : Arrays.swelling[entity.swelling],
+          "Fadiga": (Arrays.fatigue[entity.fatigue] == null)
+              ? "Não Selecionado"
+              : Arrays.fatigue[entity.fatigue],
         };
       }
     } else if (entity is Appointment) {
       if (!entity.done) {
         result = {
-          "Especialidade": entity.expertise,
+          "Especialidade": (Arrays.expertises[entity.expertise] == null)
+              ? "Não Selecionado"
+              : Arrays.expertises[entity.expertise],
           "Data": DateHelper.convertDateToString(entity.appointmentDate),
           "Horário": DateHelper.getTimeFromDate(entity.appointmentDate),
-          "Localização": entity.adress,
+          "Localização": (Arrays.adresses[entity.adress] == null)
+              ? "Não Selecionado"
+              : Arrays.adresses[entity.adress],
         };
       } else {
         result = {
-          "Especialidade": entity.expertise,
+          "Especialidade": (Arrays.expertises[entity.expertise] == null)
+              ? "Não Selecionado"
+              : Arrays.expertises[entity.expertise],
           "Data Prevista":
               DateHelper.convertDateToString(entity.appointmentDate),
           "Horário Previsto":
               DateHelper.getTimeFromDate(entity.appointmentDate),
-          "Localização": entity.adress,
+          "Localização": (Arrays.adresses[entity.adress] == null)
+              ? "Não Selecionado"
+              : Arrays.adresses[entity.adress],
           "Compareceu": (entity.went != null && entity.went) ? "Sim" : "Não",
           "Respondeu em": DateHelper.convertDateToString(entity.executedDate),
         };
@@ -210,7 +228,7 @@ class CalendarConverter {
           "Dosagem": entity.dosage.toString(),
           "Quantidade": entity.quantity.toString(),
           "Ingerido": (entity.tookIt != null && entity.tookIt) ? "Sim" : "Não",
-          "Observação": (entity.observation!=null)?entity.observation:"",
+          "Observação": (entity.observation != null) ? entity.observation : "",
         };
       }
     }

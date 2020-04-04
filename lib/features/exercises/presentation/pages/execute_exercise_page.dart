@@ -6,11 +6,13 @@ import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:cardio_flutter/core/widgets/custom_selector.dart';
 
 class ExecuteExercisePage extends StatefulWidget {
   final Exercise exercise;
@@ -37,7 +39,6 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _nameController;
-  TextEditingController _intensityController;
   TextEditingController _durationController;
   TextEditingController _timeOfDayController = new MultimaskedTextController(
     maskDefault: "xx:xx",
@@ -67,9 +68,6 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
       text: _formData[LABEL_NAME],
     );
 
-    _intensityController = TextEditingController(
-      text: _formData[LABEL_INTENSITY],
-    );
     _durationController = TextEditingController(
       text: _formData[LABEL_DURATION],
     );
@@ -132,14 +130,14 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                   });
                 },
               ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _intensityController,
-                hintText: "",
+              CustomSelector(
                 title: Strings.intensity,
+                options: Arrays.intensities.keys.toList(),
+                subtitle: _formData[LABEL_INTENSITY],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_INTENSITY] = value;
+                    _formData[LABEL_INTENSITY] =
+                        Arrays.intensities.keys.toList()[value];
                   });
                 },
               ),
@@ -234,42 +232,41 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
     }
     _formKey.currentState.save();
 
-     if (!widget.exercise.done) {
-    BlocProvider.of<ExerciseBloc>(context).add(
-      ExecuteExerciseEvent(
-        exercise: Exercise(
-          done: true,
-          name: _formData[LABEL_NAME],
-          durationInMinutes: int.parse(_formData[LABEL_DURATION]),
-          dizziness: _formData[LABEL_DIZZINESS],
-          shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
-          bodyPain: _formData[LABEL_BODY_PAIN],
-          intensity: _formData[LABEL_INTENSITY],
-          excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
-          executionDay: DateTime.now(),
-          executionTime: _formData[LABEL_TIME_OF_DAY],
+    if (!widget.exercise.done) {
+      BlocProvider.of<ExerciseBloc>(context).add(
+        ExecuteExerciseEvent(
+          exercise: Exercise(
+            done: true,
+            name: _formData[LABEL_NAME],
+            durationInMinutes: int.parse(_formData[LABEL_DURATION]),
+            dizziness: _formData[LABEL_DIZZINESS],
+            shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
+            bodyPain: _formData[LABEL_BODY_PAIN],
+            intensity: _formData[LABEL_INTENSITY],
+            excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
+            executionDay: DateTime.now(),
+            executionTime: _formData[LABEL_TIME_OF_DAY],
+          ),
         ),
-      ),
-    );}else{BlocProvider.of<ExerciseBloc>(context).add(
-      EditExecutedExerciseEvent(
-        exercise: Exercise(
-          id: widget.exercise.id,
-          done: true,
-          name: _formData[LABEL_NAME],
-          durationInMinutes: int.parse(_formData[LABEL_DURATION]),
-          dizziness: _formData[LABEL_DIZZINESS],
-          shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
-          bodyPain: _formData[LABEL_BODY_PAIN],
-          intensity: _formData[LABEL_INTENSITY],
-          excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
-          executionDay: DateTime.now(),
-          executionTime: _formData[LABEL_TIME_OF_DAY],
+      );
+    } else {
+      BlocProvider.of<ExerciseBloc>(context).add(
+        EditExecutedExerciseEvent(
+          exercise: Exercise(
+            id: widget.exercise.id,
+            done: true,
+            name: _formData[LABEL_NAME],
+            durationInMinutes: int.parse(_formData[LABEL_DURATION]),
+            dizziness: _formData[LABEL_DIZZINESS],
+            shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
+            bodyPain: _formData[LABEL_BODY_PAIN],
+            intensity: _formData[LABEL_INTENSITY],
+            excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
+            executionDay: DateTime.now(),
+            executionTime: _formData[LABEL_TIME_OF_DAY],
+          ),
         ),
-      ),
-    );
-
-
-
+      );
     }
   }
 }

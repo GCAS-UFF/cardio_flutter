@@ -1,16 +1,18 @@
-import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
-import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
+import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cardio_flutter/core/widgets/custom_selector.dart';
 
 class AddExercisePage extends StatefulWidget {
   final Exercise exercise;
@@ -40,10 +42,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  
 
   TextEditingController _nameController;
   TextEditingController _frequencyController;
-  TextEditingController _intensityController;
   TextEditingController _durationController;
   final TextEditingController _initialDateController =
       new MultimaskedTextController(
@@ -75,9 +77,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
     _frequencyController = TextEditingController(
       text: _formData[LABEL_FREQUENCY],
     );
-    _intensityController = TextEditingController(
-      text: _formData[LABEL_INTENSITY],
-    );
+
     _durationController = TextEditingController(
       text: _formData[LABEL_DURATION],
     );
@@ -131,7 +131,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 textCapitalization: TextCapitalization.words,
                 isRequired: true,
                 textEditingController: _nameController,
-                hintText:  Strings.phycical_activity_hint,
+                hintText: Strings.phycical_activity_hint,
                 title: Strings.phycical_activity,
                 onChanged: (value) {
                   setState(() {
@@ -151,14 +151,14 @@ class _AddExercisePageState extends State<AddExercisePage> {
                   });
                 },
               ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _intensityController,
-                hintText: "",
+              CustomSelector(
                 title: Strings.intensity,
+                options: Arrays.intensities.keys.toList(),
+                subtitle: _formData[LABEL_INTENSITY],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_INTENSITY] = value;
+                    _formData[LABEL_INTENSITY]
+                    =Arrays.intensities.keys.toList()[value];
                   });
                 },
               ),
@@ -202,8 +202,12 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title:(widget.exercise==null)? Strings.add:Strings.edit_patient_done,
+                title: (widget.exercise == null)
+                    ? Strings.add
+                    : Strings.edit_patient_done,
                 onTap: () {
+
+                  
                   _submitForm();
                 },
               ),
@@ -266,6 +270,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
           ),
         ),
       );
-    }         
+    }
   }
 }

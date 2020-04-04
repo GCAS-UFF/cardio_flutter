@@ -6,9 +6,11 @@ import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:cardio_flutter/core/widgets/custom_selector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExecuteBiometricPage extends StatefulWidget {
@@ -34,19 +36,19 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  
   TextEditingController _timeController = new MultimaskedTextController(
     maskDefault: "xx:xx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
-  TextEditingController _bloodPressureController =  new MultimaskedTextController(
-    escapeCharacter: "e",
-    maskDefault: "eexee",
-    // onlyDigitsDefault: true,
+  TextEditingController _bloodPressureController =
+      new MultimaskedTextController(
+    escapeCharacter: "#",
+    maskDefault: "##x##",
+    onlyDigitsDefault: true,
   ).maskedTextFieldController;
   TextEditingController _weightController;
   TextEditingController _bpmController;
-  TextEditingController _swellingController;
-  TextEditingController _fatigueController;
 
   @override
   void initState() {
@@ -63,6 +65,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
       _formData[LABEL_TIME] =
           DateHelper.getTimeFromDate(widget.biometric.executedDate);
       _timeController.text = _formData[LABEL_TIME];
+      _bloodPressureController.text= _formData[LABEL_BLOOD_PRESSURE];
     }
 
     _weightController = TextEditingController(
@@ -70,13 +73,6 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
     );
     _bpmController = TextEditingController(
       text: _formData[LABEL_BPM],
-    );
-   
-    _swellingController = TextEditingController(
-      text: _formData[LABEL_SWELLING],
-    );
-    _fatigueController = TextEditingController(
-      text: _formData[LABEL_FATIGUE],
     );
 
     super.initState();
@@ -161,25 +157,24 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                   });
                 },
               ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _swellingController,
-                hintText: "",
+              CustomSelector(
                 title: Strings.swelling,
+                options: Arrays.swelling.keys.toList(),
+                subtitle: _formData[LABEL_SWELLING],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_SWELLING] = value;
+                    _formData[LABEL_SWELLING] =
+                        Arrays.swelling.keys.toList()[value];
                   });
                 },
               ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _fatigueController,
-                hintText: '',
+              CustomSelector(
                 title: Strings.fatigue,
+                options: Arrays.fatigue.keys.toList(),
+                subtitle: _formData[LABEL_FATIGUE],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_FATIGUE] = value;
+                    _formData[LABEL_FATIGUE] = Arrays.fatigue.keys.toList()[value];
                   });
                 },
               ),

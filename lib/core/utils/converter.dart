@@ -7,6 +7,7 @@ import 'package:cardio_flutter/features/calendar/presentation/models/day.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/month.dart'
     as month;
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:meta/meta.dart';
@@ -192,7 +193,7 @@ class Converter {
       result = {
         "Exercício": exercise.name,
         "Frequência": exercise.frequency.toString(),
-        "Intensidade": exercise.intensity,
+        "Intensidade": (Arrays.intensities[exercise.intensity]==null)?"Não Selecionado":Arrays.intensities[exercise.intensity],
         "Duração": "${exercise.durationInMinutes} minutos",
         "Data de Inicio": DateHelper.convertDateToString(exercise.initialDate),
         "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),
@@ -201,7 +202,7 @@ class Converter {
       result = {
         "Hora da Realização": exercise.executionTime,
         "Exercício": exercise.name,
-        "Intensidade":exercise.intensity,
+        "Intensidade": (Arrays.intensities[exercise.intensity]==null)?"Não Selecionado":Arrays.intensities[exercise.intensity],
         "Duração": "${exercise.durationInMinutes} minutos",
         "Sintomas": "",
         "   Falta de Ar Excessiva": symptom(exercise.shortnessOfBreath),
