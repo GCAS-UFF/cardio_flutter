@@ -53,6 +53,7 @@ class MultimaskedTextController {
     bool onlyDigits = change ? onlyDigitsSecundary : onlyDigitsDefault;
 
     return Converter.convertStringToMultimaskedString(
+      escapeCharacter: escapeCharacter,
         value: text,
         maskDefault: maskDefault,
         maskSecundary: maskSecundary,
