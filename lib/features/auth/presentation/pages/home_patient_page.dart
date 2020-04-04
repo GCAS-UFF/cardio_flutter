@@ -61,7 +61,7 @@ class HomePatientPage extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                text: Strings.liquid,
+                text: Strings.ingested_liquids,
                 image: Images.ico_liquid,
                 destination: () {
                   BlocProvider.of<generic.GenericBloc<Liquid>>(context)

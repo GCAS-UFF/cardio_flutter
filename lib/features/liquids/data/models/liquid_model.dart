@@ -10,7 +10,7 @@ class LiquidModel extends Liquid {
       @required bool done,
       @required String name,
       @required int quantity,
-      @required int reference,
+      @required String reference,
       @required String id})
       : super(
             mililitersPerDay: mililitersPerDay,

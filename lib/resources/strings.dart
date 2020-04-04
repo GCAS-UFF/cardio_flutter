@@ -49,7 +49,7 @@ class Strings {
   // Menu page
 
   static const biometric = " Como estou hoje";
-  static const liquid = " Líquidos ingeridos";
+  static const liquid = " Líquido ingerido";
   static const medication = " Medicações";
   static const appointment = " Consultas";
   static const exercise = " Exercícios";
