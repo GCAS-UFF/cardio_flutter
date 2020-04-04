@@ -53,7 +53,7 @@ class ManageProfessionalRemoteDataSourceImpl
   Future<PatientModel> editPatient(PatientModel patientModel) async {
     try {
       var refPatient = patientRootRef.child(patientModel.id);
-      await refPatient.set(patientModel.toJson());
+      await refPatient.update(patientModel.toJson());
 
       DataSnapshot patientSnapshot = await refPatient.once();
       return PatientModel.fromDataSnapshot(patientSnapshot);
@@ -70,7 +70,7 @@ class ManageProfessionalRemoteDataSourceImpl
       ProfessionalModel professionalModel) async {
     try {
       var refProfessional = professionalRootRef.child(professionalModel.id);
-      await refProfessional.set(professionalModel.toJson());
+      await refProfessional.update(professionalModel.toJson());
 
       DataSnapshot professionalSnapshot = await refProfessional.once();
       return ProfessionalModel.fromDataSnapshot(professionalSnapshot);
