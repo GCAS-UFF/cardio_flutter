@@ -18,8 +18,8 @@ class ProfessionalModel extends Professional {
             expertise: expertise,
             email: email);
 
-  Map<dynamic, dynamic> toJson() {
-    Map<dynamic, dynamic> json = {};
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {};
     if (id != null) json['id'] = id;
     if (name != null) json['name'] = name;
     if (cpf != null) json['cpf'] = cpf;
