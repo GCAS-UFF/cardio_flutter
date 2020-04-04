@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 class BasePage extends StatelessWidget {
   final Widget body;
+  final Widget edit;
   final Color backgroundColor;
   final bool signOutButton;
   final Function addFunction;
@@ -14,6 +15,7 @@ class BasePage extends StatelessWidget {
   const BasePage({
     Key key,
     this.body,
+    this.edit,
     this.backgroundColor,
     this.signOutButton = true,
     this.addFunction,
@@ -42,6 +44,7 @@ class BasePage extends StatelessWidget {
           color: Colors.black87,
         ),
         actions: <Widget>[
+          (edit == null) ? Container() : edit,
           (signOutButton)
               ? IconButton(
                   onPressed: () {
