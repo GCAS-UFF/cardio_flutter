@@ -58,42 +58,46 @@ class _EntityCardState extends State<EntityCard> {
                   : Colors.orangeAccent,
               borderRadius: BorderRadius.circular(7),
             ),
-            child: Column(
-              children: ((!widget.activity.value.done))
-                  ? [
-                      Text(
-                        "Recomendação",
-                        style: TextStyle(
-                            fontSize: Dimensions.getTextSize(context, 16),
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: widget.activity.informations.entries.map(
-                          (entry) {
-                            return _buildParameterItem(context, entry);
-                          },
-                        ).toList(),
-                      ),
-                    ]
-                  : [
-                      Text(
-                        "Realizado",
-                        style: TextStyle(
-                            fontSize: Dimensions.getTextSize(context, 16),
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: widget.activity.informations.entries.map(
-                          (entry) {
-                            return _buildParameterItem(context, entry);
-                          },
-                        ).toList(),
-                      )
-                    ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: ((!widget.activity.value.done))
+                    ? [
+                        Text(
+                          "Recomendação",
+                          style: TextStyle(
+                              fontSize: Dimensions.getTextSize(context, 16),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: widget.activity.informations.entries.map(
+                            (entry) {
+                              return _buildParameterItem(context, entry);
+                            },
+                          ).toList(),
+                        ),
+                      ]
+                    : [
+                        Text(
+                          "Realizado",
+                          style: TextStyle(
+                              fontSize: Dimensions.getTextSize(context, 16),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: widget.activity.informations.entries.map(
+                            (entry) {
+                              return _buildParameterItem(context, entry);
+                            },
+                          ).toList(),
+                        )
+                      ],
+              ),
             ),
           ),
         ),
@@ -125,16 +129,6 @@ class _EntityCardState extends State<EntityCard> {
       ],
     );
   }
-
- /*  String symptom(bool symptom) {
-    String string;
-    if (symptom == null) {
-      return null;
-    } else {
-      (symptom == true) ? string = "Houve" : string = "Não houve";
-      return string;
-    }
-  } */
 
   void _showOptionsPatient(BuildContext context, BaseEntity entity) {
     showModalBottomSheet(

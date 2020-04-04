@@ -14,9 +14,7 @@ import 'package:provider/provider.dart';
 class ExerciseCard extends StatefulWidget {
   final Activity activity;
 
-  const ExerciseCard({Key key,@required this.activity}) : super(key: key);
-
-  
+  const ExerciseCard({Key key, @required this.activity}) : super(key: key);
 
   @override
   _ExerciseCardState createState() => _ExerciseCardState();
@@ -47,7 +45,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
               if (Provider.of<Settings>(context, listen: false).getUserType() ==
                   (Keys.PROFESSIONAL_TYPE)) {
               } else {
-               return _showOptionsPatient(context,widget.activity.value);
+                return _showOptionsPatient(context, widget.activity.value);
               }
             }
           },
@@ -59,42 +57,45 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   : Colors.orangeAccent,
               borderRadius: BorderRadius.circular(7),
             ),
-            child: Column(
-              children: ((!widget.activity.value.done))
-                  ? [
-                      Text(
-                        "Recomendação",
-                        style: TextStyle(
-                            fontSize: Dimensions.getTextSize(context, 16),
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: widget.activity.informations.entries.map(
-                          (entry) {
-                            return _buildParameterItem(context, entry);
-                          },
-                        ).toList(),
-                      ),
-                    ]
-                  : [
-                      Text(
-                        "Realizado",
-                        style: TextStyle(
-                            fontSize: Dimensions.getTextSize(context, 16),
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: widget.activity.informations.entries.map(
-                          (entry) {
-                            return _buildParameterItem(context, entry);
-                          },
-                        ).toList(),
-                      )
-                    ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(
+                children: ((!widget.activity.value.done))
+                    ? [
+                        Text(
+                          "Recomendação",
+                          style: TextStyle(
+                              fontSize: Dimensions.getTextSize(context, 16),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: widget.activity.informations.entries.map(
+                            (entry) {
+                              return _buildParameterItem(context, entry);
+                            },
+                          ).toList(),
+                        ),
+                      ]
+                    : [
+                        Text(
+                          "Realizado",
+                          style: TextStyle(
+                              fontSize: Dimensions.getTextSize(context, 16),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: widget.activity.informations.entries.map(
+                            (entry) {
+                              return _buildParameterItem(context, entry);
+                            },
+                          ).toList(),
+                        )
+                      ],
+              ),
             ),
           ),
         ),
