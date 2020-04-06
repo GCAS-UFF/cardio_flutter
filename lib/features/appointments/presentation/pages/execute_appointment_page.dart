@@ -177,6 +177,14 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                   ],
                 ),
               ),
+              (_formData[LABEL_WENT] == null || _formData[LABEL_WENT] == true)
+                  ? Container()
+                  : CustomTextFormField(
+                      isRequired: true,
+                      hintText: Strings.justification_hint,
+                      title: Strings.justification,
+                      enable: true,
+                    ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
