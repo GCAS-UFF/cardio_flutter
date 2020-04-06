@@ -12,6 +12,8 @@ class ExerciseModel extends Exercise {
     @required bool dizziness,
     @required bool bodyPain,
     @required String executionTime,
+    @required String intendedTime,
+    @required String observation,
     @required String name,
     @required int frequency,
     @required String intensity,
@@ -28,6 +30,8 @@ class ExerciseModel extends Exercise {
           bodyPain: bodyPain,
           name: name,
           frequency: frequency,
+          intendedTime: intendedTime,
+          observation: observation,
           intensity: intensity,
           durationInMinutes: durationInMinutes,
           initialDate: initialDate,
@@ -54,6 +58,8 @@ class ExerciseModel extends Exercise {
     if (dizziness != null) json['dizziness'] = dizziness;
     if (bodyPain != null) json['bodyPain'] = bodyPain;
     if (executionTime != null) json['executionTime'] = executionTime;
+    if (intendedTime != null) json['intendedTime'] = intendedTime;
+    if (observation != null) json['observation'] = observation;
 
     return json;
   }
@@ -81,6 +87,8 @@ class ExerciseModel extends Exercise {
       bodyPain: json['bodyPain'],
       done: json['done'],
       executionTime: json['executionTime'],
+      intendedTime: json['intendedTime'],
+      observation: json['observation'],
     );
   }
 
@@ -101,6 +109,8 @@ class ExerciseModel extends Exercise {
       executionDay: exercise.executionDay,
       done: exercise.done,
       executionTime: exercise.executionTime,
+      intendedTime: exercise.intendedTime,
+      observation: exercise.observation,
     );
   }
 

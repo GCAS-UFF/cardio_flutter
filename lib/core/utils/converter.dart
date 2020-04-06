@@ -193,22 +193,31 @@ class Converter {
       result = {
         "Exercício": exercise.name,
         "Frequência": exercise.frequency.toString(),
-        "Intensidade": (Arrays.intensities[exercise.intensity]==null)?"Não Selecionado":Arrays.intensities[exercise.intensity],
+        "Intensidade": (Arrays.intensities[exercise.intensity] == null)
+            ? "Não Selecionado"
+            : Arrays.intensities[exercise.intensity],
+        "Horário Indicado": exercise.intendedTime,
         "Duração": "${exercise.durationInMinutes} minutos",
         "Data de Inicio": DateHelper.convertDateToString(exercise.initialDate),
         "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),
+        "Observação":
+            (exercise.observation != null) ? exercise.observation : "",
       };
     } else {
       result = {
         "Hora da Realização": exercise.executionTime,
         "Exercício": exercise.name,
-        "Intensidade": (Arrays.intensities[exercise.intensity]==null)?"Não Selecionado":Arrays.intensities[exercise.intensity],
+        "Intensidade": (Arrays.intensities[exercise.intensity] == null)
+            ? "Não Selecionado"
+            : Arrays.intensities[exercise.intensity],
         "Duração": "${exercise.durationInMinutes} minutos",
         "Sintomas": "",
         "   Falta de Ar Excessiva": symptom(exercise.shortnessOfBreath),
         "   Fadiga Excessiva": symptom(exercise.excessiveFatigue),
         "   Tontura": symptom(exercise.dizziness),
         "   Dores Corporais": symptom(exercise.bodyPain),
+        "Observação":
+            (exercise.observation != null) ? exercise.observation : "",
       };
     }
     return result;

@@ -37,12 +37,12 @@ class _AddExercisePageState extends State<AddExercisePage> {
   static const String LABEL_SHORTNESS_OF_BREATH = "LABEL_SHORTNESS_OF_BREATH";
   static const String LABEL_EXCESSIVE_FATIGUE = "LABEL_EXCESSIVE_FATIGUE";
   static const String LABEL_EXECUTIONDAY = "LABEL_EXECUTIONDAY";
+  static const String LABEL_INTENDED_TIME = "LABEL_INTENDED_TIME";
   static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  
 
   TextEditingController _nameController;
   TextEditingController _frequencyController;
@@ -56,6 +56,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
     maskDefault: "xx/xx/xxxx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
+  TextEditingController _intendedTimeController = new MultimaskedTextController(
+    maskDefault: "xx:xx",
+    onlyDigitsDefault: true,
+  ).maskedTextFieldController;
 
   @override
   void initState() {
@@ -63,6 +67,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
       _formData[LABEL_NAME] = widget.exercise.name;
       _formData[LABEL_FREQUENCY] = widget.exercise.frequency.toString();
       _formData[LABEL_INTENSITY] = widget.exercise.intensity;
+      _formData[LABEL_INTENDED_TIME] = widget.exercise.intendedTime;
       _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
       _formData[LABEL_INITIAL_DATE] =
           DateHelper.convertDateToString(widget.exercise.initialDate);
@@ -70,6 +75,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
           DateHelper.convertDateToString(widget.exercise.finalDate);
       _initialDateController.text = _formData[LABEL_INITIAL_DATE];
       _finalDateController.text = _formData[LABEL_FINAL_DATE];
+      _intendedTimeController.text = _formData[LABEL_INTENDED_TIME];
     }
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
@@ -157,8 +163,20 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 subtitle: _formData[LABEL_INTENSITY],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_INTENSITY]
-                    =Arrays.intensities.keys.toList()[value];
+                    _formData[LABEL_INTENSITY] =
+                        Arrays.intensities.keys.toList()[value];
+                  });
+                },
+              ),
+              CustomTextFormField(
+                isRequired: true,
+                textEditingController: _intendedTimeController,
+                hintText: Strings.time_hint,
+                title: Strings.intended_time,
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  setState(() {
+                    _formData[LABEL_INTENDED_TIME] = value.toString();
                   });
                 },
               ),
@@ -177,6 +195,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
               CustomTextFormField(
                 isRequired: true,
                 textEditingController: _initialDateController,
+                keyboardType: TextInputType.number,
                 validator: DateInputValidator(),
                 hintText: Strings.date,
                 title: Strings.initial_date,
@@ -189,6 +208,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
               CustomTextFormField(
                 isRequired: true,
                 textEditingController: _finalDateController,
+                keyboardType: TextInputType.number,
                 validator: DateInputValidator(),
                 hintText: Strings.date,
                 title: Strings.final_date,
@@ -206,8 +226,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
                     ? Strings.add
                     : Strings.edit_patient_done,
                 onTap: () {
-
-                  
                   _submitForm();
                 },
               ),
@@ -235,6 +253,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
             dizziness: _formData[LABEL_DIZZINESS],
             shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
             bodyPain: _formData[LABEL_BODY_PAIN],
+            intendedTime: _formData[LABEL_INTENDED_TIME],
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
@@ -258,6 +277,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
             dizziness: _formData[LABEL_DIZZINESS],
             shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
             bodyPain: _formData[LABEL_BODY_PAIN],
+            intendedTime: _formData[LABEL_INTENDED_TIME],
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),

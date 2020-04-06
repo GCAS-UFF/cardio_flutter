@@ -33,6 +33,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   static const String LABEL_SHORTNESS_OF_BREATH = "LABEL_SHORTNESS_OF_BREATH";
   static const String LABEL_EXCESSIVE_FATIGUE = "LABEL_EXCESSIVE_FATIGUE";
   static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
+  static const String LABEL_OBSERVATION = "LABEL_OBSERVATION";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
@@ -40,6 +41,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
 
   TextEditingController _nameController;
   TextEditingController _durationController;
+  TextEditingController _observationController;
   TextEditingController _timeOfDayController = new MultimaskedTextController(
     maskDefault: "xx:xx",
     onlyDigitsDefault: true,
@@ -48,24 +50,29 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   @override
   void initState() {
     _formData[LABEL_NAME] = widget.exercise.name;
+    _formData[LABEL_OBSERVATION] = widget.exercise.observation;
     _formData[LABEL_INTENSITY] = widget.exercise.intensity.toString();
     _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
-    _formData[LABEL_TIME_OF_DAY] = widget.exercise.executionTime;
 
     if (widget.exercise.done) {
       _formData[LABEL_SHORTNESS_OF_BREATH] = widget.exercise.shortnessOfBreath;
       _formData[LABEL_EXCESSIVE_FATIGUE] = widget.exercise.excessiveFatigue;
       _formData[LABEL_DIZZINESS] = widget.exercise.dizziness;
       _formData[LABEL_BODY_PAIN] = widget.exercise.bodyPain;
+      _formData[LABEL_TIME_OF_DAY] = widget.exercise.executionTime;
     } else {
       _formData[LABEL_SHORTNESS_OF_BREATH] = false;
       _formData[LABEL_EXCESSIVE_FATIGUE] = false;
       _formData[LABEL_DIZZINESS] = false;
       _formData[LABEL_BODY_PAIN] = false;
+      _formData[LABEL_TIME_OF_DAY] = widget.exercise.intendedTime;
     }
 
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
+    );
+    _observationController = TextEditingController(
+      text: _formData[LABEL_OBSERVATION],
     );
 
     _durationController = TextEditingController(
@@ -171,49 +178,81 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
               ),
               Text(
                 "Sintomas:",
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
               ),
               CheckboxListTile(
+                activeColor: Colors.teal,
                 value: _formData[LABEL_SHORTNESS_OF_BREATH],
                 onChanged: (bool value) {
                   setState(() {
                     _formData[LABEL_SHORTNESS_OF_BREATH] = value;
                   });
                 },
-                title: Text(Strings.shortness_of_breath),
+                title: Text(
+                  Strings.shortness_of_breath,
+                  style:
+                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                ),
               ),
               CheckboxListTile(
+                activeColor: Colors.teal,
                 value: _formData[LABEL_EXCESSIVE_FATIGUE],
                 onChanged: (bool value) {
                   setState(() {
                     _formData[LABEL_EXCESSIVE_FATIGUE] = value;
                   });
                 },
-                title: Text(Strings.excessive_fatigue),
+                title: Text(
+                  Strings.excessive_fatigue,
+                  style:
+                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                ),
               ),
               CheckboxListTile(
+                activeColor: Colors.teal,
                 value: _formData[LABEL_DIZZINESS],
                 onChanged: (bool value) {
                   setState(() {
                     _formData[LABEL_DIZZINESS] = value;
                   });
                 },
-                title: Text(Strings.dizziness),
+                title: Text(
+                  Strings.dizziness,
+                  style:
+                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                ),
               ),
               CheckboxListTile(
+                activeColor: Colors.teal,
                 value: _formData[LABEL_BODY_PAIN],
                 onChanged: (bool value) {
                   setState(() {
                     _formData[LABEL_BODY_PAIN] = value;
                   });
                 },
-                title: Text(Strings.body_pain),
+                title: Text(
+                  Strings.body_pain,
+                  style:
+                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                ),
+              ),
+              CustomTextFormField(
+                textEditingController: _observationController,
+                hintText: Strings.observation_hint,
+                title: Strings.observation,
+                onChanged: (value) {
+                  setState(() {
+                    _formData[LABEL_OBSERVATION] = value;
+                  });
+                },
               ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: Strings.add,
+                title: (!widget.exercise.done)
+                    ? Strings.add
+                    : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm();
                 },
@@ -246,6 +285,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             executionDay: DateTime.now(),
             executionTime: _formData[LABEL_TIME_OF_DAY],
+            observation: _formData[LABEL_OBSERVATION],
           ),
         ),
       );
@@ -264,6 +304,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             executionDay: DateTime.now(),
             executionTime: _formData[LABEL_TIME_OF_DAY],
+            observation: _formData[LABEL_OBSERVATION],
           ),
         ),
       );
