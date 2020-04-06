@@ -58,7 +58,7 @@ class CalendarConverter {
               id: day,
               activities: [
                 Activity(
-                  informations: entitytoActivity(entity),
+                  informations: _entitytoActivity(entity),
                   type: Keys.ACTIVITY_RECOMENDED,
                   value: entity,
                   onClick: () {},
@@ -81,7 +81,7 @@ class CalendarConverter {
             id: day,
             activities: [
               Activity(
-                informations: entitytoActivity(entity),
+                informations: _entitytoActivity(entity),
                 type: Keys.ACTIVITY_RECOMENDED,
                 value: entity,
                 onClick: () {},
@@ -93,7 +93,7 @@ class CalendarConverter {
         // We should add in the existing day
         calendarObject.months[monthIndex].days[dayIndex].activities.add(
           Activity(
-            informations: entitytoActivity(entity),
+            informations: _entitytoActivity(entity),
             type: Keys.ACTIVITY_DONE,
             value: entity,
             onClick: () {},
@@ -113,7 +113,7 @@ class CalendarConverter {
     }
   }
 
-  static Map<String, String> entitytoActivity(BaseEntity entity) {
+  static Map<String, String> _entitytoActivity(BaseEntity entity) {
     Map<String, String> result;
 
     if (entity is Exercise) {
@@ -126,8 +126,9 @@ class CalendarConverter {
           "Intensidade": (Arrays.intensities[exercise.intensity] == null)
               ? "Não Selecionado"
               : Arrays.intensities[exercise.intensity],
+          "Horário Indicado": exercise.intendedTime,
           "Duração": "${exercise.durationInMinutes} minutos",
-          "Data de Inicio":
+          "Data de Início":
               DateHelper.convertDateToString(exercise.initialDate),
           "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),
         };
@@ -144,6 +145,8 @@ class CalendarConverter {
           "   Fadiga Excessiva": symptom(exercise.excessiveFatigue),
           "   Tontura": symptom(exercise.dizziness),
           "   Dores Corporais": symptom(exercise.bodyPain),
+          "Observação": (exercise.observation != null) ? exercise.observation : "",
+
         };
       }
     } else if (entity is Liquid) {
@@ -179,6 +182,7 @@ class CalendarConverter {
           "Fadiga": (Arrays.fatigue[entity.fatigue] == null)
               ? "Não Selecionado"
               : Arrays.fatigue[entity.fatigue],
+          "Observação": (entity.observation != null) ? entity.observation : "",
         };
       }
     } else if (entity is Appointment) {
@@ -219,7 +223,7 @@ class CalendarConverter {
           "Dosagem": entity.dosage.toString(),
           "Quantidade": entity.quantity.toString(),
           "Hora de Início": DateHelper.getTimeFromDate(entity.initialDate),
-          "Observação": entity.observation,
+          "Observação": (entity.observation != null) ? entity.observation : "",
         };
       } else {
         result = {

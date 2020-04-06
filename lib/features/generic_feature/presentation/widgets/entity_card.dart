@@ -59,13 +59,14 @@ class _EntityCardState extends State<EntityCard> {
               borderRadius: BorderRadius.circular(7),
             ),
             child: SingleChildScrollView(
+              physics: ClampingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: ((!widget.activity.value.done))
                     ? [
                         Text(
-                          "Recomendação",
+                          " Recomendação",
                           style: TextStyle(
                               fontSize: Dimensions.getTextSize(context, 16),
                               color: Colors.white,
@@ -82,7 +83,7 @@ class _EntityCardState extends State<EntityCard> {
                       ]
                     : [
                         Text(
-                          "Realizado",
+                          " Realizado",
                           style: TextStyle(
                               fontSize: Dimensions.getTextSize(context, 16),
                               color: Colors.white,

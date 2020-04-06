@@ -86,6 +86,7 @@ class Strings {
   static const hint_frequency = "vezes ao dia";
   static const add = "Adicionar";
   static const time_title = "Horário";
+  static const intended_time = "Horário indicado";
   static const shortness_of_breath = "Falta de ar excessiva";
   static const excessive_fatigue = "Fadiga excessiva";
   static const dizziness = "Tontura";
@@ -94,6 +95,8 @@ class Strings {
   // Appointment Page
   static const appointment_date = "Data da Consulta";
   static const time_of_appointment = "Hora da consulta";
+  static const justification = "Por quê?";
+  static const justification_hint = "Explique aqui o motivo";
 
 // Liquid Page
   static const liquid_title = "Prescrição";
@@ -107,6 +110,7 @@ class Strings {
   static const dosage = "Dosagem";
   static const dosage_hint = "mg";
   static const quantity = "Quantidade";
+  static const quantity_hint = "Ex: 2 Comprimidos";
   static const initial_time = "Hora Inicial";
   static const observation = "Observação";
   static const tookIt = "Consumiu?";

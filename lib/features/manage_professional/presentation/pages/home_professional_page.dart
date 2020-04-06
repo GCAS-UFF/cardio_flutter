@@ -132,6 +132,7 @@ class HomeProfessionalPage extends StatelessWidget {
 
   Widget _buildPatientList(BuildContext context, List<Patient> patientList) {
     if (patientList == null) return Container();
+    patientList.sort((a, b) => a.name.toString().compareTo(b.name.toString()));
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: patientList.map((patient) {
@@ -140,5 +141,9 @@ class HomeProfessionalPage extends StatelessWidget {
         );
       }).toList(),
     );
+  }
+
+  void sortlist(List list) {
+    return list.sort((a, b) => a.toString().compareTo(b.toString()));
   }
 }

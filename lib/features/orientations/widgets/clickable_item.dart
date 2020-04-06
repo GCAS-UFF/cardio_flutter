@@ -13,8 +13,6 @@ class ClickableItem extends StatefulWidget {
 class _ClickableItemState extends State<ClickableItem> {
   @override
   Widget build(BuildContext context) {
-   
-    
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: GestureDetector(
@@ -26,8 +24,9 @@ class _ClickableItemState extends State<ClickableItem> {
             });
           },
           child: Container(
-              decoration: BoxDecoration(border: Border.all(color: Colors.black54),
-              borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black54),
+                  borderRadius: BorderRadius.circular(8)),
               alignment: Alignment.center,
               child: (widget.isClicked)
                   ? Column(
@@ -46,17 +45,17 @@ class _ClickableItemState extends State<ClickableItem> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Divider(thickness: 2,color: Colors.blueGrey[600],),
+                          child: Divider(
+                            thickness: 2,
+                            color: Colors.blueGrey[600],
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             widget.text,
                             textAlign: TextAlign.center,
-
-                            style: TextStyle(
-                              color: Colors.black,
-                                 fontSize: 18),
+                            style: TextStyle(color: Colors.black, fontSize: 18),
                           ),
                         )
                       ],
@@ -65,6 +64,7 @@ class _ClickableItemState extends State<ClickableItem> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         widget.title,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.indigo[900],
                             fontSize: 18,

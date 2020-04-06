@@ -137,6 +137,7 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
             ),
             CustomTextFormField(
               isRequired: true,
+              keyboardType: TextInputType.number,
               textEditingController: _finalDateController,
               hintText: Strings.date,
               title: Strings.final_date,
