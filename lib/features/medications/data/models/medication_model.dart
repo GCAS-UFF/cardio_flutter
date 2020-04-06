@@ -5,7 +5,7 @@ class MedicationModel extends Medication {
   MedicationModel(
       {@required String name,
       @required double dosage,
-      @required int quantity,
+      @required String quantity,
       @required int frequency,
       @required DateTime initialDate,
       @required DateTime finalDate,

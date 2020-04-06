@@ -179,7 +179,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _quantityController,
-                hintText: "",
+                hintText: Strings.quantity_hint,
                 title: Strings.quantity,
                 onChanged: (value) {
                   setState(() {
@@ -205,7 +205,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 keyboardType: TextInputType.number,
                 textEditingController: _initialTimeController,
                 hintText: Strings.time_hint,
-                title: Strings.initial_time,
+                title: Strings.time_title,
                 validator: TimeofDayValidator(),
                 onChanged: (value) {
                   setState(() {
@@ -239,7 +239,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 },
               ),
               CustomTextFormField(
-                isRequired: true,
                 textEditingController: _observationController,
                 hintText: Strings.observation_hint,
                 title: Strings.observation,
@@ -283,7 +282,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
             dosage: (_formData[LABEL_DOSAGE] is int)
                 ? int.parse(_formData[LABEL_DOSAGE]).toDouble()
                 : double.parse(_formData[LABEL_DOSAGE]),
-            quantity: int.parse(_formData[LABEL_QUANTITY]),
+            quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
             initialDate: DateHelper.addTimeToDate(
               _formData[LABEL_INITIAL_TIME],
@@ -307,7 +306,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
             dosage: (_formData[LABEL_DOSAGE] is int)
                 ? int.parse(_formData[LABEL_DOSAGE]).toDouble()
                 : double.parse(_formData[LABEL_DOSAGE]),
-            quantity: int.parse(_formData[LABEL_QUANTITY]),
+            quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
             initialDate: DateHelper.addTimeToDate(
               _formData[LABEL_INITIAL_TIME],

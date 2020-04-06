@@ -202,7 +202,6 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 },
               ),
               CustomTextFormField(
-                isRequired: false,
                 textEditingController: _observationController,
                 hintText: Strings.observation_hint,
                 title: Strings.observation,
@@ -307,7 +306,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             done: true,
             name: _formData[LABEL_NAME],
             dosage: double.parse(_formData[LABEL_DOSAGE]),
-            quantity: int.parse(_formData[LABEL_QUANTITY]),
+            quantity: _formData[LABEL_QUANTITY],
             executedDate: DateHelper.addTimeToDate(
               _formData[LABEL_EXECUTION_TIME],
               DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),
@@ -325,7 +324,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             done: true,
             name: _formData[LABEL_NAME],
             dosage: double.parse(_formData[LABEL_DOSAGE]),
-            quantity: int.parse(_formData[LABEL_QUANTITY]),
+            quantity: _formData[LABEL_QUANTITY],
             executedDate: DateHelper.addTimeToDate(
               _formData[LABEL_EXECUTION_TIME],
               DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),

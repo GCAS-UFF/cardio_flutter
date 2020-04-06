@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 class Medication extends BaseEntity {
   final String name;
   final double dosage;
-  final int quantity;
+  final String quantity;
   final int frequency;
   final String observation;
   final bool tookIt;
