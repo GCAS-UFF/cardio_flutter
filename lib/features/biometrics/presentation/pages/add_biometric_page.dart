@@ -135,6 +135,7 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
               ),
               CustomTextFormField(
                 isRequired: true,
+                keyboardType: TextInputType.number,
                 textEditingController: _finalDateController,
                 hintText: Strings.date,
                 title: Strings.final_date,

@@ -31,12 +31,12 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
   static const String LABEL_SWELLING = "LABEL_SWELLING";
   static const String LABEL_FATIGUE = "LABEL_FATIGUE";
   static const String LABEL_TIME = "LABEL_TIME";
+  static const String LABEL_OBSERVATION = "LABEL_OBSERVATION";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  
   TextEditingController _timeController = new MultimaskedTextController(
     maskDefault: "xx:xx",
     onlyDigitsDefault: true,
@@ -49,6 +49,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
   ).maskedTextFieldController;
   TextEditingController _weightController;
   TextEditingController _bpmController;
+  TextEditingController _observationController;
 
   @override
   void initState() {
@@ -62,10 +63,11 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
       _formData[LABEL_BLOOD_PRESSURE] = widget.biometric.bloodPressure;
       _formData[LABEL_SWELLING] = widget.biometric.swelling;
       _formData[LABEL_FATIGUE] = widget.biometric.fatigue;
+      _formData[LABEL_OBSERVATION] = widget.biometric.observation;
       _formData[LABEL_TIME] =
           DateHelper.getTimeFromDate(widget.biometric.executedDate);
       _timeController.text = _formData[LABEL_TIME];
-      _bloodPressureController.text= _formData[LABEL_BLOOD_PRESSURE];
+      _bloodPressureController.text = _formData[LABEL_BLOOD_PRESSURE];
     }
 
     _weightController = TextEditingController(
@@ -73,6 +75,9 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
     );
     _bpmController = TextEditingController(
       text: _formData[LABEL_BPM],
+    );
+    _observationController = TextEditingController(
+      text: _formData[LABEL_OBSERVATION],
     );
 
     super.initState();
@@ -174,7 +179,8 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                 subtitle: _formData[LABEL_FATIGUE],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_FATIGUE] = Arrays.fatigue.keys.toList()[value];
+                    _formData[LABEL_FATIGUE] =
+                        Arrays.fatigue.keys.toList()[value];
                   });
                 },
               ),
@@ -187,6 +193,16 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                 onChanged: (value) {
                   setState(() {
                     _formData[LABEL_TIME] = value;
+                  });
+                },
+              ),
+              CustomTextFormField(
+                textEditingController: _observationController,
+                hintText: Strings.observation_hint,
+                title: Strings.observation,
+                onChanged: (value) {
+                  setState(() {
+                    _formData[LABEL_OBSERVATION] = value;
                   });
                 },
               ),
@@ -225,6 +241,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
             bloodPressure: _formData[LABEL_BLOOD_PRESSURE],
             swelling: _formData[LABEL_SWELLING],
             fatigue: _formData[LABEL_FATIGUE],
+            observation: _formData[LABEL_OBSERVATION],
             executedDate:
                 DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
           ),
@@ -240,6 +257,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
             bpm: int.parse(_formData[LABEL_BPM]),
             bloodPressure: _formData[LABEL_BLOOD_PRESSURE],
             swelling: _formData[LABEL_SWELLING],
+            observation: _formData[LABEL_OBSERVATION],
             fatigue: _formData[LABEL_FATIGUE],
             executedDate:
                 DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),

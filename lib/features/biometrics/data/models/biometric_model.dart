@@ -11,6 +11,7 @@ class BiometricModel extends Biometric {
       @required int weight,
       @required int bpm,
       @required String id,
+      @required String observation,
       @required String bloodPressure,
       @required String swelling,
       @required String fatigue})
@@ -19,6 +20,7 @@ class BiometricModel extends Biometric {
             initialDate: initialDate,
             finalDate: finalDate,
             weight: weight,
+            observation: observation,
             bpm: bpm,
             bloodPressure: bloodPressure,
             swelling: swelling,
@@ -42,6 +44,7 @@ class BiometricModel extends Biometric {
     if (model.bpm != null) json['bpm'] = model.bpm;
     if (model.swelling != null) json['swelling'] = model.swelling;
     if (model.fatigue != null) json['fatigue'] = model.fatigue;
+    if (model.observation != null) json['observation'] = model.observation;
 
     return json;
   }
@@ -66,6 +69,7 @@ class BiometricModel extends Biometric {
       fatigue: json['fatigue'],
       id: json['id'],
       done: json['done'],
+      observation: json['observation'],
     );
   }
 
@@ -82,6 +86,7 @@ class BiometricModel extends Biometric {
         fatigue: biometric.fatigue,
         id: biometric.id,
         done: biometric.done,
+        observation: biometric.observation,
         executedDate: biometric.executedDate);
   }
 }
