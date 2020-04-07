@@ -145,8 +145,8 @@ class CalendarConverter {
           "   Fadiga Excessiva": symptom(exercise.excessiveFatigue),
           "   Tontura": symptom(exercise.dizziness),
           "   Dores Corporais": symptom(exercise.bodyPain),
-          "Observação": (exercise.observation != null) ? exercise.observation : "",
-
+          "Observação":
+              (exercise.observation != null) ? exercise.observation : "",
         };
       }
     } else if (entity is Liquid) {
@@ -172,18 +172,36 @@ class CalendarConverter {
           "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
         };
       } else {
-        result = {
+        if (entity.swelling == null || entity.swelling == "Nenhum"||entity.swelling=="Selecione") {
+          result = {
+            "Peso": "${entity.weight} kg",
+            "Batimentos Cardíacos": "${entity.bpm} bpm",
+            "Pressão Arterial": entity.bloodPressure,
+            "Inchaço": (Arrays.swelling[entity.swelling] == null)
+                ? "Não Selecionado"
+                : Arrays.swelling[entity.swelling],
+            "Fadiga": (Arrays.fatigue[entity.fatigue] == null)
+                ? "Não Selecionado"
+                : Arrays.fatigue[entity.fatigue],
+            "Observação":
+                (entity.observation != null) ? entity.observation : "",
+          };
+        } else {
+          result = {
           "Peso": "${entity.weight} kg",
           "Batimentos Cardíacos": "${entity.bpm} bpm",
           "Pressão Arterial": entity.bloodPressure,
           "Inchaço": (Arrays.swelling[entity.swelling] == null)
               ? "Não Selecionado"
               : Arrays.swelling[entity.swelling],
+              "Localização do Inchaço": entity.swellingLocalization,
           "Fadiga": (Arrays.fatigue[entity.fatigue] == null)
               ? "Não Selecionado"
               : Arrays.fatigue[entity.fatigue],
           "Observação": (entity.observation != null) ? entity.observation : "",
         };
+
+        }
       }
     } else if (entity is Appointment) {
       if (!entity.done) {
@@ -198,20 +216,38 @@ class CalendarConverter {
               : Arrays.adresses[entity.adress],
         };
       } else {
-        result = {
-          "Especialidade": (Arrays.expertises[entity.expertise] == null)
-              ? "Não Selecionado"
-              : Arrays.expertises[entity.expertise],
-          "Data Prevista":
-              DateHelper.convertDateToString(entity.appointmentDate),
-          "Horário Previsto":
-              DateHelper.getTimeFromDate(entity.appointmentDate),
-          "Localização": (Arrays.adresses[entity.adress] == null)
-              ? "Não Selecionado"
-              : Arrays.adresses[entity.adress],
-          "Compareceu": (entity.went != null && entity.went) ? "Sim" : "Não",
-          "Respondeu em": DateHelper.convertDateToString(entity.executedDate),
-        };
+        if (entity.went != null && !entity.went) {
+          result = {
+            "Especialidade": (Arrays.expertises[entity.expertise] == null)
+                ? "Não Selecionado"
+                : Arrays.expertises[entity.expertise],
+            "Data Prevista":
+                DateHelper.convertDateToString(entity.appointmentDate),
+            "Horário Previsto":
+                DateHelper.getTimeFromDate(entity.appointmentDate),
+            "Localização": (Arrays.adresses[entity.adress] == null)
+                ? "Não Selecionado"
+                : Arrays.adresses[entity.adress],
+            "Compareceu": (entity.went != null && entity.went) ? "Sim" : "Não",
+            "Justificativa": entity.justification,
+            "Respondeu em": DateHelper.convertDateToString(entity.executedDate),
+          };
+        } else {
+          result = {
+            "Especialidade": (Arrays.expertises[entity.expertise] == null)
+                ? "Não Selecionado"
+                : Arrays.expertises[entity.expertise],
+            "Data Prevista":
+                DateHelper.convertDateToString(entity.appointmentDate),
+            "Horário Previsto":
+                DateHelper.getTimeFromDate(entity.appointmentDate),
+            "Localização": (Arrays.adresses[entity.adress] == null)
+                ? "Não Selecionado"
+                : Arrays.adresses[entity.adress],
+            "Compareceu": (entity.went != null && entity.went) ? "Sim" : "Não",
+            "Respondeu em": DateHelper.convertDateToString(entity.executedDate),
+          };
+        }
       }
     } else if (entity is Medication) {
       if (!entity.done) {

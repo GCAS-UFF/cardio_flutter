@@ -33,8 +33,8 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
- 
-  // TextEditingController _nameController;
+
+  TextEditingController _nameController;
   TextEditingController _quantityController;
 
   TextEditingController _timeController = new MultimaskedTextController(
@@ -57,13 +57,12 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
       _timeController.text = _formData[LABEL_TIME];
     }
 
-    // _nameController = TextEditingController(
-    //   text: _formData[LABEL_NAME],
-    // );
+    _nameController = TextEditingController(
+      text: _formData[LABEL_NAME],
+    );
     _quantityController = TextEditingController(
       text: _formData[LABEL_QUANTITY],
     );
-   
 
     super.initState();
   }
@@ -111,7 +110,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 10),
               ),
-           /*    CustomTextFormField(
+              CustomTextFormField(
                 isRequired: true,
                 textEditingController: _nameController,
                 hintText: "",
@@ -121,19 +120,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                     _formData[LABEL_NAME] = value;
                   });
                 },
-              ), */
-               CustomSelector(
-                title: Strings.liquid,
-                options: Arrays.liquid.keys.toList(),
-                subtitle: _formData[LABEL_NAME],
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_NAME] =
-                        Arrays.liquid.keys.toList()[value];
-                  });
-                },
               ),
-
               CustomSelector(
                 title: Strings.reference,
                 options: Arrays.reference.keys.toList(),
@@ -149,7 +136,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _quantityController,
-                hintText: (Arrays.reference[ _formData[LABEL_REFERENCE]]==null)
+                hintText: (Arrays.reference[_formData[LABEL_REFERENCE]] == null)
                     ? ""
                     : "Quantidade de ${_formData[LABEL_REFERENCE]}",
                 title: Strings.quantity,
@@ -159,7 +146,6 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                   });
                 },
               ),
-              
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,

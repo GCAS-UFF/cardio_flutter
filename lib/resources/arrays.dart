@@ -34,19 +34,17 @@ class Arrays {
 
   static Map<String, dynamic> intensities = {
     "Selecione": null,
-    "Baixíssima": "Baixíssima",
-    "Baixa": "Baixa",
+    "Leve": "Leve",
     "Moderada": "Moderada",
-    "Alta": "Alta",
-    "Muito Alta": "Muito Alta",
+    "Intensa": "Intensa",
   };
 
   static Map<String, dynamic> swelling = {
     "Selecione": null,
-    "Nenhum Inchaço": "Nenhum Inchaço",
-    "Pouco Inchaço": "Pouco Inchaço",
-    "Inchaço Mediano": "Inchaço Mediano",
-    "Muito Inchaço": "Muito Inchaço",
+    "Nenhum": "Nenhum",
+    "Pouco": "Pouco",
+    "Médio": "Médio",
+    "Muito": "Muito",
   };
   static Map<String, dynamic> fatigue = {
     "Selecione": null,
@@ -68,7 +66,7 @@ class Arrays {
     "Xícara de chá": 200
   };
 
-  static Map<String, dynamic> liquid = {
+  /* static Map<String, dynamic> liquid = {
     "Selecione": null,
     "Água": "Água",
     "Café": "Café",
@@ -81,5 +79,5 @@ class Arrays {
     "Suco Natural": "Suco Natural",
     "Suco de Caixa": "Suco de Caixa",
     "Suco de Saquinho": "Suco de Saquinho",
-  };
+  }; */
 }

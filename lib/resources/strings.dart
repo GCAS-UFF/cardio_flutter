@@ -141,6 +141,8 @@ class Strings {
   static const blood_pressure_hint = "mmHg";
   static const swelling = "Inchaço";
   static const fatigue = "Fadiga";
+  static const swelling_loc_title = "Localização";
+  static const swelling_loc_hint = "Diga onde está inchado";
 
   static const teste1 = "O que é insuficiência cardíaca?";
   static const teste2 =
