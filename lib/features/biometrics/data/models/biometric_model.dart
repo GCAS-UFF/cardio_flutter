@@ -14,6 +14,7 @@ class BiometricModel extends Biometric {
       @required String observation,
       @required String bloodPressure,
       @required String swelling,
+      @required String swellingLocalization,
       @required String fatigue})
       : super(
             frequency: frequency,
@@ -27,6 +28,7 @@ class BiometricModel extends Biometric {
             fatigue: fatigue,
             id: id,
             executedDate: executedDate,
+            swellingLocalization: swellingLocalization,
             done: done);
 
   static Map<dynamic, dynamic> toJson(BiometricModel model) {
@@ -45,6 +47,7 @@ class BiometricModel extends Biometric {
     if (model.swelling != null) json['swelling'] = model.swelling;
     if (model.fatigue != null) json['fatigue'] = model.fatigue;
     if (model.observation != null) json['observation'] = model.observation;
+    if (model.swellingLocalization != null) json['swellingLocalization'] = model.swellingLocalization;
 
     return json;
   }
@@ -70,6 +73,7 @@ class BiometricModel extends Biometric {
       id: json['id'],
       done: json['done'],
       observation: json['observation'],
+      swellingLocalization: json['swellingLocalization'],
     );
   }
 
@@ -87,6 +91,7 @@ class BiometricModel extends Biometric {
         id: biometric.id,
         done: biometric.done,
         observation: biometric.observation,
+        swellingLocalization: biometric.swellingLocalization,
         executedDate: biometric.executedDate);
   }
 }

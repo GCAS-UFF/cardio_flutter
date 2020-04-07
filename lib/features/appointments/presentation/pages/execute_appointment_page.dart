@@ -23,8 +23,10 @@ class ExecuteAppointmentPage extends StatefulWidget {
 
 class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
   static const String LABEL_WENT = "LABEL_WENT";
+  static const String LABEL_JUSTIFICATION = "LABEL_JUSTIFICATION";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
+  TextEditingController _justificationController;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -32,6 +34,10 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
   void initState() {
     if (widget.appointment != null) {
       _formData[LABEL_WENT] = widget.appointment.went;
+
+      (widget.appointment.went!=null  && !widget.appointment.went)
+          ? _formData[LABEL_JUSTIFICATION] = widget.appointment.justification
+          : null;
     }
     super.initState();
   }
@@ -182,8 +188,14 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                   : CustomTextFormField(
                       isRequired: true,
                       hintText: Strings.justification_hint,
+                      textEditingController: _justificationController,
                       title: Strings.justification,
                       enable: true,
+                      onChanged: (value) {
+                        setState(() {
+                          _formData[LABEL_JUSTIFICATION] = value;
+                        });
+                      },
                     ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
@@ -215,6 +227,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
           done: true,
           appointmentDate: widget.appointment.appointmentDate,
           went: _formData[LABEL_WENT],
+          justification: _formData[LABEL_JUSTIFICATION],
           expertise: widget.appointment.expertise,
           adress: widget.appointment.adress,
           executedDate: DateTime.now(),

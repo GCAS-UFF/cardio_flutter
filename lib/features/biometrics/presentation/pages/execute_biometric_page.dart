@@ -32,6 +32,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
   static const String LABEL_FATIGUE = "LABEL_FATIGUE";
   static const String LABEL_TIME = "LABEL_TIME";
   static const String LABEL_OBSERVATION = "LABEL_OBSERVATION";
+  static const String LABEL_SWELLING_LOC = "LABEL_SWELLING_LOC";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
@@ -50,6 +51,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
   TextEditingController _weightController;
   TextEditingController _bpmController;
   TextEditingController _observationController;
+  TextEditingController _swellingLocController;
 
   @override
   void initState() {
@@ -62,6 +64,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
           : widget.biometric.bpm.toString();
       _formData[LABEL_BLOOD_PRESSURE] = widget.biometric.bloodPressure;
       _formData[LABEL_SWELLING] = widget.biometric.swelling;
+      _formData[LABEL_SWELLING_LOC] = widget.biometric.swellingLocalization;
       _formData[LABEL_FATIGUE] = widget.biometric.fatigue;
       _formData[LABEL_OBSERVATION] = widget.biometric.observation;
       _formData[LABEL_TIME] =
@@ -78,6 +81,9 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
     );
     _observationController = TextEditingController(
       text: _formData[LABEL_OBSERVATION],
+    );
+    _swellingLocController = TextEditingController(
+      text: _formData[LABEL_SWELLING_LOC],
     );
 
     super.initState();
@@ -173,6 +179,22 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                   });
                 },
               ),
+              (_formData[LABEL_SWELLING] == null ||
+                      _formData[LABEL_SWELLING] == "Nenhum" ||
+                      _formData[LABEL_SWELLING] == "Selecione")
+                  ? Container()
+                  : CustomTextFormField(
+                      isRequired: true,
+                      hintText: Strings.swelling_loc_hint,
+                      textEditingController: _swellingLocController,
+                      title: Strings.swelling_loc_title,
+                      enable: true,
+                      onChanged: (value) {
+                        setState(() {
+                          _formData[LABEL_SWELLING_LOC] = value;
+                        });
+                      },
+                    ),
               CustomSelector(
                 title: Strings.fatigue,
                 options: Arrays.fatigue.keys.toList(),
@@ -239,6 +261,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
             weight: int.parse(_formData[LABEL_WEIGHT]),
             bpm: int.parse(_formData[LABEL_BPM]),
             bloodPressure: _formData[LABEL_BLOOD_PRESSURE],
+            swellingLocalization: _formData[LABEL_SWELLING_LOC],
             swelling: _formData[LABEL_SWELLING],
             fatigue: _formData[LABEL_FATIGUE],
             observation: _formData[LABEL_OBSERVATION],
@@ -256,6 +279,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
             weight: int.parse(_formData[LABEL_WEIGHT]),
             bpm: int.parse(_formData[LABEL_BPM]),
             bloodPressure: _formData[LABEL_BLOOD_PRESSURE],
+            swellingLocalization: _formData[LABEL_SWELLING_LOC],
             swelling: _formData[LABEL_SWELLING],
             observation: _formData[LABEL_OBSERVATION],
             fatigue: _formData[LABEL_FATIGUE],

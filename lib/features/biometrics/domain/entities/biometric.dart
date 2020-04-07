@@ -7,6 +7,7 @@ class Biometric extends BaseEntity {
   final int bpm;
   final String bloodPressure;
   final String swelling;
+  final String swellingLocalization;
   final String fatigue;
   final String observation;
 
@@ -14,6 +15,7 @@ class Biometric extends BaseEntity {
     this.fatigue,
     this.weight,
     this.observation,
+    this.swellingLocalization,
     this.bpm,
     this.bloodPressure,
     this.swelling,
@@ -38,6 +40,7 @@ class Biometric extends BaseEntity {
         observation,
         bloodPressure,
         swelling,
+        swellingLocalization,
         id,
         frequency,
         initialDate,
