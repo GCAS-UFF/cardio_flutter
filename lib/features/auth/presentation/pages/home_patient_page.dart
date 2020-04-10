@@ -32,7 +32,7 @@ class HomePatientPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.blueGrey[200],
       body: SingleChildScrollView(
         child: Container(
           width: Dimensions.getConvertedWidthSize(context, 412),
@@ -45,7 +45,7 @@ class HomePatientPage extends StatelessWidget {
                   "Paciente: ${(patient != null || patient.name != null) ? patient.name : ""}\nIdade: ${(patient != null) ? DateHelper.ageFromDate(patient.birthdate) : ""}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    // color: Colors.white,
+                    color: Colors.indigo[900],
                     fontSize: Dimensions.getTextSize(context, 13),
                     fontWeight: FontWeight.bold,
                   ),

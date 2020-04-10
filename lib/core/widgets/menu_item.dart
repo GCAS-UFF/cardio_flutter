@@ -26,7 +26,7 @@ class ItemMenu extends StatelessWidget {
                 blurRadius: 3,
               ),
             ],
-            color: Color(0xffc9fffd),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
           alignment: Alignment.topLeft,

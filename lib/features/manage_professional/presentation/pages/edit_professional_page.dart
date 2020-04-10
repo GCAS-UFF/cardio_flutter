@@ -1,5 +1,4 @@
 import 'package:cardio_flutter/core/input_validators/cpf_input_validator.dart';
-import 'package:cardio_flutter/core/input_validators/email_input_validator.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';

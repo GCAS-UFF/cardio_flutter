@@ -48,10 +48,10 @@ class Arrays {
   };
   static Map<String, dynamic> fatigue = {
     "Selecione": null,
-    "Nenhuma Fadiga": "Nenhuma Fadiga",
-    "Pouca Fadiga": "Pouca Fadiga",
-    "Fadiga Mediana": "Fadiga Mediana",
-    "Muita Fadiga": "Muita Fadiga",
+    "Nenhuma": "Nenhuma",
+    "Pouca": "Pouca",
+    "Média": "Média",
+    "Muita": "Muita",
   };
 
   static Map<String, dynamic> reference = {
@@ -65,19 +65,4 @@ class Arrays {
     "Cálice": 30,
     "Xícara de chá": 200
   };
-
-  /* static Map<String, dynamic> liquid = {
-    "Selecione": null,
-    "Água": "Água",
-    "Café": "Café",
-    "Refrigerante": "Refrigerante",
-    "Cerveja": "Cerveja",
-    "Bebida Alcoólica Destilada": "Bebida Alcoólica Destilada",
-    "Chá": "Chá",
-    "Leite": "Leite",
-    "Refrigerante": "Refrigerante",
-    "Suco Natural": "Suco Natural",
-    "Suco de Caixa": "Suco de Caixa",
-    "Suco de Saquinho": "Suco de Saquinho",
-  }; */
 }
