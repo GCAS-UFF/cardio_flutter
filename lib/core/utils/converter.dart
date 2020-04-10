@@ -27,6 +27,21 @@ class Converter {
     }
   }
 
+  static List<String> convertListDynamicToListString(List<dynamic> inputs) {
+    if (inputs == null) return null;
+    List<String> result = List<String>();
+    for (String string in inputs) {
+      result.add(string);
+    }
+
+    return result;
+  }
+
+  static String convertStringListToString(List<String> list) {
+    final String string =list.join(', ');
+    return string ;
+   }
+
   static String convertStringToMaskedString(
       {@required String value,
       @required String mask,
@@ -72,7 +87,11 @@ class Converter {
   }
 
   static String cleanText(String text, {bool onlyDigits}) {
-    text = text.replaceAll(".", "").replaceAll("-", "").replaceAll(" ", "");
+    text = text
+        .replaceAll(".", "")
+        .replaceAll("-", "")
+        .replaceAll(" ", "")
+        .replaceAll(":", "");
     if (onlyDigits != null && onlyDigits) {
       for (int i = 0; i < text.length; i++) {
         if (int.tryParse(text[i]) == null) {
@@ -196,7 +215,7 @@ class Converter {
         "Intensidade": (Arrays.intensities[exercise.intensity] == null)
             ? "Não Selecionado"
             : Arrays.intensities[exercise.intensity],
-        "Horário Indicado": exercise.intendedTime,
+          "Horários Indicados": Converter.convertStringListToString(exercise.times),
         "Duração": "${exercise.durationInMinutes} minutos",
         "Data de Inicio": DateHelper.convertDateToString(exercise.initialDate),
         "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),

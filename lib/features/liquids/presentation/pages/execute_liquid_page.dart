@@ -166,7 +166,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                     ? Strings.add
                     : Strings.edit_patient_done,
                 onTap: () {
-                  _submitForm();
+                  _submitForm(context);
                 },
               ),
               SizedBox(
@@ -177,8 +177,17 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
         ));
   }
 
-  void _submitForm() {
+  void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
+      return;
+    }
+    else if (_formData[LABEL_REFERENCE] == null ||
+        Arrays.reference[_formData[LABEL_REFERENCE]] == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Favor selecionar a referência"),
+        ),
+      );
       return;
     }
     _formKey.currentState.save();

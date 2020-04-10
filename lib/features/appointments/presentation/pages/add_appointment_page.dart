@@ -163,7 +163,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                     ? Strings.add
                     : Strings.edit_patient_done,
                 onTap: () {
-                  _submitForm();
+                  _submitForm(context);
                 },
               ),
               SizedBox(
@@ -174,8 +174,26 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
         ));
   }
 
-  void _submitForm() {
+  void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
+      return;
+    }
+     else if (_formData[LABEL_EXPERTISE] == null ||
+        Arrays.expertises[_formData[LABEL_EXPERTISE]] == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Favor selecionar a especialidade"),
+        ),
+      );
+      return;
+    }
+     else if (_formData[LABEL_ADRESS] == null ||
+        Arrays.adresses[_formData[LABEL_ADRESS]] == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Favor selecionar o endereço"),
+        ),
+      );
       return;
     }
     _formKey.currentState.save();

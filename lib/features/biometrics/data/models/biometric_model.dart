@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
 import 'package:meta/meta.dart';
 
@@ -11,6 +12,7 @@ class BiometricModel extends Biometric {
       @required int weight,
       @required int bpm,
       @required String id,
+      @required List<String> times,
       @required String observation,
       @required String bloodPressure,
       @required String swelling,
@@ -23,6 +25,7 @@ class BiometricModel extends Biometric {
             weight: weight,
             observation: observation,
             bpm: bpm,
+            times: times,
             bloodPressure: bloodPressure,
             swelling: swelling,
             fatigue: fatigue,
@@ -47,7 +50,9 @@ class BiometricModel extends Biometric {
     if (model.swelling != null) json['swelling'] = model.swelling;
     if (model.fatigue != null) json['fatigue'] = model.fatigue;
     if (model.observation != null) json['observation'] = model.observation;
-    if (model.swellingLocalization != null) json['swellingLocalization'] = model.swellingLocalization;
+    if (model.swellingLocalization != null)
+      json['swellingLocalization'] = model.swellingLocalization;
+    if (model.times != null) json['times'] = model.times;
 
     return json;
   }
@@ -74,6 +79,7 @@ class BiometricModel extends Biometric {
       done: json['done'],
       observation: json['observation'],
       swellingLocalization: json['swellingLocalization'],
+      times: Converter.convertListDynamicToListString(json['times']),
     );
   }
 
@@ -92,6 +98,7 @@ class BiometricModel extends Biometric {
         done: biometric.done,
         observation: biometric.observation,
         swellingLocalization: biometric.swellingLocalization,
+        times: biometric.times,
         executedDate: biometric.executedDate);
   }
 }

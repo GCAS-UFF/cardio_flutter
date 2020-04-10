@@ -1,9 +1,11 @@
+import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
+import 'package:cardio_flutter/core/widgets/times_list.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
@@ -37,7 +39,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   static const String LABEL_SHORTNESS_OF_BREATH = "LABEL_SHORTNESS_OF_BREATH";
   static const String LABEL_EXCESSIVE_FATIGUE = "LABEL_EXCESSIVE_FATIGUE";
   static const String LABEL_EXECUTIONDAY = "LABEL_EXECUTIONDAY";
-  static const String LABEL_INTENDED_TIME = "LABEL_INTENDED_TIME";
+  static const String LABEL_TIMES = "LABEL_TIMES";
   static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
@@ -56,10 +58,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
     maskDefault: "xx/xx/xxxx",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
-  TextEditingController _intendedTimeController = new MultimaskedTextController(
-    maskDefault: "xx:xx",
-    onlyDigitsDefault: true,
-  ).maskedTextFieldController;
 
   @override
   void initState() {
@@ -67,7 +65,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
       _formData[LABEL_NAME] = widget.exercise.name;
       _formData[LABEL_FREQUENCY] = widget.exercise.frequency.toString();
       _formData[LABEL_INTENSITY] = widget.exercise.intensity;
-      _formData[LABEL_INTENDED_TIME] = widget.exercise.intendedTime;
+      _formData[LABEL_TIMES] = widget.exercise.times;
       _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
       _formData[LABEL_INITIAL_DATE] =
           DateHelper.convertDateToString(widget.exercise.initialDate);
@@ -75,7 +73,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
           DateHelper.convertDateToString(widget.exercise.finalDate);
       _initialDateController.text = _formData[LABEL_INITIAL_DATE];
       _finalDateController.text = _formData[LABEL_FINAL_DATE];
-      _intendedTimeController.text = _formData[LABEL_INTENDED_TIME];
     }
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
@@ -157,6 +154,17 @@ class _AddExercisePageState extends State<AddExercisePage> {
                   });
                 },
               ),
+              TimeList(
+                  frequency: (_formData[LABEL_FREQUENCY] != null &&
+                          _formData[LABEL_FREQUENCY] != "")
+                      ? int.parse(_formData[LABEL_FREQUENCY])
+                      : 0,
+                  onChanged: (times) {
+                    setState(() {
+                      _formData[LABEL_TIMES] = times;
+                    });
+                  },
+                  initialvalues: _formData[LABEL_TIMES]),
               CustomSelector(
                 title: Strings.intensity,
                 options: Arrays.intensities.keys.toList(),
@@ -165,18 +173,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
                   setState(() {
                     _formData[LABEL_INTENSITY] =
                         Arrays.intensities.keys.toList()[value];
-                  });
-                },
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _intendedTimeController,
-                hintText: Strings.time_hint,
-                title: Strings.intended_time,
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_INTENDED_TIME] = value.toString();
                   });
                 },
               ),
@@ -226,7 +222,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                     ? Strings.add
                     : Strings.edit_patient_done,
                 onTap: () {
-                  _submitForm();
+                  _submitForm(context);
                 },
               ),
               SizedBox(
@@ -237,8 +233,16 @@ class _AddExercisePageState extends State<AddExercisePage> {
         ));
   }
 
-  void _submitForm() {
+  void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
+      return;
+    } else if (_formData[LABEL_INTENSITY] == null ||
+        Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Favor selecionar a intensidade"),
+        ),
+      );
       return;
     }
     _formKey.currentState.save();
@@ -253,7 +257,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
             dizziness: _formData[LABEL_DIZZINESS],
             shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
             bodyPain: _formData[LABEL_BODY_PAIN],
-            intendedTime: _formData[LABEL_INTENDED_TIME],
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "xx:xx", value: time))
+                .toList(),
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
@@ -277,7 +284,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
             dizziness: _formData[LABEL_DIZZINESS],
             shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
             bodyPain: _formData[LABEL_BODY_PAIN],
-            intendedTime: _formData[LABEL_INTENDED_TIME],
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "xx:xx", value: time))
+                .toList(),
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),

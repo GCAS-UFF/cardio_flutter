@@ -54,18 +54,17 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
     _formData[LABEL_INTENSITY] = widget.exercise.intensity.toString();
     _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
 
+
     if (widget.exercise.done) {
       _formData[LABEL_SHORTNESS_OF_BREATH] = widget.exercise.shortnessOfBreath;
       _formData[LABEL_EXCESSIVE_FATIGUE] = widget.exercise.excessiveFatigue;
       _formData[LABEL_DIZZINESS] = widget.exercise.dizziness;
       _formData[LABEL_BODY_PAIN] = widget.exercise.bodyPain;
-      _formData[LABEL_TIME_OF_DAY] = widget.exercise.executionTime;
     } else {
       _formData[LABEL_SHORTNESS_OF_BREATH] = false;
       _formData[LABEL_EXCESSIVE_FATIGUE] = false;
       _formData[LABEL_DIZZINESS] = false;
       _formData[LABEL_BODY_PAIN] = false;
-      _formData[LABEL_TIME_OF_DAY] = widget.exercise.intendedTime;
     }
 
     _nameController = TextEditingController(
@@ -254,7 +253,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                     ? Strings.add
                     : Strings.edit_patient_done,
                 onTap: () {
-                  _submitForm();
+                  _submitForm(context);
                 },
               ),
               SizedBox(
@@ -265,8 +264,17 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
         ));
   }
 
-  void _submitForm() {
+  void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
+      return;
+    }
+     else if (_formData[LABEL_INTENSITY] == null ||
+        Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Favor selecionar a intensidade"),
+        ),
+      );
       return;
     }
     _formKey.currentState.save();

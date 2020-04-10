@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,8 @@ class ExerciseModel extends Exercise {
     @required bool excessiveFatigue,
     @required bool dizziness,
     @required bool bodyPain,
+    @required List<String> times,
     @required String executionTime,
-    @required String intendedTime,
     @required String observation,
     @required String name,
     @required int frequency,
@@ -30,7 +31,7 @@ class ExerciseModel extends Exercise {
           bodyPain: bodyPain,
           name: name,
           frequency: frequency,
-          intendedTime: intendedTime,
+          times: times,
           observation: observation,
           intensity: intensity,
           durationInMinutes: durationInMinutes,
@@ -58,7 +59,7 @@ class ExerciseModel extends Exercise {
     if (dizziness != null) json['dizziness'] = dizziness;
     if (bodyPain != null) json['bodyPain'] = bodyPain;
     if (executionTime != null) json['executionTime'] = executionTime;
-    if (intendedTime != null) json['intendedTime'] = intendedTime;
+    if (times != null) json['times'] = times;
     if (observation != null) json['observation'] = observation;
 
     return json;
@@ -87,7 +88,7 @@ class ExerciseModel extends Exercise {
       bodyPain: json['bodyPain'],
       done: json['done'],
       executionTime: json['executionTime'],
-      intendedTime: json['intendedTime'],
+      times: Converter.convertListDynamicToListString(json['times']),
       observation: json['observation'],
     );
   }
@@ -109,7 +110,7 @@ class ExerciseModel extends Exercise {
       executionDay: exercise.executionDay,
       done: exercise.done,
       executionTime: exercise.executionTime,
-      intendedTime: exercise.intendedTime,
+      times: exercise.times,
       observation: exercise.observation,
     );
   }

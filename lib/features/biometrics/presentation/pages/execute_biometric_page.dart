@@ -236,7 +236,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                     ? Strings.add
                     : Strings.edit_patient_done,
                 onTap: () {
-                  _submitForm();
+                  _submitForm(context);
                 },
               ),
               SizedBox(
@@ -247,10 +247,28 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
         ));
   }
 
-  void _submitForm() {
+  void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
+    } else if (_formData[LABEL_SWELLING] == null ||
+        Arrays.swelling[_formData[LABEL_SWELLING]] == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Favor selecionar o inchaço"),
+        ),
+      );
+      return;
     }
+    else if (_formData[LABEL_FATIGUE] == null ||
+        Arrays.fatigue[_formData[LABEL_FATIGUE]] == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Favor selecionar a fadiga"),
+        ),
+      );
+      return;
+    }
+
     _formKey.currentState.save();
 
     if (!widget.biometric.done) {
