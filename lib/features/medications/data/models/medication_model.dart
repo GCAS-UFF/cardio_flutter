@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
 import 'package:meta/meta.dart';
 
@@ -10,6 +11,7 @@ class MedicationModel extends Medication {
       @required DateTime initialDate,
       @required DateTime finalDate,
       @required String observation,
+      @required List<String> times,
       @required bool tookIt,
       @required String id,
       @required bool done,
@@ -23,6 +25,7 @@ class MedicationModel extends Medication {
             finalDate: finalDate,
             observation: observation,
             tookIt: tookIt,
+            times:times,
             id: id,
             done: done,
             executedDate: executedDate);
@@ -43,6 +46,7 @@ class MedicationModel extends Medication {
     if (model.tookIt != null) json['tookIt'] = model.tookIt;
     if (model.id != null) json['id'] = model.id;
     if (model.done != null) json['done'] = model.done;
+    if (model.times != null) json['times'] = model.times;
     return json;
   }
 
@@ -68,6 +72,7 @@ class MedicationModel extends Medication {
       tookIt: json['tookIt'],
       id: json['id'],
       done: json['done'],
+      times: Converter.convertListDynamicToListString(json['times']),
     );
   }
 
@@ -83,6 +88,7 @@ class MedicationModel extends Medication {
         executedDate: medication.executedDate,
         observation: medication.observation,
         tookIt: medication.tookIt,
+        times: medication.times,
         id: medication.id,
         done: medication.done);
   }

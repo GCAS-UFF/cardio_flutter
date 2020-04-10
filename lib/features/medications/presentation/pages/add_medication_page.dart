@@ -1,10 +1,12 @@
 import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
 import 'package:cardio_flutter/core/input_validators/time_of_day_validator.dart';
+import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
+import 'package:cardio_flutter/core/widgets/times_list.dart';
 
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
@@ -32,7 +34,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   static const String LABEL_FREQUENCY = "LABEL_FREQUENCY";
   static const String LABEL_INITIAL_DATE = "LABEL_INITIAL_DATE";
   static const String LABEL_FINAL_DATE = "LABEL_FINAL_DATE";
-  static const String LABEL_INITIAL_TIME = "LABEL_INITIAL_TIME";
+  static const String LABEL_TIMES = "LABEL_TIMES";
   static const String LABEL_OBSERVATION = "LABEL_OBSERVATION";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
@@ -54,12 +56,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
-  final TextEditingController _initialTimeController =
-      new MultimaskedTextController(
-    maskDefault: "xx:xx",
-    onlyDigitsDefault: true,
-  ).maskedTextFieldController;
-
   TextEditingController _observationController;
 
   @override
@@ -72,8 +68,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
           DateHelper.convertDateToString(widget.medication.initialDate);
       _formData[LABEL_FINAL_DATE] =
           DateHelper.convertDateToString(widget.medication.finalDate);
-      _formData[LABEL_INITIAL_TIME] =
-          DateHelper.getTimeFromDate(widget.medication.initialDate);
       _formData[LABEL_NAME] = widget.medication.name;
       _formData[LABEL_DOSAGE] = (widget.medication.dosage == null)
           ? null
@@ -85,7 +79,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
 
       _initialdateController.text = _formData[LABEL_INITIAL_DATE];
       _finalDateController.text = _formData[LABEL_FINAL_DATE];
-      _initialTimeController.text = _formData[LABEL_INITIAL_TIME];
     }
 
     _frequencyController = TextEditingController(
@@ -203,19 +196,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
-                textEditingController: _initialTimeController,
-                hintText: Strings.time_hint,
-                title: Strings.time_title,
-                validator: TimeofDayValidator(),
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_INITIAL_TIME] = value;
-                  });
-                },
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                keyboardType: TextInputType.number,
                 textEditingController: _frequencyController,
                 hintText: Strings.hint_frequency,
                 title: Strings.frequency,
@@ -225,6 +205,17 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                   });
                 },
               ),
+              TimeList(
+                  frequency: (_formData[LABEL_FREQUENCY] != null &&
+                          _formData[LABEL_FREQUENCY] != "")
+                      ? int.parse(_formData[LABEL_FREQUENCY])
+                      : 0,
+                  onChanged: (times) {
+                    setState(() {
+                      _formData[LABEL_TIMES] = times;
+                    });
+                  },
+                  initialvalues: _formData[LABEL_TIMES]),
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
@@ -284,14 +275,14 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 : double.parse(_formData[LABEL_DOSAGE]),
             quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            initialDate: DateHelper.addTimeToDate(
-              _formData[LABEL_INITIAL_TIME],
-              DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            ),
-            finalDate: DateHelper.addTimeToDate(
-              _formData[LABEL_INITIAL_TIME],
-              DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            ),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "xx:xx", value: time))
+                .toList(),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
             observation: _formData[LABEL_OBSERVATION],
           ),
         ),
@@ -308,14 +299,14 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 : double.parse(_formData[LABEL_DOSAGE]),
             quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            initialDate: DateHelper.addTimeToDate(
-              _formData[LABEL_INITIAL_TIME],
-              DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            ),
-            finalDate: DateHelper.addTimeToDate(
-              _formData[LABEL_INITIAL_TIME],
-              DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            ),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "xx:xx", value: time))
+                .toList(),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
             observation: _formData[LABEL_OBSERVATION],
           ),
         ),
