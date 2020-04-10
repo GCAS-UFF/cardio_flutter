@@ -6,15 +6,17 @@ class AppInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BasePage(
       body: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(20.0),
         child: Container(
           decoration: BoxDecoration(
-              border: Border.all(), borderRadius: BorderRadius.circular(20)),
+              border: Border.all(width: 2),
+              borderRadius: BorderRadius.circular(20)),
           width: MediaQuery.of(context).size.width,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
                     "\nSobre",
@@ -34,18 +36,23 @@ class AppInfoPage extends StatelessWidget {
                   ),
                   Text(
                     "Card.IO é um aplicativo para monitoramento de pacientes com Insuficiência Cardíaca Crônica,"
-                    "acompanhados em um Programa de Extensão da Univerdade Federal Fluminense,"
-                    "denominado Clínica de Insuficiência Cardíaca Coração Valente."
-                    "\nEste aplicativo tem como objetivo estimular o paciente a realizar mudanças de comportamento favorecendo o"
-                    "contato direto com a equipe de saúde que o acompanha."
+                    " acompanhados em um Programa de Extensão da Univerdade Federal Fluminense,"
+                    " denominado Clínica de Insuficiência Cardíaca Coração Valente."
+                    "\nEste aplicativo tem como objetivo estimular o autocuidado, além de "
+                    "favorecer o contato direto entre paciente e profissional de saúde."
                     "\n\n"
-                    "Desenvolvido como projeto de Doutorado da Enfermeira Lyvia da Silva Figueiredo", style: TextStyle(fontSize: 15),
+                    "Desenvolvido como projeto de Doutorado da Enfermeira Lyvia da Silva Figueiredo",
+                    style: TextStyle(fontSize: 15),
+                    textAlign: TextAlign.justify,
                   ),
-                  Text("\nColaboradores",
-                      style: TextStyle(
-                          color: Colors.indigo[900],
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold)),
+                  Text(
+                    "\nColaboradores",
+                    style: TextStyle(
+                        color: Colors.indigo[900],
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 90),
                     child: Divider(
@@ -55,21 +62,30 @@ class AppInfoPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Idealizadoras\n - Enfermeira Doutoranda Lyvia da Silva Figueiredo\n",
-                    textAlign: TextAlign.start,
+                    "\nIdealizadoras",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.indigo[900],
                         fontSize: 22,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "- Prof Dra Ana Carla Dantas Cavalcanti\n(Escola de Enfermagem/UFF)\n"
-                    "- Prof Dra Paula Vanessa Peclat Flores\n(Escola de Enfermagem/UFF)",
-                    textAlign: TextAlign.start, style: TextStyle(fontSize: 15),
+                    "- Enfermeira Doutoranda Lyvia da Silva Figueiredo",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        color: Colors.indigo[900],
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    " - Prof Dra Ana Carla Dantas Cavalcanti\n(Escola de Enfermagem/UFF)\n"
+                    " - Prof Dra Paula Vanessa Peclat Flores\n(Escola de Enfermagem/UFF)",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 15),
                   ),
                   Text(
                     "\nDesenvolvedores\n",
-                    textAlign: TextAlign.start,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.indigo[900],
                         fontSize: 22,
@@ -84,11 +100,14 @@ class AppInfoPage extends StatelessWidget {
                     " - Artur Ladeira Andrade"
                     "\n(Instituto de computação/UFF)\n"
                     " - Larissa Martins dos Blanco"
-                    "\n(Instituto de computação/UFF)\n", style: TextStyle(fontSize: 15),
+                    "\n(Instituto de computação/UFF)\n"
+                    " - James Adler Wonghon S. de Sousa"
+                    "\n(Instituto de Engenharia Naval/UEA)\n",
+                    style: TextStyle(fontSize: 15),
                   ),
                   Text(
                     "Design de ícones\n",
-                    textAlign: TextAlign.start,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.indigo[900],
                         fontSize: 22,
@@ -96,7 +115,8 @@ class AppInfoPage extends StatelessWidget {
                   ),
                   Text(
                     "Danilo Corrêa\n"
-                    "(Escola de Enfermagem/UFF)\n", style: TextStyle(fontSize: 15),
+                    "(Escola de Enfermagem/UFF)\n",
+                    style: TextStyle(fontSize: 15),
                     textAlign: TextAlign.start,
                   )
                 ],

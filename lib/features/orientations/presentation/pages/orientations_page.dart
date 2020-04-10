@@ -9,7 +9,7 @@ class OrientationsPage extends StatelessWidget {
     return BasePage(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             children: <Widget>[
               ClickableItem(title: Strings.orientation1, text: Strings.orientation_answer1),
