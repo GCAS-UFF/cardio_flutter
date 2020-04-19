@@ -130,15 +130,11 @@ class Strings {
   static const bpm_title = "Meus Batimentos";
   static const bpm_hint = "bpm";
   static const blood_pressure_title = "Minha pressão arterial";
-  static const blood_pressure_hint = "mmHg";
+  static const blood_pressure_hint = "000x000 mmHg";
   static const swelling = "Inchaço";
   static const fatigue = "Fadiga";
   static const swelling_loc_title = "Localização do inchaço";
   static const swelling_loc_hint = "Diga onde está inchado";
-
-  static const teste1 = "O que é insuficiência cardíaca?";
-  static const teste2 =
-      "É a dificuldade do coração em se encher de sangue corretamente e bombeá-lo de forma suficiente para abastecer as necessidades do corpo";
 
   //Patient Help Page
 
@@ -187,99 +183,92 @@ class Strings {
 
   // Orientations Page
 
-  static const orientation1 = "O que é insuficiência cardíaca?";
-  static const orientation2 = "Sinais e sintomas da Insuficiência Cardíaca";
-  static const orientation3 = "Consumo de sal";
-  static const orientation4 = "Ingestão de Gorduras";
-  static const orientation5 = "Tenha uma alimentação saudável";
-  static const orientation6 = "Controle a ingestão de líquido";
-  static const orientation7 = "Pratique exercícios físicos";
-  static const orientation8 = "Controle seu peso";
-  static const orientation9 = "Tome as medicações";
-  static const orientation10 = "Tome as vacinas";
-  static const orientation11 = "Não falte as consultas";
-  static const orientation12 = "Não fume";
-  static const orientation13 = "Como parar de fumar?";
-  static const orientation14 = "Não tome bebidas alcoólicas";
-  static const orientation15 = "Diminua o consumo de bebidas cafeinadas";
-  static const orientation16 = "Sono";
-  static const orientation17 = "Ansiedade e estresse";
-  static const orientation18 = "Diminuindo a ansiedade e o estresse";
-  static const orientation19 = "Em caso de viagens";
-  static const orientation20 =
-      "A gravidez é contra-indicada para mulheres com Insuficiência Cardíaca?";
+  static const orientation1 = "Insuficiência cardíaca?";
+  static const orientation2 = "Sinais e Sintomas da Insuficiência Cardíaca  ";
+  static const orientation3 = "Alimentação";
+  static const orientation4 = "Controle de Líquidos";
+  static const orientation5 = "Exercícios Físicos";
+  static const orientation6 = "Controle de Peso ";
+  static const orientation7 = "Fumo e bebida alcoólica";
+  static const orientation8 = "Como parar de fumar?";
+  static const orientation9 = "Medicações ";
+  static const orientation10 = "Vacinação ";
+  static const orientation11 = "Consultas";
+  static const orientation12 = "Ansiedade e Estresse";
+  static const orientation13 = "Sono ";
+  static const orientation14 = "Viagens";
 
-  static const orientation_answer1 =
-      "É a dificuldade do coração em se encher de sangue corretamente e bombeá-lo de"
-      " forma suficiente para abastecer as necessidades do corpo.";
   static const orientation_answer2 =
-      "- Falta de ar;\n- Indisposição para realizar exercícios físicos;"
-      "\n- Coração acelerado;\n- Cansaço;\n- Tosse noturna;\n- Edema (Inchaço) nas pernas, pés e mãos;"
-      "\n- Vontade de urinar muitas vezes à noite;\n- Ganho de peso inexplicável;"
-      "\n- Dificuldade para dormir;\n- Ansiedade;\n- Dor no peito;"
-      "\n- Dificuldade de ter relações sexuais e às vezes de desenvolver atividades diárias."
-      "\n\nPara que esses sintomas diminuam é necessário seguir o tratamento e realizar algumas mudanças no dia-a-dia.";
-  static const orientation_answer3 =
-      "Deve-se diminuí-lo, pois o excesso de sal faz o corpo reter líquido e o coração passa a fazer mais força"
-      " para bombeá-lo; com isso, pioram os sintomas de edema (inchaço) e dispnéia (falta de ar)."
-      "\n\nAlimentos com Sal: Saleiro; caldo de carne, bacalhau, salsicha; enlatados; ketchup; "
-      "fermento contém bicarbonato de sódio; refrigerantes; amendoim, grão de bico, sementes de abóbora e antiácidos.";
+      "Os sintomas podem aparecer aos poucos quando se realiza alguma atividade, ou até mesmo, em repouso.\n"
+      "Exemplo de sintomas:\n"
+      "1. Falta de ar\n2. Tosse\n3. Náusea \n4. Palpitações \n5. Ganho de peso"
+      "\n6. Inchaço nas pernas, pés ou tornozelos\n7. Tontura\n8. Cansaço \n9. Confusão mental";
+  static const orientation_answer1 =
+      "É a dificuldade do coração em se encher de sangue corretamente e bombeá-lo de "
+      "forma suficiente para abastecer as necessidades do corpo ";
+  static const orientation_answer3_1 =
+      "1. Mantenha alimentação saudável, com pouca gordura, pouco sal e rica em frutas, legumes e verduras\n\n2.";
+  static const orientation_answer3_2 =
+      "os alimentos embutidos, comidas congeladas (industrializadas), temperos prontos, alimentos em conservas e os "
+      "industrializados, pois o conservante utilizado é rico em sódio.  "
+      "Exemplos:\n- Caldo de carne e legumes prontos; \n- Ketchup \n- Refrigerante \n- Amendoim  \n- Bacalhau  \n- Salsicha "
+      " \n- Bacon \n- Queijos amarelos "
+      "\n- Pele de frango  \n- Carnes gordas \n- Mortadela \n\n3. ";
+  static const orientation_answer3_3 =
+      "\nExemplos: \n- Alho \n- Cebola  \n- Manjericão \n- Orégano \n- Alecrim  \n- Salsa \n- Coentro \n- Tomilho \n- Louro "
+      "\nEntre outros";
   static const orientation_answer4 =
-      "O consumo de gorduras deve ser evitado porque aumenta o colesterol levando à doença cardíaca "
-      "chamada de doença arterial coronariana, que pode contribuir para piorar IC."
-      " Alimentos com gordura: Carnes gordas, pele de frango, mortadela, bacon, leite integral, "
-      "creme de leite, manteiga, queijos amarelos, miúdos (fígado, coração, rins).";
+      "- Não beba líquido em excesso\n- Contabilize os líquidos com a ajuda de um copo dosador \n - Siga as orientações oferecidas"
+      " durante a consulta presencial ";
   static const orientation_answer5 =
-      "Procure fazer uma alimentação rica em frutas, vegetais, legumes,"
-      "queijos e carnes magras. Evite alimentos industrializados. O sal deve ser rigidamente evitado!";
+      "- Praticar atividade física pode melhorar os sintomas da Insuficiência Cardíaca, aumentar a capacidade de esforço e "
+      "melhorar sua qualidade de vida! "
+      "\n- Converse com seu Cardiologista e Fisioterapeuta e veja se está apto a praticar atividades e qual a mais apropriada para você.";
   static const orientation_answer6 =
-      "Não beba líquidos em excesso, mas também não deixe de ingerí-los. Tome entre 1,0 a 1,5 litros por dia.";
+      "- Escolha um horário e crie o hábito de se pesar com roupas leves, isto deve ser feito diariamente."
+      "\n- O ganho de peso em excesso pode indicar Insuficiência Cardíaca descompensada.";
   static const orientation_answer7 =
-      "Praticar atividade física pode melhorar os sintomas da IC, aumentar a capacidade de"
-      " esforço e melhorar sua qualidade de vida! Converse com seu"
-      " cardiologista e veja se está apto a praticar atividades e qual a mais apropriada para você.";
+      "- O cigarro contém substâncias tóxicas que provocam aumento do trabalho do coração."
+      "\n- A ingestão de bebidas alcoólicas deve ser eliminada, já que pode piorar a Insuficiência Cardíaca e"
+      " causar alterações no ritmo cardíaco.";
   static const orientation_answer8 =
-      "Escolha um horário e crie o hábito de se pesar com roupas leves, isto "
-      "deve ser feito todos os dias. O ganho de peso em excesso pode indicar IC descompensada.";
+      "- Faça uma lista com todas as suas razões para parar de fumar"
+      "\n- Escolha uma data para começar  "
+      "\n- Mude hábitos que sempre te dão vontade de fumar  "
+      "\n- Se não conseguir parar de uma vez, vá diminuindo a quantidade diária, até parar completamente "
+      "\n- Procure fazer atividades que relaxem "
+      "\n- Não desista  "
+      "\n- Não se desespere, se tiver uma recaída "
+      "\n- Tenha força de vontade e recomece sempre "
+      "\n- Procure grupos de apoio  ";
   static const orientation_answer9 =
-      "É muito importante tomar todos os remédios na hora certa! Não tomar nenhuma medicação que não seja indicada pelo médico.";
+      "- Tome os medicamentos conforme orientação e prescrição de seu médico.  "
+      "\n- Tome seu medicamento sempre no horário que foi orientado. "
+      "\n- Mesmo quando se sentir bem, continue fazendo o uso da medicação, isso significa um adequado controle de sua doença "
+      "\n- Não aumente, diminua ou pare de tomar os medicamentos sem orientação médica. ";
   static const orientation_answer10 =
-      "Participe das campanhas de vacinação contra gripe (influenza) anualmente, e contra a pneumonia (pneumococcus) a cada 3 anos.";
+      "Participe das campanhas de vacinação contra influenza (gripe) e pneumococo (pneumonia). ";
   static const orientation_answer11 =
-      " É muito importante que venha a todas as consultas para realizar um acompanhamento da sua doença.";
-  static const orientation_answer12 =
-      "O cigarro contém substâncias tóxicas que provocam aumento do trabalho do coração.";
+      "É muito importante comparecer em todas as consultas, para realizar um acompanhamento adequado "
+      "da sua doença. Caso tenha algo impedindo de comparecer, entre em contato para a remarcação. ";
+  static const orientation_answer12_1 =
+      "1.  Ansiedade e estresse são sentimentos comuns a todas as pessoas, porém se forem persistentes e interferirem "
+      "nas atividades diárias ou nas relações com outras pessoas, devemos procurar ajuda. \n\n2. ";
+  static const orientation_answer12_2 =
+      "\n- Procurar um Psicólogo, para tratar esses sentimentos"
+      "\n- Expresse suas emoções e sentimentos"
+      "\n- Se estiver mais angustiado, triste ou ansioso, busque conversar com pessoas que geralmente têm uma postura mais otimista frente às dificuldades."
+      "\n- Aceite apoio emocional quando oferecido e ofereça apoio sempre que puder"
+      "\n- Planeje atividades para o dia, que não sobrecarreguem seu corpo e mente."
+      "\n- Preencha seu tempo com informações otimistas e atividades prazerosas "
+      "\n- Não se isolar"
+      "\n- Realizar atividades que goste (Exemplo: ver filme, desenhar, bordar, cantar, ouvir música)"
+      "\n- Use técnicas de respiração e meditação"
+      "\n- Suporte religioso, caso tenha crença religiosa";
   static const orientation_answer13 =
-      "Faça uma lista com todas as suas razões para parar de fumar;"
-      "\nEscolha uma data para parar;"
-      "\nMude hábitos que sempre te dão vontade de fumar, como: tomar um cafezinho depois do almoço;"
-      "\nSe não conseguir parar de uma vez, vá diminuindo a quantidade de maços por dia, até parar completamente;"
-      "\nFaça exercícios físicos (se puder) e tenha uma alimentação equilibrada;"
-      "\nProcure fazer atividades que te relaxem;"
-      "\nNão desista ou se desespere se tiver uma recaída, tenha força de vontade e recomece sempre.";
+      "Tente dormir pelo menos 8 horas por dia. Além disso, repouse caso tenha feito atividades de esforço moderado ou esteja sentindo algum sintoma.";
   static const orientation_answer14 =
-      " A ingestão de bebidas alcoólicas deve ser eliminada, já que pode piorar a IC e causar alterações no ritmo cardíaco.";
-  static const orientation_answer15 =
-      "Bebidas como café, mate e chá preto contém cafeína, uma substância que acelera o trabalho cardíaco, e por isso devem ser evitadas.";
-  static const orientation_answer16 =
-      "Tente dormir pelo menos 8 horas por dia. Além disso, repouse caso tenha "
-      "feito atividades de esforço moderado ou esteja sentindo algum sintoma.";
-  static const orientation_answer17 =
-      "Ansiedade e estresse são sentimentos comuns a todas as pessoas, porém se forem persistentes e interferirem nas"
-      " atividades do dia-a-dia ou nas relações com outras pessoas, devemos prestar atenção e procurar ajuda.";
-  static const orientation_answer18 =
-      "Procurar um profissional de saúde (Psicólogo), para tratar esses sentimentos; conversar com "
-      "pessoas de sua confiança sobre esses sentimentos. Pode ser um amigo, um familiar. Só o ato de falar e ouvir a opinião de uma pessoa "
-      "querida, trará uma sensação melhor; não se isolar; dividir seus sentimentos e interagir com outras pessoas; realizar atividades que "
-      "gosta, sozinho ou com os amigos, isso ajuda a esquecer os problemas; aprender sobre a doença que o acomete e como tratá-la. Isso"
-      " fará com que o controle sobre a doença seja maior diminuindo o medo do desconhecido.";
-  static const orientation_answer19 =
-      "Informe ao seu médico para que o mesmo avalie a necessidade de profilaxia para evitar a forma"
-      "ção de coágulos nas pernas, que possuiu chance maior de ocorrer em quem tem IC.";
-  static const orientation_answer20 =
-      "Sim, pois pode levar à piora da doença e muitos medicamentos adotados para o controle da Insuf"
-      "iciência Cardíaca não devem ser tomados durante a gravidez. Mas, caso a mulher tenha desejo de engravidar deve conversar antes com"
-      " a equipe que a acompanha.";
+      "Informe ao profissional de saúde que te acompanha em caso de viagens, para avaliar a necessidade de profilaxia para evitar a formação de coágulos.  ";
 
   //Professional Help Page
 
@@ -290,7 +279,7 @@ class Strings {
   static const professional_help5 = "Medicações";
   static const professional_help6 = "Consultas";
   static const professional_help7 = "Exercícios";
-  static const professional_help8 = "Editar Perfil | Deslogar";
+  static const professional_help8 = "Deslogar";
   static const professional_help9 = "Orientações";
   static const professional_help10 = "Informações";
 
@@ -319,7 +308,7 @@ class Strings {
       "Nesta tela você poderá ver uma lista dos exercícios recomendados organizados por data; os itens azuis representam as exercícios passados e os itens alaranjados, os exercícios que já foram realizados pelo paciente, com informações sobre sintomas. Ao clicar na exercício recomendado, será possível editá-lo."
       "\n\nPara adicionar novos exercícios clique no botão com ícone de \"+\" e informe, na tela que abrirá, a atividade física, a frequência diária, a intensidade, duração e período da recomendação.";
   static const professional_help_answer8 =
-      "Localizado no canto superior direito, estão presente as opções de editar o perfil(Somenta na tela principal), para alterar ou atualizar informações, e o de deslogar,"
+      "No canto superior direito, está presente a opção de deslogar,"
       " para sair da sua conta, que está presente em todas as telas do aplicativo, exceto a de logon.";
   static const professional_help_answer9 =
       "Nesta tela, você encontrará informações sobre a Insuficiência Cardíaca.";
