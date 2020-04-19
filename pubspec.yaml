@@ -35,6 +35,10 @@ dependencies:
   provider: ^4.0.4
   flushbar: <1.9.1
 
+  # notification
+  flutter_local_notifications: ^0.7.1+1
+
+
 
 
 
