@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flushbar/flushbar.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:meta/meta.dart';
 import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart';
 
@@ -173,10 +173,10 @@ class _EditProfessionalPageState extends State<EditProfessionalPage> {
       listener: (context, state) {
         print(state);
         if (state is Error) {
-          // Flushbar(
-          //   message: state.message,
-          //   duration: Duration(seconds: 3),
-          // )..show(context);
+          Flushbar(
+            message: state.message,
+            duration: Duration(seconds: 3),
+          )..show(context);
         } else if (state is Loaded) {
           Navigator.pop(context);
         }

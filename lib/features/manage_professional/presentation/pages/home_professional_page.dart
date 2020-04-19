@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flushbar/flushbar.dart';
+import 'package:flushbar/flushbar.dart';
 
 class HomeProfessionalPage extends StatelessWidget {
   @override
@@ -17,10 +17,10 @@ class HomeProfessionalPage extends StatelessWidget {
     return BlocListener<ManageProfessionalBloc, ManageProfessionalState>(
       listener: (context, state) {
         if (state is Error) {
-          // Flushbar(
-          //   message: state.message,
-          //   duration: Duration(seconds: 3),
-          // )..show(context);
+          Flushbar(
+            message: state.message,
+            duration: Duration(seconds: 3),
+          )..show(context);
         }
       },
       child: BlocBuilder<ManageProfessionalBloc, ManageProfessionalState>(
