@@ -19,7 +19,7 @@ class PatientTile extends StatefulWidget {
 }
 
 class _PatientTileState extends State<PatientTile> {
-  FlutterLocalNotificationsPlugin localNotificationsPlugin =
+ /*  FlutterLocalNotificationsPlugin localNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   initializeNotifications() async {
     var initializeAndroid = AndroidInitializationSettings('app_logo');
@@ -52,7 +52,7 @@ class _PatientTileState extends State<PatientTile> {
         hashcode, message, subtext, datetime, platformChannel,
         payload: hashcode.toString());
   }
-
+ */
   @override
   @override
   Widget build(BuildContext context) {
@@ -119,19 +119,22 @@ DateTime now = DateTime.now().toUtc().add(
         _showOptions(
             context,
             widget.patient,
-            singleNotification(
+           /*  singleNotification(
               now,
               "Tomar Remédio",
               "Não esqueça que o cookie caiu",
               98123871,
-            ));
+            ), */
+            );
       },
     );
   }
 }
 
 void _showOptions(
-    BuildContext context, Patient patient, Future<Function> function) {
+    BuildContext context, Patient patient,
+    // Future<Function> function
+    ) {
   showModalBottomSheet(
     context: context,
     builder: (context) {
@@ -146,8 +149,8 @@ void _showOptions(
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: FlatButton(
-                        onPressed: () async {
-                          await function;
+                        onPressed: ()  {
+                          // await function;
                           Navigator.pop(context);
                           Navigator.push(
                             context,

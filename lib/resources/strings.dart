@@ -136,49 +136,95 @@ class Strings {
   static const swelling_loc_title = "Localização do inchaço";
   static const swelling_loc_hint = "Diga onde está inchado";
 
+  //Professional Help Page
+
+  static const professional_help1 = "Tela principal";
+  static const professional_help2 = "Cadastro de paciente";
+  static const professional_help3 = "Como estou hoje?";
+  static const professional_help4 = "Líquidos Ingeridos";
+  static const professional_help5 = "Medicações";
+  static const professional_help6 = "Consultas";
+  static const professional_help7 = "Exercícios";
+  static const professional_help8 = "Deslogar";
+  static const professional_help9 = "Orientações";
+  static const professional_help10 = "Informações";
+
+  static const professional_help_answer1 =
+      "Nesta tela, você verá uma lista com todos seus pacientes já cadastrados, com dados sobre eles, como CPF e "
+      "idade. Ao clicar sobre o nome, será exibido um menu que contém"
+      " um botão \"Abrir\", para ir para o menu do paciente e conseguir recomendar ações e ver histórico de ações realizadas; "
+      "\"Editar\", para alterar ou atualizar as informações do paciente; e \"Excluir\", para tirar o paciente da sua lista."
+      "\nLocalizado no canto superior direito, está presente a opção de editar o perfil, para alterar ou atualizar suas próprias informações."
+      "\nAlém disso, haverá um botão \"Cadastrar novo paciente\".";
+  static const professional_help_answer2 =
+      "Nesta tela, você poderá cadastrar um novo paciente, informando nome, CPF, endereço, data de nascimento e e-mail."
+      "\nNão se esqueça de informar ao paciente que a senha de acesso ao sistema dele será seu CPF.";
+  static const professional_help_answer3 =
+      "Nesta tela você poderá ver uma lista de ações recomendadas e realizadas organizadas por data; os itens azuis representam as ações recomendadas e os itens alaranjados, as realizadas. Ao clicar no item recomendado, será possível editá-lo."
+      "\n\nPara adicionar novas recomendações clique no botão com ícone de \"+\" e informe a periodicidade diária em que o paciente deverá aferir seus dados biométricos, além de informar o período da recomendação através da data inicial e final.";
+  static const professional_help_answer4 =
+      "Nesta tela você poderá ver uma lista de ações recomendadas e realizadas organizadas por data; os itens azuis representam as recomendações de líquidos ingeridos e os itens alaranjados, as informações que o paciente forneceu sobre os líquidos que ingeriu. Ao clicar na recomendação, será possível editá-la."
+      "\n\nPara adicionar novas recomendações clique no botão com ícone de \"+\" e informe, na tela que abrirá, a quantidade máxima a ser ingerida (em mililitros) e o período da recomendação.";
+  static const professional_help_answer5 =
+      "Nesta tela você poderá ver uma lista de ações recomendadas e realizadas organizadas por data; os itens azuis representam as recomendações de medicamentos e os itens alaranjados, as informações que o paciente forneceu. Ao clicar na recomendação, será possível editá-la."
+      "\n\nPara adicionar novas recomendações clique no botão com ícone de \"+\" e informe, na tela que abrirá, o nome do medicamento, dosagem, frequência diária, observações (se houver), dentre outros.";
+  static const professional_help_answer6 =
+      "Nesta tela você poderá ver uma lista das consultas marcadas organizadas por data; os itens azuis representam todas as Consultas já marcadas e os itens alaranjados, as informações que o paciente forneceu sobre seu comparecimento. Ao clicar na consulta marcada, será possível editá-la."
+      "\n\nAo marcar uma nova consulta, clique no botão com ícone de \"+\" e informe, na tela que abrirá, a data da consulta, o horário, endereço e especialidade do profissional de saúde para adicioná-la ao perfil do paciente.";
+  static const professional_help_answer7 =
+      "Nesta tela você poderá ver uma lista dos exercícios recomendados organizados por data; os itens azuis representam os exercícios recomendados e os itens alaranjados, os exercícios que já foram realizados pelo paciente, com informações sobre sintomas. Ao clicar no exercício recomendado, será possível editá-lo."
+      "\n\nPara adicionar novos exercícios clique no botão com ícone de \"+\" e informe, na tela que abrirá, a atividade física, a frequência diária, a intensidade, duração e período da recomendação.";
+  static const professional_help_answer8 =
+      "No canto superior direito, está presente a opção de deslogar,"
+      " para sair da sua conta, que está presente em todas as telas do aplicativo, exceto a de logon.";
+  static const professional_help_answer9 =
+      "Nesta tela, você encontrará informações sobre a Insuficiência Cardíaca.";
+  static const professional_help_answer10 =
+      "Nesta tela, você encontrará informações sobre a concepção do aplicativo e seus colaboradores.";
+
   //Patient Help Page
 
-  static const help1 = "Menu";
-  static const help2 = "Como estou hoje";
-  static const help3 = "Líquidos Ingeridos";
-  static const help4 = "Medicações";
-  static const help5 = "Consultas";
-  static const help6 = "Exercícios";
-  static const help7 = "Orientações";
-  static const help8 = "Informações";
+  static const help1 = "Como estou hoje?";
+  static const help2 = "Líquidos Ingeridos";
+  static const help3 = "Medicações";
+  static const help4 = "Consultas";
+  static const help5 = "Exercícios";
+  static const help6 = "Orientações";
+  static const help7 = "Informações";
+
   static const help_answer1 =
-      "Localizado no canto superior direito, o menu está presente em todas as telas do aplicativo,"
-      " exceto a de logon.\nNele há uma única opção: deslogar da sua conta no aplicativo.";
+      "Nesta tela serão exibidas as recomendações do profissional para dados biométricos (cor Azul) e os dados biométricos que já foram preenchidos"
+      " (Cor Laranja); ao clicar no item azul, será possivel preenchê-lo, e ao salvar surgirá um novo item Laranja. Caso tenha ocorrido algum erro"
+      " durante o preenchimento, não se preocupe, pois é possível editá-lo posteriormente; ao clicar no item laranja, aparecerá um menu com 2 opções"
+      ": \"Editar\", para ajustar as informações do item realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada nova"
+      " aferição de dados, clique no item azul correspondente para que assim crie um novo item realizado.";
   static const help_answer2 =
-      "Nesta tela, você encontrará uma série de capos a serem preenchidos. São Eles:"
-      "\n- Meu peso: onde você colocará seu peso atual em quilogramas (separe as gramas com ponto \".\")"
-      "\n- Meus batimentos: onde você informará seus batimentos cardíacos no memento da aferição"
-      "\n- Minha pressão arterial: onde você informará sua pressão arterial no seguinto formato: 00x00."
-      "\n- Inchaço: onde você informará a opção que melhor representa seu inchaço"
-      "\n- Fadiga: onde você informará a opção que melhor representa sua fadiga";
+      "Nesta tela serão exibidas as recomendações do profissional para líquidos ingeridos (cor Azul) e os dados de líquidos ingeridos que já foram preenchidos"
+      " (Cor Laranja); ao clicar no item azul, será possivel preenchê-lo, e ao salvar surgirá um novo item Laranja. Caso tenha ocorrido algum erro"
+      " durante o preenchimento, não se preocupe, pois é possível editá-lo posteriormente; ao clicar no item laranja, aparecerá um menu com 2 opções"
+      ": \"Editar\", para ajustar as informações do item realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada novo"
+      " líquido ingerido, clique no item azul correspondente para que assim crie um novo item realizado.";
   static const help_answer3 =
-      "Nesta tela, você encontrará duas listas: recomendações atuais e recomendações antigas e, em cada, terão as recomendações em cada data."
-      "\nAo clicar na data, você verá mais detalhes sobre a recomendação como data de início, data de fim da recomendação, além da quantidade máxima de líquidos para o dia."
-      "\nSempre que ingerir um líquido, clique na data e, em seguida, no ícone \"+\". A tela pedirá o nome do líquido ingerido, a quantidade (em unidade), a referência (copo, cálice, etc) e o horário que ingeriu."
-      "\nAo clicar em \"OK\", a lista atualizará, informando a quantidade total de líquido ingerida até o momento, assim que você atualizar a tela (saindo e voltando).";
+      "Nesta tela serão exibidos os medicamentos que o profissional passou (cor Azul) e os dados de medicamentos que já foram preenchidos"
+      " (Cor Laranja); ao clicar no item azul, será possivel preenchê-lo, e ao salvar surgirá um novo item Laranja. Caso tenha ocorrido algum erro"
+      " durante o preenchimento, não se preocupe, pois é possível editá-lo posteriormente; ao clicar no item laranja, aparecerá um menu com 2 opções"
+      ": \"Editar\", para ajustar as informações do item preenchido, e \"Excluir\", caso deseje excluir um dos itens preenchidos. Para cada novo"
+      " medicamento que foi consumido ou deveria ter sido consumido, clique no item azul correspondente para assim preencher um novo item.";
   static const help_answer4 =
-      "Nesta tela, você encontrará duas listas: recomendações atuais e recomendações antigas e, em cada, terão as recomendações em cada data."
-      "\nAo clicar na data, você verá mais detalhes sobre a recomendação como nome do medicamente, dose, quantidade e horários a serem tomados."
-      "\nSempre que cosumir um medicamento, clique na data e, em seguida, no ícone \"+\". A tela que surgir já estará preenchida com os detalhes da recomendação, exceto o horário de consumo de medicamento."
-      "\nAo clicar em \"OK\", a lista atualizará assim que você atualizar a tela (saindo e voltando).";
+      "Nesta tela serão exibidas todas as consultas marcadas (cor Azul) e os dados das consultas que já passaram"
+      " (Cor Laranja); ao clicar no item azul, será possivel preenchê-lo, e ao salvar surgirá um novo item Laranja. Caso tenha ocorrido algum erro"
+      " durante o preenchimento, não se preocupe, pois é possível editá-lo posteriormente; ao clicar no item laranja, aparecerá um menu com 2 opções"
+      ": \"Editar\", para ajustar as informações do item realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada nova"
+      " consulta que compareceu, ou deveria ter comparecido, clique no item azul para preenchê-lo.";
   static const help_answer5 =
-      "Nesta tela, você encontrará duas listas: consultas futuras e consultas passadas."
-      "\nAo clicar na data, você verá mais detalhes sobre a(s) consulta(s) como especialidade do profissional de saúde, horário e localização."
-      "\nSempre que comparecer a uma consulta, clique na data e, em seguida, no ícone \"+\". A tela que surgir já estará preenchida com os detalhes da recomendação, exceto o horário de comparecimento."
-      "\nAo clicar em \"OK\", a lista atualizará assim que você atualizar a tela (saindo e voltando).";
+      "Nesta tela serão exibidos os exercícios recomendados pelo profissional (cor Azul) e os exercícios que já foram preenchidos"
+      " (Cor Laranja); ao clicar no item azul, será possivel preenchê-lo, e ao salvar surgirá um novo item Laranja. Caso tenha ocorrido algum erro"
+      " durante o preenchimento, não se preocupe, pois é possível editá-lo posteriormente; ao clicar no item laranja, aparecerá um menu com 2 opções"
+      ": \"Editar\", para ajustar as informações do item realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada novo"
+      " exercício realizado, clique no item azul correspondente para que assim crie um novo item realizado.";
   static const help_answer6 =
-      "Nesta tela, você encontrará duas listas: recomendações atuais e recomendações antigas e, em cada, terão as recomendações em cada data."
-      "\nAo clicar na data, você verá mais detalhes sobre a recomendação como exercício a ser realizado, intensidade, duração e frequência diária."
-      "\nSempre que se exercitar, clique na data e, em seguida, no ícone \"+\". A tela que surgir já estará preenchida com os detalhes da recomendação, exceto o horário de realização. Além disso, informe se houve se houve algum sintoma ao realizar a atividade física."
-      "\nAo clicar em \"OK\", a lista atualizará assim que você atualizar a tela (saindo e voltando).";
-  static const help_answer7 =
       "Nesta tela, você encontrará informações sobre a Insuficiência Cardíaca.";
-  static const help_answer8 =
+  static const help_answer7 =
       "Nesta tela, você encontrará informações sobre a concepção do aplicativo e seus colaboradores.";
 
   // Orientations Page
@@ -269,49 +315,4 @@ class Strings {
       "Tente dormir pelo menos 8 horas por dia. Além disso, repouse caso tenha feito atividades de esforço moderado ou esteja sentindo algum sintoma.";
   static const orientation_answer14 =
       "Informe ao profissional de saúde que te acompanha em caso de viagens, para avaliar a necessidade de profilaxia para evitar a formação de coágulos.  ";
-
-  //Professional Help Page
-
-  static const professional_help1 = "Tela principal";
-  static const professional_help2 = "Cadastro de paciente";
-  static const professional_help3 = "Como estou hoje";
-  static const professional_help4 = "Líquidos Ingeridos";
-  static const professional_help5 = "Medicações";
-  static const professional_help6 = "Consultas";
-  static const professional_help7 = "Exercícios";
-  static const professional_help8 = "Deslogar";
-  static const professional_help9 = "Orientações";
-  static const professional_help10 = "Informações";
-
-  static const professional_help_answer1 =
-      "Nesta tela, você verá uma lista com todos seus pacientes já cadastrados, com dados sobre eles, como CPF e idade. Ao clicar sobre o nome, será exibido um menu que contém"
-      " um botão \"Abrir\", para ir para o menu do paciente e conseguir recomendar ações e ver histórico de ações realizadas; "
-      "\"Editar\", para alterar ou atualizar as informações do paciente; e \"Excluir\", para tirar o paciente da sua lista."
-      "\nLocalizado no canto superior direito, está presente a opção de editar o perfil, para alterar ou atualizar informações."
-      "\nAlém disso, haverá um botão \"Cadastrar novo paciente\".";
-  static const professional_help_answer2 =
-      "Nesta tela, você poderá cadastrar um novo paciente, informando nome, CPF, endereço, data de nascimento e e-mail."
-      "\nNão se esqueça de informar ao paciente que a senha de acesso ao sistema dele será seu CPF.";
-  static const professional_help_answer3 =
-      "Nesta tela você poderá ver uma lista de ações recomendadas e realizadas organizadas por data; os itens azuis representam as ações recomendadas e os itens alaranjados, as realizadas. Ao clicar no item recomendado, será possível editá-lo."
-      "\n\nVocê também poderá adicionar uma recomendação, informando a periodicidade diária em que o paciente deverá aferir seus dados biométricos, além de informar o período da recomendação através da data inicial e final.";
-  static const professional_help_answer4 =
-      "Nesta tela você poderá ver uma lista de ações recomendadas e realizadas organizadas por data; os itens azuis representam as recomendações de líquidos ingeridos e os itens alaranjados, as informações que o paciente forneceu. Ao clicar na recomendação, será possível editá-la."
-      "\n\nPara adicionar novas recomendações clique no botão com ícone de \"+\" e informe, na tela que abrirá, a quantidade máxima a ser ingerida (em mililitros) e o período da recomendação.";
-  static const professional_help_answer5 =
-      "Nesta tela você poderá ver uma lista de ações recomendadas e realizadas organizadas por data; os itens azuis representam as recomendações de medicamentos e os itens alaranjados, as informações que o paciente forneceu. Ao clicar na recomendação, será possível editá-la."
-      "\n\nPara adicionar novas recomendações clique no botão com ícone de \"+\" e informe, na tela que abrirá, o nome do medicamento, dosagem, frequência diária, observações (se houverem), dentre outros.";
-  static const professional_help_answer6 =
-      "Nesta tela você poderá ver uma lista das consultas marcadas organizadas por data; os itens azuis representam todas as Consultas já marcadas e os itens alaranjados, as informações que o paciente forneceu sobre seu comparecimento. Ao clicar na consulta marcada, será possível editá-la."
-      "\n\nAo marcar uma nova consulta, clique no botão com ícone de \"+\" e informe, na tela que abrirá, a data da consulta, o horário, endereço e especialidade do profissional de saúde para adicioná-la ao perfil do paciente";
-  static const professional_help_answer7 =
-      "Nesta tela você poderá ver uma lista dos exercícios recomendados organizados por data; os itens azuis representam as exercícios passados e os itens alaranjados, os exercícios que já foram realizados pelo paciente, com informações sobre sintomas. Ao clicar na exercício recomendado, será possível editá-lo."
-      "\n\nPara adicionar novos exercícios clique no botão com ícone de \"+\" e informe, na tela que abrirá, a atividade física, a frequência diária, a intensidade, duração e período da recomendação.";
-  static const professional_help_answer8 =
-      "No canto superior direito, está presente a opção de deslogar,"
-      " para sair da sua conta, que está presente em todas as telas do aplicativo, exceto a de logon.";
-  static const professional_help_answer9 =
-      "Nesta tela, você encontrará informações sobre a Insuficiência Cardíaca.";
-  static const professional_help_answer10 =
-      "Nesta tela, você encontrará informações sobre a concepção do aplicativo e seus colaboradores.";
 }
