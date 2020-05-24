@@ -39,12 +39,12 @@ class MultimaskedTextController {
     } else {
       String newText = _buildText(text);
       lastTextSize = newText.length;
-      _maskedTextFieldController.text = newText;
-      if (_maskedTextFieldController.selection.start <
-          _maskedTextFieldController.text.length) {
-        _maskedTextFieldController.selection = new TextSelection.fromPosition(
-            new TextPosition(offset: _maskedTextFieldController.text.length));
-      }
+     _maskedTextFieldController.value =
+          _maskedTextFieldController.value.copyWith(
+        text: newText,
+        selection: TextSelection.collapsed(offset: newText.length),
+        composing: TextRange.empty,
+      );
     }
   }
 
@@ -53,7 +53,6 @@ class MultimaskedTextController {
     bool onlyDigits = change ? onlyDigitsSecundary : onlyDigitsDefault;
 
     return Converter.convertStringToMultimaskedString(
-      escapeCharacter: escapeCharacter,
         value: text,
         maskDefault: maskDefault,
         maskSecundary: maskSecundary,
