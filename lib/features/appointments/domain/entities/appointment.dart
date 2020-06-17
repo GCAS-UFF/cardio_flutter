@@ -5,12 +5,14 @@ class Appointment extends BaseEntity {
   final DateTime appointmentDate;
   final String adress;
   final String expertise;
-  final String went;
+  final String justification;
+  final bool went;
 
   Appointment({
     id,
     executedDate,
     done,
+    this.justification,
     this.went,
     @required this.appointmentDate,
     @required this.adress,
@@ -23,6 +25,14 @@ class Appointment extends BaseEntity {
             done: done);
 
   @override
-  List<Object> get props =>
-      [adress, expertise, appointmentDate, went, id, done, executedDate];
+  List<Object> get props => [
+        adress,
+        expertise,
+        appointmentDate,
+        went,
+        id,
+        done,
+        executedDate,
+        justification,
+      ];
 }

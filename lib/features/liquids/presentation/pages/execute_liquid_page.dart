@@ -1,11 +1,13 @@
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/widgets/custom_selector.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +36,6 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
 
   TextEditingController _nameController;
   TextEditingController _quantityController;
-  TextEditingController _referenceController;
 
   TextEditingController _timeController = new MultimaskedTextController(
     maskDefault: "xx:xx",
@@ -61,9 +62,6 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
     );
     _quantityController = TextEditingController(
       text: _formData[LABEL_QUANTITY],
-    );
-    _referenceController = TextEditingController(
-      text: _formData[LABEL_REFERENCE],
     );
 
     super.initState();
@@ -116,10 +114,21 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                 isRequired: true,
                 textEditingController: _nameController,
                 hintText: "",
-                title: Strings.ingested_liquids,
+                title: Strings.liquid,
                 onChanged: (value) {
                   setState(() {
                     _formData[LABEL_NAME] = value;
+                  });
+                },
+              ),
+              CustomSelector(
+                title: Strings.reference,
+                options: Arrays.reference.keys.toList(),
+                subtitle: _formData[LABEL_REFERENCE],
+                onChanged: (value) {
+                  setState(() {
+                    _formData[LABEL_REFERENCE] =
+                        Arrays.reference.keys.toList()[value];
                   });
                 },
               ),
@@ -127,7 +136,9 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _quantityController,
-                hintText: "",
+                hintText: (Arrays.reference[_formData[LABEL_REFERENCE]] == null)
+                    ? ""
+                    : "Quantidade de ${_formData[LABEL_REFERENCE]}",
                 title: Strings.quantity,
                 onChanged: (value) {
                   setState(() {
@@ -137,21 +148,9 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                textEditingController: _referenceController,
-                keyboardType: TextInputType.number,
-                hintText: "",
-                title: Strings.reference,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_REFERENCE] = value;
-                  });
-                },
-              ),
-              CustomTextFormField(
-                isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _timeController,
-                hintText: "",
+                hintText: Strings.time_hint,
                 title: Strings.time_title,
                 onChanged: (value) {
                   setState(() {
@@ -167,7 +166,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                     ? Strings.add
                     : Strings.edit_patient_done,
                 onTap: () {
-                  _submitForm();
+                  _submitForm(context);
                 },
               ),
               SizedBox(
@@ -178,8 +177,17 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
         ));
   }
 
-  void _submitForm() {
+  void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
+      return;
+    }
+    else if (_formData[LABEL_REFERENCE] == null ||
+        Arrays.reference[_formData[LABEL_REFERENCE]] == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Favor selecionar a referência"),
+        ),
+      );
       return;
     }
     _formKey.currentState.save();
@@ -191,7 +199,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
             done: true,
             name: _formData[LABEL_NAME],
             quantity: int.parse(_formData[LABEL_QUANTITY]),
-            reference: int.parse(_formData[LABEL_REFERENCE]),
+            reference: _formData[LABEL_REFERENCE],
             executedDate:
                 DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
           ),
@@ -205,7 +213,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
             done: true,
             name: _formData[LABEL_NAME],
             quantity: int.parse(_formData[LABEL_QUANTITY]),
-            reference: int.parse(_formData[LABEL_REFERENCE]),
+            reference: _formData[LABEL_REFERENCE],
             executedDate:
                 DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
           ),

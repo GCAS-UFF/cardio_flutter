@@ -5,7 +5,7 @@ class Liquid extends BaseEntity {
   final int mililitersPerDay;
   final String name;
   final int quantity;
-  final int reference;
+  final String reference;
 
   Liquid({
     this.name,

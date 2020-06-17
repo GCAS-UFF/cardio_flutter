@@ -11,10 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
     as professional;
 
 class ProfessionalSignUpPage extends StatefulWidget {
+  final Professional professional;
+
+  const ProfessionalSignUpPage({this.professional});
   @override
   _ProfessionalSignUpPageState createState() => _ProfessionalSignUpPageState();
 }
@@ -28,8 +32,9 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
   static const String LABEL_PASSWORD = "LABEL_PASSWORD";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
-  
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final TextEditingController _cpfController = new MultimaskedTextController(
     maskDefault: null,
@@ -70,6 +75,7 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
       return;
     }
     _formKey.currentState.save();
+
     BlocProvider.of<AuthBloc>(context).add(
       SignUpProfessionalEvent(
         professional: Professional(
@@ -85,134 +91,137 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(
-            height: Dimensions.getConvertedHeightSize(context, 15),
+    return BasePage(
+        key: _scaffoldKey,
+        signOutButton: false,
+        backgroundColor: Color(0xffc9fffd),
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 15),
+                ),
+                CustomTextFormField(
+                  textEditingController: _nameController,
+                  isRequired: true,
+                  hintText: Strings.name_hint,
+                  title: Strings.name_title,
+                  textCapitalization: TextCapitalization.words,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_NAME] = value;
+                    });
+                  },
+                ),
+                CustomTextFormField(
+                  textEditingController: _cpfController,
+                  isRequired: true,
+                  keyboardType: TextInputType.number,
+                  validator: CpfInputValidator(),
+                  hintText: Strings.cpf_hint,
+                  title: Strings.cpf_title,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_CPF] = value;
+                    });
+                  },
+                ),
+                CustomTextFormField(
+                  textEditingController: _regionalRegisterController,
+                  isRequired: true,
+                  hintText: "",
+                  title: Strings.register,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_REGIONAL_REGISTER] = value;
+                    });
+                  },
+                ),
+                CustomTextFormField(
+                  textEditingController: _expertiseController,
+                  isRequired: true,
+                  hintText: "",
+                  title: Strings.specialty,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_EXPERTISE] = value;
+                    });
+                  },
+                ),
+                CustomTextFormField(
+                  textEditingController: _emailController,
+                  validator: EmailInputValidator(),
+                  isRequired: true,
+                  hintText: Strings.email_hint,
+                  title: Strings.email_title,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_EMAIL] = value;
+                    });
+                  },
+                ),
+                (widget.professional == null)
+                    ? CustomTextFormField(
+                        isRequired: true,
+                        enable: true,
+                        hintText: Strings.password_hint,
+                        title: Strings.password_title,
+                        obscureText: true,
+                        onChanged: (value) {
+                          setState(() {
+                            _formData[LABEL_PASSWORD] = value;
+                          });
+                        },
+                      )
+                    : Container(),
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 20),
+                ),
+                Button(
+                  onTap: () {
+                    _submitForm();
+                  },
+                  title: (widget.professional == null)
+                      ? Strings.sign_up_done
+                      : Strings.edit_patient_done,
+                ),
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 20),
+                ),
+              ],
+            ),
           ),
-          CustomTextFormField(
-            textEditingController: _nameController,
-            isRequired: true,
-            hintText: Strings.name_hint,
-            title: Strings.name_title,
-            textCapitalization: TextCapitalization.words,
-            onChanged: (value) {
-              setState(() {
-                _formData[LABEL_NAME] = value;
-              });
-            },
-          ),
-          CustomTextFormField(
-            textEditingController: _cpfController,
-            isRequired: true,
-            keyboardType: TextInputType.number,
-            validator: CpfInputValidator(),
-            hintText: Strings.cpf_hint,
-            title: Strings.cpf_title,
-            onChanged: (value) {
-              setState(() {
-                _formData[LABEL_CPF] = value;
-              });
-            },
-          ),
-          CustomTextFormField(
-            textEditingController: _regionalRegisterController,
-            isRequired: true,
-            hintText: "",
-            title: Strings.register,
-            onChanged: (value) {
-              setState(() {
-                _formData[LABEL_REGIONAL_REGISTER] = value;
-              });
-            },
-          ),
-          CustomTextFormField(
-            textEditingController: _expertiseController,
-            isRequired: true,
-            hintText: "",
-            title: Strings.specialty,
-            onChanged: (value) {
-              setState(() {
-                _formData[LABEL_EXPERTISE] = value;
-              });
-            },
-          ),
-          CustomTextFormField(
-            textEditingController: _emailController,
-            validator: EmailInputValidator(),
-            isRequired: true,
-            hintText: Strings.email_hint,
-            title: Strings.email_title,
-            onChanged: (value) {
-              setState(() {
-                _formData[LABEL_EMAIL] = value;
-              });
-            },
-          ),
-          CustomTextFormField(
-            isRequired: true,
-            hintText: Strings.password_hint,
-            title: Strings.password_title,
-            obscureText: true,
-            onChanged: (value) {
-              setState(() {
-                _formData[LABEL_PASSWORD] = value;
-              });
-            },
-          ),
-          SizedBox(
-            height: Dimensions.getConvertedHeightSize(context, 20),
-          ),
-          Button(
-            onTap: () {
-              _submitForm();
-            },
-            title: Strings.sign_up_done,
-          ),
-          SizedBox(
-            height: Dimensions.getConvertedHeightSize(context, 20),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BasePage(
-      signOutButton: false,
-      backgroundColor: Color(0xffc9fffd),
-      body: SingleChildScrollView(
-        child: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            print(state);
-            if (state is Error) {
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
-              );
-            } else if (state is SignedUp) {
-              BlocProvider.of<professional.ManageProfessionalBloc>(context)
-                  .add(professional.Start(professional: state.user));
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/homeProfessionalPage', (r) => false);
-            }
-          },
-          child: BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, state) {
-              if (state is Loading) {
-                return LoadingWidget(_buildForm(context));
-              } else {
-                return _buildForm(context);
-              }
-            },
-          ),
-        ),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        print(state);
+        if (state is Error) {
+          Flushbar(
+              message: state.message,
+              duration: Duration(seconds: 3),
+            )..show(context);
+        } else if (state is SignedUp) {
+          BlocProvider.of<professional.ManageProfessionalBloc>(context)
+              .add(professional.Start(professional: state.user));
+          Navigator.pop(context);
+        }
+      },
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is Loading) {
+            return LoadingWidget(_buildForm(context));
+          } else {
+            return _buildForm(context);
+          }
+        },
       ),
     );
   }

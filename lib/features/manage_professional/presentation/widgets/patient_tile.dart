@@ -8,6 +8,7 @@ import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
     as professional;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class PatientTile extends StatefulWidget {
   final Patient patient;
@@ -18,6 +19,40 @@ class PatientTile extends StatefulWidget {
 }
 
 class _PatientTileState extends State<PatientTile> {
+ /*  FlutterLocalNotificationsPlugin localNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  initializeNotifications() async {
+    var initializeAndroid = AndroidInitializationSettings('app_logo');
+    var initializeIOS = IOSInitializationSettings();
+    var initSettings = InitializationSettings(initializeAndroid, initializeIOS);
+    await localNotificationsPlugin.initialize(initSettings);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializeNotifications();
+  }
+
+  Future singleNotification(
+      DateTime datetime, String message, String subtext, int hashcode,
+      {String sound}) async {
+        print("ooooooooooooooooooooooooooooooi");
+    var androidChannel = AndroidNotificationDetails(
+      'channel-id',
+      'channel-name',
+      'channel-description',
+      importance: Importance.Max,
+      priority: Priority.Max,
+    );
+
+    var iosChannel = IOSNotificationDetails();
+    var platformChannel = NotificationDetails(androidChannel, iosChannel);
+    localNotificationsPlugin.schedule(
+        hashcode, message, subtext, datetime, platformChannel,
+        payload: hashcode.toString());
+  }
+ */
   @override
   @override
   Widget build(BuildContext context) {
@@ -78,13 +113,28 @@ class _PatientTileState extends State<PatientTile> {
         ),
       ),
       onTap: () {
-        _showOptions(context, widget.patient);
+DateTime now = DateTime.now().toUtc().add(
+                Duration(seconds: 10),
+              );
+        _showOptions(
+            context,
+            widget.patient,
+           /*  singleNotification(
+              now,
+              "Tomar Remédio",
+              "Não esqueça que o cookie caiu",
+              98123871,
+            ), */
+            );
       },
     );
   }
 }
 
-void _showOptions(BuildContext context, Patient patient) {
+void _showOptions(
+    BuildContext context, Patient patient,
+    // Future<Function> function
+    ) {
   showModalBottomSheet(
     context: context,
     builder: (context) {
@@ -99,7 +149,8 @@ void _showOptions(BuildContext context, Patient patient) {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: FlatButton(
-                        onPressed: () {
+                        onPressed: ()  {
+                          // await function;
                           Navigator.pop(context);
                           Navigator.push(
                             context,

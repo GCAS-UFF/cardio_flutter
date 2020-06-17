@@ -23,19 +23,22 @@ class ExecuteAppointmentPage extends StatefulWidget {
 
 class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
   static const String LABEL_WENT = "LABEL_WENT";
+  static const String LABEL_JUSTIFICATION = "LABEL_JUSTIFICATION";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
+  TextEditingController _justificationController;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  TextEditingController _wentController;
 
   @override
   void initState() {
     if (widget.appointment != null) {
       _formData[LABEL_WENT] = widget.appointment.went;
+
+      (widget.appointment.went!=null  && !widget.appointment.went)
+          ? _formData[LABEL_JUSTIFICATION] = widget.appointment.justification
+          : null;
     }
-    _wentController = TextEditingController(text: _formData[LABEL_WENT]);
     super.initState();
   }
 
@@ -116,17 +119,84 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                 title: Strings.specialty,
                 enable: false,
               ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _wentController,
-                hintText: "",
-                title: "Compareceu?",
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_WENT] = value;
-                  });
-                },
+              SizedBox(
+                height: Dimensions.getTextSize(context, 20),
               ),
+              Container(
+                  alignment: Alignment.centerLeft,
+                  padding: Dimensions.getEdgeInsets(context, left: 25),
+                  child: Text(
+                    Strings.went,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: Dimensions.getTextSize(context, 15)),
+                  )),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: Dimensions.getEdgeInsets(context, left: 25),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Radio(
+                          value: true,
+                          activeColor: Colors.teal,
+                          groupValue: _formData[LABEL_WENT],
+                          onChanged: (went) {
+                            print(went);
+                            setState(() {
+                              _formData[LABEL_WENT] = went;
+                            });
+                          },
+                        ),
+                        Text(
+                          'Sim',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: Dimensions.getTextSize(context, 15)),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Radio(
+                          activeColor: Colors.teal,
+                          value: false,
+                          groupValue: _formData[LABEL_WENT],
+                          onChanged: (went) {
+                            print(went);
+                            setState(() {
+                              _formData[LABEL_WENT] = went;
+                            });
+                          },
+                        ),
+                        Text(
+                          'Não',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: Dimensions.getTextSize(context, 15)),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              (_formData[LABEL_WENT] == null || _formData[LABEL_WENT] == true)
+                  ? Container()
+                  : CustomTextFormField(
+                      isRequired: true,
+                      hintText: Strings.justification_hint,
+                      textEditingController: _justificationController,
+                      title: Strings.justification,
+                      enable: true,
+                      onChanged: (value) {
+                        setState(() {
+                          _formData[LABEL_JUSTIFICATION] = value;
+                        });
+                      },
+                    ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
@@ -157,6 +227,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
           done: true,
           appointmentDate: widget.appointment.appointmentDate,
           went: _formData[LABEL_WENT],
+          justification: _formData[LABEL_JUSTIFICATION],
           expertise: widget.appointment.expertise,
           adress: widget.appointment.adress,
           executedDate: DateTime.now(),

@@ -4,7 +4,8 @@ import 'package:meta/meta.dart';
 class Medication extends BaseEntity {
   final String name;
   final double dosage;
-  final int quantity;
+  final String quantity;
+  final List<String> times;
   final int frequency;
   final String observation;
   final bool tookIt;
@@ -15,6 +16,7 @@ class Medication extends BaseEntity {
     @required this.quantity,
     this.frequency,
     initialDate,
+    this.times,
     finalDate,
     executedDate,
     this.observation,
@@ -37,6 +39,7 @@ class Medication extends BaseEntity {
         quantity,
         frequency,
         initialDate,
+        times,
         finalDate,
         executedDate,
         tookIt,

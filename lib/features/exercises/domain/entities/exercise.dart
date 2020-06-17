@@ -12,6 +12,8 @@ class Exercise extends Equatable {
   final int durationInMinutes;
   final DateTime initialDate;
   final DateTime finalDate;
+  final List<String> times;
+  final String observation;
   final bool shortnessOfBreath;
   final bool excessiveFatigue;
   final bool dizziness;
@@ -21,6 +23,8 @@ class Exercise extends Equatable {
   Exercise({
     this.executionDay,
     this.id,
+    this.observation,
+    this.times,
     this.shortnessOfBreath,
     this.excessiveFatigue,
     this.dizziness,
@@ -39,10 +43,12 @@ class Exercise extends Equatable {
   List<Object> get props => [
         executionDay,
         shortnessOfBreath,
+        observation,
         excessiveFatigue,
         dizziness,
         bodyPain,
         name,
+        times,
         frequency,
         intensity,
         durationInMinutes,

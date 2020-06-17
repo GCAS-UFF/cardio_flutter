@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
@@ -9,6 +10,7 @@ import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart'
 import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 
 class CalendarConverter {
@@ -57,7 +59,7 @@ class CalendarConverter {
               id: day,
               activities: [
                 Activity(
-                  informations: entityoActivity(entity),
+                  informations: _entitytoActivity(entity),
                   type: Keys.ACTIVITY_RECOMENDED,
                   value: entity,
                   onClick: () {},
@@ -80,7 +82,7 @@ class CalendarConverter {
             id: day,
             activities: [
               Activity(
-                informations: entityoActivity(entity),
+                informations: _entitytoActivity(entity),
                 type: Keys.ACTIVITY_RECOMENDED,
                 value: entity,
                 onClick: () {},
@@ -92,7 +94,7 @@ class CalendarConverter {
         // We should add in the existing day
         calendarObject.months[monthIndex].days[dayIndex].activities.add(
           Activity(
-            informations: entityoActivity(entity),
+            informations: _entitytoActivity(entity),
             type: Keys.ACTIVITY_DONE,
             value: entity,
             onClick: () {},
@@ -112,7 +114,7 @@ class CalendarConverter {
     }
   }
 
-  static Map<String, String> entityoActivity(BaseEntity entity) {
+  static Map<String, String> _entitytoActivity(BaseEntity entity) {
     Map<String, String> result;
 
     if (entity is Exercise) {
@@ -121,10 +123,14 @@ class CalendarConverter {
       if (!exercise.done) {
         result = {
           "Exercício": exercise.name,
-          "Frequência": exercise.frequency.toString(),
-          "Intensidade": exercise.intensity,
+          "Frequência": "${exercise.frequency.toString()} vezes ao dia",
+          "Intensidade": (Arrays.intensities[exercise.intensity] == null)
+              ? "Não Selecionado"
+              : Arrays.intensities[exercise.intensity],
+          "Horários Indicados":
+              Converter.convertStringListToString(exercise.times),
           "Duração": "${exercise.durationInMinutes} minutos",
-          "Data de Inicio":
+          "Data de Início":
               DateHelper.convertDateToString(exercise.initialDate),
           "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),
         };
@@ -132,13 +138,17 @@ class CalendarConverter {
         result = {
           "Hora da Realização": exercise.executionTime,
           "Exercício": exercise.name,
-          "Intensidade": exercise.intensity,
+          "Intensidade": (Arrays.intensities[exercise.intensity] == null)
+              ? "Não Selecionado"
+              : Arrays.intensities[exercise.intensity],
           "Duração": "${exercise.durationInMinutes} minutos",
           "Sintomas": "",
           "   Falta de Ar Excessiva": symptom(exercise.shortnessOfBreath),
           "   Fadiga Excessiva": symptom(exercise.excessiveFatigue),
           "   Tontura": symptom(exercise.dizziness),
           "   Dores Corporais": symptom(exercise.bodyPain),
+          "Observação":
+              (exercise.observation != null) ? exercise.observation : "",
         };
       }
     } else if (entity is Liquid) {
@@ -150,67 +160,129 @@ class CalendarConverter {
         };
       } else {
         result = {
-          "Quantidade Ingerida":
-              (entity.reference * entity.quantity).toString(),
+          "Quantidade Ingerida": Arrays.reference[entity.reference] == null
+              ? "Referência não selecionada"
+              : '${(Arrays.reference[entity.reference] * entity.quantity)} ml',
+                        "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
+
           "Bebida": entity.name,
         };
       }
     } else if (entity is Biometric) {
       if (!entity.done) {
         result = {
-          "Frequência": entity.frequency.toString(),
+          "Frequência": "${entity.frequency.toString()} vezes ao dia",
+          "Horários Indicados":
+              Converter.convertStringListToString(entity.times),
           "Data de Inicio": DateHelper.convertDateToString(entity.initialDate),
           "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
         };
       } else {
-        result = {
-          "Peso": "${entity.weight} kg",
-          "Batimentos Cardíacos": "${entity.bpm} bpm",
-          "Pressão Arterial": entity.bloodPressure,
-          "Inchaço": entity.swelling,
-          "Fadiga": entity.fatigue,
-        };
+        if (entity.swelling == null ||
+            entity.swelling == "Nenhum" ||
+            entity.swelling == "Selecione") {
+          result = {
+            "Peso": "${entity.weight} kg",
+            "Batimentos Cardíacos": "${entity.bpm} bpm",
+            "Pressão Arterial": entity.bloodPressure,
+            "Inchaço": (Arrays.swelling[entity.swelling] == null)
+                ? "Não Selecionado"
+                : Arrays.swelling[entity.swelling],
+            "Fadiga": (Arrays.fatigue[entity.fatigue] == null)
+                ? "Não Selecionado"
+                : Arrays.fatigue[entity.fatigue],
+                          "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
+
+
+            "Observação":
+                (entity.observation != null) ? entity.observation : "",
+          };
+        } else {
+          result = {
+            "Peso": "${entity.weight} kg",
+            "Batimentos Cardíacos": "${entity.bpm} bpm",
+            "Pressão Arterial": entity.bloodPressure,
+            "Inchaço": (Arrays.swelling[entity.swelling] == null)
+                ? "Não Selecionado"
+                : Arrays.swelling[entity.swelling],
+            "Localização do Inchaço": entity.swellingLocalization,
+            "Fadiga": (Arrays.fatigue[entity.fatigue] == null)
+                ? "Não Selecionado"
+                : Arrays.fatigue[entity.fatigue],
+                          "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
+
+            "Observação":
+                (entity.observation != null) ? entity.observation : "",
+          };
+        }
       }
     } else if (entity is Appointment) {
       if (!entity.done) {
         result = {
-          "Especialidade": entity.expertise,
+          "Especialidade": (Arrays.expertises[entity.expertise] == null)
+              ? "Não Selecionado"
+              : Arrays.expertises[entity.expertise],
           "Data": DateHelper.convertDateToString(entity.appointmentDate),
           "Horário": DateHelper.getTimeFromDate(entity.appointmentDate),
-          "Localização": entity.adress,
+          "Localização": (Arrays.adresses[entity.adress] == null)
+              ? "Não Selecionado"
+              : Arrays.adresses[entity.adress],
         };
       } else {
-        result = {
-          "Especialidade": entity.expertise,
-          "Data Prevista":
-              DateHelper.convertDateToString(entity.appointmentDate),
-          "Horário Previsto":
-              DateHelper.getTimeFromDate(entity.appointmentDate),
-          "Localização": entity.adress,
-          "Compareceu": entity.went,
-          "Respondeu em": DateHelper.convertDateToString(entity.executedDate),
-        };
+        if (entity.went != null && !entity.went) {
+          result = {
+            "Especialidade": (Arrays.expertises[entity.expertise] == null)
+                ? "Não Selecionado"
+                : Arrays.expertises[entity.expertise],
+            "Data Prevista":
+                DateHelper.convertDateToString(entity.appointmentDate),
+            "Horário Previsto":
+                DateHelper.getTimeFromDate(entity.appointmentDate),
+            "Localização": (Arrays.adresses[entity.adress] == null)
+                ? "Não Selecionado"
+                : Arrays.adresses[entity.adress],
+            "Compareceu": (entity.went != null && entity.went) ? "Sim" : "Não",
+            "Justificativa": entity.justification,
+            "Respondeu em": DateHelper.convertDateToString(entity.executedDate),
+          };
+        } else {
+          result = {
+            "Especialidade": (Arrays.expertises[entity.expertise] == null)
+                ? "Não Selecionado"
+                : Arrays.expertises[entity.expertise],
+            "Data Prevista":
+                DateHelper.convertDateToString(entity.appointmentDate),
+            "Horário Previsto":
+                DateHelper.getTimeFromDate(entity.appointmentDate),
+            "Localização": (Arrays.adresses[entity.adress] == null)
+                ? "Não Selecionado"
+                : Arrays.adresses[entity.adress],
+            "Compareceu": (entity.went != null && entity.went) ? "Sim" : "Não",
+            "Respondeu em": DateHelper.convertDateToString(entity.executedDate),
+          };
+        }
       }
     } else if (entity is Medication) {
       if (!entity.done) {
         result = {
-          "Frequência": "${entity.frequency.toString()} vezes ao dia",
-          "Data de Inicio": DateHelper.convertDateToString(entity.initialDate),
-          "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
           "Nome": entity.name,
           "Dosagem": entity.dosage.toString(),
           "Quantidade": entity.quantity.toString(),
-          "Hora de Início": DateHelper.getTimeFromDate(entity.initialDate),
-          "Observação": entity.observation,
+          "Frequência": "${entity.frequency.toString()} vezes ao dia",
+          "Horários Indicados":
+              Converter.convertStringListToString(entity.times),
+          "Data de Inicio": DateHelper.convertDateToString(entity.initialDate),
+          "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
+          "Observação": (entity.observation != null) ? entity.observation : "",
         };
       } else {
         result = {
-          "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
           "Nome": entity.name,
           "Dosagem": entity.dosage.toString(),
           "Quantidade": entity.quantity.toString(),
-          "Ingerido": (entity.tookIt != null || entity.tookIt) ? "Sim" : "Não",
-          "Observação": entity.observation,
+          "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
+          "Ingerido": (entity.tookIt != null && entity.tookIt) ? "Sim" : "Não",
+          "Observação": (entity.observation != null) ? entity.observation : "",
         };
       }
     }

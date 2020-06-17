@@ -1,9 +1,11 @@
 import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
+import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
+import 'package:cardio_flutter/core/widgets/times_list.dart';
 
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
@@ -28,6 +30,7 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
   static const String LABEL_FREQUENCY = "LABEL_FREQUENCY";
   static const String LABEL_INITIAL_DATE = "LABEL_INITIAL_DATE";
   static const String LABEL_FINAL_DATE = "LABEL_FINAL_DATE";
+  static const String LABEL_TIMES = "LABEL_TIMES";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
@@ -50,6 +53,8 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
   void initState() {
     if (widget.biometric != null) {
       _formData[LABEL_FREQUENCY] = widget.biometric.frequency.toString();
+      _formData[LABEL_TIMES] = widget.biometric.times;
+
       _formData[LABEL_INITIAL_DATE] =
           DateHelper.convertDateToString(widget.biometric.initialDate);
       _formData[LABEL_FINAL_DATE] =
@@ -120,6 +125,17 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
                   });
                 },
               ),
+              TimeList(
+                  frequency: (_formData[LABEL_FREQUENCY] != null &&
+                          _formData[LABEL_FREQUENCY] != "")
+                      ? int.parse(_formData[LABEL_FREQUENCY])
+                      : 0,
+                  onChanged: (times) {
+                    setState(() {
+                      _formData[LABEL_TIMES] = times;
+                    });
+                  },
+                  initialvalues: _formData[LABEL_TIMES]),
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
@@ -135,6 +151,7 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
               ),
               CustomTextFormField(
                 isRequired: true,
+                keyboardType: TextInputType.number,
                 textEditingController: _finalDateController,
                 hintText: Strings.date,
                 title: Strings.final_date,
@@ -176,6 +193,10 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
           entity: Biometric(
             done: false,
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "xx:xx", value: time))
+                .toList(),
             finalDate:
                 DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
             initialDate:
@@ -190,6 +211,10 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
             id: widget.biometric.id,
             done: false,
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "xx:xx", value: time))
+                .toList(),
             finalDate:
                 DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
             initialDate:

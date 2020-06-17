@@ -22,7 +22,7 @@ class ItemMenu extends StatelessWidget {
             boxShadow: <BoxShadow>[
               BoxShadow(
                 offset: Offset(3, 3),
-                color: Color(0xffc9fffd),
+                color: Colors.indigo,
                 blurRadius: 3,
               ),
             ],

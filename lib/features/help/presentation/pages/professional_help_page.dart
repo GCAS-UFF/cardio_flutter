@@ -12,16 +12,36 @@ class ProfessionalHelpPage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              ClickableItem(title: Strings.professional_help1, text: Strings.professional_help_answer1),
-              ClickableItem(title: Strings.professional_help2, text: Strings.professional_help_answer2),
-              ClickableItem(title: Strings.professional_help3, text: Strings.professional_help_answer3),
-              ClickableItem(title: Strings.professional_help4, text: Strings.professional_help_answer4),
-              ClickableItem(title: Strings.professional_help5, text: Strings.professional_help_answer5),
-              ClickableItem(title: Strings.professional_help6, text: Strings.professional_help_answer6),
-              ClickableItem(title: Strings.professional_help7, text: Strings.professional_help_answer7),
-              ClickableItem(title: Strings.professional_help8, text: Strings.professional_help_answer8),
-              ClickableItem(title: Strings.professional_help9, text: Strings.professional_help_answer9),
-              ClickableItem(title: Strings.professional_help10, text: Strings.professional_help_answer10),
+              ClickableItem(
+                  title: Strings.professional_help1,
+                  text: TextSpan(text: Strings.professional_help_answer1)),
+              ClickableItem(
+                  title: Strings.professional_help2,
+                  text: TextSpan(text: Strings.professional_help_answer2)),
+              ClickableItem(
+                  title: Strings.professional_help3,
+                  text: TextSpan(text: Strings.professional_help_answer3)),
+              ClickableItem(
+                  title: Strings.professional_help4,
+                  text: TextSpan(text: Strings.professional_help_answer4)),
+              ClickableItem(
+                  title: Strings.professional_help5,
+                  text: TextSpan(text: Strings.professional_help_answer5)),
+              ClickableItem(
+                  title: Strings.professional_help6,
+                  text: TextSpan(text: Strings.professional_help_answer6)),
+              ClickableItem(
+                  title: Strings.professional_help7,
+                  text: TextSpan(text: Strings.professional_help_answer7)),
+              ClickableItem(
+                  title: Strings.professional_help8,
+                  text: TextSpan(text: Strings.professional_help_answer8)),
+              ClickableItem(
+                  title: Strings.professional_help9,
+                  text: TextSpan(text: Strings.professional_help_answer9)),
+              ClickableItem(
+                  title: Strings.professional_help10,
+                  text: TextSpan(text: Strings.professional_help_answer10)),
             ],
           ),
         ),

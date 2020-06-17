@@ -7,7 +7,8 @@ class AppointmentModel extends Appointment {
       @required DateTime appointmentDate,
       @required String adress,
       @required String expertise,
-      @required String went,
+      @required String justification,
+      @required bool went,
       @required String id,
       @required bool done, 
       @required DateTime executedDate})
@@ -16,6 +17,7 @@ class AppointmentModel extends Appointment {
             went: went,
             executedDate: executedDate,
             done : done,
+            justification:justification,
             appointmentDate: appointmentDate,
             adress: adress,
             expertise: expertise);
@@ -29,6 +31,7 @@ class AppointmentModel extends Appointment {
     if (appointmentModel.adress != null) json['adress'] = appointmentModel.adress;
     if (appointmentModel.expertise != null) json['expertise'] = appointmentModel.expertise;
     if (appointmentModel.went != null) json['went'] = appointmentModel.went;
+    if (appointmentModel.justification != null) json['justification'] = appointmentModel.justification;
 
     return json;
   }
@@ -47,6 +50,7 @@ class AppointmentModel extends Appointment {
       went: json['went'],
       id: json['id'],
       done : json['done'],
+      justification : json['justification'],
     );
   }
 
@@ -59,6 +63,7 @@ class AppointmentModel extends Appointment {
         executedDate: appointment.executedDate,
         done: appointment.done,
         id: appointment.id,
+        justification: appointment.justification,
         went: appointment.went);
   }
 }

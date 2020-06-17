@@ -1,16 +1,20 @@
-import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
+import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
-import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
+import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
+import 'package:cardio_flutter/core/widgets/times_list.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cardio_flutter/core/widgets/custom_selector.dart';
 
 class AddExercisePage extends StatefulWidget {
   final Exercise exercise;
@@ -35,6 +39,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   static const String LABEL_SHORTNESS_OF_BREATH = "LABEL_SHORTNESS_OF_BREATH";
   static const String LABEL_EXCESSIVE_FATIGUE = "LABEL_EXCESSIVE_FATIGUE";
   static const String LABEL_EXECUTIONDAY = "LABEL_EXECUTIONDAY";
+  static const String LABEL_TIMES = "LABEL_TIMES";
   static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
@@ -43,7 +48,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   TextEditingController _nameController;
   TextEditingController _frequencyController;
-  TextEditingController _intensityController;
   TextEditingController _durationController;
   final TextEditingController _initialDateController =
       new MultimaskedTextController(
@@ -61,6 +65,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
       _formData[LABEL_NAME] = widget.exercise.name;
       _formData[LABEL_FREQUENCY] = widget.exercise.frequency.toString();
       _formData[LABEL_INTENSITY] = widget.exercise.intensity;
+      _formData[LABEL_TIMES] = widget.exercise.times;
       _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
       _formData[LABEL_INITIAL_DATE] =
           DateHelper.convertDateToString(widget.exercise.initialDate);
@@ -75,9 +80,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
     _frequencyController = TextEditingController(
       text: _formData[LABEL_FREQUENCY],
     );
-    _intensityController = TextEditingController(
-      text: _formData[LABEL_INTENSITY],
-    );
+
     _durationController = TextEditingController(
       text: _formData[LABEL_DURATION],
     );
@@ -131,7 +134,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 textCapitalization: TextCapitalization.words,
                 isRequired: true,
                 textEditingController: _nameController,
-                hintText: "",
+                hintText: Strings.phycical_activity_hint,
                 title: Strings.phycical_activity,
                 onChanged: (value) {
                   setState(() {
@@ -151,14 +154,25 @@ class _AddExercisePageState extends State<AddExercisePage> {
                   });
                 },
               ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _intensityController,
-                hintText: "",
+              TimeList(
+                  frequency: (_formData[LABEL_FREQUENCY] != null &&
+                          _formData[LABEL_FREQUENCY] != "")
+                      ? int.parse(_formData[LABEL_FREQUENCY])
+                      : 0,
+                  onChanged: (times) {
+                    setState(() {
+                      _formData[LABEL_TIMES] = times;
+                    });
+                  },
+                  initialvalues: _formData[LABEL_TIMES]),
+              CustomSelector(
                 title: Strings.intensity,
+                options: Arrays.intensities.keys.toList(),
+                subtitle: _formData[LABEL_INTENSITY],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_INTENSITY] = value;
+                    _formData[LABEL_INTENSITY] =
+                        Arrays.intensities.keys.toList()[value];
                   });
                 },
               ),
@@ -177,6 +191,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
               CustomTextFormField(
                 isRequired: true,
                 textEditingController: _initialDateController,
+                keyboardType: TextInputType.number,
                 validator: DateInputValidator(),
                 hintText: Strings.date,
                 title: Strings.initial_date,
@@ -189,6 +204,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
               CustomTextFormField(
                 isRequired: true,
                 textEditingController: _finalDateController,
+                keyboardType: TextInputType.number,
                 validator: DateInputValidator(),
                 hintText: Strings.date,
                 title: Strings.final_date,
@@ -202,9 +218,11 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title:(widget.exercise==null)? Strings.add:Strings.edit_patient_done,
+                title: (widget.exercise == null)
+                    ? Strings.add
+                    : Strings.edit_patient_done,
                 onTap: () {
-                  _submitForm();
+                  _submitForm(context);
                 },
               ),
               SizedBox(
@@ -215,8 +233,16 @@ class _AddExercisePageState extends State<AddExercisePage> {
         ));
   }
 
-  void _submitForm() {
+  void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
+      return;
+    } else if (_formData[LABEL_INTENSITY] == null ||
+        Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Favor selecionar a intensidade"),
+        ),
+      );
       return;
     }
     _formKey.currentState.save();
@@ -231,6 +257,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
             dizziness: _formData[LABEL_DIZZINESS],
             shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
             bodyPain: _formData[LABEL_BODY_PAIN],
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "xx:xx", value: time))
+                .toList(),
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
@@ -254,6 +284,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
             dizziness: _formData[LABEL_DIZZINESS],
             shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
             bodyPain: _formData[LABEL_BODY_PAIN],
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "xx:xx", value: time))
+                .toList(),
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
@@ -266,6 +300,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
           ),
         ),
       );
-    }         
+    }
   }
 }

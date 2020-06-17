@@ -179,7 +179,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 keyboardType: TextInputType.number,
                 textEditingController: _executedDateController,
                 enable: true,
-                hintText: "",
+                hintText: Strings.date,
                 validator: DateInputValidator(),
                 title: Strings.executed_date,
                 onChanged: (value) {
@@ -192,7 +192,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _executionTimeController,
-                hintText: "",
+                hintText: Strings.time_hint,
                 validator: TimeofDayValidator(),
                 title: Strings.time_title,
                 onChanged: (value) {
@@ -202,9 +202,8 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 },
               ),
               CustomTextFormField(
-                isRequired: false,
                 textEditingController: _observationController,
-                hintText: "",
+                hintText: Strings.observation_hint,
                 title: Strings.observation,
                 onChanged: (value) {
                   setState(() {
@@ -212,14 +211,68 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                   });
                 },
               ),
-              CheckboxListTile(
-                value: _formData[LABEL_TOOK_IT],
-                onChanged: (bool value) {
-                  setState(() {
-                    _formData[LABEL_TOOK_IT] = value;
-                  });
-                },
-                title: Text(Strings.tookIt),
+              SizedBox(
+                height: Dimensions.getTextSize(context, 20),
+              ),
+              Container(
+                  alignment: Alignment.centerLeft,
+                  padding: Dimensions.getEdgeInsets(context, left: 25),
+                  child: Text(
+                    Strings.tookIt,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: Dimensions.getTextSize(context, 15)),
+                  )),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: Dimensions.getEdgeInsets(context, left: 25),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Radio(
+                          value: true,
+                          activeColor: Colors.teal,
+                          groupValue: _formData[LABEL_TOOK_IT],
+                          onChanged: (tookit) {
+                            print(tookit);
+                            setState(() {
+                              _formData[LABEL_TOOK_IT] = tookit;
+                            });
+                          },
+                        ),
+                        Text(
+                    'Sim',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: Dimensions.getTextSize(context, 15)),
+                  )
+                      ],
+                    ), 
+                    Row(
+                      children: <Widget>[
+                        Radio(
+                          activeColor: Colors.teal,
+                          value: false,
+                          groupValue: _formData[LABEL_TOOK_IT],
+                          onChanged: (tookit) {
+                            print(tookit);
+                            setState(() {
+                              _formData[LABEL_TOOK_IT] = tookit;
+                            });
+                          },
+                        ), Text(
+                    'Não',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: Dimensions.getTextSize(context, 15)),
+                  )
+                      ],
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
@@ -253,7 +306,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             done: true,
             name: _formData[LABEL_NAME],
             dosage: double.parse(_formData[LABEL_DOSAGE]),
-            quantity: int.parse(_formData[LABEL_QUANTITY]),
+            quantity: _formData[LABEL_QUANTITY],
             executedDate: DateHelper.addTimeToDate(
               _formData[LABEL_EXECUTION_TIME],
               DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),
@@ -271,7 +324,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             done: true,
             name: _formData[LABEL_NAME],
             dosage: double.parse(_formData[LABEL_DOSAGE]),
-            quantity: int.parse(_formData[LABEL_QUANTITY]),
+            quantity: _formData[LABEL_QUANTITY],
             executedDate: DateHelper.addTimeToDate(
               _formData[LABEL_EXECUTION_TIME],
               DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),

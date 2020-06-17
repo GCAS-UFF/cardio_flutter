@@ -12,14 +12,27 @@ class PatientHelpPage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              ClickableItem(title: Strings.help1, text: Strings.help_answer1),
-              ClickableItem(title: Strings.help2, text: Strings.help_answer2),
-              ClickableItem(title: Strings.help3, text: Strings.help_answer3),
-              ClickableItem(title: Strings.help4, text: Strings.help_answer4),
-              ClickableItem(title: Strings.help5, text: Strings.help_answer5),
-              ClickableItem(title: Strings.help6, text: Strings.help_answer6),
-              ClickableItem(title: Strings.help7, text: Strings.help_answer7),
-              ClickableItem(title: Strings.help8, text: Strings.help_answer8),
+              ClickableItem(
+                  title: Strings.help1,
+                  text: TextSpan(text: Strings.help_answer1)),
+              ClickableItem(
+                  title: Strings.help2,
+                  text: TextSpan(text: Strings.help_answer2)),
+              ClickableItem(
+                  title: Strings.help3,
+                  text: TextSpan(text: Strings.help_answer3)),
+              ClickableItem(
+                  title: Strings.help4,
+                  text: TextSpan(text: Strings.help_answer4)),
+              ClickableItem(
+                  title: Strings.help5,
+                  text: TextSpan(text: Strings.help_answer5)),
+              ClickableItem(
+                  title: Strings.help6,
+                  text: TextSpan(text: Strings.help_answer6)),
+              ClickableItem(
+                  title: Strings.help7,
+                  text: TextSpan(text: Strings.help_answer7)),
             ],
           ),
         ),

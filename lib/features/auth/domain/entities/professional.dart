@@ -15,7 +15,7 @@ class Professional extends Equatable {
       @required this.cpf,
       @required this.regionalRecord,
       @required this.expertise,
-      @required this.email});
+      this.email});
 
   @override
   List<Object> get props => [name, cpf, regionalRecord, expertise, email];
