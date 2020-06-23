@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cardio_flutter/core/error/failure.dart';
+import 'package:cardio_flutter/core/usecases/usecase.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
+import 'package:cardio_flutter/features/auth/domain/usecases/get_current_user.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_in.dart'
     as sign_in;
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_patient.dart'
@@ -24,17 +26,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final sign_in.SignIn signIn;
   final sign_patient.SignUpPatient signUpPatient;
   final sign_professional.SignUpProfessional signUpProfessional;
+  final GetCurrentUser getCurrentUser;
 
   AuthBloc(
       {@required this.signIn,
       @required this.signUpPatient,
-      @required this.signUpProfessional})
+      @required this.signUpProfessional,
+      @required this.getCurrentUser})
       : assert(signIn != null),
         assert(signUpPatient != null),
-        assert(signUpProfessional != null);
+        assert(signUpProfessional != null),
+        assert(getCurrentUser != null) {
+    this.add(GetUserStatusEvent());
+  }
 
   @override
-  AuthState get initialState => Empty();
+  AuthState get initialState => InitialAuthState();
 
   @override
   Stream<AuthState> mapEventToState(
@@ -55,12 +62,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       var userOrFailure = await signUpProfessional(sign_professional.Params(
           professional: event.professional, password: event.password));
       yield* _eitherSignedUpOrErrorState(userOrFailure);
+    } else if (event is GetUserStatusEvent) {
+      var userOrFailure = await getCurrentUser(NoParams());
+      yield* _eitherLoggedOrErrorState(userOrFailure);
     }
   }
 
   Stream<AuthState> _eitherLoggedOrErrorState(
       Either<Failure, dynamic> userOrFailure) async* {
     yield userOrFailure.fold((failure) {
+      if (failure is UserNotCachedFailure) return Empty();
       return Error(message: Converter.convertFailureToMessage(failure));
     }, (user) {
       if (user is Patient) {

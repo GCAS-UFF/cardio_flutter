@@ -8,7 +8,6 @@ class Settings {
 
   Settings({@required this.sharedPreferences});
 
-
   String getUserType() {
     try {
       return sharedPreferences.getString(Keys.CACHED_USER_TYPE);
@@ -16,5 +15,12 @@ class Settings {
       throw CacheException();
     }
   }
-  
+
+  String getUserId() {
+    try {
+      return sharedPreferences.getString(Keys.CACHED_USER_ID);
+    } catch (e) {
+      throw CacheException();
+    }
+  }
 }

@@ -3,6 +3,7 @@ import 'package:cardio_flutter/features/appointments/data/models/appointment_mod
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:cardio_flutter/features/auth/domain/repositories/auth_repository.dart';
+import 'package:cardio_flutter/features/auth/domain/usecases/get_current_user.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_in.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_patient.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_professional.dart';
@@ -32,9 +33,11 @@ import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_
 import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart';
 import 'package:cardio_flutter/features/medications/data/models/medication_model.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
+import 'package:cardio_flutter/features/notitications/notification_manager.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -72,6 +75,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => DataConnectionChecker());
   sl.registerLazySingleton(() => Settings(sharedPreferences: sl()));
+  sl.registerLazySingleton(() => FlutterLocalNotificationsPlugin());
+
+  //! Notifications
+  final NotificationManager notificationManager = NotificationManager(
+      firebaseDatabase: sl(), localNotificationsPlugin: sl(), settings: sl());
+
+  notificationManager.init();
+  sl.registerLazySingleton(() => notificationManager);
 }
 
 void _initAuth() {
@@ -81,6 +92,7 @@ void _initAuth() {
       signIn: sl(),
       signUpPatient: sl(),
       signUpProfessional: sl(),
+      getCurrentUser: sl(),
     ),
   );
 
@@ -88,6 +100,7 @@ void _initAuth() {
   sl.registerLazySingleton(() => SignUpProfessional(sl()));
   sl.registerLazySingleton(() => SignUpPatient(sl()));
   sl.registerLazySingleton(() => SignIn(sl()));
+  sl.registerLazySingleton(() => GetCurrentUser(sl()));
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(
@@ -95,6 +108,7 @@ void _initAuth() {
       networkInfo: sl(),
       remoteDataSource: sl(),
       localDataSource: sl(),
+      notificationManager: sl(),
     ),
   );
 

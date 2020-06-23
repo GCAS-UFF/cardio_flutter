@@ -8,6 +8,7 @@ import 'package:cardio_flutter/features/auth/data/models/profissional_model.dart
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
 import 'package:cardio_flutter/features/auth/domain/repositories/auth_repository.dart';
+import 'package:cardio_flutter/features/notitications/notification_manager.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
@@ -17,11 +18,13 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthLocalDataSource localDataSource;
   final AuthRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
+  final NotificationManager notificationManager;
 
   AuthRepositoryImpl(
       {@required this.localDataSource,
       @required this.remoteDataSource,
-      @required this.networkInfo});
+      @required this.networkInfo,
+      @required this.notificationManager});
 
   @override
   Future<Either<Failure, dynamic>> signIn(String email, String password) async {
@@ -40,6 +43,9 @@ class AuthRepositoryImpl implements AuthRepository {
         if (user != null) {
           await localDataSource.saveUserId(user.id);
           await localDataSource.saveUserType(type);
+          
+          notificationManager.init();
+
           return Right(user);
         } else {
           return Left(ServerFailure());
@@ -103,6 +109,41 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(ServerFailure());
       } on CacheException {
         return Left(CacheFailure());
+      }
+    } else {
+      return Left(NoInternetConnectionFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> getCurrentUser() async {
+    if (await networkInfo.isConnected) {
+      try {
+        dynamic user = await remoteDataSource.getCurrentUser();
+        String type;
+        if (user is PatientModel) {
+          type = Keys.PATIENT_TYPE;
+        } else if (user is ProfessionalModel) {
+          type = Keys.PROFESSIONAL_TYPE;
+        } else {
+          type = "UNDEFINED";
+        }
+
+        if (user != null) {
+          await localDataSource.saveUserId(user.id);
+          await localDataSource.saveUserType(type);
+          return Right(user);
+        } else {
+          return Left(ServerFailure());
+        }
+      } on PlatformException catch (e) {
+        return Left(PlatformFailure(message: e.message));
+      } on ServerException {
+        return Left(ServerFailure());
+      } on CacheException {
+        return Left(CacheFailure());
+      } on UserNotCachedException {
+        return Left(UserNotCachedFailure());
       }
     } else {
       return Left(NoInternetConnectionFailure());

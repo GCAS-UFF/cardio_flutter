@@ -20,3 +20,5 @@ class PlatformFailure extends Failure {
 
   List<Object> get props => [message];
 }
+
+class UserNotCachedFailure extends Failure {}

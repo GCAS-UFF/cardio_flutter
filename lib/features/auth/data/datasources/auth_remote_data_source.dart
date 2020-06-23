@@ -18,6 +18,8 @@ abstract class AuthRemoteDataSource {
 
   Future<ProfessionalModel> signUpProfessional(
       ProfessionalModel professionalModel, String password);
+
+  Future<dynamic> getCurrentUser();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -151,6 +153,42 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // Get user from firebase
       DataSnapshot userSnapshot = await userRef.once();
       return UserModel.fromDataSnapshot(userSnapshot);
+    } on PlatformException catch (e) {
+      throw e;
+    } catch (e) {
+      print("[AuthRemoteDataSourceImpl] ${e.toString()}");
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<dynamic> getCurrentUser() async {
+    try {
+      FirebaseUser user = await firebaseAuth.currentUser();
+      if(user == null) throw UserNotCachedException();
+      String uid = user.uid;
+      DataSnapshot userSnapshot = await FirebaseDatabase.instance
+          .reference()
+          .child('User')
+          .child(uid)
+          .once();
+
+      UserModel userModel = UserModel.fromDataSnapshot(userSnapshot);
+      if (userModel.type == Keys.PATIENT_TYPE) {
+        var ref =
+            FirebaseDatabase.instance.reference().child('Patient').child(uid);
+        DataSnapshot patientSnapshot = await ref.once();
+        return PatientModel.fromDataSnapshot(patientSnapshot);
+      } else if (userModel.type == Keys.PROFESSIONAL_TYPE) {
+        var ref = FirebaseDatabase.instance
+            .reference()
+            .child('Professional')
+            .child(uid);
+        DataSnapshot professionalSnapshot = await ref.once();
+        return ProfessionalModel.fromDataSnapshot(professionalSnapshot);
+      } else {
+        throw ServerException();
+      }
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {

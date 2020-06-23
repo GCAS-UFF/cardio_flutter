@@ -85,6 +85,8 @@ class _LoginPageState extends State<LoginPage> {
             builder: (context, state) {
               if (state is Loading) {
                 return LoadingWidget(_buildScaffold(context));
+              } else if (state is InitialAuthState) {
+                return LoadingWidget(Container());
               } else {
                 return _buildScaffold(context);
               }

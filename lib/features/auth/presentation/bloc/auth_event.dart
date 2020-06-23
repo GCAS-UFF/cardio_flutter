@@ -33,3 +33,5 @@ class SignUpProfessionalEvent extends AuthEvent {
 
   List<Object> get props => [professional, password];
 }
+
+class  GetUserStatusEvent extends AuthEvent {}

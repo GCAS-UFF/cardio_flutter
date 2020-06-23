@@ -11,4 +11,6 @@ abstract class AuthRepository {
 
   Future<Either<Failure, Professional>> signUpProfessional(
       Professional professional, String password);
+
+  Future<Either<Failure, dynamic>> getCurrentUser();
 }
