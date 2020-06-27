@@ -315,4 +315,12 @@ class Strings {
       "Tente dormir pelo menos 8 horas por dia. Além disso, repouse caso tenha feito atividades de esforço moderado ou esteja sentindo algum sintoma.";
   static const orientation_answer14 =
       "Informe ao profissional de saúde que te acompanha em caso de viagens, para avaliar a necessidade de profilaxia para evitar a formação de coágulos.  ";
+
+      // Empty Page
+  static const empty_appointment = "Ainda não há consultas agendadas";
+  static const empty_biometrics = "Ainda não há solicitação de dados biométricos";
+  static const empty_exercise = "Ainda não há exercícios recomendados";
+  static const empty_liquid = "Ainda não há limite de líquidos registrado";
+  static const empty_medication = "Ainda não há medicamentos prescritos";
+
 }
