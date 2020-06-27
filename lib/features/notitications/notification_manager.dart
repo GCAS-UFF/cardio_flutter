@@ -2,13 +2,13 @@ import 'dart:math';
 
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
-import 'package:cardio_flutter/features/appointments/data/models/appointment_model.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
-import 'package:cardio_flutter/features/biometrics/data/models/biometric_model.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
+import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/generic_feature/util/generic_converter.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
+import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -288,7 +288,98 @@ class NotificationManager {
   }
 
   Future<void> _initializeLiquid(
-      String patientId, int startId, NotificationDetails channel) async {}
+      String patientId, int startId, NotificationDetails channel) async {
+    //Clean all current notifications
+    await _cleanNotifications(startId);
+    int toDoCount;
+
+    //Count mililiters recomenden to drink that day
+    firebaseDatabase
+        .reference()
+        .child("Patient")
+        .child(patientId)
+        .child('ToDo')
+        .child("Liquid")
+        .orderByChild("initialdate")
+        .onValue
+        .listen((event) async {
+      toDoCount = 0;
+      var toDoSsnapshot = event.snapshot;
+      if (toDoSsnapshot == null) return;
+      List<Liquid> toDoLiquids = GenericConverter.genericFromDataSnapshotList(
+          "liquid", toDoSsnapshot, false);
+      toDoLiquids.forEach((toDoLiquid) {
+        if (DateTime.now().isAfter(
+                DateHelper.addTimeToDate("00:00", toDoLiquid.initialDate)) &&
+            DateTime.now().isBefore(
+                DateHelper.addTimeToDate("23:59", toDoLiquid.finalDate))) {
+          toDoCount = toDoCount + toDoLiquid.mililitersPerDay;
+        }
+      });
+    });
+    // Getting firebase reference and start listen for changes
+    firebaseDatabase
+        .reference()
+        .child("Patient")
+        .child(patientId)
+        .child('Done')
+        .child("Liquid")
+        .orderByChild("executedDate")
+        .onValue
+        .listen((event) async {
+          int count =0;
+      // Get changed snapshot
+      var snapshot = event.snapshot;
+      // Don't do nothing if theres no record
+      if (snapshot == null) return;
+
+      print("[Liquid] ${snapshot.value}");
+
+      //Get list of all entries
+      List<Liquid> liquids = GenericConverter.genericFromDataSnapshotList(
+          "liquid", snapshot, true);
+
+      // Set a new alarm for each combination of day and time, só que não
+      liquids.forEach((liquid) {
+        if (liquid.executedDate != null &&
+            liquid.quantity != null &&
+            liquid.reference != null) {
+          count =  count + (Arrays.reference[liquid.reference] * liquid.quantity);
+              print("count:$count");
+              print("todocount:$toDoCount");
+              
+          
+        }
+      });
+      if (count >= (toDoCount * 0.8) && count < toDoCount * 0.9) {
+            singleNotification(
+                channel: channel,
+                datetime: DateTime.now().add(Duration(seconds: 3)),
+                title: "Limite de Líquidos ingeridos próximo",
+                body:
+                    "Você já tomou mais de 80% do volume de líquidos ingeridos recomendado para hoje",
+                startId: startId);
+          } else if (count >= (toDoCount * 0.9) && count < toDoCount * 1) {
+            singleNotification(
+                channel: channel,
+                datetime: DateTime.now().add(Duration(seconds: 3)),
+                title: "Limite de Líquidos ingeridos próximo",
+                body:
+                    "Você já tomou mais de 90% do volume de líquidos ingeridos recomendado para hoje",
+                startId: startId);
+          } else if (count >= toDoCount) {
+            singleNotification(
+                channel: channel,
+                datetime: DateTime.now().add(Duration(seconds: 3)),
+                title: "Limite de Líquidos ingeridos excedido",
+                body:
+                    "Você já excedeu o volume de líquidos ingeridos recomendado para hoje",
+                startId: startId);
+          } else {
+            return;
+          }
+    });
+  }
 
   Future<void> _initializeMedication(
       String patientId, int startId, NotificationDetails channel) async {
