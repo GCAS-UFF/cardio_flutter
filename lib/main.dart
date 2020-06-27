@@ -21,8 +21,11 @@ import 'features/liquids/presentation/pages/liquid_page.dart';
 import 'features/manage_professional/presentation/bloc/manage_professional_bloc.dart';
 import 'features/medications/presentation/pages/medication_page.dart';
 import 'injection_container.dart' as di;
+import 'package:flutter/rendering.dart';
+
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
   runApp(
@@ -61,6 +64,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+        debugPaintSizeEnabled = false;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

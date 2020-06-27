@@ -63,17 +63,15 @@ class _CustomTextTimeFormFieldState extends State<CustomTextTimeFormField> {
           ),
           Container(
             width: Dimensions.getConvertedWidthSize(context, 70),
-            child: TextFormField(
+            child: TextFormField(textAlign: TextAlign.center,
               controller: widget.textEditingController,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: Dimensions.getTextSize(context, 20),
               ),
               keyboardType: TextInputType.number,
-              
               autovalidate: _shouldValidate,
               decoration: InputDecoration(
-                prefixText: "  ",
                 hintText: Strings.time_hint,
                 errorStyle: TextStyle(
                   color: Colors.red,
