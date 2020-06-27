@@ -191,6 +191,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     } on PlatformException catch (e) {
       throw e;
+    } on UserNotCachedException catch (e){
+      throw e;
     } catch (e) {
       print("[AuthRemoteDataSourceImpl] ${e.toString()}");
       throw ServerException();
