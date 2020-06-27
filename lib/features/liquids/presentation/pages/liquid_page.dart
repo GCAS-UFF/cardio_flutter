@@ -45,7 +45,7 @@ class LiquidPage extends StatelessWidget {
         child: BlocBuilder<GenericBloc<Liquid>, GenericState<Liquid>>(
           builder: (context, state) {
             if (state is Loading<Liquid>) {
-              return LoadingWidget(_bodybuilder(context, null, null));
+              return LoadingWidget(Container());
             } else if (state is Loaded<Liquid>) {
               return _bodybuilder(context, state.patient, state.calendar);
             } else {

@@ -43,7 +43,7 @@ class ExercisePage extends StatelessWidget {
         child: BlocBuilder<ExerciseBloc, ExerciseState>(
           builder: (context, state) {
             if (state is Loading) {
-              return LoadingWidget(_bodybuilder(context, null, null));
+              return LoadingWidget(Container());
             } else if (state is Loaded) {
               return _bodybuilder(context, state.patient, state.calendar);
             } else {

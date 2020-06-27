@@ -45,7 +45,7 @@ class AppointmentPage extends StatelessWidget {
         child: BlocBuilder<GenericBloc<Appointment>, GenericState<Appointment>>(
           builder: (context, state) {
             if (state is Loading<Appointment>) {
-              return LoadingWidget(_bodybuilder(context, null, null));
+              return LoadingWidget(Container());
             } else if (state is Loaded<Appointment>) {
               return _bodybuilder(context, state.patient, state.calendar);
             } else {

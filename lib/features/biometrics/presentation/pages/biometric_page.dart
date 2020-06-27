@@ -45,7 +45,7 @@ class BiometricPage extends StatelessWidget {
         child: BlocBuilder<GenericBloc<Biometric>, GenericState<Biometric>>(
           builder: (context, state) {
             if (state is Loading<Biometric>) {
-              return LoadingWidget(_bodybuilder(context, null, null));
+              return LoadingWidget(Container());
             } else if (state is Loaded<Biometric>) {
               return _bodybuilder(context, state.patient, state.calendar);
             } else {

@@ -45,7 +45,7 @@ class MedicationPage extends StatelessWidget {
         child: BlocBuilder<GenericBloc<Medication>, GenericState<Medication>>(
           builder: (context, state) {
             if (state is Loading<Medication>) {
-              return LoadingWidget(_bodybuilder(context, null, null));
+              return LoadingWidget(Container());
             } else if (state is Loaded<Medication>) {
               return _bodybuilder(context, state.patient, state.calendar);
             } else {
