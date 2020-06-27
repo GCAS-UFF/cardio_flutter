@@ -7,6 +7,7 @@ import 'package:cardio_flutter/features/calendar/presentation/models/calendar.da
 import 'package:cardio_flutter/features/calendar/presentation/models/day.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/month.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/widgets/empty_page.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/entity_card.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/liquids/presentation/pages/add_liquid_page.dart';
@@ -14,6 +15,7 @@ import 'package:cardio_flutter/features/liquids/presentation/pages/execute_liqui
 import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
+import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -153,7 +155,10 @@ class LiquidPage extends StatelessWidget {
 
   Widget _bodybuilder(
       BuildContext context, Patient patient, Calendar calendar) {
-    if (patient == null || calendar == null) return Container();
+    if (patient == null || calendar == null||
+        calendar.months == null ||
+        calendar.months.isEmpty)
+      return EmptyPage(text: Strings.empty_liquid);
     return Container(
       child: SingleChildScrollView(
         padding: Dimensions.getEdgeInsetsAll(context, 15),

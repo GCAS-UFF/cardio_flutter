@@ -9,9 +9,11 @@ import 'package:cardio_flutter/features/calendar/presentation/models/month.dart'
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
 import 'package:cardio_flutter/features/exercises/presentation/pages/add_exercise_page.dart';
 import 'package:cardio_flutter/features/exercises/presentation/widgets/exercise_card.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/widgets/empty_page.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
+import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -124,7 +126,10 @@ class ExercisePage extends StatelessWidget {
 
   Widget _bodybuilder(
       BuildContext context, Patient patient, Calendar calendar) {
-    if (patient == null || calendar == null) return Container();
+    if (patient == null || calendar == null||
+        calendar.months == null ||
+        calendar.months.isEmpty)
+      return EmptyPage(text: Strings.empty_exercise);
     return Container(
       child: SingleChildScrollView(
         padding: Dimensions.getEdgeInsetsAll(context, 15),
