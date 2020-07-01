@@ -58,6 +58,8 @@ import 'features/manage_professional/domain/repositories/manage_professional_rep
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  sl.allowReassignment = true;
+
   _initAuth();
   _initManageProfessional();
   _initExerxise();
@@ -69,15 +71,25 @@ Future<void> init() async {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   //! External
+  await initExternal();
+
+  //! Notifications
+  initNotifications();
+}
+
+Future<void> initExternal() async {
+  SharedPreferences.setMockInitialValues({});
   final sharedPreferences = await SharedPreferences.getInstance();
+  sl.allowReassignment = true;
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => FirebaseDatabase.instance);
   sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => DataConnectionChecker());
   sl.registerLazySingleton(() => Settings(sharedPreferences: sl()));
   sl.registerLazySingleton(() => FlutterLocalNotificationsPlugin());
+}
 
-  //! Notifications
+void initNotifications() {
   final NotificationManager notificationManager = NotificationManager(
       firebaseDatabase: sl(), localNotificationsPlugin: sl(), settings: sl());
 
@@ -85,6 +97,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => notificationManager);
 }
 
+
+Future<void> initNotificationsForced () async{
+  final NotificationManager notificationManager = NotificationManager(
+      firebaseDatabase: sl(), localNotificationsPlugin: sl(), settings: sl());
+
+  await notificationManager.init();
+  sl.registerLazySingleton(() => notificationManager);
+}
 void _initAuth() {
   // Bloc
   sl.registerFactory(
