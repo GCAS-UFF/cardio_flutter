@@ -63,7 +63,8 @@ Future<void> main() async {
       ),
     ),
   );
- await AndroidAlarmManager.periodic(const Duration(seconds: 30), helloAlarmID, updateFirebase);
+  await AndroidAlarmManager.periodic(
+      const Duration(seconds: 30), helloAlarmID, updateFirebase);
 }
 
 void updateFirebase() async {
