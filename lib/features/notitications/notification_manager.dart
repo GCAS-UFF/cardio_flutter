@@ -74,6 +74,7 @@ class NotificationManager {
       styleInformation: BigTextStyleInformation(""),
       importance: Importance.Max,
       priority: Priority.Max,
+      ongoing: true,
     );
     var iosChannel = IOSNotificationDetails();
     return NotificationDetails(androidChannel, iosChannel);
