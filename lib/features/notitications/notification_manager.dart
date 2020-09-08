@@ -48,13 +48,14 @@ class NotificationManager {
 
     await _initializeNotifications();
 
-    _initializeAppointment(
+    await _initializeAppointment(
         patientId, APPOINTMENT_NOTIFICATION_ID, _appointmentChannel);
-    _initializeBiometric(
+    await _initializeBiometric(
         patientId, BIOMETRIC_NOTIFICATION_ID, _biometricChannel);
-    _initializeExercise(patientId, EXERCISE_NOTIFICATION_ID, _exerciseChannel);
-    _initializeLiquid(patientId, LIQUID_NOTIFICATION_ID, _liquidChannel);
-    _initializeMedication(
+    await _initializeExercise(
+        patientId, EXERCISE_NOTIFICATION_ID, _exerciseChannel);
+    await _initializeLiquid(patientId, LIQUID_NOTIFICATION_ID, _liquidChannel);
+    await _initializeMedication(
         patientId, MEDICATION_NOTIFICATION_ID, _medicationChannel);
   }
 
@@ -73,6 +74,7 @@ class NotificationManager {
       styleInformation: BigTextStyleInformation(""),
       importance: Importance.Max,
       priority: Priority.Max,
+      ongoing: true,
     );
     var iosChannel = IOSNotificationDetails();
     return NotificationDetails(androidChannel, iosChannel);
@@ -130,14 +132,14 @@ class NotificationManager {
           GenericConverter.genericFromDataSnapshotList(
               "appointment", snapshot, false);
 
-      appointments.forEach((appointment) {
+      appointments.forEach((appointment) async {
         if (appointment.appointmentDate != null &&
             appointment.appointmentDate.millisecondsSinceEpoch >
                 DateTime.now().millisecondsSinceEpoch) {
           DateTime oneDayBefore =
               appointment.appointmentDate.subtract(new Duration(days: 1));
           if (oneDayBefore.isAfter(DateTime.now())) {
-            singleNotification(
+            await singleNotification(
               channel: channel,
               startId: startId,
               title:
@@ -151,7 +153,7 @@ class NotificationManager {
           DateTime hoursBefore =
               appointment.appointmentDate.subtract(new Duration(hours: 2));
           if (hoursBefore.isAfter(DateTime.now())) {
-            singleNotification(
+            await singleNotification(
               channel: channel,
               startId: startId,
               title:
@@ -192,12 +194,13 @@ class NotificationManager {
 
       // Set a new alarm for each combination of day and time
       biometrics.forEach((biometric) {
-        if (biometric.initialDate != null &&
+        if (biometric != null &&
+            biometric.initialDate != null &&
             biometric.finalDate != null &&
             biometric.times != null) {
           // Go through all the times registred
           biometric.times.forEach(
-            (time) {
+            (time) async {
               int initialTime =
                   DateHelper.addTimeToDate(time, biometric.initialDate)
                       .millisecondsSinceEpoch;
@@ -211,7 +214,7 @@ class NotificationManager {
                 DateTime notificationTime =
                     DateTime.fromMillisecondsSinceEpoch(i);
                 if (notificationTime.isAfter(DateTime.now())) {
-                  singleNotification(
+                  await singleNotification(
                     channel: channel,
                     startId: startId,
                     title: "Atenção!!",
@@ -253,12 +256,13 @@ class NotificationManager {
 
       // Set a new alarm for each combination of day and time
       exercises.forEach((exercise) {
-        if (exercise.initialDate != null &&
+        if (exercise != null &&
+            exercise.initialDate != null &&
             exercise.finalDate != null &&
             exercise.times != null) {
           // Go through all the times registred
           exercise.times.forEach(
-            (time) {
+            (time) async {
               int initialTime =
                   DateHelper.addTimeToDate(time, exercise.initialDate)
                       .millisecondsSinceEpoch;
@@ -271,7 +275,7 @@ class NotificationManager {
                 DateTime notificationTime =
                     DateTime.fromMillisecondsSinceEpoch(i);
                 if (notificationTime.isAfter(DateTime.now())) {
-                  singleNotification(
+                  await singleNotification(
                     channel: channel,
                     startId: startId,
                     title: "Atenção!!",
@@ -327,7 +331,7 @@ class NotificationManager {
         .orderByChild("executedDate")
         .onValue
         .listen((event) async {
-          int count =0;
+      int count = 0;
       // Get changed snapshot
       var snapshot = event.snapshot;
       // Don't do nothing if theres no record
@@ -340,44 +344,45 @@ class NotificationManager {
           "liquid", snapshot, true);
 
       // Set a new alarm for each combination of day and time, só que não
-      liquids.forEach((liquid) {
-        if (liquid.executedDate != null &&
+      liquids.forEach((liquid) async {
+        if (liquid != null &&
+            liquid.executedDate != null &&
             liquid.quantity != null &&
             liquid.reference != null) {
-          count =  count + (Arrays.reference[liquid.reference] * liquid.quantity);
-              print("count:$count");
-              print("todocount:$toDoCount");
-              
-          
+          count =
+              count + (Arrays.reference[liquid.reference] * liquid.quantity);
+          print("count:$count");
+          print("todocount:$toDoCount");
         }
       });
+      if (toDoCount == null || toDoCount == 0) return;
       if (count >= (toDoCount * 0.8) && count < toDoCount * 0.9) {
-            singleNotification(
-                channel: channel,
-                datetime: DateTime.now().add(Duration(seconds: 3)),
-                title: "Limite de Líquidos ingeridos próximo",
-                body:
-                    "Você já tomou mais de 80% do volume de líquidos ingeridos recomendado para hoje",
-                startId: startId);
-          } else if (count >= (toDoCount * 0.9) && count < toDoCount * 1) {
-            singleNotification(
-                channel: channel,
-                datetime: DateTime.now().add(Duration(seconds: 3)),
-                title: "Limite de Líquidos ingeridos próximo",
-                body:
-                    "Você já tomou mais de 90% do volume de líquidos ingeridos recomendado para hoje",
-                startId: startId);
-          } else if (count >= toDoCount) {
-            singleNotification(
-                channel: channel,
-                datetime: DateTime.now().add(Duration(seconds: 3)),
-                title: "Limite de Líquidos ingeridos excedido",
-                body:
-                    "Você já excedeu o volume de líquidos ingeridos recomendado para hoje",
-                startId: startId);
-          } else {
-            return;
-          }
+        await singleNotification(
+            channel: channel,
+            datetime: DateTime.now().add(Duration(seconds: 3)),
+            title: "Limite de Líquidos ingeridos próximo",
+            body:
+                "Você já tomou mais de 80% do volume de líquidos ingeridos recomendado para hoje",
+            startId: startId);
+      } else if (count >= (toDoCount * 0.9) && count < toDoCount * 1) {
+        await singleNotification(
+            channel: channel,
+            datetime: DateTime.now().add(Duration(seconds: 3)),
+            title: "Limite de Líquidos ingeridos próximo",
+            body:
+                "Você já tomou mais de 90% do volume de líquidos ingeridos recomendado para hoje",
+            startId: startId);
+      } else if (count >= toDoCount) {
+        singleNotification(
+            channel: channel,
+            datetime: DateTime.now().add(Duration(seconds: 3)),
+            title: "Limite de Líquidos ingeridos excedido",
+            body:
+                "Você já excedeu o volume de líquidos ingeridos recomendado para hoje",
+            startId: startId);
+      } else {
+        return;
+      }
     });
   }
 
@@ -408,7 +413,8 @@ class NotificationManager {
 
       // Set a new alarm for each combination of day and time
       medications.forEach((medication) {
-        if (medication.initialDate != null &&
+        if (medication != null &&
+            medication.initialDate != null &&
             medication.finalDate != null &&
             medication.times != null) {
           // Go through all the times registred

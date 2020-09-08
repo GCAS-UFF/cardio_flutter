@@ -33,10 +33,12 @@ import 'package:cardio_flutter/features/manage_professional/domain/usecases/get_
 import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart';
 import 'package:cardio_flutter/features/medications/data/models/medication_model.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
+import 'package:cardio_flutter/features/notitications/external_notification_manager.dart';
 import 'package:cardio_flutter/features/notitications/notification_manager.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,6 +60,8 @@ import 'features/manage_professional/domain/repositories/manage_professional_rep
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  sl.allowReassignment = true;
+
   _initAuth();
   _initManageProfessional();
   _initExerxise();
@@ -69,19 +73,44 @@ Future<void> init() async {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   //! External
+  await initExternal();
+
+  //! Notifications
+  initNotifications();
+}
+
+Future<void> initExternal() async {
+  SharedPreferences.setMockInitialValues({});
   final sharedPreferences = await SharedPreferences.getInstance();
+  sl.allowReassignment = true;
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => FirebaseDatabase.instance);
   sl.registerLazySingleton(() => FirebaseAuth.instance);
+  sl.registerLazySingleton(() => FirebaseMessaging());
   sl.registerLazySingleton(() => DataConnectionChecker());
   sl.registerLazySingleton(() => Settings(sharedPreferences: sl()));
   sl.registerLazySingleton(() => FlutterLocalNotificationsPlugin());
+}
 
-  //! Notifications
-  final NotificationManager notificationManager = NotificationManager(
+void initNotifications() {
+  final notificationManager = NotificationManager(
       firebaseDatabase: sl(), localNotificationsPlugin: sl(), settings: sl());
 
   notificationManager.init();
+  sl.registerLazySingleton(() => notificationManager);
+
+  final externalNotificationManager =
+      ExternalNotificationManager(firebaseMessaging: sl());
+
+  externalNotificationManager.init();
+  sl.registerLazySingleton(() => externalNotificationManager);
+}
+
+Future<void> initNotificationsForced() async {
+  final NotificationManager notificationManager = NotificationManager(
+      firebaseDatabase: sl(), localNotificationsPlugin: sl(), settings: sl());
+
+  await notificationManager.init();
   sl.registerLazySingleton(() => notificationManager);
 }
 
