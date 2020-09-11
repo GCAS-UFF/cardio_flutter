@@ -130,7 +130,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 10),
+                height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -144,6 +144,9 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                   });
                 },
               ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
+              ),
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
@@ -156,6 +159,9 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                   });
                 },
               ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
+              ),
               CustomTextFormField(
                 isRequired: true,
                 textEditingController: _bloodPressureController,
@@ -167,6 +173,9 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                     _formData[LABEL_BLOOD_PRESSURE] = value;
                   });
                 },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomSelector(
                 title: Strings.swelling,
@@ -195,6 +204,9 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                         });
                       },
                     ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
+              ),
               CustomSelector(
                 title: Strings.fatigue,
                 options: Arrays.fatigue.keys.toList(),
@@ -205,6 +217,9 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                         Arrays.fatigue.keys.toList()[value];
                   });
                 },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -217,6 +232,9 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                     _formData[LABEL_TIME] = value;
                   });
                 },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 textEditingController: _observationController,
@@ -258,8 +276,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
         ),
       );
       return;
-    }
-    else if (_formData[LABEL_FATIGUE] == null ||
+    } else if (_formData[LABEL_FATIGUE] == null ||
         Arrays.fatigue[_formData[LABEL_FATIGUE]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(

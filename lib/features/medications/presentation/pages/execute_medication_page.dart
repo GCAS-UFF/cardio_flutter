@@ -134,7 +134,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 10),
+                height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -147,6 +147,9 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                     _formData[LABEL_NAME] = value;
                   });
                 },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -161,6 +164,9 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                   });
                 },
               ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
+              ),
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
@@ -173,6 +179,9 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                     _formData[LABEL_QUANTITY] = value;
                   });
                 },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -188,6 +197,9 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                   });
                 },
               ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
+              ),
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
@@ -200,6 +212,9 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                     _formData[LABEL_EXECUTION_TIME] = value;
                   });
                 },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 textEditingController: _observationController,
@@ -221,7 +236,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                     Strings.tookIt,
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 15)),
+                        fontSize: Dimensions.getTextSize(context, 20)),
                   )),
               Container(
                 alignment: Alignment.centerLeft,
@@ -247,7 +262,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                     'Sim',
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 15)),
+                        fontSize: Dimensions.getTextSize(context, 20)),
                   )
                       ],
                     ), 
@@ -267,7 +282,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                     'Não',
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 15)),
+                        fontSize: Dimensions.getTextSize(context, 20)),
                   )
                       ],
                     ),

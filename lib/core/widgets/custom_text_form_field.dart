@@ -73,7 +73,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               "  ${widget.title}",
               style: TextStyle(
                 color: Colors.black,
-                fontSize: Dimensions.getTextSize(context, 15),
+                fontSize: Dimensions.getTextSize(context, 20),
               ),
             ),
           ),

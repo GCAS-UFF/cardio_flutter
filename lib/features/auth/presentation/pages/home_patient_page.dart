@@ -39,15 +39,18 @@ class HomePatientPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Padding(
-                padding: Dimensions.getEdgeInsetsAll(context, 8),
-                child: Text(
-                  "Paciente: ${(patient != null || patient.name != null) ? patient.name : ""}\nIdade: ${(patient != null) ? DateHelper.ageFromDate(patient.birthdate) : ""}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.indigo[900],
-                    fontSize: Dimensions.getTextSize(context, 13),
-                    fontWeight: FontWeight.bold,
+              Visibility(
+                visible: false,
+                child: Padding(
+                  padding: Dimensions.getEdgeInsetsAll(context, 8),
+                  child: Text(
+                    "Paciente: ${(patient != null || patient.name != null) ? patient.name : ""}\nIdade: ${(patient != null) ? DateHelper.ageFromDate(patient.birthdate) : ""}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.indigo[900],
+                      fontSize: Dimensions.getTextSize(context, 15),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

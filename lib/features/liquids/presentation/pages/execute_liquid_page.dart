@@ -108,7 +108,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 10),
+                height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -121,6 +121,9 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                   });
                 },
               ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
+              ),
               CustomSelector(
                 title: Strings.reference,
                 options: Arrays.reference.keys.toList(),
@@ -131,6 +134,9 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                         Arrays.reference.keys.toList()[value];
                   });
                 },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -145,6 +151,9 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                     _formData[LABEL_QUANTITY] = value;
                   });
                 },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 isRequired: true,

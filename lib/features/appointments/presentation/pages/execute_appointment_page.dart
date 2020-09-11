@@ -85,7 +85,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 10),
+                height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -96,6 +96,9 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                 enable: false,
                 title: Strings.appointment_date,
               ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
+              ),
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
@@ -105,12 +108,18 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                 enable: false,
                 title: Strings.time_of_appointment,
               ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
+              ),
               CustomTextFormField(
                 isRequired: true,
                 initialValue: widget.appointment.adress,
                 hintText: "",
                 enable: false,
                 title: Strings.adress,
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -129,7 +138,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                     Strings.went,
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 15)),
+                        fontSize: Dimensions.getTextSize(context, 20)),
                   )),
               Container(
                 alignment: Alignment.centerLeft,
@@ -155,7 +164,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                           'Sim',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              fontSize: Dimensions.getTextSize(context, 15)),
+                              fontSize: Dimensions.getTextSize(context, 20)),
                         )
                       ],
                     ),
@@ -176,7 +185,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                           'Não',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              fontSize: Dimensions.getTextSize(context, 15)),
+                              fontSize: Dimensions.getTextSize(context, 20)),
                         )
                       ],
                     ),

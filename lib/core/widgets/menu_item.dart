@@ -44,7 +44,7 @@ class ItemMenu extends StatelessWidget {
               Text(
                 text,
                 style: TextStyle(
-                    fontSize: Dimensions.getTextSize(context, 15),
+                    fontSize: Dimensions.getTextSize(context, 20),
                     fontWeight: FontWeight.bold,
                     color: Colors.indigo[900]),
               ),

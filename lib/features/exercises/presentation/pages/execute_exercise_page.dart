@@ -122,7 +122,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 10),
+                height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               CustomTextFormField(
                 textCapitalization: TextCapitalization.words,
@@ -136,6 +136,9 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                   });
                 },
               ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
+              ),
               CustomSelector(
                 title: Strings.intensity,
                 options: Arrays.intensities.keys.toList(),
@@ -146,6 +149,9 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                         Arrays.intensities.keys.toList()[value];
                   });
                 },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -158,6 +164,9 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                     _formData[LABEL_DURATION] = value.toString();
                   });
                 },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -175,9 +184,13 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
-              Text(
-                "Sintomas:",
-                style: TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
+              Container(
+                padding: Dimensions.getEdgeInsetsSymetric(context, horizontal: 25),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Sintomas:",
+                  style: TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
+                ),
               ),
               CheckboxListTile(
                 activeColor: Colors.teal,
@@ -190,7 +203,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 title: Text(
                   Strings.shortness_of_breath,
                   style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                      TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
                 ),
               ),
               CheckboxListTile(
@@ -204,7 +217,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 title: Text(
                   Strings.excessive_fatigue,
                   style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                      TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
                 ),
               ),
               CheckboxListTile(
@@ -218,7 +231,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 title: Text(
                   Strings.dizziness,
                   style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                      TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
                 ),
               ),
               CheckboxListTile(
@@ -232,8 +245,11 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 title: Text(
                   Strings.body_pain,
                   style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                      TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
                 ),
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 13),
               ),
               CustomTextFormField(
                 textEditingController: _observationController,

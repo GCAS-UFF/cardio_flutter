@@ -57,7 +57,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffc9fffd),
       body: SingleChildScrollView(
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
@@ -102,34 +101,15 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context, constraints) {
         return SingleChildScrollView(
           child: Container(
-            height: Dimensions.getConvertedHeightSize(context, 592),
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: <Color>[Color(0xffc9fffd), Colors.white],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight)),
+            height: double.maxFinite,
+            margin: Dimensions.getEdgeInsets(context, top: 96),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  height: Dimensions.getConvertedHeightSize(context, 30),
-                ),
-                Container(
-                  height: Dimensions.getConvertedHeightSize(context, 100),
-                  width: Dimensions.getConvertedWidthSize(context, 300),
-                  color: Colors.transparent,
-                  alignment: Alignment.center,
-                  child: Text(
-                    Strings.app_name,
-                    style: TextStyle(
-                      color: Colors.indigo,
-                      fontSize: Dimensions.getTextSize(context, 30),
-                    ),
-                  ),
-                ),
                 Image.asset(
                   Images.app_logo,
-                  scale: 4,
+                  height: Dimensions.getConvertedHeightSize(context, 165),
+                  width: Dimensions.getConvertedWidthSize(context, 233),
                 ),
                 Form(
                   key: _formKey,
@@ -150,6 +130,10 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           keyboardType: TextInputType.emailAddress,
                         ),
+                        SizedBox(
+                          height:
+                              Dimensions.getConvertedHeightSize(context, 10),
+                        ),
                         CustomTextFormField(
                           hintText: Strings.password_hint,
                           title: Strings.password_title,
@@ -160,6 +144,10 @@ class _LoginPageState extends State<LoginPage> {
                               _formData[LABEL_PASSWORD] = value;
                             });
                           },
+                        ),
+                        SizedBox(
+                          height:
+                              Dimensions.getConvertedHeightSize(context, 10),
                         ),
                         Container(
                           margin: Dimensions.getEdgeInsets(context, top: 15),
