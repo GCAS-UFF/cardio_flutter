@@ -54,7 +54,6 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
     _formData[LABEL_INTENSITY] = widget.exercise.intensity.toString();
     _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
 
-
     if (widget.exercise.done) {
       _formData[LABEL_SHORTNESS_OF_BREATH] = widget.exercise.shortnessOfBreath;
       _formData[LABEL_EXCESSIVE_FATIGUE] = widget.exercise.excessiveFatigue;
@@ -85,7 +84,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Color(0xffc9fffd),
+      recomendation: Strings.exercise,
       body: SingleChildScrollView(
         child: BlocListener<ExerciseBloc, ExerciseState>(
           listener: (context, state) {
@@ -185,11 +184,13 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Container(
-                padding: Dimensions.getEdgeInsetsSymetric(context, horizontal: 25),
+                padding:
+                    Dimensions.getEdgeInsetsSymetric(context, horizontal: 25),
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Sintomas:",
-                  style: TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
+                  style:
+                      TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
                 ),
               ),
               CheckboxListTile(
@@ -283,8 +284,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    }
-     else if (_formData[LABEL_INTENSITY] == null ||
+    } else if (_formData[LABEL_INTENSITY] == null ||
         Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(

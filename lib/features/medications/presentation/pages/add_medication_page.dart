@@ -105,7 +105,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Color(0xffc9fffd),
+      recomendation: Strings.exercise,
       body: SingleChildScrollView(
         child: BlocListener<GenericBloc<Medication>, GenericState<Medication>>(
           listener: (context, state) {

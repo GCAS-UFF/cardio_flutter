@@ -24,6 +24,7 @@ class AppointmentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
+      recomendation: Strings.appointment,
       addFunction: () {
         if (Provider.of<Settings>(context, listen: false).getUserType() ==
             Keys.PROFESSIONAL_TYPE) {

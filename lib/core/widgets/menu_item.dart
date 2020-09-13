@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/images.dart';
@@ -13,40 +14,43 @@ class ItemMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: Dimensions.getEdgeInsetsAll(context, 8),
+    return Container(
+      width: double.infinity,
+      padding: Dimensions.getEdgeInsets(context, left: 25, right: 25),
+      margin: Dimensions.getEdgeInsets(context, bottom: 20),
       child: InkWell(
         onTap: destination,
         child: Container(
           decoration: BoxDecoration(
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                offset: Offset(3, 3),
-                color: Colors.indigo,
-                blurRadius: 3,
-              ),
-            ],
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            color: CardioColors.grey_01,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: CardioColors.black,
+              width: 1,
+            ),
           ),
-          alignment: Alignment.topLeft,
-          width: Dimensions.getConvertedWidthSize(context, 300),
-          height: Dimensions.getConvertedHeightSize(context, 45),
+          padding: Dimensions.getEdgeInsets(
+            context,
+            left: 10,
+            right: 10,
+            top: 5,
+            bottom: 5,
+          ),
+          alignment: Alignment.centerLeft,
           child: Row(
             children: <Widget>[
-              SizedBox(
-                width: Dimensions.getConvertedWidthSize(context, 5),
-              ),
-              Padding(
-                padding: Dimensions.getEdgeInsetsAll(context, 2),
-                child: Image.asset(image),
+              Image.asset(
+                image,
+                height: Dimensions.getConvertedHeightSize(context, 45),
+                width: Dimensions.getConvertedHeightSize(context, 45),
               ),
               Text(
                 text,
                 style: TextStyle(
-                    fontSize: Dimensions.getTextSize(context, 20),
-                    fontWeight: FontWeight.bold,
-                    color: Colors.indigo[900]),
+                  fontSize: Dimensions.getTextSize(context, 25),
+                  fontWeight: FontWeight.w500,
+                  color: CardioColors.black,
+                ),
               ),
             ],
           ),

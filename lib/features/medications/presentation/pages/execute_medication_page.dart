@@ -96,7 +96,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Color(0xffc9fffd),
+      recomendation: Strings.exercise,
       body: SingleChildScrollView(
         child: BlocListener<GenericBloc<Medication>, GenericState<Medication>>(
           listener: (context, state) {
@@ -259,13 +259,13 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                           },
                         ),
                         Text(
-                    'Sim',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 20)),
-                  )
+                          'Sim',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: Dimensions.getTextSize(context, 20)),
+                        )
                       ],
-                    ), 
+                    ),
                     Row(
                       children: <Widget>[
                         Radio(
@@ -278,12 +278,13 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                               _formData[LABEL_TOOK_IT] = tookit;
                             });
                           },
-                        ), Text(
-                    'Não',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 20)),
-                  )
+                        ),
+                        Text(
+                          'Não',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: Dimensions.getTextSize(context, 20)),
+                        )
                       ],
                     ),
                   ],

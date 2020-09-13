@@ -102,6 +102,8 @@ class BasePage extends StatelessWidget {
                 SizedBox(
                   height: Dimensions.getConvertedHeightSize(context, 35),
                 ),
+
+                /// Menu items
                 SideMenuItem(),
                 SideMenuItem(),
 

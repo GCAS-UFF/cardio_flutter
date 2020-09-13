@@ -70,7 +70,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Color(0xffc9fffd),
+      recomendation: Strings.exercise,
       body: SingleChildScrollView(
         child: BlocListener<GenericBloc<Liquid>, GenericState<Liquid>>(
           listener: (context, state) {
@@ -189,8 +189,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    }
-    else if (_formData[LABEL_REFERENCE] == null ||
+    } else if (_formData[LABEL_REFERENCE] == null ||
         Arrays.reference[_formData[LABEL_REFERENCE]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(

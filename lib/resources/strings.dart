@@ -54,7 +54,6 @@ class Strings {
       "O horário que você digitou é inválido";
 
   // Menu page
-
   static const biometric = " Como estou hoje";
   static const liquid = " Líquido ingerido";
   static const medication = " Medicações";

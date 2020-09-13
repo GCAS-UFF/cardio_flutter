@@ -1,10 +1,12 @@
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
+import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 
 class AppInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
+      recomendation: Strings.about,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Container(

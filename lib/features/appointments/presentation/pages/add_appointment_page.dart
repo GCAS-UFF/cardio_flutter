@@ -68,7 +68,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Color(0xffc9fffd),
+      recomendation: Strings.appointment,
       body: SingleChildScrollView(
         child:
             BlocListener<GenericBloc<Appointment>, GenericState<Appointment>>(
@@ -177,8 +177,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    }
-     else if (_formData[LABEL_EXPERTISE] == null ||
+    } else if (_formData[LABEL_EXPERTISE] == null ||
         Arrays.expertises[_formData[LABEL_EXPERTISE]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
@@ -186,8 +185,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
         ),
       );
       return;
-    }
-     else if (_formData[LABEL_ADRESS] == null ||
+    } else if (_formData[LABEL_ADRESS] == null ||
         Arrays.adresses[_formData[LABEL_ADRESS]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(

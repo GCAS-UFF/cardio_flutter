@@ -91,7 +91,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Color(0xffc9fffd),
+      recomendation: Strings.exercise,
       body: SingleChildScrollView(
         child: BlocListener<ExerciseBloc, ExerciseState>(
           listener: (context, state) {

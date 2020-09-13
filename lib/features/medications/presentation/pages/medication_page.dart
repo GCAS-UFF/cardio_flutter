@@ -24,6 +24,7 @@ class MedicationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
+      recomendation: Strings.medication,
       addFunction: () {
         if (Provider.of<Settings>(context, listen: false).getUserType() ==
             Keys.PROFESSIONAL_TYPE) {
@@ -155,7 +156,8 @@ class MedicationPage extends StatelessWidget {
 
   Widget _bodybuilder(
       BuildContext context, Patient patient, Calendar calendar) {
-    if (patient == null || calendar == null||
+    if (patient == null ||
+        calendar == null ||
         calendar.months == null ||
         calendar.months.isEmpty)
       return EmptyPage(text: Strings.empty_medication);

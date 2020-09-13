@@ -7,6 +7,7 @@ class PatientHelpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
+      recomendation: Strings.help,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),

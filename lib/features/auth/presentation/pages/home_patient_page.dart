@@ -12,6 +12,7 @@ import 'package:cardio_flutter/features/help/presentation/pages/professional_hel
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
 import 'package:cardio_flutter/features/orientations/presentation/pages/orientations_page.dart';
+import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
 import 'package:cardio_flutter/resources/keys.dart';
@@ -32,29 +33,58 @@ class HomePatientPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Colors.blueGrey[200],
       userData: patient,
       body: SingleChildScrollView(
         child: Container(
           width: Dimensions.getConvertedWidthSize(context, 412),
+          padding: Dimensions.getEdgeInsets(context, top: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               /// Patient data
               Visibility(
                 visible: false,
-                child: Padding(
-                  padding: Dimensions.getEdgeInsetsAll(context, 8),
-                  child: Text(
-                    "Paciente: ${(patient != null || patient.name != null) ? patient.name : ""}\nIdade: ${(patient != null) ? DateHelper.ageFromDate(patient.birthdate) : ""}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.indigo[900],
-                      fontSize: Dimensions.getTextSize(context, 15),
-                      fontWeight: FontWeight.bold,
+                child: Container(
+                  width: double.infinity,
+                  margin: Dimensions.getEdgeInsets(context, left: 15),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: CardioColors.black,
+                        width: 1,
+                      ),
                     ),
                   ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        (patient != null || patient.name != null)
+                            ? patient.name
+                            : "Null",
+                        style: TextStyle(
+                          color: CardioColors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: Dimensions.getTextSize(context, 20),
+                        ),
+                      ),
+                      Text(
+                        (patient != null || patient.cpf != null)
+                            ? "CPF: ${patient.cpf}"
+                            : "Null",
+                        style: TextStyle(
+                          color: CardioColors.black,
+                          fontSize: Dimensions.getTextSize(context, 16),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 20),
               ),
 
               /// Biometric data item

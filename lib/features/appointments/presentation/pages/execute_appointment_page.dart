@@ -35,7 +35,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
     if (widget.appointment != null) {
       _formData[LABEL_WENT] = widget.appointment.went;
 
-      (widget.appointment.went!=null  && !widget.appointment.went)
+      (widget.appointment.went != null && !widget.appointment.went)
           ? _formData[LABEL_JUSTIFICATION] = widget.appointment.justification
           : null;
     }
@@ -45,7 +45,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Color(0xffc9fffd),
+      recomendation: Strings.appointment,
       body: SingleChildScrollView(
         child:
             BlocListener<GenericBloc<Appointment>, GenericState<Appointment>>(

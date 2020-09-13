@@ -24,14 +24,18 @@ class BiometricPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
+      recomendation: Strings.biometric,
       addFunction: () {
         if (Provider.of<Settings>(context, listen: false).getUserType() ==
             Keys.PROFESSIONAL_TYPE) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddBiometricPage()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddBiometricPage(),
+            ),
+          );
         }
       },
-      backgroundColor: Color(0xffc9fffd),
       body: BlocListener<GenericBloc<Biometric>, GenericState<Biometric>>(
         listener: (context, state) {
           if (state is Error<Biometric>) {
@@ -146,7 +150,9 @@ class BiometricPage extends StatelessWidget {
             SizedBox(
               width: Dimensions.getConvertedWidthSize(context, 15),
             ),
-            Expanded(child: _buildExerciseList(context, day.activities)),
+            Expanded(
+              child: _buildExerciseList(context, day.activities),
+            ),
           ],
         );
       }).toList(),
@@ -155,7 +161,8 @@ class BiometricPage extends StatelessWidget {
 
   Widget _bodybuilder(
       BuildContext context, Patient patient, Calendar calendar) {
-    if (patient == null || calendar == null||
+    if (patient == null ||
+        calendar == null ||
         calendar.months == null ||
         calendar.months.isEmpty)
       return EmptyPage(text: Strings.empty_biometrics);
@@ -169,7 +176,9 @@ class BiometricPage extends StatelessWidget {
               height: Dimensions.getConvertedHeightSize(context, 10),
             ),
             Column(
-              children: <Widget>[_buildMonthList(context, calendar.months)],
+              children: <Widget>[
+                _buildMonthList(context, calendar.months),
+              ],
             ),
             SizedBox(
               width: Dimensions.getConvertedWidthSize(context, 15),

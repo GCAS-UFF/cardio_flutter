@@ -4,10 +4,10 @@ import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 
 class OrientationsPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return BasePage(
+      recomendation: Strings.orientations,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -27,7 +27,6 @@ class OrientationsPage extends StatelessWidget {
                             color: Colors.red, fontWeight: FontWeight.bold)),
                     TextSpan(text: Strings.orientation_answer2),
                   ],
-                 
                 ),
               ),
               ClickableItem(
@@ -49,8 +48,6 @@ class OrientationsPage extends StatelessWidget {
                     ),
                     TextSpan(text: Strings.orientation_answer3_3),
                   ],
-                 
-                  
                 ),
               ),
               ClickableItem(
@@ -98,7 +95,6 @@ class OrientationsPage extends StatelessWidget {
                     ),
                     TextSpan(text: Strings.orientation_answer12_2),
                   ],
-                  
                 ),
               ),
               ClickableItem(
