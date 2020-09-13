@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,11 +13,12 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Container(
-        decoration: BoxDecoration(boxShadow: <BoxShadow>[
-          BoxShadow(color: Colors.indigo, offset: Offset(3, 3), blurRadius: 5)
-        ], borderRadius: BorderRadius.circular(5), color: Colors.teal),
-       height: Dimensions.getConvertedHeightSize(context, 50),
-     width: Dimensions.getConvertedWidthSize(context, 180),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: CardioColors.blue,
+        ),
+        height: Dimensions.getConvertedHeightSize(context, 38),
+        width: Dimensions.getConvertedWidthSize(context, 158),
         alignment: Alignment.center,
         child: Text(
           title,
@@ -24,6 +26,7 @@ class Button extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontSize: Dimensions.getTextSize(context, 20),
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),

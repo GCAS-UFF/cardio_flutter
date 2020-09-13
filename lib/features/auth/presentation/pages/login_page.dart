@@ -67,25 +67,38 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             } else if (state is LoggedProfessional) {
-              BlocProvider.of<professional.ManageProfessionalBloc>(context)
-                  .add(professional.Start(professional: state.professional));
+              BlocProvider.of<professional.ManageProfessionalBloc>(context).add(
+                professional.Start(
+                  professional: state.professional,
+                ),
+              );
               Navigator.pushNamedAndRemoveUntil(
-                  context, '/homeProfessionalPage', (r) => false);
+                context,
+                '/homeProfessionalPage',
+                (r) => false,
+              );
             } else if (state is LoggedPatient) {
               Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          HomePatientPage(patient: state.patient)),
-                  (r) => false);
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePatientPage(
+                    patient: state.patient,
+                  ),
+                ),
+                (r) => false,
+              );
             }
           },
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
               if (state is Loading) {
-                return LoadingWidget(_buildScaffold(context));
+                return LoadingWidget(
+                  _buildScaffold(context),
+                );
               } else if (state is InitialAuthState) {
-                return LoadingWidget(Container());
+                return LoadingWidget(
+                  Container(),
+                );
               } else {
                 return _buildScaffold(context);
               }
@@ -97,80 +110,63 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildScaffold(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          child: Container(
-            height: double.maxFinite,
-            margin: Dimensions.getEdgeInsets(context, top: 96),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Image.asset(
-                  Images.app_logo,
-                  height: Dimensions.getConvertedHeightSize(context, 165),
-                  width: Dimensions.getConvertedWidthSize(context, 233),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Container(
-                    // margin: Dimensions.getEdgeInsets(context, bottom: 15),
-                    child: Column(
-                      children: <Widget>[
-                        CustomTextFormField(
-                          textEditingController: _emailController,
-                          hintText: Strings.email_hint,
-                          title: Strings.email_title,
-                          isRequired: true,
-                          validator: EmailInputValidator(),
-                          onChanged: (value) {
-                            setState(() {
-                              _formData[LABEL_EMAIL] = value;
-                            });
-                          },
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                        SizedBox(
-                          height:
-                              Dimensions.getConvertedHeightSize(context, 10),
-                        ),
-                        CustomTextFormField(
-                          hintText: Strings.password_hint,
-                          title: Strings.password_title,
-                          isRequired: true,
-                          obscureText: true,
-                          onChanged: (value) {
-                            setState(() {
-                              _formData[LABEL_PASSWORD] = value;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          height:
-                              Dimensions.getConvertedHeightSize(context, 10),
-                        ),
-                        Container(
-                          margin: Dimensions.getEdgeInsets(context, top: 15),
-                          child: Button(
-                            title: Strings.login_button,
-                            onTap: () {
-                              _submitForm();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+    return Container(
+      margin: Dimensions.getEdgeInsets(context, top: 96, left: 30, right: 30),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Image.asset(
+            Images.app_logo,
+            height: Dimensions.getConvertedHeightSize(context, 165),
+            width: Dimensions.getConvertedWidthSize(context, 233),
+          ),
+          Form(
+            key: _formKey,
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  /// E-mail text field
+                  CustomTextFormField(
+                    textEditingController: _emailController,
+                    hintText: Strings.email_hint,
+                    title: Strings.email_title,
+                    isRequired: true,
+                    validator: EmailInputValidator(),
+                    onChanged: (value) {
+                      setState(() => _formData[LABEL_EMAIL] = value);
+                    },
+                    keyboardType: TextInputType.emailAddress,
                   ),
-                ),
-                signUpFlatButton(context),
-                SizedBox(
-                  height: Dimensions.getConvertedHeightSize(context, 10),
-                ),
-              ],
+                  SizedBox(
+                    height: Dimensions.getConvertedHeightSize(context, 20),
+                  ),
+
+                  /// Password text field
+                  CustomTextFormField(
+                    hintText: Strings.password_hint,
+                    title: Strings.password_title,
+                    isRequired: true,
+                    obscureText: true,
+                    onChanged: (value) {
+                      setState(() => _formData[LABEL_PASSWORD] = value);
+                    },
+                  ),
+                  SizedBox(
+                    height: Dimensions.getConvertedHeightSize(context, 40),
+                  ),
+
+                  /// Submit button
+                  Button(
+                    title: Strings.login_button,
+                    onTap: _submitForm,
+                  ),
+                  signUpFlatButton(context),
+                ],
+              ),
             ),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
