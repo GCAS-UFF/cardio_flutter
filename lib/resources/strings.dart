@@ -2,6 +2,13 @@ class Strings {
   // App
   static const String app_name = "CARD.IO";
 
+  // AppBar
+  static const String greeting_text_app_bar = "Olá, ";
+  static const String exclamation_point_text_app_bar = "!";
+
+  // Side menu
+  static const String exit_button_side_menu_item = "Sair";
+
   // Login Page
   static const String login_button = "Login";
   static const String sign_up_button = "Ainda não é cadastrado?";
@@ -316,11 +323,11 @@ class Strings {
   static const orientation_answer14 =
       "Informe ao profissional de saúde que te acompanha em caso de viagens, para avaliar a necessidade de profilaxia para evitar a formação de coágulos.  ";
 
-      // Empty Page
+  // Empty Page
   static const empty_appointment = "Ainda não há consultas agendadas";
-  static const empty_biometrics = "Ainda não há solicitação de dados biométricos";
+  static const empty_biometrics =
+      "Ainda não há solicitação de dados biométricos";
   static const empty_exercise = "Ainda não há exercícios recomendados";
   static const empty_liquid = "Ainda não há limite de líquidos registrado";
   static const empty_medication = "Ainda não há medicamentos prescritos";
-
 }

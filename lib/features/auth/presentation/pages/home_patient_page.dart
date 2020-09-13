@@ -33,12 +33,14 @@ class HomePatientPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BasePage(
       backgroundColor: Colors.blueGrey[200],
+      userData: patient,
       body: SingleChildScrollView(
         child: Container(
           width: Dimensions.getConvertedWidthSize(context, 412),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              /// Patient data
               Visibility(
                 visible: false,
                 child: Padding(
@@ -54,67 +56,93 @@ class HomePatientPage extends StatelessWidget {
                   ),
                 ),
               ),
+
+              /// Biometric data item
               ItemMenu(
                 text: Strings.biometric,
                 image: Images.ico_biometric,
                 destination: () {
-                  BlocProvider.of<generic.GenericBloc<Biometric>>(context)
-                      .add(generic.Start<Biometric>(patient: patient));
+                  BlocProvider.of<generic.GenericBloc<Biometric>>(context).add(
+                    generic.Start<Biometric>(patient: patient),
+                  );
                   return Navigator.pushNamed(context, "/biometricPage");
                 },
               ),
+
+              /// Liquid intake item
               ItemMenu(
                 text: Strings.ingested_liquids,
                 image: Images.ico_liquid,
                 destination: () {
-                  BlocProvider.of<generic.GenericBloc<Liquid>>(context)
-                      .add(generic.Start<Liquid>(patient: patient));
+                  BlocProvider.of<generic.GenericBloc<Liquid>>(context).add(
+                    generic.Start<Liquid>(patient: patient),
+                  );
                   return Navigator.pushNamed(context, "/liquidPage");
                 },
               ),
+
+              /// Medication item
               ItemMenu(
                 text: Strings.medication,
                 image: Images.ico_medication,
                 destination: () {
-                  BlocProvider.of<generic.GenericBloc<Medication>>(context)
-                      .add(generic.Start<Medication>(patient: patient));
+                  BlocProvider.of<generic.GenericBloc<Medication>>(context).add(
+                    generic.Start<Medication>(patient: patient),
+                  );
                   return Navigator.pushNamed(context, "/medicationPage");
                 },
               ),
+
+              /// Appointments item
               ItemMenu(
                 text: Strings.appointment,
                 image: Images.ico_appointment,
                 destination: () {
                   BlocProvider.of<generic.GenericBloc<Appointment>>(context)
-                      .add(generic.Start<Appointment>(patient: patient));
+                      .add(
+                    generic.Start<Appointment>(patient: patient),
+                  );
                   return Navigator.pushNamed(context, "/appointmentPage");
                 },
               ),
+
+              /// Excercises item
               ItemMenu(
                 text: Strings.exercise,
                 image: Images.ico_exercise,
                 destination: () {
-                  BlocProvider.of<exercise.ExerciseBloc>(context)
-                      .add(exercise.Start(patient: patient));
+                  BlocProvider.of<exercise.ExerciseBloc>(context).add(
+                    exercise.Start(patient: patient),
+                  );
                   return Navigator.pushNamed(context, "/exercisePage");
                 },
               ),
+
+              /// Orientations item
               ItemMenu(
                 text: Strings.orientations,
                 image: Images.ico_orientations,
                 destination: () {
                   return Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => OrientationsPage()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OrientationsPage(),
+                    ),
+                  );
                 },
               ),
+
+              /*
               ItemMenu(
                 text: Strings.about,
                 image: Images.ico_about,
                 destination: () {
-                  return Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AppInfoPage()));
+                  return Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AppInfoPage(),
+                    ),
+                  );
                 },
               ),
               ItemMenu(
@@ -127,16 +155,21 @@ class HomePatientPage extends StatelessWidget {
                       ? Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ProfessionalHelpPage()))
+                            builder: (context) => ProfessionalHelpPage(),
+                          ),
+                        )
                       : Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => PatientHelpPage()));
+                            builder: (context) => PatientHelpPage(),
+                          ),
+                        );
                 },
               ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 15),
               )
+              */
             ],
           ),
         ),

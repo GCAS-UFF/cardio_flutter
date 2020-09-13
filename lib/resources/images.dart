@@ -8,4 +8,5 @@ class Images {
   static const String ico_orientations = "assets/images/ico_orientations.png";
   static const String ico_about = "assets/images/ico_about.png";
   static const String ico_help = "assets/images/ico_help.png";
+  static const String profile_thumb = "assets/images/profile_thumb.svg";
 }
