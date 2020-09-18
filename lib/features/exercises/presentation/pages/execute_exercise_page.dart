@@ -113,7 +113,10 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Form(
+    return Container(
+        padding: Dimensions.getEdgeInsets(context,
+        top: 10, left: 30, right: 30, bottom: 20),
+    child: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(
@@ -127,7 +130,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 textCapitalization: TextCapitalization.words,
                 isRequired: true,
                 textEditingController: _nameController,
-                hintText: "",
+                hintText: Strings.phycical_activity_hint,
                 title: Strings.phycical_activity,
                 onChanged: (value) {
                   setState(() {
@@ -278,7 +281,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
               ),
             ],
           ),
-        ));
+        ),),);
   }
 
   void _submitForm(context) {

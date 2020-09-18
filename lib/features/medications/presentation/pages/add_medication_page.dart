@@ -105,7 +105,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      recomendation: Strings.exercise,
+      recomendation: Strings.medication,
       body: SingleChildScrollView(
         child: BlocListener<GenericBloc<Medication>, GenericState<Medication>>(
           listener: (context, state) {

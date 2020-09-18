@@ -70,7 +70,7 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      recomendation: Strings.exercise,
+      recomendation: Strings.liquid,
       body: SingleChildScrollView(
         child: BlocListener<GenericBloc<Liquid>, GenericState<Liquid>>(
           listener: (context, state) {

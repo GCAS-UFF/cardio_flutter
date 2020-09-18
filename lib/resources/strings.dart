@@ -108,6 +108,8 @@ class Strings {
   static const liquid_title = "Prescrição";
   static const hint_liquid = "mL/dia";
   static const ingested_liquids = "Líquidos Ingeridos";
+  static const ingested_liquids_name = "Ex: água, café ...";
+  static const ingested_liquids_quantity = "Ex: 1, 2, 3 ...";
   static const reference = "Referência";
 
 //Medication Page
@@ -128,7 +130,7 @@ class Strings {
   // Medication Page
 
   static const time_hint = "00:00";
-  static const observation_hint = "Caso desejado, insira aqui";
+  static const observation_hint = "Se necessário, comente aqui";
 
   // Biometrics Page
   static const weight_title = "Meu peso";

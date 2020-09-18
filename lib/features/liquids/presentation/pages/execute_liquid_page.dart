@@ -70,7 +70,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      recomendation: Strings.exercise,
+      recomendation: Strings.liquid,
       body: SingleChildScrollView(
         child: BlocListener<GenericBloc<Liquid>, GenericState<Liquid>>(
           listener: (context, state) {
@@ -100,7 +100,10 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Form(
+    return Container(
+        padding: Dimensions.getEdgeInsets(context,
+        top: 10, left: 30, right: 30, bottom: 20),
+    child: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(
@@ -113,7 +116,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
               CustomTextFormField(
                 isRequired: true,
                 textEditingController: _nameController,
-                hintText: "",
+                hintText: Strings.ingested_liquids_name,
                 title: Strings.liquid,
                 onChanged: (value) {
                   setState(() {
@@ -143,7 +146,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                 keyboardType: TextInputType.number,
                 textEditingController: _quantityController,
                 hintText: (Arrays.reference[_formData[LABEL_REFERENCE]] == null)
-                    ? ""
+                    ? Strings.ingested_liquids_quantity
                     : "Quantidade de ${_formData[LABEL_REFERENCE]}",
                 title: Strings.quantity,
                 onChanged: (value) {
@@ -183,7 +186,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
               ),
             ],
           ),
-        ));
+        ),),);
   }
 
   void _submitForm(context) {
