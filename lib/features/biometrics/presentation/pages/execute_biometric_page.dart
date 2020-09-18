@@ -1,6 +1,7 @@
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/widgets/custom_dropdown_form_field.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
@@ -10,7 +11,6 @@ import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:cardio_flutter/core/widgets/custom_selector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExecuteBiometricPage extends StatefulWidget {
@@ -123,147 +123,133 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 20),
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                keyboardType: TextInputType.number,
-                textEditingController: _weightController,
-                hintText: Strings.weight_hint,
-                title: Strings.weight_title,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_WEIGHT] = value;
-                  });
-                },
-              ),
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 13),
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                keyboardType: TextInputType.number,
-                textEditingController: _bpmController,
-                hintText: Strings.bpm_hint,
-                title: Strings.bpm_title,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_BPM] = value;
-                  });
-                },
-              ),
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 13),
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _bloodPressureController,
-                keyboardType: TextInputType.number,
-                hintText: Strings.blood_pressure_hint,
-                title: Strings.blood_pressure_title,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_BLOOD_PRESSURE] = value;
-                  });
-                },
-              ),
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 13),
-              ),
-              CustomSelector(
-                title: Strings.swelling,
-                options: Arrays.swelling.keys.toList(),
-                subtitle: _formData[LABEL_SWELLING],
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_SWELLING] =
-                        Arrays.swelling.keys.toList()[value];
-                  });
-                },
-              ),
-              (_formData[LABEL_SWELLING] == null ||
-                      _formData[LABEL_SWELLING] == "Nenhum" ||
-                      _formData[LABEL_SWELLING] == "Selecione")
-                  ? Container()
-                  : CustomTextFormField(
-                      isRequired: true,
-                      hintText: Strings.swelling_loc_hint,
-                      textEditingController: _swellingLocController,
-                      title: Strings.swelling_loc_title,
-                      enable: true,
-                      onChanged: (value) {
-                        setState(() {
-                          _formData[LABEL_SWELLING_LOC] = value;
-                        });
-                      },
-                    ),
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 13),
-              ),
-              CustomSelector(
-                title: Strings.fatigue,
-                options: Arrays.fatigue.keys.toList(),
-                subtitle: _formData[LABEL_FATIGUE],
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_FATIGUE] =
-                        Arrays.fatigue.keys.toList()[value];
-                  });
-                },
-              ),
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 13),
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                keyboardType: TextInputType.number,
-                textEditingController: _timeController,
-                hintText: Strings.time_hint,
-                title: Strings.time_title,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_TIME] = value;
-                  });
-                },
-              ),
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 13),
-              ),
-              CustomTextFormField(
-                textEditingController: _observationController,
-                hintText: Strings.observation_hint,
-                title: Strings.observation,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_OBSERVATION] = value;
-                  });
-                },
-              ),
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 20),
-              ),
-              Button(
-                title: (!widget.biometric.done)
-                    ? Strings.add
-                    : Strings.edit_patient_done,
-                onTap: () {
-                  _submitForm(context);
-                },
-              ),
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 20),
-              ),
-            ],
-          ),
-        ));
+    return Container(
+      padding: Dimensions.getEdgeInsets(context,
+          top: 10, left: 30, right: 30, bottom: 20),
+      child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 20),
+                ),
+                CustomTextFormField(
+                  isRequired: true,
+                  keyboardType: TextInputType.number,
+                  textEditingController: _weightController,
+                  hintText: Strings.weight_hint,
+                  title: Strings.weight_title,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_WEIGHT] = value;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 13),
+                ),
+                CustomTextFormField(
+                  isRequired: true,
+                  keyboardType: TextInputType.number,
+                  textEditingController: _bpmController,
+                  hintText: Strings.bpm_hint,
+                  title: Strings.bpm_title,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_BPM] = value;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 13),
+                ),
+                CustomTextFormField(
+                  isRequired: true,
+                  textEditingController: _bloodPressureController,
+                  keyboardType: TextInputType.number,
+                  hintText: Strings.blood_pressure_hint,
+                  title: Strings.blood_pressure_title,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_BLOOD_PRESSURE] = value;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 13),
+                ),
+                CustomDropdownFormField(
+                  title: Strings.swelling,
+                  dropDownList: Arrays.swelling.keys.toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_SWELLING] =
+                          Arrays.swelling.keys.toList()[value];
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 13),
+                ),
+                CustomDropdownFormField(
+                  title: Strings.fatigue,
+                  dropDownList: Arrays.fatigue.keys.toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_FATIGUE] =
+                          Arrays.fatigue.keys.toList()[value];
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 13),
+                ),
+                CustomTextFormField(
+                  isRequired: true,
+                  keyboardType: TextInputType.number,
+                  textEditingController: _timeController,
+                  hintText: Strings.time_hint,
+                  title: Strings.time_title,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_TIME] = value;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 13),
+                ),
+                CustomTextFormField(
+                  textEditingController: _observationController,
+                  hintText: Strings.observation_hint,
+                  title: Strings.observation,
+                  onChanged: (value) {
+                    setState(() {
+                      _formData[LABEL_OBSERVATION] = value;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 20),
+                ),
+                Button(
+                  title: (!widget.biometric.done)
+                      ? Strings.add
+                      : Strings.edit_patient_done,
+                  onTap: () {
+                    _submitForm(context);
+                  },
+                ),
+                SizedBox(
+                  height: Dimensions.getConvertedHeightSize(context, 20),
+                ),
+              ],
+            ),
+          )),
+    );
   }
 
   void _submitForm(context) {

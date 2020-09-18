@@ -136,7 +136,7 @@ class Strings {
   static const bpm_title = "Meus Batimentos";
   static const bpm_hint = "bpm";
   static const blood_pressure_title = "Minha pressão arterial";
-  static const blood_pressure_hint = "000x000 mmHg";
+  static const blood_pressure_hint = "00x00 mmHg";
   static const swelling = "Inchaço";
   static const fatigue = "Fadiga";
   static const swelling_loc_title = "Localização do inchaço";

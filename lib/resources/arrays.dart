@@ -14,7 +14,7 @@ class Arrays {
     "Dezembro de"
   ];
   static Map<String, dynamic> adresses = {
-    "Selecione": null,
+    // "Selecione": null,
     "Clínica Coração Valente1":
         "1Av. Jansen de Melo, 174 - Centro, Niterói - RJ",
     "Clínica Coração Valente2":
@@ -24,7 +24,7 @@ class Arrays {
   };
 
   static Map<String, dynamic> expertises = {
-    "Selecione": null,
+    // "Selecione": null,
     "Enfermagem": "Enfermagem",
     "Fisioterapia": "Fisioterapia",
     "Medicina": "Medicina",
@@ -33,21 +33,21 @@ class Arrays {
   };
 
   static Map<String, dynamic> intensities = {
-    "Selecione": null,
+    // "Selecione": null,
     "Leve": "Leve",
     "Moderada": "Moderada",
     "Intensa": "Intensa",
   };
 
   static Map<String, dynamic> swelling = {
-    "Selecione": null,
+    // "Selecione": null,
     "Nenhum": "Nenhum",
     "Pouco": "Pouco",
     "Médio": "Médio",
     "Muito": "Muito",
   };
   static Map<String, dynamic> fatigue = {
-    "Selecione": null,
+    // "Selecione": null,
     "Nenhuma": "Nenhuma",
     "Pouca": "Pouca",
     "Média": "Média",
@@ -55,7 +55,7 @@ class Arrays {
   };
 
   static Map<String, dynamic> reference = {
-    "Selecione": null,
+    // "Selecione": null,
     "Colher de chá": 5,
     "Colher de sopa": 15,
     "Copo americano": 200,
