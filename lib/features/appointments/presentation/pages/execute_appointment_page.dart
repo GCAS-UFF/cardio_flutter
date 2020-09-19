@@ -78,9 +78,9 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
 
   Widget _buildForm(BuildContext context) {
     return Container(
-        padding: Dimensions.getEdgeInsets(context,
-        top: 10, left: 30, right: 30, bottom: 20),
-        child: Form(
+      padding: Dimensions.getEdgeInsets(context,
+          top: 10, left: 30, right: 30, bottom: 20),
+      child: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(
@@ -223,7 +223,9 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
               ),
             ],
           ),
-        ),),);
+        ),
+      ),
+    );
   }
 
   void _submitForm() {
