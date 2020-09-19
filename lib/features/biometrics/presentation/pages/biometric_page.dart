@@ -51,7 +51,14 @@ class BiometricPage extends StatelessWidget {
             if (state is Loading<Biometric>) {
               return LoadingWidget(Container());
             } else if (state is Loaded<Biometric>) {
-              return _bodybuilder(context, state.patient, state.calendar);
+              return SingleChildScrollView(
+                child: EntityCard(
+                    activity: null,
+                    openExecuted: null,
+                    openRecomendation: null,
+                    delete: null),
+              );
+              // return _bodybuilder(context, state.patient, state.calendar);
             } else {
               return _bodybuilder(context, null, null);
             }

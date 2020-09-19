@@ -75,7 +75,7 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
                         widget.hintText ?? "",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: CardioColors.grey_02,
+                          color: CardioColors.grey_04,
                           fontSize: Dimensions.getTextSize(context, 20),
                           fontWeight: FontWeight.normal,
                         ),
@@ -167,7 +167,7 @@ class InputDecorationGabrielForms {
       fillColor: CardioColors.white,
       border: OutlineInputBorder(
         borderSide: BorderSide(
-          width: 1,
+          width: Dimensions.getConvertedHeightSize(context, 1),
           style: BorderStyle.solid,
           color: CardioColors.black,
         ),
@@ -180,7 +180,7 @@ class InputDecorationGabrielForms {
       /// showing an error.
       focusedErrorBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          width: 1,
+          width: Dimensions.getConvertedHeightSize(context, 1),
           style: BorderStyle.solid,
           color: CardioColors.red,
         ),
@@ -193,7 +193,7 @@ class InputDecorationGabrielForms {
       /// is showing an error.
       errorBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          width: 1,
+          width: Dimensions.getConvertedHeightSize(context, 1),
           style: BorderStyle.solid,
           color: CardioColors.red,
         ),
@@ -206,7 +206,7 @@ class InputDecorationGabrielForms {
       /// showing an error.
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          width: 1,
+          width: Dimensions.getConvertedHeightSize(context, 1),
           style: BorderStyle.solid,
           color: CardioColors.black,
         ),
@@ -219,7 +219,7 @@ class InputDecorationGabrielForms {
       /// showing an error.
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          width: 1,
+          width: Dimensions.getConvertedHeightSize(context, 1),
           style: BorderStyle.solid,
           color: CardioColors.black,
         ),
@@ -232,7 +232,7 @@ class InputDecorationGabrielForms {
       /// showing an error.
       disabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          width: 1,
+          width: Dimensions.getConvertedHeightSize(context, 1),
           style: BorderStyle.solid,
           color: CardioColors.black,
         ),

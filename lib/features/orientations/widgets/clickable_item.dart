@@ -26,7 +26,10 @@ class _ClickableItemState extends State<ClickableItem> {
         },
         child: Container(
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.black54, width: 2),
+              border: Border.all(
+                color: Colors.black54,
+                width: Dimensions.getConvertedHeightSize(context, 2),
+              ),
               borderRadius: BorderRadius.circular(8)),
           alignment: Alignment.center,
           child: (widget.isClicked)

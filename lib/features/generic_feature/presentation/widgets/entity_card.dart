@@ -1,6 +1,9 @@
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/widgets/done_recomendation_detail_tile.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/widgets/recomendation_detail_tile.dart';
+import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +29,173 @@ class EntityCard extends StatefulWidget {
 }
 
 class _EntityCardState extends State<EntityCard> {
+  TextStyle _textStyle;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _textStyle = TextStyle(
+      fontSize: Dimensions.getTextSize(context, 20),
+      fontWeight: FontWeight.normal,
+      color: CardioColors.black,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        // Recomendaion
+        Container(
+          padding: Dimensions.getEdgeInsets(context,
+              left: 10, top: 3, right: 10, bottom: 3),
+          width: double.infinity,
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: CardioColors.grey_02,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+          ),
+          child: ExpansionTile(
+            title: Text.rich(
+              TextSpan(
+                style: _textStyle,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "Medir ",
+                  ),
+                  TextSpan(
+                    text: "2 vezes",
+                    style: _textStyle.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: " ao dia",
+                  ),
+                ],
+              ),
+            ),
+            backgroundColor: CardioColors.transparent,
+            children: <Widget>[
+              RecomendationDetailTile(
+                title: "Horário(s) recomendado(s): ",
+                content: "06:00, 14:00, 22:00",
+              ),
+              RecomendationDetailTile(
+                title: "Data de início: ",
+                content: "07/09/2020",
+              ),
+              RecomendationDetailTile(
+                title: "Data de fim: ",
+                content: "09/09/2020",
+              ),
+            ],
+          ),
+        ),
+        // Border
+        Container(
+          color: CardioColors.black,
+          height: Dimensions.getConvertedHeightSize(context, 1),
+          width: double.infinity,
+        ),
+        // Done recomendations
+        Container(
+          padding: Dimensions.getEdgeInsets(context,
+              left: 10, top: 3, right: 10, bottom: 3),
+          width: double.infinity,
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: CardioColors.grey_02,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+            ),
+          ),
+          child: ExpansionTile(
+            title: Text.rich(
+              TextSpan(
+                style: _textStyle,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "Realizados: ",
+                  ),
+                  TextSpan(
+                    text: "0",
+                    style: _textStyle.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            backgroundColor: CardioColors.transparent,
+            children: <Widget>[
+              Container(
+                margin: Dimensions.getEdgeInsets(context, left: 20, bottom: 10),
+                padding: Dimensions.getEdgeInsets(context, left: 10, right: 10),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: CardioColors.green_01,
+                  borderRadius: BorderRadius.circular(
+                    Dimensions.getConvertedHeightSize(context, 10),
+                  ),
+                ),
+                child: ExpansionTile(
+                  backgroundColor: CardioColors.transparent,
+                  title: Text(
+                    "10:00",
+                    style: TextStyle(
+                      fontSize: Dimensions.getTextSize(context, 20),
+                      color: CardioColors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  children: <Widget>[
+                    DoneRecomendationDetailTile(),
+                    DoneRecomendationDetailTile(),
+                  ],
+                ),
+              ),
+              Container(
+                margin: Dimensions.getEdgeInsets(context, left: 20, bottom: 10),
+                padding: Dimensions.getEdgeInsets(context, left: 10, right: 10),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: CardioColors.green_01,
+                  borderRadius: BorderRadius.circular(
+                    Dimensions.getConvertedHeightSize(context, 10),
+                  ),
+                ),
+                child: ExpansionTile(
+                  backgroundColor: CardioColors.transparent,
+                  title: Text(
+                    "10:00",
+                    style: TextStyle(
+                      fontSize: Dimensions.getTextSize(context, 20),
+                      color: CardioColors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  children: <Widget>[
+                    DoneRecomendationDetailTile(),
+                    DoneRecomendationDetailTile(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+/*
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -108,7 +278,7 @@ class _EntityCardState extends State<EntityCard> {
       ],
     );
   }
-
+*/
   Widget _buildParameterItem(BuildContext context, MapEntry entry) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

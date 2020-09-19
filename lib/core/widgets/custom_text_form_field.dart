@@ -100,7 +100,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               hintText: widget.hintText,
               hintStyle: TextStyle(
                 fontSize: Dimensions.getTextSize(context, 20),
-                color: CardioColors.grey_02,
+                color: CardioColors.grey_04,
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),

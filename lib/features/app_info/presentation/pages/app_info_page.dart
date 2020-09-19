@@ -1,4 +1,5 @@
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
+import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,9 @@ class AppInfoPage extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Container(
           decoration: BoxDecoration(
-              border: Border.all(width: 2),
+              border: Border.all(
+                width: Dimensions.getConvertedHeightSize(context, 2),
+              ),
               borderRadius: BorderRadius.circular(20)),
           width: MediaQuery.of(context).size.width,
           child: Padding(
