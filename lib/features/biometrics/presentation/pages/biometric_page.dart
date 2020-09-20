@@ -13,6 +13,7 @@ import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generi
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/empty_page.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/entity_card.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
+import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -51,14 +52,7 @@ class BiometricPage extends StatelessWidget {
             if (state is Loading<Biometric>) {
               return LoadingWidget(Container());
             } else if (state is Loaded<Biometric>) {
-              return SingleChildScrollView(
-                child: EntityCard(
-                    activity: null,
-                    openExecuted: null,
-                    openRecomendation: null,
-                    delete: null),
-              );
-              // return _bodybuilder(context, state.patient, state.calendar);
+              return _bodybuilder(context, state.patient, state.calendar);
             } else {
               return _bodybuilder(context, null, null);
             }
@@ -113,15 +107,24 @@ class BiometricPage extends StatelessWidget {
         return Column(
           children: <Widget>[
             Container(
+              padding: Dimensions.getEdgeInsets(context, bottom: 5),
+              alignment: Alignment.bottomLeft,
               decoration: BoxDecoration(
-                color: Colors.blue[900],
-                borderRadius: BorderRadius.circular(10),
+                color: CardioColors.white,
+                border: Border(
+                  bottom: BorderSide(
+                    color: CardioColors.black,
+                    width: Dimensions.getConvertedHeightSize(context, 1),
+                  ),
+                ),
               ),
-              height: Dimensions.getConvertedHeightSize(context, 50),
-              alignment: Alignment.center,
               child: Text(
                 "${Arrays.months[month.id - 1]} ${month.year}",
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: TextStyle(
+                  color: CardioColors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: Dimensions.getTextSize(context, 22),
+                ),
               ),
             ),
             SizedBox(
@@ -141,26 +144,31 @@ class BiometricPage extends StatelessWidget {
     if (dayList == null) return Container();
     return Column(
       children: dayList.map((day) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              child: CircleAvatar(
-                backgroundColor: Colors.blue[900],
-                radius: 35,
+        return Container(
+          margin: Dimensions.getEdgeInsets(context, bottom: 20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              CircleAvatar(
+                backgroundColor: CardioColors.blue,
+                radius: Dimensions.getConvertedHeightSize(context, 25),
                 child: Text(
-                  (day.id.toString()),
-                  style: TextStyle(fontSize: 22),
+                  day.id.toString(),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                    color: CardioColors.white,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: Dimensions.getConvertedWidthSize(context, 15),
-            ),
-            Expanded(
-              child: _buildExerciseList(context, day.activities),
-            ),
-          ],
+              SizedBox(
+                width: Dimensions.getConvertedWidthSize(context, 10),
+              ),
+              Expanded(
+                child: _buildExerciseList(context, day.activities),
+              ),
+            ],
+          ),
         );
       }).toList(),
     );
@@ -174,6 +182,7 @@ class BiometricPage extends StatelessWidget {
         calendar.months.isEmpty)
       return EmptyPage(text: Strings.empty_biometrics);
     return Container(
+      margin: Dimensions.getEdgeInsets(context, left: 15),
       child: SingleChildScrollView(
         padding: Dimensions.getEdgeInsetsAll(context, 15),
         child: Column(

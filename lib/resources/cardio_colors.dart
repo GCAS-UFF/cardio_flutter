@@ -16,6 +16,7 @@ class CardioColors {
   static const Color grey_03 = Color(0xFFC5C5C5);
   static const Color grey_04 = Color(0xFFAAAAAA);
   static const Color grey_05 = Color(0xFFA2A2A2);
+  static const Color grey_06 = Color(0xFF808080);
 
   static const Color green_01 = Color(0xFFA1DCAE);
   static const Color green_02 = Color(0xFF71C88B);

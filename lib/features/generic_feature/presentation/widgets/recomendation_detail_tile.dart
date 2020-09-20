@@ -7,7 +7,7 @@ class RecomendationDetailTile extends StatelessWidget {
   final String content;
   const RecomendationDetailTile({
     Key key,
-    this.title = "Título: ",
+    this.title = "Título",
     this.content = "conteúdo",
   }) : super(key: key);
 
@@ -34,7 +34,7 @@ class RecomendationDetailTile extends StatelessWidget {
           ),
           children: <TextSpan>[
             TextSpan(
-              text: title,
+              text: "$title: ",
             ),
             TextSpan(
               text: content, //"06:00, 14:00, 22:00",

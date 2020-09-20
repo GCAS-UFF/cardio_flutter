@@ -186,8 +186,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                   dropDownList: Arrays.swelling.keys.toList(),
                   onChanged: (value) {
                     setState(() {
-                      _formData[LABEL_SWELLING] =
-                          Arrays.swelling.keys.toList()[value];
+                      _formData[LABEL_SWELLING] = Arrays.swelling['$value'];
                     });
                   },
                 ),
@@ -199,8 +198,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                   dropDownList: Arrays.fatigue.keys.toList(),
                   onChanged: (value) {
                     setState(() {
-                      _formData[LABEL_FATIGUE] =
-                          Arrays.fatigue.keys.toList()[value];
+                      _formData[LABEL_FATIGUE] = Arrays.fatigue['$value'];
                     });
                   },
                 ),
