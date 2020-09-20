@@ -70,7 +70,7 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      recomendation: Strings.exercise,
+      recomendation: Strings.liquid,
       body: SingleChildScrollView(
         child: BlocListener<GenericBloc<Liquid>, GenericState<Liquid>>(
           listener: (context, state) {
@@ -100,69 +100,73 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: Dimensions.getConvertedHeightSize(context, 10),
-            ),
-            CustomTextFormField(
-              isRequired: true,
-              keyboardType: TextInputType.number,
-              textEditingController: _milimitersPerDayController,
-              hintText: Strings.hint_liquid,
-              title: Strings.liquid_title,
-              onChanged: (value) {
-                setState(() {
-                  _formData[LABEL_MILIMITERS_PER_DAY] = value;
-                });
-              },
-            ),
-            CustomTextFormField(
-              isRequired: true,
-              keyboardType: TextInputType.number,
-              textEditingController: _initialDateController,
-              hintText: Strings.date,
-              validator: DateInputValidator(),
-              title: Strings.initial_date,
-              onChanged: (value) {
-                setState(() {
-                  _formData[LABEL_INITIAL_DATE] = value;
-                });
-              },
-            ),
-            CustomTextFormField(
-              isRequired: true,
-              keyboardType: TextInputType.number,
-              textEditingController: _finalDateController,
-              hintText: Strings.date,
-              title: Strings.final_date,
-              validator: DateInputValidator(),
-              onChanged: (value) {
-                setState(() {
-                  _formData[LABEL_FINAL_DATE] = value;
-                });
-              },
-            ),
-            SizedBox(
-              height: Dimensions.getConvertedHeightSize(context, 20),
-            ),
-            Button(
-              title: (widget.liquid == null)
-                  ? Strings.add
-                  : Strings.edit_patient_done,
-              onTap: () {
-                _submitForm();
-              },
-            ),
-            SizedBox(
-              height: Dimensions.getConvertedHeightSize(context, 20),
-            ),
-          ],
+    return Container(
+      padding: Dimensions.getEdgeInsets(context,
+          top: 10, left: 30, right: 30, bottom: 20),
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 10),
+              ),
+              CustomTextFormField(
+                isRequired: true,
+                keyboardType: TextInputType.number,
+                textEditingController: _milimitersPerDayController,
+                hintText: Strings.hint_liquid,
+                title: Strings.liquid_title,
+                onChanged: (value) {
+                  setState(() {
+                    _formData[LABEL_MILIMITERS_PER_DAY] = value;
+                  });
+                },
+              ),
+              CustomTextFormField(
+                isRequired: true,
+                keyboardType: TextInputType.number,
+                textEditingController: _initialDateController,
+                hintText: Strings.date,
+                validator: DateInputValidator(),
+                title: Strings.initial_date,
+                onChanged: (value) {
+                  setState(() {
+                    _formData[LABEL_INITIAL_DATE] = value;
+                  });
+                },
+              ),
+              CustomTextFormField(
+                isRequired: true,
+                keyboardType: TextInputType.number,
+                textEditingController: _finalDateController,
+                hintText: Strings.date,
+                title: Strings.final_date,
+                validator: DateInputValidator(),
+                onChanged: (value) {
+                  setState(() {
+                    _formData[LABEL_FINAL_DATE] = value;
+                  });
+                },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 20),
+              ),
+              Button(
+                title: (widget.liquid == null)
+                    ? Strings.add
+                    : Strings.edit_patient_done,
+                onTap: () {
+                  _submitForm();
+                },
+              ),
+              SizedBox(
+                height: Dimensions.getConvertedHeightSize(context, 20),
+              ),
+            ],
+          ),
         ),
       ),
     );

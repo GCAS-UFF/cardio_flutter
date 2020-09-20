@@ -105,7 +105,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      recomendation: Strings.exercise,
+      recomendation: Strings.medication,
       body: SingleChildScrollView(
         child: BlocListener<GenericBloc<Medication>, GenericState<Medication>>(
           listener: (context, state) {
@@ -135,7 +135,10 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Form(
+    return Container(
+      padding: Dimensions.getEdgeInsets(context,
+          top: 10, left: 30, right: 30, bottom: 20),
+      child: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(
@@ -255,7 +258,9 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
               ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   void _submitForm() {

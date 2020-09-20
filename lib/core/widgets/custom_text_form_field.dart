@@ -114,6 +114,12 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   color: CardioColors.black,
                 ),
               ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+                borderSide: BorderSide(
+                  color: CardioColors.black.withOpacity(0.4),
+                ),
+              ),
             ),
           ),
         ],
