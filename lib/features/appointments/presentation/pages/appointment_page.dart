@@ -32,7 +32,6 @@ class AppointmentPage extends StatelessWidget {
               MaterialPageRoute(builder: (context) => AddAppointmentPage()));
         }
       },
-      backgroundColor: Color(0xffc9fffd),
       body: BlocListener<GenericBloc<Appointment>, GenericState<Appointment>>(
         listener: (context, state) {
           if (state is Error<Appointment>) {

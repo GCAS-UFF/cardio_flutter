@@ -1,6 +1,7 @@
 import 'package:cardio_flutter/core/input_validators/time_of_day_validator.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/widgets/custom_dropdown_form_field.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
@@ -12,7 +13,6 @@ import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:cardio_flutter/core/widgets/custom_selector.dart';
 
 class ExecuteExercisePage extends StatefulWidget {
   final Exercise exercise;
@@ -142,14 +142,12 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 13),
               ),
-              CustomSelector(
+              CustomDropdownFormField(
                 title: Strings.intensity,
-                options: Arrays.intensities.keys.toList(),
-                subtitle: _formData[LABEL_INTENSITY],
+                dropDownList: Arrays.intensities.keys.toList(),
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_INTENSITY] =
-                        Arrays.intensities.keys.toList()[value];
+                    _formData[LABEL_INTENSITY] = Arrays.intensities['$value'];
                   });
                 },
               ),

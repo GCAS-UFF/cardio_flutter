@@ -40,17 +40,6 @@ class HomeProfessionalPage extends StatelessWidget {
   Widget _buildBody(BuildContext context, Professional professional,
       List<Patient> patientList) {
     return BasePage(
-      edit: IconButton(
-        icon: Icon(Icons.edit),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return EditProfessionalPage(
-              professional: professional,
-            );
-          }));
-        },
-      ),
-      backgroundColor: Colors.white,
       body: Container(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(

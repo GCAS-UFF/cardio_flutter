@@ -206,7 +206,6 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Color(0xffc9fffd),
       body: SingleChildScrollView(
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {

@@ -93,8 +93,6 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
   Widget _buildForm(BuildContext context) {
     return BasePage(
         key: _scaffoldKey,
-        signOutButton: false,
-        backgroundColor: Color(0xffc9fffd),
         body: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -205,9 +203,9 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
         print(state);
         if (state is Error) {
           Flushbar(
-              message: state.message,
-              duration: Duration(seconds: 3),
-            )..show(context);
+            message: state.message,
+            duration: Duration(seconds: 3),
+          )..show(context);
         } else if (state is SignedUp) {
           BlocProvider.of<professional.ManageProfessionalBloc>(context)
               .add(professional.Start(professional: state.user));

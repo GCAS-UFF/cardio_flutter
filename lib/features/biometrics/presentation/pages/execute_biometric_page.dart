@@ -93,7 +93,6 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
   Widget build(BuildContext context) {
     return BasePage(
       recomendation: Strings.biometric,
-      backgroundColor: Color(0xffc9fffd),
       body: SingleChildScrollView(
         child: BlocListener<GenericBloc<Biometric>, GenericState<Biometric>>(
           listener: (context, state) {

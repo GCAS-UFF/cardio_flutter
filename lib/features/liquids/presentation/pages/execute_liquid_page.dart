@@ -1,6 +1,7 @@
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/widgets/custom_dropdown_form_field.dart';
 import 'package:cardio_flutter/core/widgets/custom_selector.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
@@ -71,29 +72,27 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   Widget build(BuildContext context) {
     return BasePage(
       recomendation: Strings.liquid,
-      body: SingleChildScrollView(
-        child: BlocListener<GenericBloc<Liquid>, GenericState<Liquid>>(
-          listener: (context, state) {
-            if (state is Error<Liquid>) {
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
-              );
-            } else if (state is Loaded<Liquid>) {
-              Navigator.pop(context);
+      body: BlocListener<GenericBloc<Liquid>, GenericState<Liquid>>(
+        listener: (context, state) {
+          if (state is Error<Liquid>) {
+            Scaffold.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          } else if (state is Loaded<Liquid>) {
+            Navigator.pop(context);
+          }
+        },
+        child: BlocBuilder<GenericBloc<Liquid>, GenericState<Liquid>>(
+          builder: (context, state) {
+            print(state);
+            if (state is Loading<Liquid>) {
+              return LoadingWidget(_buildForm(context));
+            } else {
+              return _buildForm(context);
             }
           },
-          child: BlocBuilder<GenericBloc<Liquid>, GenericState<Liquid>>(
-            builder: (context, state) {
-              print(state);
-              if (state is Loading<Liquid>) {
-                return LoadingWidget(_buildForm(context));
-              } else {
-                return _buildForm(context);
-              }
-            },
-          ),
         ),
       ),
     );
@@ -127,14 +126,12 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 13),
               ),
-              CustomSelector(
+              CustomDropdownFormField(
                 title: Strings.reference,
-                options: Arrays.reference.keys.toList(),
-                subtitle: _formData[LABEL_REFERENCE],
+                dropDownList: Arrays.reference.keys.toList(),
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_REFERENCE] =
-                        Arrays.reference.keys.toList()[value];
+                    _formData[LABEL_REFERENCE] = Arrays.reference['$value'];
                   });
                 },
               ),
@@ -145,9 +142,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                 isRequired: true,
                 keyboardType: TextInputType.number,
                 textEditingController: _quantityController,
-                hintText: (Arrays.reference[_formData[LABEL_REFERENCE]] == null)
-                    ? Strings.ingested_liquids_quantity
-                    : "Quantidade de ${_formData[LABEL_REFERENCE]}",
+                hintText: Strings.ingested_liquids_quantity,
                 title: Strings.quantity,
                 onChanged: (value) {
                   setState(() {

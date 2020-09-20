@@ -32,7 +32,6 @@ class MedicationPage extends StatelessWidget {
               MaterialPageRoute(builder: (context) => AddMedicationPage()));
         }
       },
-      backgroundColor: Color(0xffc9fffd),
       body: BlocListener<GenericBloc<Medication>, GenericState<Medication>>(
         listener: (context, state) {
           if (state is Error<Medication>) {

@@ -15,12 +15,10 @@ import 'package:cardio_flutter/features/orientations/presentation/pages/orientat
 import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/images.dart';
-import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/core/widgets/menu_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart'
     as generic;
 
@@ -34,6 +32,7 @@ class HomePatientPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BasePage(
       userData: patient,
+      hasDrawer: true,
       body: SingleChildScrollView(
         child: Container(
           width: Dimensions.getConvertedWidthSize(context, 412),
