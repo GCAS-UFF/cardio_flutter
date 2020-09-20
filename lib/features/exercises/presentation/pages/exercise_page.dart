@@ -60,7 +60,7 @@ class ExercisePage extends StatelessWidget {
     return Column(
       children: activityList.map((activity) {
         return ExerciseCard(
-          activity: activity,
+          exercise: activity,
         );
       }).toList(),
     );
