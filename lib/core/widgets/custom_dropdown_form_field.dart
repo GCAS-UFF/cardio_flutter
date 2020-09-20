@@ -75,7 +75,7 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
                         widget.hintText ?? "",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: CardioColors.grey_04,
+                          color: CardioColors.grey_05,
                           fontSize: Dimensions.getTextSize(context, 20),
                           fontWeight: FontWeight.normal,
                         ),

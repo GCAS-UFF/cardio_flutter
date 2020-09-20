@@ -55,7 +55,7 @@ class CustomSelector extends StatelessWidget {
                   (subtitle == null) ? "Selecione" : subtitle,
                   style: TextStyle(
                     fontSize: Dimensions.getTextSize(context, 20),
-                    color: CardioColors.grey_04,
+                    color: CardioColors.grey_05,
                   ),
                 ),
                 Icon(

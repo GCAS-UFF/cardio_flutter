@@ -1,5 +1,6 @@
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/widgets/custom_radio_list_form_text_field.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
@@ -100,7 +101,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                 title: Strings.appointment_date,
               ),
               SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 13),
+                height: Dimensions.getConvertedHeightSize(context, 15),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -112,7 +113,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                 title: Strings.time_of_appointment,
               ),
               SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 13),
+                height: Dimensions.getConvertedHeightSize(context, 15),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -122,7 +123,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                 title: Strings.adress,
               ),
               SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 13),
+                height: Dimensions.getConvertedHeightSize(context, 15),
               ),
               CustomTextFormField(
                 isRequired: true,
@@ -132,82 +133,34 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
                 enable: false,
               ),
               SizedBox(
-                height: Dimensions.getTextSize(context, 20),
+                height: Dimensions.getTextSize(context, 15),
               ),
-              Container(
-                  alignment: Alignment.centerLeft,
-                  padding: Dimensions.getEdgeInsets(context, left: 25),
-                  child: Text(
-                    Strings.went,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 20)),
-                  )),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: Dimensions.getEdgeInsets(context, left: 25),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Radio(
-                          value: true,
-                          activeColor: Colors.teal,
-                          groupValue: _formData[LABEL_WENT],
-                          onChanged: (went) {
-                            print(went);
-                            setState(() {
-                              _formData[LABEL_WENT] = went;
-                            });
-                          },
-                        ),
-                        Text(
-                          'Sim',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: Dimensions.getTextSize(context, 20)),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Radio(
-                          activeColor: Colors.teal,
-                          value: false,
-                          groupValue: _formData[LABEL_WENT],
-                          onChanged: (went) {
-                            print(went);
-                            setState(() {
-                              _formData[LABEL_WENT] = went;
-                            });
-                          },
-                        ),
-                        Text(
-                          'Não',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: Dimensions.getTextSize(context, 20)),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+              CustomRadioListFormField(
+                title: Strings.went,
+                groupValue: _formData[LABEL_WENT],
+                onChanged: (went) {
+                  setState(() {
+                    _formData[LABEL_WENT] = went;
+                  });
+                },
               ),
-              (_formData[LABEL_WENT] == null || _formData[LABEL_WENT] == true)
+              (_formData[LABEL_WENT] == null ||
+                      _formData[LABEL_WENT] == YesNoRadioOptions.YES)
                   ? Container()
-                  : CustomTextFormField(
-                      isRequired: true,
-                      hintText: Strings.justification_hint,
-                      textEditingController: _justificationController,
-                      title: Strings.justification,
-                      enable: true,
-                      onChanged: (value) {
-                        setState(() {
-                          _formData[LABEL_JUSTIFICATION] = value;
-                        });
-                      },
+                  : Container(
+                      margin: Dimensions.getEdgeInsets(context, top: 15),
+                      child: CustomTextFormField(
+                        isRequired: true,
+                        hintText: Strings.justification_hint,
+                        textEditingController: _justificationController,
+                        title: Strings.justification,
+                        enable: true,
+                        onChanged: (value) {
+                          setState(() {
+                            _formData[LABEL_JUSTIFICATION] = value;
+                          });
+                        },
+                      ),
                     ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
@@ -240,7 +193,7 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
           id: widget.appointment.id,
           done: true,
           appointmentDate: widget.appointment.appointmentDate,
-          went: _formData[LABEL_WENT],
+          went: _formData[LABEL_WENT] == YesNoRadioOptions.YES ? true : false,
           justification: _formData[LABEL_JUSTIFICATION],
           expertise: widget.appointment.expertise,
           adress: widget.appointment.adress,

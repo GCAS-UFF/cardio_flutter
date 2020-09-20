@@ -20,7 +20,7 @@ class RecomendationDetailTile extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: CardioColors.grey_05,
+            color: CardioColors.grey_06,
             width: Dimensions.getConvertedHeightSize(context, 1),
           ),
         ),

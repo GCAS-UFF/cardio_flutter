@@ -113,7 +113,7 @@ class _EntityCardState extends State<EntityCard> {
           color: CardioColors.transparent,
           border: Border(
             top: BorderSide(
-              color: CardioColors.grey_05,
+              color: CardioColors.grey_06,
               width: Dimensions.getConvertedHeightSize(context, 1),
             ),
           ),
