@@ -13,6 +13,7 @@ import 'package:cardio_flutter/features/medications/domain/entities/medication.d
 import 'package:cardio_flutter/features/medications/presentation/pages/add_medication_page.dart';
 import 'package:cardio_flutter/features/medications/presentation/pages/execute_medication_page.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
+import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -102,15 +103,24 @@ class MedicationPage extends StatelessWidget {
         return Column(
           children: <Widget>[
             Container(
+              padding: Dimensions.getEdgeInsets(context, bottom: 5),
+              alignment: Alignment.bottomLeft,
               decoration: BoxDecoration(
-                color: Colors.blue[900],
-                borderRadius: BorderRadius.circular(10),
+                color: CardioColors.white,
+                border: Border(
+                  bottom: BorderSide(
+                    color: CardioColors.black,
+                    width: Dimensions.getConvertedHeightSize(context, 1),
+                  ),
+                ),
               ),
-              height: Dimensions.getConvertedHeightSize(context, 50),
-              alignment: Alignment.center,
               child: Text(
                 "${Arrays.months[month.id - 1]} ${month.year}",
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: TextStyle(
+                  color: CardioColors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: Dimensions.getTextSize(context, 22),
+                ),
               ),
             ),
             SizedBox(
@@ -130,24 +140,31 @@ class MedicationPage extends StatelessWidget {
     if (dayList == null) return Container();
     return Column(
       children: dayList.map((day) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              child: CircleAvatar(
-                backgroundColor: Colors.blue[900],
-                radius: 35,
+        return Container(
+          margin: Dimensions.getEdgeInsets(context, bottom: 20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              CircleAvatar(
+                backgroundColor: CardioColors.blue,
+                radius: Dimensions.getConvertedHeightSize(context, 25),
                 child: Text(
-                  (day.id.toString()),
-                  style: TextStyle(fontSize: 22),
+                  day.id.toString(),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                    color: CardioColors.white,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: Dimensions.getConvertedWidthSize(context, 15),
-            ),
-            Expanded(child: _buildExerciseList(context, day.activities)),
-          ],
+              SizedBox(
+                width: Dimensions.getConvertedWidthSize(context, 10),
+              ),
+              Expanded(
+                child: _buildExerciseList(context, day.activities),
+              ),
+            ],
+          ),
         );
       }).toList(),
     );
@@ -161,6 +178,7 @@ class MedicationPage extends StatelessWidget {
         calendar.months.isEmpty)
       return EmptyPage(text: Strings.empty_medication);
     return Container(
+      margin: Dimensions.getEdgeInsets(context, left: 15),
       child: SingleChildScrollView(
         padding: Dimensions.getEdgeInsetsAll(context, 15),
         child: Column(
