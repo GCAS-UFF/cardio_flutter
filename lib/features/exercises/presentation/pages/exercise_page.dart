@@ -8,8 +8,8 @@ import 'package:cardio_flutter/features/calendar/presentation/models/day.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/month.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
 import 'package:cardio_flutter/features/exercises/presentation/pages/add_exercise_page.dart';
-import 'package:cardio_flutter/features/exercises/presentation/widgets/exercise_card.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/empty_page.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/widgets/entity_card.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
@@ -17,6 +17,8 @@ import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+
+import 'execute_exercise_page.dart';
 
 class ExercisePage extends StatelessWidget {
   @override
@@ -59,8 +61,16 @@ class ExercisePage extends StatelessWidget {
     if (activityList == null) return Container();
     return Column(
       children: activityList.map((activity) {
-        return ExerciseCard(
-          exercise: activity,
+        return EntityCard(
+          activity: activity,
+          openExecuted: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>
+                    ExecuteExercisePage(exercise: activity.value),
+              ),
+            );
+          },
         );
       }).toList(),
     );
@@ -117,7 +127,9 @@ class ExercisePage extends StatelessWidget {
             SizedBox(
               width: Dimensions.getConvertedWidthSize(context, 15),
             ),
-            Expanded(child: _buildExerciseList(context, day.activities)),
+            Expanded(
+              child: _buildExerciseList(context, day.activities),
+            ),
           ],
         );
       }).toList(),

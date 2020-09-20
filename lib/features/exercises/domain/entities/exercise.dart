@@ -14,6 +14,7 @@ class Exercise extends Equatable {
   final DateTime finalDate;
   final List<String> times;
   final String observation;
+  final List<String> symptoms;
   final bool shortnessOfBreath;
   final bool excessiveFatigue;
   final bool dizziness;
@@ -25,6 +26,7 @@ class Exercise extends Equatable {
     this.id,
     this.observation,
     this.times,
+    this.symptoms,
     this.shortnessOfBreath,
     this.excessiveFatigue,
     this.dizziness,
@@ -42,6 +44,7 @@ class Exercise extends Equatable {
   @override
   List<Object> get props => [
         executionDay,
+        symptoms,
         shortnessOfBreath,
         observation,
         excessiveFatigue,
