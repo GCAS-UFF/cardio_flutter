@@ -1,6 +1,7 @@
 import 'package:cardio_flutter/core/input_validators/time_of_day_validator.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/widgets/custom_check_item.dart';
 import 'package:cardio_flutter/core/widgets/custom_dropdown_form_field.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
@@ -8,6 +9,7 @@ import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
+import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
@@ -185,71 +187,89 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
-              Container(
-                padding:
-                    Dimensions.getEdgeInsetsSymetric(context, horizontal: 25),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Sintomas:",
-                  style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
-                ),
-              ),
-              CheckboxListTile(
-                activeColor: Colors.teal,
-                value: _formData[LABEL_SHORTNESS_OF_BREATH],
-                onChanged: (bool value) {
-                  setState(() {
-                    _formData[LABEL_SHORTNESS_OF_BREATH] = value;
-                  });
-                },
-                title: Text(
-                  Strings.shortness_of_breath,
-                  style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
-                ),
-              ),
-              CheckboxListTile(
-                activeColor: Colors.teal,
-                value: _formData[LABEL_EXCESSIVE_FATIGUE],
-                onChanged: (bool value) {
-                  setState(() {
-                    _formData[LABEL_EXCESSIVE_FATIGUE] = value;
-                  });
-                },
-                title: Text(
-                  Strings.excessive_fatigue,
-                  style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
-                ),
-              ),
-              CheckboxListTile(
-                activeColor: Colors.teal,
-                value: _formData[LABEL_DIZZINESS],
-                onChanged: (bool value) {
-                  setState(() {
-                    _formData[LABEL_DIZZINESS] = value;
-                  });
-                },
-                title: Text(
-                  Strings.dizziness,
-                  style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
-                ),
-              ),
-              CheckboxListTile(
-                activeColor: Colors.teal,
-                value: _formData[LABEL_BODY_PAIN],
-                onChanged: (bool value) {
-                  setState(() {
-                    _formData[LABEL_BODY_PAIN] = value;
-                  });
-                },
-                title: Text(
-                  Strings.body_pain,
-                  style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 20)),
-                ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Sintomas",
+                    style: TextStyle(
+                      color: CardioColors.black,
+                      fontSize: Dimensions.getTextSize(context, 20),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    strutStyle: StrutStyle.disabled,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: Dimensions.getEdgeInsets(context,
+                        left: 15, top: 15, bottom: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        Dimensions.getConvertedHeightSize(context, 5),
+                      ),
+                      border: Border.all(
+                        color: CardioColors.black,
+                        width: Dimensions.getConvertedHeightSize(context, 1),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        CustomCheckItem(
+                          label: Strings.shortness_of_breath,
+                          value: _formData[LABEL_SHORTNESS_OF_BREATH],
+                          onChanged: (bool value) {
+                            setState(() {
+                              _formData[LABEL_SHORTNESS_OF_BREATH] = value;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          height:
+                              Dimensions.getConvertedHeightSize(context, 10),
+                        ),
+                        CustomCheckItem(
+                          value: _formData[LABEL_EXCESSIVE_FATIGUE],
+                          onChanged: (bool value) {
+                            setState(() {
+                              _formData[LABEL_EXCESSIVE_FATIGUE] = value;
+                            });
+                          },
+                          label: Strings.excessive_fatigue,
+                        ),
+                        SizedBox(
+                          height:
+                              Dimensions.getConvertedHeightSize(context, 10),
+                        ),
+                        CustomCheckItem(
+                          value: _formData[LABEL_DIZZINESS],
+                          onChanged: (bool value) {
+                            setState(() {
+                              _formData[LABEL_DIZZINESS] = value;
+                            });
+                          },
+                          label: Strings.dizziness,
+                        ),
+                        SizedBox(
+                          height:
+                              Dimensions.getConvertedHeightSize(context, 10),
+                        ),
+                        CustomCheckItem(
+                          value: _formData[LABEL_BODY_PAIN],
+                          onChanged: (bool value) {
+                            setState(() {
+                              _formData[LABEL_BODY_PAIN] = value;
+                            });
+                          },
+                          label: Strings.body_pain,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 13),
