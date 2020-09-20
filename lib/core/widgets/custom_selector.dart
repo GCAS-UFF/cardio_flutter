@@ -41,7 +41,7 @@ class CustomSelector extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(
                 color: CardioColors.black,
-                width: 1,
+                width: Dimensions.getConvertedHeightSize(context, 1),
               ),
               color: Colors.white,
               borderRadius: BorderRadius.circular(
@@ -55,7 +55,7 @@ class CustomSelector extends StatelessWidget {
                   (subtitle == null) ? "Selecione" : subtitle,
                   style: TextStyle(
                     fontSize: Dimensions.getTextSize(context, 20),
-                    color: CardioColors.grey_02,
+                    color: CardioColors.grey_04,
                   ),
                 ),
                 Icon(

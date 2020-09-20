@@ -26,7 +26,7 @@ class ItemMenu extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             border: Border.all(
               color: CardioColors.black,
-              width: 1,
+              width: Dimensions.getConvertedHeightSize(context, 1),
             ),
           ),
           padding: Dimensions.getEdgeInsets(

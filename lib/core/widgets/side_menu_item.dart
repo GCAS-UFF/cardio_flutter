@@ -31,7 +31,7 @@ class SideMenuItem extends StatelessWidget {
           border: Border(
             bottom: BorderSide(
               color: CardioColors.black,
-              width: 1,
+              width: Dimensions.getConvertedHeightSize(context, 1),
             ),
           ),
         ),
