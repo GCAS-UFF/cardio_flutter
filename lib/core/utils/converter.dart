@@ -45,7 +45,7 @@ class Converter {
   static String convertStringToMaskedString(
       {@required String value,
       @required String mask,
-      String escapeCharacter = "x",
+      String escapeCharacter = "#",
       bool onlyDigits}) {
     if (value == null || mask == null) return "";
     value = cleanText(value, onlyDigits: onlyDigits);
@@ -72,7 +72,7 @@ class Converter {
       @required String maskSecundary,
       @required Function changeMask,
       bool onlyDigits,
-      String escapeCharacter = "x"}) {
+      String escapeCharacter = "#"}) {
     String mask;
     if (changeMask == null)
       mask = maskDefault;
