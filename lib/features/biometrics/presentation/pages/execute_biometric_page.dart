@@ -45,7 +45,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
   TextEditingController _bloodPressureController =
       new MultimaskedTextController(
     escapeCharacter: "#",
-    maskDefault: "###x###",
+    maskDefault: "##x##",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
   TextEditingController _weightController;
@@ -258,8 +258,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
         ),
       );
       return;
-    }
-    else if (_formData[LABEL_FATIGUE] == null ||
+    } else if (_formData[LABEL_FATIGUE] == null ||
         Arrays.fatigue[_formData[LABEL_FATIGUE]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(

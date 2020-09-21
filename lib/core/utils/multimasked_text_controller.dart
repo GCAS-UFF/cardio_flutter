@@ -21,7 +21,7 @@ class MultimaskedTextController {
       {@required this.maskDefault,
       this.maskSecundary,
       this.changeMask,
-      this.escapeCharacter: "x",
+      this.escapeCharacter: "#",
       this.onlyDigitsDefault = false,
       this.onlyDigitsSecundary = false}) {
     this._maskedTextFieldController = new TextEditingController();
@@ -39,7 +39,7 @@ class MultimaskedTextController {
     } else {
       String newText = _buildText(text);
       lastTextSize = newText.length;
-     _maskedTextFieldController.value =
+      _maskedTextFieldController.value =
           _maskedTextFieldController.value.copyWith(
         text: newText,
         selection: TextSelection.collapsed(offset: newText.length),
