@@ -121,26 +121,29 @@ class ExercisePage extends StatelessWidget {
     if (dayList == null) return Container();
     return Column(
       children: dayList.map((day) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              child: CircleAvatar(
-                backgroundColor: Colors.blue[900],
-                radius: 35,
-                child: Text(
-                  (day.id.toString()),
-                  style: TextStyle(fontSize: 22),
+        return Container(
+          margin: Dimensions.getEdgeInsets(context, bottom: 20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                child: CircleAvatar(
+                  backgroundColor: Colors.blue[900],
+                  radius: 35,
+                  child: Text(
+                    (day.id.toString()),
+                    style: TextStyle(fontSize: 22),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: Dimensions.getConvertedWidthSize(context, 15),
-            ),
-            Expanded(
-              child: _buildExerciseList(context, day.activities),
-            ),
-          ],
+              SizedBox(
+                width: Dimensions.getConvertedWidthSize(context, 15),
+              ),
+              Expanded(
+                child: _buildExerciseList(context, day.activities),
+              ),
+            ],
+          ),
         );
       }).toList(),
     );
