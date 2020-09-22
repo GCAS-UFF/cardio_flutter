@@ -8,6 +8,7 @@ class ExerciseModel extends Exercise {
   ExerciseModel({
     @required DateTime executionDay,
     @required String id,
+    @required List<String> symptoms,
     @required bool shortnessOfBreath,
     @required bool excessiveFatigue,
     @required bool dizziness,
@@ -25,6 +26,7 @@ class ExerciseModel extends Exercise {
   }) : super(
           executionDay: executionDay,
           id: id,
+          symptoms: symptoms,
           shortnessOfBreath: shortnessOfBreath,
           excessiveFatigue: excessiveFatigue,
           dizziness: dizziness,
@@ -67,6 +69,17 @@ class ExerciseModel extends Exercise {
 
   factory ExerciseModel.fromJson(Map<dynamic, dynamic> json) {
     if (json == null) return null;
+
+    List<String> _symptomsList = [];
+    if (json['shortnessOfBreath'] != null && json['shortnessOfBreath'] == true)
+      _symptomsList.add("Falta de ar");
+    if (json['excessiveFatigue'] != null && json['excessiveFatigue'])
+      _symptomsList.add("Fadiga excessiva");
+    if (json['dizziness'] != null && json['dizziness'])
+      _symptomsList.add("Tontura");
+    if (json['bodyPain'] != null && json['bodyPain'])
+      _symptomsList.add("Dores corporais");
+
     return ExerciseModel(
       executionDay: (json['executionDay'] == null)
           ? null
@@ -82,6 +95,7 @@ class ExerciseModel extends Exercise {
       frequency: json['frequency'],
       intensity: json['intensity'],
       durationInMinutes: json['durationInMinutes'],
+      symptoms: _symptomsList,
       shortnessOfBreath: json['shortnessOfBreath'],
       excessiveFatigue: json['excessiveFatigue'],
       dizziness: json['dizziness'],
@@ -95,8 +109,20 @@ class ExerciseModel extends Exercise {
 
   factory ExerciseModel.fromEntity(Exercise exercise) {
     if (exercise == null) return null;
+
+    List<String> _symptomsList = [];
+    if (exercise.shortnessOfBreath != null && exercise.shortnessOfBreath)
+      _symptomsList.add("Falta de ar");
+    if (exercise.excessiveFatigue != null && exercise.excessiveFatigue)
+      _symptomsList.add("Fadiga excessiva");
+    if (exercise.dizziness != null && exercise.dizziness)
+      _symptomsList.add("Tontura");
+    if (exercise.bodyPain != null && exercise.bodyPain)
+      _symptomsList.add("Dores corporais");
+
     return ExerciseModel(
       name: exercise.name,
+      symptoms: _symptomsList,
       bodyPain: exercise.bodyPain,
       dizziness: exercise.dizziness,
       durationInMinutes: exercise.durationInMinutes,
@@ -126,6 +152,7 @@ class ExerciseModel extends Exercise {
 
     return ExerciseModel.fromJson(objectMap);
   }
+
   static List<ExerciseModel> fromDataSnapshotList(
       DataSnapshot dataSnapshot, bool done) {
     if (dataSnapshot == null) return null;

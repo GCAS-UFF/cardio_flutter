@@ -38,14 +38,14 @@ class Converter {
   }
 
   static String convertStringListToString(List<String> list) {
-    final String string =list.join(', ');
-    return string ;
-   }
+    final String string = list.join(', ');
+    return string;
+  }
 
   static String convertStringToMaskedString(
       {@required String value,
       @required String mask,
-      String escapeCharacter = "x",
+      String escapeCharacter = "#",
       bool onlyDigits}) {
     if (value == null || mask == null) return "";
     value = cleanText(value, onlyDigits: onlyDigits);
@@ -72,7 +72,7 @@ class Converter {
       @required String maskSecundary,
       @required Function changeMask,
       bool onlyDigits,
-      String escapeCharacter = "x"}) {
+      String escapeCharacter = "#"}) {
     String mask;
     if (changeMask == null)
       mask = maskDefault;
@@ -195,13 +195,24 @@ class Converter {
     }
   }
 
-  static String symptom(bool symptom) {
-    String string;
-    if (symptom == null) {
-      return null;
-    } else {
-      (symptom == true) ? string = "Houve" : string = "Não houve";
-      return string;
+  static String symptom(List<String> symptomList) {
+    if (symptomList == null)
+      return "";
+    else {
+      String result = "";
+      if (symptomList.isEmpty)
+        result = "Sem sintomas";
+      else
+        for (int i = 0; i < symptomList.length; i++) {
+          result += symptomList[i];
+          if (i == (symptomList.length - 1))
+            result += ".";
+          else if (i == (symptomList.length - 2))
+            result += " e ";
+          else
+            result += ", ";
+        }
+      return result;
     }
   }
 
@@ -215,7 +226,8 @@ class Converter {
         "Intensidade": (Arrays.intensities[exercise.intensity] == null)
             ? "Não Selecionado"
             : Arrays.intensities[exercise.intensity],
-          "Horários Indicados": Converter.convertStringListToString(exercise.times),
+        "Horários Indicados":
+            Converter.convertStringListToString(exercise.times),
         "Duração": "${exercise.durationInMinutes} minutos",
         "Data de Inicio": DateHelper.convertDateToString(exercise.initialDate),
         "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),
@@ -230,11 +242,7 @@ class Converter {
             ? "Não Selecionado"
             : Arrays.intensities[exercise.intensity],
         "Duração": "${exercise.durationInMinutes} minutos",
-        "Sintomas": "",
-        "   Falta de Ar Excessiva": symptom(exercise.shortnessOfBreath),
-        "   Fadiga Excessiva": symptom(exercise.excessiveFatigue),
-        "   Tontura": symptom(exercise.dizziness),
-        "   Dores Corporais": symptom(exercise.bodyPain),
+        "Sintomas": symptom(exercise.symptoms),
         "Observação":
             (exercise.observation != null) ? exercise.observation : "",
       };

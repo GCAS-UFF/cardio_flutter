@@ -8,15 +8,18 @@ import 'package:cardio_flutter/features/calendar/presentation/models/day.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/month.dart';
 import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
 import 'package:cardio_flutter/features/exercises/presentation/pages/add_exercise_page.dart';
-import 'package:cardio_flutter/features/exercises/presentation/widgets/exercise_card.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/empty_page.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/widgets/entity_card.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
+import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+
+import 'execute_exercise_page.dart';
 
 class ExercisePage extends StatelessWidget {
   @override
@@ -59,8 +62,16 @@ class ExercisePage extends StatelessWidget {
     if (activityList == null) return Container();
     return Column(
       children: activityList.map((activity) {
-        return ExerciseCard(
+        return EntityCard(
           activity: activity,
+          openExecuted: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>
+                    ExecuteExercisePage(exercise: activity.value),
+              ),
+            );
+          },
         );
       }).toList(),
     );
@@ -73,15 +84,24 @@ class ExercisePage extends StatelessWidget {
         return Column(
           children: <Widget>[
             Container(
+              padding: Dimensions.getEdgeInsets(context, bottom: 5),
+              alignment: Alignment.bottomLeft,
               decoration: BoxDecoration(
-                color: Colors.blue[900],
-                borderRadius: BorderRadius.circular(10),
+                color: CardioColors.white,
+                border: Border(
+                  bottom: BorderSide(
+                    color: CardioColors.black,
+                    width: Dimensions.getConvertedHeightSize(context, 1),
+                  ),
+                ),
               ),
-              height: Dimensions.getConvertedHeightSize(context, 50),
-              alignment: Alignment.center,
               child: Text(
                 "${Arrays.months[month.id - 1]} ${month.year}",
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: TextStyle(
+                  color: CardioColors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: Dimensions.getTextSize(context, 22),
+                ),
               ),
             ),
             SizedBox(
@@ -101,24 +121,29 @@ class ExercisePage extends StatelessWidget {
     if (dayList == null) return Container();
     return Column(
       children: dayList.map((day) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              child: CircleAvatar(
-                backgroundColor: Colors.blue[900],
-                radius: 35,
-                child: Text(
-                  (day.id.toString()),
-                  style: TextStyle(fontSize: 22),
+        return Container(
+          margin: Dimensions.getEdgeInsets(context, bottom: 20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                child: CircleAvatar(
+                  backgroundColor: Colors.blue[900],
+                  radius: 35,
+                  child: Text(
+                    (day.id.toString()),
+                    style: TextStyle(fontSize: 22),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: Dimensions.getConvertedWidthSize(context, 15),
-            ),
-            Expanded(child: _buildExerciseList(context, day.activities)),
-          ],
+              SizedBox(
+                width: Dimensions.getConvertedWidthSize(context, 15),
+              ),
+              Expanded(
+                child: _buildExerciseList(context, day.activities),
+              ),
+            ],
+          ),
         );
       }).toList(),
     );

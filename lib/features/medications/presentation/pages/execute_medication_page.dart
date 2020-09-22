@@ -3,6 +3,7 @@ import 'package:cardio_flutter/core/input_validators/time_of_day_validator.dart'
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
+import 'package:cardio_flutter/core/widgets/custom_radio_list_form_text_field.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 
@@ -69,13 +70,18 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
           DateHelper.getTimeFromDate(widget.medication.executedDate);
       _formData[LABEL_OBSERVATION] =
           (!widget.medication.done) ? null : widget.medication.observation;
-      _formData[LABEL_TOOK_IT] = widget.medication.tookIt;
+      _formData[LABEL_TOOK_IT] =
+          widget.medication.tookIt != null && widget.medication.tookIt
+              ? YesNoRadioOptions.YES
+              : YesNoRadioOptions.NO;
       _executedDateController.text = _formData[LABEL_EXECUTED_DATE];
       _executionTimeController.text = _formData[LABEL_EXECUTION_TIME];
     }
 
     _formData[LABEL_TOOK_IT] =
-        (_formData[LABEL_TOOK_IT] == null) ? false : _formData[LABEL_TOOK_IT];
+        widget.medication.tookIt != null && widget.medication.tookIt
+            ? YesNoRadioOptions.YES
+            : YesNoRadioOptions.NO;
 
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
@@ -232,66 +238,14 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
               SizedBox(
                 height: Dimensions.getTextSize(context, 20),
               ),
-              Container(
-                  alignment: Alignment.centerLeft,
-                  padding: Dimensions.getEdgeInsets(context, left: 25),
-                  child: Text(
-                    Strings.tookIt,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 20)),
-                  )),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: Dimensions.getEdgeInsets(context, left: 25),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Radio(
-                          value: true,
-                          activeColor: Colors.teal,
-                          groupValue: _formData[LABEL_TOOK_IT],
-                          onChanged: (tookit) {
-                            print(tookit);
-                            setState(() {
-                              _formData[LABEL_TOOK_IT] = tookit;
-                            });
-                          },
-                        ),
-                        Text(
-                          'Sim',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: Dimensions.getTextSize(context, 20)),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Radio(
-                          activeColor: Colors.teal,
-                          value: false,
-                          groupValue: _formData[LABEL_TOOK_IT],
-                          onChanged: (tookit) {
-                            print(tookit);
-                            setState(() {
-                              _formData[LABEL_TOOK_IT] = tookit;
-                            });
-                          },
-                        ),
-                        Text(
-                          'Não',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: Dimensions.getTextSize(context, 20)),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+              CustomRadioListFormField(
+                title: Strings.tookIt,
+                groupValue: _formData[LABEL_TOOK_IT],
+                onChanged: (tookit) {
+                  setState(() {
+                    _formData[LABEL_TOOK_IT] = tookit;
+                  });
+                },
               ),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
@@ -333,7 +287,9 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
               DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),
             ),
             observation: _formData[LABEL_OBSERVATION],
-            tookIt: _formData[LABEL_TOOK_IT],
+            tookIt: _formData[LABEL_TOOK_IT] == YesNoRadioOptions.YES
+                ? true
+                : false,
           ),
         ),
       );
@@ -351,7 +307,9 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
               DateHelper.convertStringToDate(_formData[LABEL_EXECUTED_DATE]),
             ),
             observation: _formData[LABEL_OBSERVATION],
-            tookIt: _formData[LABEL_TOOK_IT],
+            tookIt: _formData[LABEL_TOOK_IT] == YesNoRadioOptions.YES
+                ? true
+                : false,
           ),
         ),
       );

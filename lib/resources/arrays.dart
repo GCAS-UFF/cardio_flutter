@@ -1,3 +1,5 @@
+import 'package:cardio_flutter/resources/strings.dart';
+
 class Arrays {
   static const List<String> months = [
     "Janeiro de",
@@ -65,4 +67,11 @@ class Arrays {
     "Cálice": 30,
     "Xícara de chá": 200
   };
+
+  static List<String> symptomsCheckListLabels = [
+    Strings.shortness_of_breath,
+    Strings.excessive_fatigue,
+    Strings.dizziness,
+    Strings.body_pain,
+  ];
 }

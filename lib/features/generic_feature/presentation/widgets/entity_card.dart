@@ -31,7 +31,7 @@ class _EntityCardState extends State<EntityCard> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _textStyle = TextStyle(
-      fontSize: Dimensions.getTextSize(context, 20),
+      fontSize: Dimensions.getTextSize(context, 22),
       fontWeight: FontWeight.normal,
       color: CardioColors.black,
     );
@@ -147,7 +147,7 @@ class _EntityCardState extends State<EntityCard> {
                 Text(
                   "Realizar",
                   style: TextStyle(
-                    fontSize: Dimensions.getTextSize(context, 18),
+                    fontSize: Dimensions.getTextSize(context, 20),
                     fontWeight: FontWeight.normal,
                     color: CardioColors.white,
                   ),

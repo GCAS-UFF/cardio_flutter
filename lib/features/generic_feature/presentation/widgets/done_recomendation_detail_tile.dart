@@ -28,7 +28,7 @@ class DoneRecomendationDetailTile extends StatelessWidget {
       child: Text.rich(
         TextSpan(
           style: TextStyle(
-            fontSize: Dimensions.getTextSize(context, 16),
+            fontSize: Dimensions.getTextSize(context, 20),
             fontWeight: FontWeight.normal,
             color: CardioColors.black,
           ),
@@ -39,7 +39,7 @@ class DoneRecomendationDetailTile extends StatelessWidget {
             TextSpan(
               text: content, //"06:00, 14:00, 22:00",
               style: TextStyle(
-                fontSize: Dimensions.getTextSize(context, 16),
+                fontSize: Dimensions.getTextSize(context, 20),
                 fontWeight: FontWeight.bold,
                 color: CardioColors.black,
               ),
