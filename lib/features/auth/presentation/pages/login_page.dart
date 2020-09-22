@@ -92,12 +92,16 @@ class _LoginPageState extends State<LoginPage> {
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
               if (state is Loading) {
-                return LoadingWidget(
-                  _buildScaffold(context),
+                return Center(
+                  child: LoadingWidget(
+                    Container(),
+                  ),
                 );
               } else if (state is InitialAuthState) {
-                return LoadingWidget(
-                  Container(),
+                return Center(
+                  child: LoadingWidget(
+                    Container(),
+                  ),
                 );
               } else {
                 return _buildScaffold(context);
