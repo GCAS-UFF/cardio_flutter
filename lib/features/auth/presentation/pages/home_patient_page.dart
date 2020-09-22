@@ -30,9 +30,11 @@ class HomePatientPage extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    debugPrint("[JP] ${patient?.name?.split(" ")[0]}");
     return BasePage(
-      userData: patient,
       hasDrawer: true,
+      recomendation: "Home",
+      patient: patient,
       body: SingleChildScrollView(
         child: Container(
           width: Dimensions.getConvertedWidthSize(context, 412),

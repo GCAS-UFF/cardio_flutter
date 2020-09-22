@@ -15,6 +15,8 @@ class SideMenuHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> names = userName.split(" ");
+    String _fullname = "${names[0]} ${names.last}";
     return Container(
       padding: Dimensions.getEdgeInsets(
         context,
@@ -44,26 +46,28 @@ class SideMenuHeader extends StatelessWidget {
           ),
 
           /// Personal data
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                userName,
-                style: TextStyle(
-                  fontSize: Dimensions.getTextSize(context, 20),
-                  fontWeight: FontWeight.w500,
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  _fullname,
+                  style: TextStyle(
+                    fontSize: Dimensions.getTextSize(context, 20),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              Text(
-                userCpf,
-                style: TextStyle(
-                  fontSize: Dimensions.getTextSize(context, 16),
-                  fontWeight: FontWeight.normal,
+                Text(
+                  userCpf,
+                  style: TextStyle(
+                    fontSize: Dimensions.getTextSize(context, 16),
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

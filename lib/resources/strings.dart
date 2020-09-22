@@ -253,53 +253,53 @@ class Strings {
   static const orientation14 = "Viagens";
 
   static const orientation_answer2 =
-      "Os sintomas podem aparecer aos poucos quando se realiza alguma atividade, ou até mesmo, em repouso.\n"
+      " Os sintomas podem aparecer aos poucos quando se realiza alguma atividade, ou até mesmo, em repouso.\n"
       "Exemplo de sintomas:\n"
-      "1. Falta de ar\n2. Tosse\n3. Náusea \n4. Palpitações \n5. Ganho de peso"
-      "\n6. Inchaço nas pernas, pés ou tornozelos\n7. Tontura\n8. Cansaço \n9. Confusão mental";
+      "1. Falta de ar;\n2. Tosse;\n3. Náusea;\n4. Palpitações;\n5. Ganho de peso;"
+      "\n6. Inchaço nas pernas, pés ou tornozelos;\n7. Tontura;\n8. Cansaço;\n9. Confusão mental.";
   static const orientation_answer1 =
       "É a dificuldade do coração em se encher de sangue corretamente e bombeá-lo de "
-      "forma suficiente para abastecer as necessidades do corpo ";
+      "forma suficiente para abastecer as necessidades do corpo.";
   static const orientation_answer3_1 =
-      "1. Mantenha alimentação saudável, com pouca gordura, pouco sal e rica em frutas, legumes e verduras\n\n2.";
+      "1. Mantenha alimentação saudável, com pouca gordura, pouco sal e rica em frutas, legumes e verduras;\n\n2.";
   static const orientation_answer3_2 =
-      "os alimentos embutidos, comidas congeladas (industrializadas), temperos prontos, alimentos em conservas e os "
+      " os alimentos embutidos, comidas congeladas (industrializadas), temperos prontos, alimentos em conservas e os "
       "industrializados, pois o conservante utilizado é rico em sódio.  "
-      "Exemplos:\n- Caldo de carne e legumes prontos; \n- Ketchup \n- Refrigerante \n- Amendoim  \n- Bacalhau  \n- Salsicha "
-      " \n- Bacon \n- Queijos amarelos "
-      "\n- Pele de frango  \n- Carnes gordas \n- Mortadela \n\n3. ";
+      "Exemplos:\n- Caldo de carne e legumes prontos;\n- Ketchup;\n- Refrigerante;\n- Amendoim;\n- Bacalhau;\n- Salsicha;"
+      " \n- Bacon;\n- Queijos amarelos;"
+      "\n- Pele de frango;\n- Carnes gordas;\n- Mortadela.\n\n3. ";
   static const orientation_answer3_3 =
-      "\nExemplos: \n- Alho \n- Cebola  \n- Manjericão \n- Orégano \n- Alecrim  \n- Salsa \n- Coentro \n- Tomilho \n- Louro "
-      "\nEntre outros";
+      "\n- Alho;\n- Cebola; \n- Manjericão;\n- Orégano;\n- Alecrim;\n- Salsa;\n- Coentro;\n- Tomilho;\n- Louro;"
+      "\n- Entre outros...";
   static const orientation_answer4 =
-      "- Não beba líquido em excesso\n- Contabilize os líquidos com a ajuda de um copo dosador \n - Siga as orientações oferecidas"
-      " durante a consulta presencial ";
+      "- Não beba líquido em excesso;\n- Contabilize os líquidos com a ajuda de um copo dosador;\n- Siga as orientações oferecidas"
+      " durante a consulta presencial.";
   static const orientation_answer5 =
-      "- Praticar atividade física pode melhorar os sintomas da Insuficiência Cardíaca, aumentar a capacidade de esforço e "
+      "Praticar atividade física pode melhorar os sintomas da Insuficiência Cardíaca, aumentar a capacidade de esforço e "
       "melhorar sua qualidade de vida! "
-      "\n- Converse com seu Cardiologista e Fisioterapeuta e veja se está apto a praticar atividades e qual a mais apropriada para você.";
+      "\n\nConverse com seu Cardiologista e Fisioterapeuta e veja se está apto a praticar atividades e qual a mais apropriada para você.";
   static const orientation_answer6 =
-      "- Escolha um horário e crie o hábito de se pesar com roupas leves, isto deve ser feito diariamente."
-      "\n- O ganho de peso em excesso pode indicar Insuficiência Cardíaca descompensada.";
+      "Escolha um horário e crie o hábito de se pesar com roupas leves, isto deve ser feito diariamente."
+      "\n\nO ganho de peso em excesso pode indicar Insuficiência Cardíaca descompensada.";
   static const orientation_answer7 =
-      "- O cigarro contém substâncias tóxicas que provocam aumento do trabalho do coração."
-      "\n- A ingestão de bebidas alcoólicas deve ser eliminada, já que pode piorar a Insuficiência Cardíaca e"
+      "O cigarro contém substâncias tóxicas que provocam aumento do trabalho do coração."
+      "\n\nA ingestão de bebidas alcoólicas deve ser eliminada, já que pode piorar a Insuficiência Cardíaca e"
       " causar alterações no ritmo cardíaco.";
   static const orientation_answer8 =
-      "- Faça uma lista com todas as suas razões para parar de fumar"
-      "\n- Escolha uma data para começar  "
-      "\n- Mude hábitos que sempre te dão vontade de fumar  "
-      "\n- Se não conseguir parar de uma vez, vá diminuindo a quantidade diária, até parar completamente "
-      "\n- Procure fazer atividades que relaxem "
-      "\n- Não desista  "
-      "\n- Não se desespere, se tiver uma recaída "
-      "\n- Tenha força de vontade e recomece sempre "
-      "\n- Procure grupos de apoio  ";
+      "- Faça uma lista com todas as suas razões para parar de fumar;"
+      "\n- Escolha uma data para começar;"
+      "\n- Mude hábitos que sempre te dão vontade de fumar;"
+      "\n- Se não conseguir parar de uma vez, vá diminuindo a quantidade diária, até parar completamente;"
+      "\n- Procure fazer atividades que relaxem;"
+      "\n- Não desista;"
+      "\n- Não se desespere, se tiver uma recaída;"
+      "\n- Tenha força de vontade e recomece sempre;"
+      "\n- Procure grupos de apoio.";
   static const orientation_answer9 =
-      "- Tome os medicamentos conforme orientação e prescrição de seu médico.  "
-      "\n- Tome seu medicamento sempre no horário que foi orientado. "
-      "\n- Mesmo quando se sentir bem, continue fazendo o uso da medicação, isso significa um adequado controle de sua doença "
-      "\n- Não aumente, diminua ou pare de tomar os medicamentos sem orientação médica. ";
+      "- Tome os medicamentos conforme orientação e prescrição de seu médico;"
+      "\n- Tome seu medicamento sempre no horário que foi orientado;"
+      "\n- Mesmo quando se sentir bem, continue fazendo o uso da medicação, isso significa um adequado controle de sua doença;"
+      "\n- Não aumente, diminua ou pare de tomar os medicamentos sem orientação médica.";
   static const orientation_answer10 =
       "Participe das campanhas de vacinação contra influenza (gripe) e pneumococo (pneumonia). ";
   static const orientation_answer11 =
@@ -309,16 +309,16 @@ class Strings {
       "1.  Ansiedade e estresse são sentimentos comuns a todas as pessoas, porém se forem persistentes e interferirem "
       "nas atividades diárias ou nas relações com outras pessoas, devemos procurar ajuda. \n\n2. ";
   static const orientation_answer12_2 =
-      "\n- Procurar um Psicólogo, para tratar esses sentimentos"
-      "\n- Expresse suas emoções e sentimentos"
-      "\n- Se estiver mais angustiado, triste ou ansioso, busque conversar com pessoas que geralmente têm uma postura mais otimista frente às dificuldades."
-      "\n- Aceite apoio emocional quando oferecido e ofereça apoio sempre que puder"
-      "\n- Planeje atividades para o dia, que não sobrecarreguem seu corpo e mente."
-      "\n- Preencha seu tempo com informações otimistas e atividades prazerosas "
-      "\n- Não se isolar"
-      "\n- Realizar atividades que goste (Exemplo: ver filme, desenhar, bordar, cantar, ouvir música)"
-      "\n- Use técnicas de respiração e meditação"
-      "\n- Suporte religioso, caso tenha crença religiosa";
+      "\n- Procurar um Psicólogo, para tratar esses sentimentos;"
+      "\n- Expresse suas emoções e sentimentos;"
+      "\n- Se estiver mais angustiado, triste ou ansioso, busque conversar com pessoas que geralmente têm uma postura mais otimista frente às dificuldades;"
+      "\n- Aceite apoio emocional quando oferecido e ofereça apoio sempre que puder;"
+      "\n- Planeje atividades para o dia, que não sobrecarreguem seu corpo e mente;"
+      "\n- Preencha seu tempo com informações otimistas e atividades prazerosas;"
+      "\n- Não se isolar;"
+      "\n- Realizar atividades que goste (Exemplo: ver filme, desenhar, bordar, cantar, ouvir música);"
+      "\n- Use técnicas de respiração e meditação;"
+      "\n- Suporte religioso, caso tenha crença religiosa.";
   static const orientation_answer13 =
       "Tente dormir pelo menos 8 horas por dia. Além disso, repouse caso tenha feito atividades de esforço moderado ou esteja sentindo algum sintoma.";
   static const orientation_answer14 =

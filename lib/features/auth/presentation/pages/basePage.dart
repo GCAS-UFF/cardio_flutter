@@ -4,7 +4,11 @@ import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/core/widgets/side_menu_exit_button.dart';
 import 'package:cardio_flutter/core/widgets/side_menu_header.dart';
 import 'package:cardio_flutter/core/widgets/side_menu_item.dart';
-import 'package:cardio_flutter/features/auth/domain/entities/user.dart';
+import 'package:cardio_flutter/features/app_info/presentation/pages/app_info_page.dart';
+import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
+import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
+import 'package:cardio_flutter/features/help/presentation/pages/patient_help_page.dart';
+import 'package:cardio_flutter/features/help/presentation/pages/professional_help_page.dart';
 import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
@@ -15,18 +19,18 @@ import 'package:provider/provider.dart';
 class BasePage extends StatelessWidget {
   final Widget body;
   final Function addFunction;
-  final User userData;
   final String recomendation;
   final bool hasDrawer;
+  final Patient patient;
 
-  const BasePage(
-      {Key key,
-      this.body,
-      this.addFunction,
-      this.userData,
-      this.recomendation,
-      this.hasDrawer = false})
-      : super(key: key);
+  const BasePage({
+    Key key,
+    this.body,
+    this.addFunction,
+    this.recomendation,
+    this.hasDrawer = false,
+    this.patient,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +39,7 @@ class BasePage extends StatelessWidget {
       color: CardioColors.white,
       fontWeight: FontWeight.w500,
     );
+
     return hasDrawer
         ? Scaffold(
             floatingActionButton: (addFunction != null)
@@ -59,29 +64,12 @@ class BasePage extends StatelessWidget {
               iconTheme: IconThemeData(
                 color: CardioColors.white,
               ),
-              title: userData != null
-                  ? RichText(
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: Strings.greeting_text_app_bar,
-                            style: _textStyle,
-                          ),
-                          TextSpan(
-                            text: userData.type,
-                            style: _textStyle,
-                          ),
-                          TextSpan(
-                            text: Strings.exclamation_point_text_app_bar,
-                            style: _textStyle,
-                          ),
-                        ],
-                      ),
-                    )
-                  : Text(
-                      recomendation,
-                      style: _textStyle,
-                    ),
+              title: Text(
+                patient != null && patient.name != null
+                    ? "Olá, ${patient.name.split(" ")[0]}!"
+                    : recomendation,
+                style: _textStyle,
+              ),
               backgroundColor: CardioColors.blue,
             ),
             drawer: Drawer(
@@ -94,14 +82,45 @@ class BasePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       /// Header
-                      SideMenuHeader(),
+                      SideMenuHeader(
+                        userName: patient?.name,
+                        userCpf: patient?.cpf,
+                      ),
                       SizedBox(
-                        height: Dimensions.getConvertedHeightSize(context, 35),
+                        height: Dimensions.getConvertedHeightSize(context, 25),
                       ),
 
                       /// Menu items
-                      SideMenuItem(),
-                      SideMenuItem(),
+                      SideMenuItem(
+                        text: Strings.about,
+                        onTapFunction: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AppInfoPage(),
+                          ),
+                        ),
+                      ),
+                      SideMenuItem(
+                        text: Strings.help,
+                        onTapFunction: () {
+                          (Provider.of<Settings>(context, listen: false)
+                                      .getUserType() ==
+                                  Keys.PROFESSIONAL_TYPE)
+                              ? Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProfessionalHelpPage(),
+                                  ),
+                                )
+                              : Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PatientHelpPage(),
+                                  ),
+                                );
+                        },
+                      ),
 
                       /// Spacer
                       Expanded(
@@ -140,29 +159,10 @@ class BasePage extends StatelessWidget {
               iconTheme: IconThemeData(
                 color: CardioColors.white,
               ),
-              title: userData != null
-                  ? RichText(
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: Strings.greeting_text_app_bar,
-                            style: _textStyle,
-                          ),
-                          TextSpan(
-                            text: userData.type,
-                            style: _textStyle,
-                          ),
-                          TextSpan(
-                            text: Strings.exclamation_point_text_app_bar,
-                            style: _textStyle,
-                          ),
-                        ],
-                      ),
-                    )
-                  : Text(
-                      recomendation,
-                      style: _textStyle,
-                    ),
+              title: Text(
+                recomendation,
+                style: _textStyle,
+              ),
               backgroundColor: CardioColors.blue,
               leading: GestureDetector(
                 child: Icon(
