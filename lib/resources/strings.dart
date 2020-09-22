@@ -331,4 +331,36 @@ class Strings {
   static const empty_exercise = "Ainda não há exercícios recomendados";
   static const empty_liquid = "Ainda não há limite de líquidos registrado";
   static const empty_medication = "Ainda não há medicamentos prescritos";
+
+  // About Page
+  static const about1 = "Sobre";
+  static const about2 = "Colaboradores";
+  static const about2_1 = "Idealizadoras\n\n";
+  static const about2_2 = "\n\nDesenvolvedores\n\n";
+  static const about2_3 = "\n\nDesign de ícones\n\n";
+
+  static const about_answer1 =
+      "Card.IO é um aplicativo para monitoramento de pacientes com Insuficiência Cardíaca Crônica,"
+      " acompanhados em um Programa de Extensão da Univerdade Federal Fluminense,"
+      " denominado Clínica de Insuficiência Cardíaca Coração Valente."
+      "\nEste aplicativo tem como objetivo estimular o autocuidado, além de "
+      "favorecer o contato direto entre paciente e profissional de saúde."
+      "\n\n"
+      "Desenvolvido como projeto de Doutorado da Enfermeira Lyvia da Silva Figueiredo";
+  static const about_answer2_1 = "- Enfermeira Doutoranda Lyvia da Silva Figueiredo\n"
+      " - Prof Dra Ana Carla Dantas Cavalcanti \n(Escola de Enfermagem/UFF)\n"
+      " - Prof Dra Paula Vanessa Peclat Flores \n(Escola de Enfermagem/UFF)";
+  static const about_answer2_2 = "Prof Dr Flávio Luis Seixas\n"
+      "(Instituto de computação/UFF)\n   - José Paulo de Mello Gomes"
+      "\n(Instituto de computação/UFF)\n"
+      " - Kelly Maria Augusta Tavares Bentes"
+      "\n(Instituto de computação/UFF)\n"
+      " - Artur Ladeira Andrade"
+      "\n(Instituto de computação/UFF)\n"
+      " - Larissa Martins dos Blanco"
+      "\n(Instituto de computação/UFF)\n"
+      " - James Adler Wonghon S. de Sousa"
+      "\n(Instituto de Engenharia Naval/UEA)\n";
+  static const about_answer2_3 = "Danilo Corrêa\n"
+      "(Escola de Enfermagem/UFF)\n";
 }
