@@ -126,13 +126,15 @@ class ExercisePage extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                child: CircleAvatar(
-                  backgroundColor: Colors.blue[900],
-                  radius: 35,
-                  child: Text(
-                    (day.id.toString()),
-                    style: TextStyle(fontSize: 22),
+              CircleAvatar(
+                backgroundColor: CardioColors.blue,
+                radius: Dimensions.getConvertedHeightSize(context, 25),
+                child: Text(
+                  day.id.toString(),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                    color: CardioColors.white,
                   ),
                 ),
               ),

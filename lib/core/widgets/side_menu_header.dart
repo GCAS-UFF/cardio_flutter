@@ -40,6 +40,7 @@ class SideMenuHeader extends StatelessWidget {
             Images.profile_thumb,
             height: Dimensions.getConvertedHeightSize(context, 79),
             width: Dimensions.getConvertedHeightSize(context, 79),
+            color: CardioColors.grey_06,
           ),
           SizedBox(
             width: Dimensions.getConvertedWidthSize(context, 10),

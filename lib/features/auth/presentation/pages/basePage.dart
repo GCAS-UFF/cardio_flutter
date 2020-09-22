@@ -6,7 +6,6 @@ import 'package:cardio_flutter/core/widgets/side_menu_header.dart';
 import 'package:cardio_flutter/core/widgets/side_menu_item.dart';
 import 'package:cardio_flutter/features/app_info/presentation/pages/app_info_page.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
-import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
 import 'package:cardio_flutter/features/help/presentation/pages/patient_help_page.dart';
 import 'package:cardio_flutter/features/help/presentation/pages/professional_help_page.dart';
 import 'package:cardio_flutter/resources/cardio_colors.dart';
