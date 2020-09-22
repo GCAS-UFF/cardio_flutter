@@ -11,6 +11,7 @@ import 'package:cardio_flutter/features/exercises/presentation/pages/add_exercis
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/empty_page.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/entity_card.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
+import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -83,15 +84,24 @@ class ExercisePage extends StatelessWidget {
         return Column(
           children: <Widget>[
             Container(
+              padding: Dimensions.getEdgeInsets(context, bottom: 5),
+              alignment: Alignment.bottomLeft,
               decoration: BoxDecoration(
-                color: Colors.blue[900],
-                borderRadius: BorderRadius.circular(10),
+                color: CardioColors.white,
+                border: Border(
+                  bottom: BorderSide(
+                    color: CardioColors.black,
+                    width: Dimensions.getConvertedHeightSize(context, 1),
+                  ),
+                ),
               ),
-              height: Dimensions.getConvertedHeightSize(context, 50),
-              alignment: Alignment.center,
               child: Text(
                 "${Arrays.months[month.id - 1]} ${month.year}",
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: TextStyle(
+                  color: CardioColors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: Dimensions.getTextSize(context, 22),
+                ),
               ),
             ),
             SizedBox(
