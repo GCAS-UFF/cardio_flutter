@@ -45,11 +45,18 @@ dependencies:
   # Load SVG files
   flutter_svg: ^0.17.4
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.5"
   flutter_localizations:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/app_logo.png"
 
 flutter:
 
