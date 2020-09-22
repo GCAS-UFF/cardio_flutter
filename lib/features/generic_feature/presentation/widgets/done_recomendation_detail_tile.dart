@@ -13,8 +13,6 @@ class DoneRecomendationDetailTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("[JP] title: $title");
-    debugPrint("[JP] content: $content");
     return Container(
       padding: Dimensions.getEdgeInsets(context, left: 15, top: 10, bottom: 10),
       width: double.infinity,

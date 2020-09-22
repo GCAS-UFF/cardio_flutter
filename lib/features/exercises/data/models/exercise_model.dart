@@ -74,7 +74,7 @@ class ExerciseModel extends Exercise {
     if (json['shortnessOfBreath'] != null && json['shortnessOfBreath'] == true)
       _symptomsList.add("Falta de ar");
     if (json['excessiveFatigue'] != null && json['excessiveFatigue'])
-      _symptomsList.add("Fatiga excessiva");
+      _symptomsList.add("Fadiga excessiva");
     if (json['dizziness'] != null && json['dizziness'])
       _symptomsList.add("Tontura");
     if (json['bodyPain'] != null && json['bodyPain'])
@@ -114,7 +114,7 @@ class ExerciseModel extends Exercise {
     if (exercise.shortnessOfBreath != null && exercise.shortnessOfBreath)
       _symptomsList.add("Falta de ar");
     if (exercise.excessiveFatigue != null && exercise.excessiveFatigue)
-      _symptomsList.add("Fatiga excessiva");
+      _symptomsList.add("Fadiga excessiva");
     if (exercise.dizziness != null && exercise.dizziness)
       _symptomsList.add("Tontura");
     if (exercise.bodyPain != null && exercise.bodyPain)
