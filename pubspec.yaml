@@ -45,11 +45,13 @@ dependencies:
   # Load SVG files
   flutter_svg: ^0.17.4
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+
 
 flutter:
 

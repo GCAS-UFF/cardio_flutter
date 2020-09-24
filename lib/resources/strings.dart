@@ -201,35 +201,40 @@ class Strings {
   static const help7 = "Informações";
 
   static const help_answer1 =
-      "Nesta tela serão exibidas as recomendações do profissional para dados biométricos (cor Azul) e os dados biométricos que já foram preenchidos"
-      " (Cor Laranja); ao clicar no item azul, será possivel preenchê-lo, e ao salvar surgirá um novo item Laranja. Caso tenha ocorrido algum erro"
-      " durante o preenchimento, não se preocupe, pois é possível editá-lo posteriormente; ao clicar no item laranja, aparecerá um menu com 2 opções"
-      ": \"Editar\", para ajustar as informações do item realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada nova"
-      " aferição de dados, clique no item azul correspondente para que assim crie um novo item realizado.";
+      "Nesta tela serão exibidas as recomendações do profissional para dados biométricos (Recomendação) e os dados biométricos que já foram preenchidos"
+      " (Realizado); ao clicar no item cinza \"Recomendação\" e posteriormente no botão Azul \"Realizar\", será possivel preenchê-lo, e ao salvar"
+      " surgirá um novo item verde \"Realizado\" no dia atual. Caso tenha ocorrido algum erro durante o preenchimento, não se preocupe, pois é possível"
+      " editá-lo posteriormente; ao clicar no item \"Realizado\", aparecerá um menu com 2 opções: \"Editar\", para ajustar as informações do item"
+      " realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada nova aferição de dados, clique no item \"Recomendação\""
+      " correspondente para que assim crie um novo item realizado.";
   static const help_answer2 =
-      "Nesta tela serão exibidas as recomendações do profissional para líquidos ingeridos (cor Azul) e os dados de líquidos ingeridos que já foram preenchidos"
-      " (Cor Laranja); ao clicar no item azul, será possivel preenchê-lo, e ao salvar surgirá um novo item Laranja. Caso tenha ocorrido algum erro"
-      " durante o preenchimento, não se preocupe, pois é possível editá-lo posteriormente; ao clicar no item laranja, aparecerá um menu com 2 opções"
-      ": \"Editar\", para ajustar as informações do item realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada novo"
-      " líquido ingerido, clique no item azul correspondente para que assim crie um novo item realizado.";
+      "Nesta tela serão exibidas as recomendações do profissional para líquidos ingeridos (Recomendação) e os dados de líquidos ingeridos que já foram"
+      " preenchidos (Realizado); ao clicar no item cinza \"Recomendação\" e posteriormente no botão Azul \"Realizar\", será possivel preenchê-lo, e ao "
+      " salvar surgirá um novo item verde \"Realizado\" no dia atual. Caso tenha ocorrido algum erro durante o preenchimento, não se preocupe, pois é"
+      " possível editá-lo posteriormente; ao clicar no item \"Realizado\" aparecerá um menu com 2 opções: \"Editar\", para ajustar as informações do,"
+      " item realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada novo líquido ingerido, clique no item \"Recomendação\""
+      " correspondente para que assim crie um novo item realizado.";
   static const help_answer3 =
-      "Nesta tela serão exibidos os medicamentos que o profissional passou (cor Azul) e os dados de medicamentos que já foram preenchidos"
-      " (Cor Laranja); ao clicar no item azul, será possivel preenchê-lo, e ao salvar surgirá um novo item Laranja. Caso tenha ocorrido algum erro"
-      " durante o preenchimento, não se preocupe, pois é possível editá-lo posteriormente; ao clicar no item laranja, aparecerá um menu com 2 opções"
-      ": \"Editar\", para ajustar as informações do item preenchido, e \"Excluir\", caso deseje excluir um dos itens preenchidos. Para cada novo"
-      " medicamento que foi consumido ou deveria ter sido consumido, clique no item azul correspondente para assim preencher um novo item.";
+      "Nesta tela serão exibidos os medicamentos que o profissional passou (Recomendação) e os dados de medicamentos que já foram preenchidos"
+      " (Realizado); ao clicar no item cinza \"Recomendação\" e posteriormente no botão Azul \"Realizar\", será possivel preenchê-lo, e ao salvar"
+      " surgirá um novo item verde \"Realizado\" no dia atual. Caso tenha ocorrido algum erro durante o preenchimento, não se preocupe, pois é possível"
+      " editá-lo posteriormente; ao clicar no item \"Realizado\", aparecerá um menu com 2 opções: \"Editar\", para ajustar as informações do item"
+      " realizado, e \"Excluir\", caso deseje excluir um dos itens preenchidos. Para cada novo medicamento que foi consumido ou deveria ter sido"
+      " consumido, clique no item \"Recomendação\" correspondente para assim preencher um novo item.";
   static const help_answer4 =
-      "Nesta tela serão exibidas todas as consultas marcadas (cor Azul) e os dados das consultas que já passaram"
-      " (Cor Laranja); ao clicar no item azul, será possivel preenchê-lo, e ao salvar surgirá um novo item Laranja. Caso tenha ocorrido algum erro"
-      " durante o preenchimento, não se preocupe, pois é possível editá-lo posteriormente; ao clicar no item laranja, aparecerá um menu com 2 opções"
-      ": \"Editar\", para ajustar as informações do item realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada nova"
-      " consulta que compareceu, ou deveria ter comparecido, clique no item azul para preenchê-lo.";
+      "Nesta tela serão exibidas todas as consultas marcadas (Recomendação) e os dados das consultas que já passaram (Realizado);"
+      " (Realizado); ao clicar no item cinza \"Recomendação\" e posteriormente no botão Azul \"Realizar\", será possivel preenchê-lo, e ao salvar"
+      " surgirá um novo item verde \"Realizado\" no dia atual. Caso tenha ocorrido algum erro durante o preenchimento, não se preocupe, pois é possível"
+      " editá-lo posteriormente; ao clicar no item \"Realizado\", aparecerá um menu com 2 opções: \"Editar\", para ajustar as informações do item"
+      " realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada nova consulta que compareceu, ou deveria ter comparecido,"
+      " clique no item \"Recomendação\" para preenchê-lo.";
   static const help_answer5 =
-      "Nesta tela serão exibidos os exercícios recomendados pelo profissional (cor Azul) e os exercícios que já foram preenchidos"
-      " (Cor Laranja); ao clicar no item azul, será possivel preenchê-lo, e ao salvar surgirá um novo item Laranja. Caso tenha ocorrido algum erro"
-      " durante o preenchimento, não se preocupe, pois é possível editá-lo posteriormente; ao clicar no item laranja, aparecerá um menu com 2 opções"
-      ": \"Editar\", para ajustar as informações do item realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada novo"
-      " exercício realizado, clique no item azul correspondente para que assim crie um novo item realizado.";
+      "Nesta tela serão exibidos os exercícios recomendados pelo profissional (Recomendação) e os exercícios que já foram preenchidos (Realizado); ao"
+      " (Realizado); ao clicar no item cinza \"Recomendação\" e posteriormente no botão Azul \"Realizar\", será possivel preenchê-lo, e ao salvar"
+      " surgirá um novo item verde \"Realizado\" no dia atual. Caso tenha ocorrido algum erro durante o preenchimento, não se preocupe, pois é possível"
+      " editá-lo posteriormente; ao clicar no item \"Realizado\", aparecerá um menu com 2 opções: \"Editar\", para ajustar as informações do item"
+      " realizado, e \"Excluir\", caso deseje excluir um dos itens realizados. Para cada novo exercício realizado, clique no item \"Recomendação\""
+      " correspondente para que assim crie um novo item realizado.";
   static const help_answer6 =
       "Nesta tela, você encontrará informações sobre a Insuficiência Cardíaca.";
   static const help_answer7 =
