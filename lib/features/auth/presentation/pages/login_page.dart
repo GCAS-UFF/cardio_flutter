@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                       title: Strings.login_button,
                       onTap: _submitForm,
                     ),
-                    signUpFlatButton(context),
+                    // signUpFlatButton(context),
                   ],
                 ),
               ),
