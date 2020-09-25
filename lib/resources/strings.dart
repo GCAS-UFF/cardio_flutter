@@ -17,9 +17,10 @@ class Strings {
   static const password_title = "Senha";
   static const password_hint = "Digite sua senha";
   static const cancel = "Cancelar";
-  static const signup_warning =
-      "Caso seja um paciente ainda não cadastrado, entre em contato com seu profissional de saúde para que faça seu cadastro.\n\nCaso seja um profissional de saúde autorizado basta clicar em \"Continuar\" e seguir com seu cadastro";
-  static const okbutton = "Continuar";
+  static const signup_warning = "Caso seja um paciente ainda não cadastrado, entre em contato com seu profissional de saúde para que faça seu cadastro.\n\nCaso seja um profissional de saúde, entre em contato com a equipe de desenvolvimento para que faça seu cadastro.";
+      // "Caso seja um paciente ainda não cadastrado, entre em contato com seu profissional de saúde para que faça seu cadastro.\n\nCaso seja um profissional de saúde autorizado basta clicar em \"Continuar\" e seguir com seu cadastro.";
+      
+  static const okbutton = "OK";
   static const warning = " ATENÇÃO";
   static const invalid_user_type = "Usuário inválido";
 

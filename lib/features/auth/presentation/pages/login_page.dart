@@ -193,7 +193,7 @@ Widget signUpFlatButton(BuildContext context) {
             text: Strings.signup_warning,
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, "/professionalSignUp");
+              // Navigator.pushNamed(context, "/professionalSignUp");
             },
           );
         },

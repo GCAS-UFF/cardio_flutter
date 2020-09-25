@@ -83,27 +83,27 @@ class CustomDialogWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        color: CardioColors.grey_02,
-                        shape: new RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: CardioColors.black,
-                            width: 1,
-                            style: BorderStyle.solid,
-                          ),
-                          borderRadius: new BorderRadius.circular(5.0),
-                        ),
-                        child: Text(
-                          Strings.cancel,
-                          style: TextStyle(
-                            color: CardioColors.black,
-                            fontSize: Dimensions.getTextSize(context, 20),
-                          ),
-                        ),
-                      ),
+                      // FlatButton(
+                      //   onPressed: () {
+                      //     Navigator.pop(context);
+                      //   },
+                      //   color: CardioColors.grey_02,
+                      //   shape: new RoundedRectangleBorder(
+                      //     side: BorderSide(
+                      //       color: CardioColors.black,
+                      //       width: 1,
+                      //       style: BorderStyle.solid,
+                      //     ),
+                      //     borderRadius: new BorderRadius.circular(5.0),
+                      //   ),
+                      //   child: Text(
+                      //     Strings.cancel,
+                      //     style: TextStyle(
+                      //       color: CardioColors.black,
+                      //       fontSize: Dimensions.getTextSize(context, 20),
+                      //     ),
+                      //   ),
+                      // ),
                       FlatButton(
                         onPressed: onPressed,
                         color: CardioColors.blue,
