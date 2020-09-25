@@ -76,3 +76,6 @@ ios/Flutter/flutter_export_environment.sh
 android/local.properties
 .packages
 .flutter-plugins-dependencies
+ios/Podfile
+ios/Flutter/Debug.xcconfig
+ios/Flutter/Release.xcconfig

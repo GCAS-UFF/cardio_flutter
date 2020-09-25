@@ -1,14 +1,8 @@
-import 'package:cardio_flutter/core/platform/settings.dart';
-import 'package:cardio_flutter/core/utils/date_helper.dart';
-import 'package:cardio_flutter/features/app_info/presentation/pages/app_info_page.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
-import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart'
-    as exercise;
-import 'package:cardio_flutter/features/help/presentation/pages/patient_help_page.dart';
-import 'package:cardio_flutter/features/help/presentation/pages/professional_help_page.dart';
+import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart' as exercise;
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
 import 'package:cardio_flutter/features/orientations/presentation/pages/orientations_page.dart';
@@ -19,8 +13,7 @@ import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/core/widgets/menu_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart'
-    as generic;
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart' as generic;
 
 class HomePatientPage extends StatelessWidget {
   final Patient patient;
@@ -30,7 +23,6 @@ class HomePatientPage extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    debugPrint("[JP] ${patient?.name?.split(" ")[0]}");
     return BasePage(
       hasDrawer: true,
       recomendation: "Home",
@@ -62,9 +54,7 @@ class HomePatientPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        (patient != null || patient.name != null)
-                            ? patient.name
-                            : "Null",
+                        (patient != null || patient.name != null) ? patient.name : "Null",
                         style: TextStyle(
                           color: CardioColors.black,
                           fontWeight: FontWeight.w500,
@@ -72,9 +62,7 @@ class HomePatientPage extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        (patient != null || patient.cpf != null)
-                            ? "CPF: ${patient.cpf}"
-                            : "Null",
+                        (patient != null || patient.cpf != null) ? "CPF: ${patient.cpf}" : "Null",
                         style: TextStyle(
                           color: CardioColors.black,
                           fontSize: Dimensions.getTextSize(context, 16),
@@ -129,8 +117,7 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.appointment,
                 image: Images.ico_appointment,
                 destination: () {
-                  BlocProvider.of<generic.GenericBloc<Appointment>>(context)
-                      .add(
+                  BlocProvider.of<generic.GenericBloc<Appointment>>(context).add(
                     generic.Start<Appointment>(patient: patient),
                   );
                   return Navigator.pushNamed(context, "/appointmentPage");
