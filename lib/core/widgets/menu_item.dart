@@ -8,9 +8,7 @@ class ItemMenu extends StatelessWidget {
   final String image;
   final Function destination;
 
-  const ItemMenu(
-      {Key key, this.text = "", this.image = Images.app_logo, this.destination})
-      : super(key: key);
+  const ItemMenu({Key key, this.text = "", this.image = Images.app_logo, this.destination}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +42,17 @@ class ItemMenu extends StatelessWidget {
                 height: Dimensions.getConvertedHeightSize(context, 45),
                 width: Dimensions.getConvertedHeightSize(context, 45),
               ),
-              Text(
-                text,
-                style: TextStyle(
-                  fontSize: Dimensions.getTextSize(context, 25),
-                  fontWeight: FontWeight.w500,
-                  color: CardioColors.black,
+              SizedBox(
+                width: Dimensions.getConvertedWidthSize(context, 5),
+              ),
+              Expanded(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: Dimensions.getTextSize(context, 22),
+                    fontWeight: FontWeight.w500,
+                    color: CardioColors.black,
+                  ),
                 ),
               ),
             ],
