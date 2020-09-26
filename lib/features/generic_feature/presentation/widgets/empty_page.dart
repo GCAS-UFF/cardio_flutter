@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +14,10 @@ class EmptyPage extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-            fontSize: Dimensions.getTextSize(context, 20),
-            fontWeight: FontWeight.bold,
-            color: Colors.teal[900]),
+          fontSize: Dimensions.getTextSize(context, 22),
+          fontWeight: FontWeight.bold,
+          color: CardioColors.blue,
+        ),
         textAlign: TextAlign.center,
       ),
     );
