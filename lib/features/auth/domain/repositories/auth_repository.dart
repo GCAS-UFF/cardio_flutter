@@ -13,4 +13,6 @@ abstract class AuthRepository {
       Professional professional, String password);
 
   Future<Either<Failure, dynamic>> getCurrentUser();
+
+  Future<Either<Failure, void>> signOut();
 }

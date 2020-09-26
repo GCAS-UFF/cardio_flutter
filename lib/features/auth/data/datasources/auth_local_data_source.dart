@@ -2,12 +2,14 @@ import 'package:cardio_flutter/core/error/exception.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../injection_container.dart' as di;
 
 abstract class AuthLocalDataSource {
   Future<bool> saveUserId(String id);
   Future<bool> saveUserType(String userType);
   Future<String> getUserId();
   Future<String> getUserType();
+  Future<void> signOut();
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
@@ -48,6 +50,16 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       return sharedPreferences.getString(Keys.CACHED_USER_TYPE);
     } catch (e) {
       throw CacheException();
+    }
+  }
+
+  @override
+  Future<void> signOut() async {
+    try {
+      await sharedPreferences.clear();
+      di.reset();
+    } catch (e) {
+      throw e;
     }
   }
 }

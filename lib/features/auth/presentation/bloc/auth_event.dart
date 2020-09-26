@@ -28,10 +28,11 @@ class SignUpProfessionalEvent extends AuthEvent {
   final Professional professional;
   final String password;
 
-  SignUpProfessionalEvent(
-      {@required this.professional, @required this.password});
+  SignUpProfessionalEvent({@required this.professional, @required this.password});
 
   List<Object> get props => [professional, password];
 }
 
-class  GetUserStatusEvent extends AuthEvent {}
+class GetUserStatusEvent extends AuthEvent {}
+
+class SignOutEvent extends AuthEvent {}

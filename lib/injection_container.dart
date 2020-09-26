@@ -5,6 +5,7 @@ import 'package:cardio_flutter/features/auth/data/repositories/auth_repository_i
 import 'package:cardio_flutter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/get_current_user.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_in.dart';
+import 'package:cardio_flutter/features/auth/domain/usecases/sign_out.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_patient.dart';
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_professional.dart';
 import 'package:cardio_flutter/features/biometrics/data/models/biometric_model.dart';
@@ -93,22 +94,19 @@ Future<void> initExternal() async {
 }
 
 void initNotifications() {
-  final notificationManager = NotificationManager(
-      firebaseDatabase: sl(), localNotificationsPlugin: sl(), settings: sl());
+  final notificationManager = NotificationManager(firebaseDatabase: sl(), localNotificationsPlugin: sl(), settings: sl());
 
   notificationManager.init();
   sl.registerLazySingleton(() => notificationManager);
 
-  final externalNotificationManager =
-      ExternalNotificationManager(firebaseMessaging: sl());
+  final externalNotificationManager = ExternalNotificationManager(firebaseMessaging: sl());
 
   externalNotificationManager.init();
   sl.registerLazySingleton(() => externalNotificationManager);
 }
 
 Future<void> initNotificationsForced() async {
-  final NotificationManager notificationManager = NotificationManager(
-      firebaseDatabase: sl(), localNotificationsPlugin: sl(), settings: sl());
+  final NotificationManager notificationManager = NotificationManager(firebaseDatabase: sl(), localNotificationsPlugin: sl(), settings: sl());
 
   await notificationManager.init();
   sl.registerLazySingleton(() => notificationManager);
@@ -122,6 +120,7 @@ void _initAuth() {
       signUpPatient: sl(),
       signUpProfessional: sl(),
       getCurrentUser: sl(),
+      signOut: sl(),
     ),
   );
 
@@ -130,6 +129,7 @@ void _initAuth() {
   sl.registerLazySingleton(() => SignUpPatient(sl()));
   sl.registerLazySingleton(() => SignIn(sl()));
   sl.registerLazySingleton(() => GetCurrentUser(sl()));
+  sl.registerLazySingleton(() => SignOut(sl()));
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(
@@ -387,4 +387,9 @@ void _initMedication() {
       firebaseTag: "Medication",
     ),
   );
+}
+
+void reset() {
+  sl.reset();
+  init();
 }

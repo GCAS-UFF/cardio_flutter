@@ -14,8 +14,7 @@ class SignUpPatient implements UseCase<Patient, Params> {
   @override
   Future<Either<Failure, Patient>> call(Params params) {
     // The patient password is by default his cpf
-    return repository.signUpPatient(params.patient,
-        params.patient.cpf.replaceAll("-", "").replaceAll(".", ""));
+    return repository.signUpPatient(params.patient, params.patient.cpf.replaceAll("-", "").replaceAll(".", ""));
   }
 }
 
