@@ -48,8 +48,7 @@ class _ClickableItemState extends State<ClickableItem> {
             widget.isClicked
                 ? Container(
                     width: double.infinity,
-                    padding: Dimensions.getEdgeInsets(context,
-                        left: 10, top: 10, right: 5, bottom: 15),
+                    padding: Dimensions.getEdgeInsets(context, left: 10, top: 10, right: 15, bottom: 15),
                     color: CardioColors.grey_01,
                     child: RichText(
                       textAlign: TextAlign.justify,
