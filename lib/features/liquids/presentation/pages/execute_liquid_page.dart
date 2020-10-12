@@ -38,7 +38,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   TextEditingController _quantityController;
 
   TextEditingController _timeController = new MultimaskedTextController(
-    maskDefault: "xx:xx",
+    maskDefault: "##:##",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
@@ -46,14 +46,9 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   void initState() {
     if (widget.liquid != null) {
       _formData[LABEL_NAME] = widget.liquid.name;
-      _formData[LABEL_QUANTITY] = (widget.liquid.quantity == null)
-          ? null
-          : widget.liquid.quantity.toString();
-      _formData[LABEL_REFERENCE] = (widget.liquid.reference == null)
-          ? null
-          : widget.liquid.reference.toString();
-      _formData[LABEL_TIME] =
-          DateHelper.getTimeFromDate(widget.liquid.executedDate);
+      _formData[LABEL_QUANTITY] = (widget.liquid.quantity == null) ? null : widget.liquid.quantity.toString();
+      _formData[LABEL_REFERENCE] = (widget.liquid.reference == null) ? null : widget.liquid.reference.toString();
+      _formData[LABEL_TIME] = DateHelper.getTimeFromDate(widget.liquid.executedDate);
       _timeController.text = _formData[LABEL_TIME];
     }
 
@@ -99,8 +94,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
 
   Widget _buildForm(BuildContext context) {
     return Container(
-      padding: Dimensions.getEdgeInsets(context,
-          top: 10, left: 30, right: 30, bottom: 20),
+      padding: Dimensions.getEdgeInsets(context, top: 10, left: 30, right: 30, bottom: 20),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -168,9 +162,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (!widget.liquid.done)
-                    ? Strings.add
-                    : Strings.edit_patient_done,
+                title: (!widget.liquid.done) ? Strings.add : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm(context);
                 },
@@ -188,8 +180,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    } else if (_formData[LABEL_REFERENCE] == null ||
-        Arrays.reference[_formData[LABEL_REFERENCE]] == null) {
+    } else if (_formData[LABEL_REFERENCE] == null || Arrays.reference[_formData[LABEL_REFERENCE]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Favor selecionar a referência"),
@@ -207,8 +198,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
             name: _formData[LABEL_NAME],
             quantity: int.parse(_formData[LABEL_QUANTITY]),
             reference: _formData[LABEL_REFERENCE],
-            executedDate:
-                DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
+            executedDate: DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
           ),
         ),
       );
@@ -221,8 +211,7 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
             name: _formData[LABEL_NAME],
             quantity: int.parse(_formData[LABEL_QUANTITY]),
             reference: _formData[LABEL_REFERENCE],
-            executedDate:
-                DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
+            executedDate: DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
           ),
         ),
       );

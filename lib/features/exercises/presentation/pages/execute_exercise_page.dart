@@ -46,7 +46,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   TextEditingController _durationController;
   TextEditingController _observationController;
   TextEditingController _timeOfDayController = new MultimaskedTextController(
-    maskDefault: "xx:xx",
+    maskDefault: "##:##",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
@@ -117,8 +117,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
 
   Widget _buildForm(BuildContext context) {
     return Container(
-      padding: Dimensions.getEdgeInsets(context,
-          top: 10, left: 30, right: 30, bottom: 20),
+      padding: Dimensions.getEdgeInsets(context, top: 10, left: 30, right: 30, bottom: 20),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -202,8 +201,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                   ),
                   Container(
                     width: double.infinity,
-                    padding: Dimensions.getEdgeInsets(context,
-                        left: 15, top: 15, bottom: 10),
+                    padding: Dimensions.getEdgeInsets(context, left: 15, top: 15, bottom: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
                         Dimensions.getConvertedHeightSize(context, 5),
@@ -228,8 +226,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                           },
                         ),
                         SizedBox(
-                          height:
-                              Dimensions.getConvertedHeightSize(context, 10),
+                          height: Dimensions.getConvertedHeightSize(context, 10),
                         ),
                         CustomCheckItem(
                           value: _formData[LABEL_EXCESSIVE_FATIGUE],
@@ -241,8 +238,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                           label: Strings.excessive_fatigue,
                         ),
                         SizedBox(
-                          height:
-                              Dimensions.getConvertedHeightSize(context, 10),
+                          height: Dimensions.getConvertedHeightSize(context, 10),
                         ),
                         CustomCheckItem(
                           value: _formData[LABEL_DIZZINESS],
@@ -254,8 +250,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                           label: Strings.dizziness,
                         ),
                         SizedBox(
-                          height:
-                              Dimensions.getConvertedHeightSize(context, 10),
+                          height: Dimensions.getConvertedHeightSize(context, 10),
                         ),
                         CustomCheckItem(
                           value: _formData[LABEL_BODY_PAIN],
@@ -288,9 +283,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (!widget.exercise.done)
-                    ? Strings.add
-                    : Strings.edit_patient_done,
+                title: (!widget.exercise.done) ? Strings.add : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm(context);
                 },
@@ -308,8 +301,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    } else if (_formData[LABEL_INTENSITY] == null ||
-        Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
+    } else if (_formData[LABEL_INTENSITY] == null || Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Favor selecionar a intensidade"),

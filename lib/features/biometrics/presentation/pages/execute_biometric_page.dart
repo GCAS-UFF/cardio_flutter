@@ -39,11 +39,10 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _timeController = new MultimaskedTextController(
-    maskDefault: "xx:xx",
+    maskDefault: "##:##",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
-  TextEditingController _bloodPressureController =
-      new MultimaskedTextController(
+  TextEditingController _bloodPressureController = new MultimaskedTextController(
     escapeCharacter: "#",
     maskDefault: "##x##",
     onlyDigitsDefault: true,
@@ -56,19 +55,14 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
   @override
   void initState() {
     if (widget.biometric != null) {
-      _formData[LABEL_WEIGHT] = (widget.biometric.weight == null)
-          ? null
-          : widget.biometric.weight.toString();
-      _formData[LABEL_BPM] = (widget.biometric.bpm == null)
-          ? null
-          : widget.biometric.bpm.toString();
+      _formData[LABEL_WEIGHT] = (widget.biometric.weight == null) ? null : widget.biometric.weight.toString();
+      _formData[LABEL_BPM] = (widget.biometric.bpm == null) ? null : widget.biometric.bpm.toString();
       _formData[LABEL_BLOOD_PRESSURE] = widget.biometric.bloodPressure;
       _formData[LABEL_SWELLING] = widget.biometric.swelling;
       _formData[LABEL_SWELLING_LOC] = widget.biometric.swellingLocalization;
       _formData[LABEL_FATIGUE] = widget.biometric.fatigue;
       _formData[LABEL_OBSERVATION] = widget.biometric.observation;
-      _formData[LABEL_TIME] =
-          DateHelper.getTimeFromDate(widget.biometric.executedDate);
+      _formData[LABEL_TIME] = DateHelper.getTimeFromDate(widget.biometric.executedDate);
       _timeController.text = _formData[LABEL_TIME];
       _bloodPressureController.text = _formData[LABEL_BLOOD_PRESSURE];
     }
@@ -123,8 +117,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
 
   Widget _buildForm(BuildContext context) {
     return Container(
-      padding: Dimensions.getEdgeInsets(context,
-          top: 10, left: 30, right: 30, bottom: 20),
+      padding: Dimensions.getEdgeInsets(context, top: 10, left: 30, right: 30, bottom: 20),
       child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -233,9 +226,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
                   height: Dimensions.getConvertedHeightSize(context, 20),
                 ),
                 Button(
-                  title: (!widget.biometric.done)
-                      ? Strings.add
-                      : Strings.edit_patient_done,
+                  title: (!widget.biometric.done) ? Strings.add : Strings.edit_patient_done,
                   onTap: () {
                     _submitForm(context);
                   },
@@ -252,16 +243,14 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    } else if (_formData[LABEL_SWELLING] == null ||
-        Arrays.swelling[_formData[LABEL_SWELLING]] == null) {
+    } else if (_formData[LABEL_SWELLING] == null || Arrays.swelling[_formData[LABEL_SWELLING]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Favor selecionar o inchaço"),
         ),
       );
       return;
-    } else if (_formData[LABEL_FATIGUE] == null ||
-        Arrays.fatigue[_formData[LABEL_FATIGUE]] == null) {
+    } else if (_formData[LABEL_FATIGUE] == null || Arrays.fatigue[_formData[LABEL_FATIGUE]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Favor selecionar a fadiga"),
@@ -284,8 +273,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
             swelling: _formData[LABEL_SWELLING],
             fatigue: _formData[LABEL_FATIGUE],
             observation: _formData[LABEL_OBSERVATION],
-            executedDate:
-                DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
+            executedDate: DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
           ),
         ),
       );
@@ -302,8 +290,7 @@ class _ExecuteBiometricPageState extends State<ExecuteBiometricPage> {
             swelling: _formData[LABEL_SWELLING],
             observation: _formData[LABEL_OBSERVATION],
             fatigue: _formData[LABEL_FATIGUE],
-            executedDate:
-                DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
+            executedDate: DateHelper.addTimeToCurrentDate(_formData[LABEL_TIME]),
           ),
         ),
       );

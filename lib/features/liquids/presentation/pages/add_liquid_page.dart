@@ -35,27 +35,22 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
 
   TextEditingController _milimitersPerDayController;
 
-  final TextEditingController _initialDateController =
-      new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
+  final TextEditingController _initialDateController = new MultimaskedTextController(
+    maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
-  final TextEditingController _finalDateController =
-      new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
+  final TextEditingController _finalDateController = new MultimaskedTextController(
+    maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
   @override
   void initState() {
     if (widget.liquid != null) {
-      _formData[LABEL_MILIMITERS_PER_DAY] =
-          widget.liquid.mililitersPerDay.toString();
-      _formData[LABEL_INITIAL_DATE] =
-          DateHelper.convertDateToString(widget.liquid.initialDate);
-      _formData[LABEL_FINAL_DATE] =
-          DateHelper.convertDateToString(widget.liquid.finalDate);
+      _formData[LABEL_MILIMITERS_PER_DAY] = widget.liquid.mililitersPerDay.toString();
+      _formData[LABEL_INITIAL_DATE] = DateHelper.convertDateToString(widget.liquid.initialDate);
+      _formData[LABEL_FINAL_DATE] = DateHelper.convertDateToString(widget.liquid.finalDate);
       _initialDateController.text = _formData[LABEL_INITIAL_DATE];
       _finalDateController.text = _formData[LABEL_FINAL_DATE];
     }
@@ -101,8 +96,7 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
 
   Widget _buildForm(BuildContext context) {
     return Container(
-      padding: Dimensions.getEdgeInsets(context,
-          top: 10, left: 30, right: 30, bottom: 20),
+      padding: Dimensions.getEdgeInsets(context, top: 10, left: 30, right: 30, bottom: 20),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -155,9 +149,7 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (widget.liquid == null)
-                    ? Strings.add
-                    : Strings.edit_patient_done,
+                title: (widget.liquid == null) ? Strings.add : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm();
                 },
@@ -184,10 +176,8 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
           entity: Liquid(
             done: false,
             mililitersPerDay: int.parse(_formData[LABEL_MILIMITERS_PER_DAY]),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            initialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
           ),
         ),
       );
@@ -198,10 +188,8 @@ class _AddLiquidPageState extends State<AddLiquidPage> {
             id: widget.liquid.id,
             done: false,
             mililitersPerDay: int.parse(_formData[LABEL_MILIMITERS_PER_DAY]),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            initialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
           ),
         ),
       );

@@ -3,8 +3,7 @@ import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
-import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
-    as professional;
+import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart' as professional;
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -38,12 +37,11 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _cpfController = new MultimaskedTextController(
-    maskDefault: "xxx.xxx.xxx-xx",
+    maskDefault: "###.###.###-##",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
-  final TextEditingController _birthDateController =
-      new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
+  final TextEditingController _birthDateController = new MultimaskedTextController(
+    maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
   TextEditingController _nameController;
@@ -56,10 +54,8 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
       _formData[LABEL_NAME] = widget.patient.name;
       _formData[LABEL_ADRESS] = widget.patient.address;
       _formData[LABEL_EMAIL] = widget.patient.email;
-      _formData[LABEL_BIRTHDATE] =
-          DateHelper.convertDateToString(widget.patient.birthdate);
-      _formData[LABEL_CPF] = Converter.convertStringToMaskedString(
-          value: widget.patient.cpf, mask: "xxx.xxx.xxx-xx");
+      _formData[LABEL_BIRTHDATE] = DateHelper.convertDateToString(widget.patient.birthdate);
+      _formData[LABEL_CPF] = Converter.convertStringToMaskedString(value: widget.patient.cpf, mask: "###.###.###-##");
       _cpfController.text = _formData[LABEL_CPF];
       _birthDateController.text = _formData[LABEL_BIRTHDATE];
     }
@@ -189,9 +185,7 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
               height: Dimensions.getConvertedHeightSize(context, 20),
             ),
             Button(
-              title: (widget.patient == null)
-                  ? Strings.new_patient_done
-                  : Strings.edit_patient_done,
+              title: (widget.patient == null) ? Strings.new_patient_done : Strings.edit_patient_done,
               onTap: () {
                 _submitForm();
               },
@@ -216,8 +210,7 @@ class _PatientSignUpPageState extends State<PatientSignUpPage> {
                 ),
               );
             } else if (state is SignedUp) {
-              BlocProvider.of<professional.ManageProfessionalBloc>(context)
-                  .add(professional.Refresh());
+              BlocProvider.of<professional.ManageProfessionalBloc>(context).add(professional.Refresh());
               Navigator.pop(context);
             }
           },

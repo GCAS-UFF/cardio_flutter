@@ -12,8 +12,7 @@ import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flushbar/flushbar.dart';
-import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
-    as professional;
+import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart' as professional;
 
 class ProfessionalSignUpPage extends StatefulWidget {
   final Professional professional;
@@ -38,13 +37,11 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
 
   final TextEditingController _cpfController = new MultimaskedTextController(
     maskDefault: null,
-    maskSecundary: "xxx.xxx.xxx-xx",
+    maskSecundary: "###.###.###-##",
     onlyDigitsDefault: false,
     onlyDigitsSecundary: true,
     changeMask: (String text) {
-      return (text != null &&
-          text.length >= 1 &&
-          int.tryParse(text.substring(0, 1)) != null);
+      return (text != null && text.length >= 1 && int.tryParse(text.substring(0, 1)) != null);
     },
   ).maskedTextFieldController;
   TextEditingController _nameController;
@@ -183,9 +180,7 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
                   onTap: () {
                     _submitForm();
                   },
-                  title: (widget.professional == null)
-                      ? Strings.sign_up_done
-                      : Strings.edit_patient_done,
+                  title: (widget.professional == null) ? Strings.sign_up_done : Strings.edit_patient_done,
                 ),
                 SizedBox(
                   height: Dimensions.getConvertedHeightSize(context, 20),
@@ -207,8 +202,7 @@ class _ProfessionalSignUpPageState extends State<ProfessionalSignUpPage> {
             duration: Duration(seconds: 3),
           )..show(context);
         } else if (state is SignedUp) {
-          BlocProvider.of<professional.ManageProfessionalBloc>(context)
-              .add(professional.Start(professional: state.user));
+          BlocProvider.of<professional.ManageProfessionalBloc>(context).add(professional.Start(professional: state.user));
           Navigator.pop(context);
         }
       },

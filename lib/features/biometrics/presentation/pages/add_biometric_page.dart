@@ -37,15 +37,13 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _frequencyController;
-  final TextEditingController _initialDateController =
-      new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
+  final TextEditingController _initialDateController = new MultimaskedTextController(
+    maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
-  final TextEditingController _finalDateController =
-      new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
+  final TextEditingController _finalDateController = new MultimaskedTextController(
+    maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
@@ -55,10 +53,8 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
       _formData[LABEL_FREQUENCY] = widget.biometric.frequency.toString();
       _formData[LABEL_TIMES] = widget.biometric.times;
 
-      _formData[LABEL_INITIAL_DATE] =
-          DateHelper.convertDateToString(widget.biometric.initialDate);
-      _formData[LABEL_FINAL_DATE] =
-          DateHelper.convertDateToString(widget.biometric.finalDate);
+      _formData[LABEL_INITIAL_DATE] = DateHelper.convertDateToString(widget.biometric.initialDate);
+      _formData[LABEL_FINAL_DATE] = DateHelper.convertDateToString(widget.biometric.finalDate);
       _initialDateController.text = _formData[LABEL_INITIAL_DATE];
       _finalDateController.text = _formData[LABEL_FINAL_DATE];
     }
@@ -104,8 +100,7 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
 
   Widget _buildForm(BuildContext context) {
     return Container(
-      padding: Dimensions.getEdgeInsets(context,
-          top: 10, left: 30, right: 30, bottom: 20),
+      padding: Dimensions.getEdgeInsets(context, top: 10, left: 30, right: 30, bottom: 20),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -129,10 +124,7 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
                 },
               ),
               TimeList(
-                  frequency: (_formData[LABEL_FREQUENCY] != null &&
-                          _formData[LABEL_FREQUENCY] != "")
-                      ? int.parse(_formData[LABEL_FREQUENCY])
-                      : 0,
+                  frequency: (_formData[LABEL_FREQUENCY] != null && _formData[LABEL_FREQUENCY] != "") ? int.parse(_formData[LABEL_FREQUENCY]) : 0,
                   onChanged: (times) {
                     setState(() {
                       _formData[LABEL_TIMES] = times;
@@ -169,9 +161,7 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (widget.biometric == null)
-                    ? Strings.add
-                    : Strings.edit_patient_done,
+                title: (widget.biometric == null) ? Strings.add : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm();
                 },
@@ -198,14 +188,9 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
           entity: Biometric(
             done: false,
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            times: (_formData[LABEL_TIMES] as List)
-                .map((time) => Converter.convertStringToMaskedString(
-                    mask: "xx:xx", value: time))
-                .toList(),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            initialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
+            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
           ),
         ),
       );
@@ -216,14 +201,9 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
             id: widget.biometric.id,
             done: false,
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            times: (_formData[LABEL_TIMES] as List)
-                .map((time) => Converter.convertStringToMaskedString(
-                    mask: "xx:xx", value: time))
-                .toList(),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            initialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
+            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
           ),
         ),
       );
