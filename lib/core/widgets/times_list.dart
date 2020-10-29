@@ -11,10 +11,7 @@ class TimeList extends StatelessWidget {
   final Function onChanged;
   final List<String> initialvalues;
 
-  TimeList(
-      {@required this.frequency,
-      @required this.onChanged,
-      @required this.initialvalues});
+  TimeList({@required this.frequency, @required this.onChanged, @required this.initialvalues});
   @override
   Widget build(BuildContext context) {
     return (frequency == null || frequency == 0)
@@ -53,16 +50,14 @@ class TimeList extends StatelessWidget {
 
   List<Widget> _buildList(BuildContext context) {
     List<String> times;
-    initialvalues == null || (initialvalues).length != frequency
-        ? times = List<String>(frequency)
-        : times = initialvalues;
+    initialvalues == null || (initialvalues).length != frequency ? times = List<String>(frequency) : times = initialvalues;
     List<Widget> list = [];
     if (frequency != null && frequency >= 1) {
       for (int i = 0; i < frequency; i++) {
         print(i);
         times[i] = (times[i] == null) ? "" : times[i];
         TextEditingController textEditingController = MultimaskedTextController(
-          maskDefault: "xx:xx",
+          maskDefault: "##:##",
           onlyDigitsDefault: true,
         ).maskedTextFieldController;
         textEditingController.text = times[i];

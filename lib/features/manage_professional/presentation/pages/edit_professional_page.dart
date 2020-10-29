@@ -17,8 +17,7 @@ import 'package:cardio_flutter/features/manage_professional/presentation/bloc/ma
 class EditProfessionalPage extends StatefulWidget {
   final Professional professional;
 
-  const EditProfessionalPage({@required this.professional})
-      : assert(professional != null);
+  const EditProfessionalPage({@required this.professional}) : assert(professional != null);
   @override
   _EditProfessionalPageState createState() => _EditProfessionalPageState();
 }
@@ -34,15 +33,13 @@ class _EditProfessionalPageState extends State<EditProfessionalPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _cpfController = new MultimaskedTextController(
-    maskDefault: null,
-    maskSecundary: "xxx.xxx.xxx-xx",
+    maskDefault: "###.###.###-##",
+    // maskSecundary: "###.###.###-##",
     onlyDigitsDefault: false,
     onlyDigitsSecundary: true,
-    changeMask: (String text) {
-      return (text != null &&
-          text.length >= 1 &&
-          int.tryParse(text.substring(0, 1)) != null);
-    },
+    // changeMask: (String text) {
+    //   return (text != null && text.length >= 1 && int.tryParse(text.substring(0, 1)) != null);
+    // },
   ).maskedTextFieldController;
   TextEditingController _nameController;
   TextEditingController _regionalRegisterController;
@@ -50,8 +47,7 @@ class _EditProfessionalPageState extends State<EditProfessionalPage> {
 
   @override
   void initState() {
-    _formData[LABEL_CPF] = Converter.convertStringToMaskedString(
-        value: widget.professional.cpf, mask: 'xxx.xxx.xxx-xx');
+    _formData[LABEL_CPF] = Converter.convertStringToMaskedString(value: widget.professional.cpf, mask: '###.###.###-##');
     _formData[LABEL_NAME] = widget.professional.name;
     _formData[LABEL_EXPERTISE] = widget.professional.expertise;
     _formData[LABEL_REGIONAL_REGISTER] = widget.professional.regionalRecord;
