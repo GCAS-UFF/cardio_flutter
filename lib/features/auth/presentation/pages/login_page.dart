@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/widgets/dialog_widget.dart';
 import 'package:cardio_flutter/core/input_validators/email_input_validator.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
@@ -11,8 +12,7 @@ import '../../../../core/widgets/button.dart';
 import '../../../../resources/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
-import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
-    as professional;
+import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart' as professional;
 
 import '../bloc/auth_bloc.dart';
 
@@ -47,9 +47,7 @@ class _LoginPageState extends State<LoginPage> {
     BlocProvider.of<AuthBloc>(context).add(
       SignInEvent(
         password: _formData[LABEL_PASSWORD],
-        email: (_formData[LABEL_EMAIL] != null
-            ? _formData[LABEL_EMAIL].toString().trim()
-            : _formData[LABEL_EMAIL]),
+        email: (_formData[LABEL_EMAIL] != null ? _formData[LABEL_EMAIL].toString().trim() : _formData[LABEL_EMAIL]),
       ),
     );
   }
@@ -68,17 +66,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             } else if (state is LoggedProfessional) {
-              BlocProvider.of<professional.ManageProfessionalBloc>(context)
-                  .add(professional.Start(professional: state.professional));
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/homeProfessionalPage', (r) => false);
+              BlocProvider.of<professional.ManageProfessionalBloc>(context).add(professional.Start(professional: state.professional));
+              Mixpanel.trackEvent(MixpanelEvents.OPEN_APP, userId: state.professional.id);
+              Navigator.pushNamedAndRemoveUntil(context, '/homeProfessionalPage', (r) => false);
             } else if (state is LoggedPatient) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          HomePatientPage(patient: state.patient)),
-                  (r) => false);
+              Mixpanel.trackEvent(MixpanelEvents.OPEN_APP, userId: state.patient.id);
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePatientPage(patient: state.patient)), (r) => false);
             }
           },
           child: BlocBuilder<AuthBloc, AuthState>(
@@ -104,10 +97,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Container(
             height: Dimensions.getConvertedHeightSize(context, 592),
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: <Color>[Color(0xffc9fffd), Colors.white],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight)),
+                gradient: LinearGradient(colors: <Color>[Color(0xffc9fffd), Colors.white], begin: Alignment.topLeft, end: Alignment.bottomRight)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[

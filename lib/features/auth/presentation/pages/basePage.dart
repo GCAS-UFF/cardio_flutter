@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
@@ -25,8 +26,7 @@ class BasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: (addFunction != null)
-          ? ((Provider.of<Settings>(context, listen: false).getUserType() ==
-                  Keys.PROFESSIONAL_TYPE)
+          ? ((Provider.of<Settings>(context, listen: false).getUserType() == Keys.PROFESSIONAL_TYPE)
               ? FloatingActionButton(
                   onPressed: addFunction,
                   child: Icon(
@@ -48,6 +48,7 @@ class BasePage extends StatelessWidget {
           (signOutButton)
               ? IconButton(
                   onPressed: () {
+                    Mixpanel.trackEvent(MixpanelEvents.DO_LOGOUT);
                     Navigator.pushNamed(context, "/");
                   },
                   icon: Icon(
@@ -58,9 +59,7 @@ class BasePage extends StatelessWidget {
         ],
         title: Text(
           Strings.app_name,
-          style: TextStyle(
-              fontSize: Dimensions.getTextSize(context, 20),
-              color: Colors.black87),
+          style: TextStyle(fontSize: Dimensions.getTextSize(context, 20), color: Colors.black87),
         ),
         backgroundColor: Colors.lightBlueAccent[100],
       ),

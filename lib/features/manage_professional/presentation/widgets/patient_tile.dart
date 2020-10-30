@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
@@ -5,8 +6,7 @@ import 'package:cardio_flutter/features/auth/presentation/pages/home_patient_pag
 import 'package:cardio_flutter/features/auth/presentation/pages/patient_sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
-import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart'
-    as professional;
+import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart' as professional;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PatientTile extends StatefulWidget {
@@ -18,7 +18,6 @@ class PatientTile extends StatefulWidget {
 }
 
 class _PatientTileState extends State<PatientTile> {
-  
   @override
   @override
   Widget build(BuildContext context) {
@@ -49,22 +48,16 @@ class _PatientTileState extends State<PatientTile> {
                   children: <Widget>[
                     Text(
                       (widget.patient.name != null) ? widget.patient.name : "",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      (widget.patient.cpf != null)
-                          ? Converter.convertStringToMaskedString(
-                              value: widget.patient.cpf, mask: "xxx.xxx.xxx-xx")
-                          : "",
+                      (widget.patient.cpf != null) ? Converter.convertStringToMaskedString(value: widget.patient.cpf, mask: "xxx.xxx.xxx-xx") : "",
                       style: TextStyle(
                         fontSize: 18,
                       ),
                     ),
                     Text(
-                      (DateHelper.convertDateToString(
-                                  widget.patient.birthdate) !=
-                              null)
+                      (DateHelper.convertDateToString(widget.patient.birthdate) != null)
                           ? "${DateHelper.ageFromDate(widget.patient.birthdate).toString()} anos"
                           : "",
                       style: TextStyle(
@@ -79,23 +72,22 @@ class _PatientTileState extends State<PatientTile> {
         ),
       ),
       onTap: () {
-DateTime now = DateTime.now().toUtc().add(
-                Duration(seconds: 10),
-              );
-        _showOptions(
-          
-            context,
-            widget.patient,
-          
+        DateTime now = DateTime.now().toUtc().add(
+              Duration(seconds: 10),
             );
+        _showOptions(
+          context,
+          widget.patient,
+        );
       },
     );
   }
 }
 
 void _showOptions(
-    BuildContext context, Patient patient,
-    ) {
+  BuildContext context,
+  Patient patient,
+) {
   showModalBottomSheet(
     context: context,
     builder: (context) {
@@ -110,13 +102,15 @@ void _showOptions(
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: FlatButton(
-                        onPressed: ()  {
+                        onPressed: () {
                           Navigator.pop(context);
+                          Mixpanel.trackEvent(
+                            MixpanelEvents.OPEN_PATIENT,
+                            data: {"patientId": patient.id},
+                          );
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    HomePatientPage(patient: patient)),
+                            MaterialPageRoute(builder: (context) => HomePatientPage(patient: patient)),
                           );
                         },
                         child: Text(
@@ -148,9 +142,7 @@ void _showOptions(
                     child: FlatButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        BlocProvider.of<professional.ManageProfessionalBloc>(
-                                context)
-                            .add(
+                        BlocProvider.of<professional.ManageProfessionalBloc>(context).add(
                           professional.DeletePatientEvent(
                             patient: patient,
                           ),
