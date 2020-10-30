@@ -38,14 +38,14 @@ class Converter {
   }
 
   static String convertStringListToString(List<String> list) {
-    final String string =list.join(', ');
-    return string ;
-   }
+    final String string = list.join(', ');
+    return string;
+  }
 
   static String convertStringToMaskedString(
       {@required String value,
       @required String mask,
-      String escapeCharacter = "x",
+      String escapeCharacter = "#",
       bool onlyDigits}) {
     if (value == null || mask == null) return "";
     value = cleanText(value, onlyDigits: onlyDigits);
@@ -72,7 +72,7 @@ class Converter {
       @required String maskSecundary,
       @required Function changeMask,
       bool onlyDigits,
-      String escapeCharacter = "x"}) {
+      String escapeCharacter = "#"}) {
     String mask;
     if (changeMask == null)
       mask = maskDefault;
@@ -215,7 +215,8 @@ class Converter {
         "Intensidade": (Arrays.intensities[exercise.intensity] == null)
             ? "Não Selecionado"
             : Arrays.intensities[exercise.intensity],
-          "Horários Indicados": Converter.convertStringListToString(exercise.times),
+        "Horários Indicados":
+            Converter.convertStringListToString(exercise.times),
         "Duração": "${exercise.durationInMinutes} minutos",
         "Data de Inicio": DateHelper.convertDateToString(exercise.initialDate),
         "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),

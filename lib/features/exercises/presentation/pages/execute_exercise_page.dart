@@ -43,7 +43,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   TextEditingController _durationController;
   TextEditingController _observationController;
   TextEditingController _timeOfDayController = new MultimaskedTextController(
-    maskDefault: "xx:xx",
+    maskDefault: "##:##",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
@@ -53,7 +53,6 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
     _formData[LABEL_OBSERVATION] = widget.exercise.observation;
     _formData[LABEL_INTENSITY] = widget.exercise.intensity.toString();
     _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
-
 
     if (widget.exercise.done) {
       _formData[LABEL_SHORTNESS_OF_BREATH] = widget.exercise.shortnessOfBreath;
@@ -142,8 +141,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 subtitle: _formData[LABEL_INTENSITY],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_INTENSITY] =
-                        Arrays.intensities.keys.toList()[value];
+                    _formData[LABEL_INTENSITY] = Arrays.intensities.keys.toList()[value];
                   });
                 },
               ),
@@ -189,8 +187,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 },
                 title: Text(
                   Strings.shortness_of_breath,
-                  style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                  style: TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
                 ),
               ),
               CheckboxListTile(
@@ -203,8 +200,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 },
                 title: Text(
                   Strings.excessive_fatigue,
-                  style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                  style: TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
                 ),
               ),
               CheckboxListTile(
@@ -217,8 +213,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 },
                 title: Text(
                   Strings.dizziness,
-                  style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                  style: TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
                 ),
               ),
               CheckboxListTile(
@@ -231,8 +226,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 },
                 title: Text(
                   Strings.body_pain,
-                  style:
-                      TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                  style: TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
                 ),
               ),
               CustomTextFormField(
@@ -249,9 +243,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (!widget.exercise.done)
-                    ? Strings.add
-                    : Strings.edit_patient_done,
+                title: (!widget.exercise.done) ? Strings.add : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm(context);
                 },
@@ -267,9 +259,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    }
-     else if (_formData[LABEL_INTENSITY] == null ||
-        Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
+    } else if (_formData[LABEL_INTENSITY] == null || Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Favor selecionar a intensidade"),

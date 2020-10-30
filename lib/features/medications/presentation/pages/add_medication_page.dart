@@ -45,14 +45,12 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   TextEditingController _dosageController;
   TextEditingController _quantityController;
   TextEditingController _frequencyController;
-  final TextEditingController _initialdateController =
-      new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
+  final TextEditingController _initialdateController = new MultimaskedTextController(
+    maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
-  final TextEditingController _finalDateController =
-      new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
+  final TextEditingController _finalDateController = new MultimaskedTextController(
+    maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
@@ -61,20 +59,12 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   @override
   void initState() {
     if (widget.medication != null) {
-      _formData[LABEL_FREQUENCY] = (widget.medication.frequency == null)
-          ? null
-          : widget.medication.frequency.toString();
-      _formData[LABEL_INITIAL_DATE] =
-          DateHelper.convertDateToString(widget.medication.initialDate);
-      _formData[LABEL_FINAL_DATE] =
-          DateHelper.convertDateToString(widget.medication.finalDate);
+      _formData[LABEL_FREQUENCY] = (widget.medication.frequency == null) ? null : widget.medication.frequency.toString();
+      _formData[LABEL_INITIAL_DATE] = DateHelper.convertDateToString(widget.medication.initialDate);
+      _formData[LABEL_FINAL_DATE] = DateHelper.convertDateToString(widget.medication.finalDate);
       _formData[LABEL_NAME] = widget.medication.name;
-      _formData[LABEL_DOSAGE] = (widget.medication.dosage == null)
-          ? null
-          : widget.medication.dosage.toString();
-      _formData[LABEL_QUANTITY] = (widget.medication.quantity == null)
-          ? null
-          : widget.medication.quantity.toString();
+      _formData[LABEL_DOSAGE] = (widget.medication.dosage == null) ? null : widget.medication.dosage.toString();
+      _formData[LABEL_QUANTITY] = (widget.medication.quantity == null) ? null : widget.medication.quantity.toString();
       _formData[LABEL_OBSERVATION] = widget.medication.observation;
 
       _initialdateController.text = _formData[LABEL_INITIAL_DATE];
@@ -206,10 +196,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 },
               ),
               TimeList(
-                  frequency: (_formData[LABEL_FREQUENCY] != null &&
-                          _formData[LABEL_FREQUENCY] != "")
-                      ? int.parse(_formData[LABEL_FREQUENCY])
-                      : 0,
+                  frequency: (_formData[LABEL_FREQUENCY] != null && _formData[LABEL_FREQUENCY] != "") ? int.parse(_formData[LABEL_FREQUENCY]) : 0,
                   onChanged: (times) {
                     setState(() {
                       _formData[LABEL_TIMES] = times;
@@ -243,9 +230,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (widget.medication == null)
-                    ? Strings.add
-                    : Strings.edit_patient_done,
+                title: (widget.medication == null) ? Strings.add : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm();
                 },
@@ -270,19 +255,12 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
           entity: Medication(
             done: false,
             name: _formData[LABEL_NAME],
-            dosage: (_formData[LABEL_DOSAGE] is int)
-                ? int.parse(_formData[LABEL_DOSAGE]).toDouble()
-                : double.parse(_formData[LABEL_DOSAGE]),
+            dosage: (_formData[LABEL_DOSAGE] is int) ? int.parse(_formData[LABEL_DOSAGE]).toDouble() : double.parse(_formData[LABEL_DOSAGE]),
             quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            initialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            times: (_formData[LABEL_TIMES] as List)
-                .map((time) => Converter.convertStringToMaskedString(
-                    mask: "xx:xx", value: time))
-                .toList(),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
+            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
             observation: _formData[LABEL_OBSERVATION],
           ),
         ),
@@ -294,19 +272,12 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
             id: widget.medication.id,
             done: false,
             name: _formData[LABEL_NAME],
-            dosage: (_formData[LABEL_DOSAGE] is int)
-                ? int.parse(_formData[LABEL_DOSAGE]).toDouble()
-                : double.parse(_formData[LABEL_DOSAGE]),
+            dosage: (_formData[LABEL_DOSAGE] is int) ? int.parse(_formData[LABEL_DOSAGE]).toDouble() : double.parse(_formData[LABEL_DOSAGE]),
             quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            initialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            times: (_formData[LABEL_TIMES] as List)
-                .map((time) => Converter.convertStringToMaskedString(
-                    mask: "xx:xx", value: time))
-                .toList(),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
+            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
             observation: _formData[LABEL_OBSERVATION],
           ),
         ),

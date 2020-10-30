@@ -42,12 +42,11 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
   TextEditingController _dosageController;
   TextEditingController _quantityController;
   TextEditingController _executedDateController = new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
+    maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
-  TextEditingController _executionTimeController =
-      new MultimaskedTextController(
-    maskDefault: "xx:xx",
+  TextEditingController _executionTimeController = new MultimaskedTextController(
+    maskDefault: "##:##",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
   TextEditingController _observationController;
@@ -56,26 +55,18 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
   void initState() {
     if (widget.medication != null) {
       _formData[LABEL_NAME] = widget.medication.name;
-      _formData[LABEL_DOSAGE] = (widget.medication.dosage == null)
-          ? null
-          : widget.medication.dosage.toString();
-      _formData[LABEL_QUANTITY] = (widget.medication.quantity == null)
-          ? null
-          : widget.medication.quantity.toString();
-      _formData[LABEL_EXECUTED_DATE] = (!widget.medication.done)
-          ? DateHelper.convertDateToString(DateTime.now())
-          : DateHelper.convertDateToString(widget.medication.executedDate);
-      _formData[LABEL_EXECUTION_TIME] =
-          DateHelper.getTimeFromDate(widget.medication.executedDate);
-      _formData[LABEL_OBSERVATION] =
-          (!widget.medication.done) ? null : widget.medication.observation;
+      _formData[LABEL_DOSAGE] = (widget.medication.dosage == null) ? null : widget.medication.dosage.toString();
+      _formData[LABEL_QUANTITY] = (widget.medication.quantity == null) ? null : widget.medication.quantity.toString();
+      _formData[LABEL_EXECUTED_DATE] =
+          (!widget.medication.done) ? DateHelper.convertDateToString(DateTime.now()) : DateHelper.convertDateToString(widget.medication.executedDate);
+      _formData[LABEL_EXECUTION_TIME] = DateHelper.getTimeFromDate(widget.medication.executedDate);
+      _formData[LABEL_OBSERVATION] = (!widget.medication.done) ? null : widget.medication.observation;
       _formData[LABEL_TOOK_IT] = widget.medication.tookIt;
       _executedDateController.text = _formData[LABEL_EXECUTED_DATE];
       _executionTimeController.text = _formData[LABEL_EXECUTION_TIME];
     }
 
-    _formData[LABEL_TOOK_IT] =
-        (_formData[LABEL_TOOK_IT] == null) ? false : _formData[LABEL_TOOK_IT];
+    _formData[LABEL_TOOK_IT] = (_formData[LABEL_TOOK_IT] == null) ? false : _formData[LABEL_TOOK_IT];
 
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
@@ -220,8 +211,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                   child: Text(
                     Strings.tookIt,
                     textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 15)),
+                    style: TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
                   )),
               Container(
                 alignment: Alignment.centerLeft,
@@ -244,13 +234,12 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                           },
                         ),
                         Text(
-                    'Sim',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 15)),
-                  )
+                          'Sim',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                        )
                       ],
-                    ), 
+                    ),
                     Row(
                       children: <Widget>[
                         Radio(
@@ -263,12 +252,12 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                               _formData[LABEL_TOOK_IT] = tookit;
                             });
                           },
-                        ), Text(
-                    'Não',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: Dimensions.getTextSize(context, 15)),
-                  )
+                        ),
+                        Text(
+                          'Não',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(fontSize: Dimensions.getTextSize(context, 15)),
+                        )
                       ],
                     ),
                   ],
@@ -278,9 +267,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (!widget.medication.done)
-                    ? Strings.add
-                    : Strings.edit_patient_done,
+                title: (!widget.medication.done) ? Strings.add : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm();
                 },
