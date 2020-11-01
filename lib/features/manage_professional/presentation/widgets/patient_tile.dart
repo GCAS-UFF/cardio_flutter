@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
@@ -103,6 +104,10 @@ void _showOptions(
                     child: FlatButton(
                         onPressed: () {
                           Navigator.pop(context);
+                          Mixpanel.trackEvent(
+                            MixpanelEvents.OPEN_PATIENT,
+                            data: {"patientId": patient.id},
+                          );
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => HomePatientPage(patient: patient)),
