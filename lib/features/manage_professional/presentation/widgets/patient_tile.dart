@@ -51,7 +51,7 @@ class _PatientTileState extends State<PatientTile> {
                       style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      (widget.patient.cpf != null) ? Converter.convertStringToMaskedString(value: widget.patient.cpf, mask: "xxx.xxx.xxx-xx") : "",
+                      (widget.patient.cpf != null) ? Converter.convertStringToMaskedString(value: widget.patient.cpf, mask: "###.###.###-##") : "",
                       style: TextStyle(
                         fontSize: 18,
                       ),
