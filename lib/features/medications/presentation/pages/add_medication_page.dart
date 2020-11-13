@@ -148,7 +148,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                keyboardType: TextInputType.number,
                 textEditingController: _dosageController,
                 hintText: Strings.dosage_hint,
                 title: Strings.dosage,
@@ -160,7 +159,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                keyboardType: TextInputType.number,
                 textEditingController: _quantityController,
                 hintText: Strings.quantity_hint,
                 title: Strings.quantity,
@@ -195,8 +193,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
                   });
                 },
               ),
-              TimeList(
-                  frequency: (_formData[LABEL_FREQUENCY] != null && _formData[LABEL_FREQUENCY] != "") ? int.parse(_formData[LABEL_FREQUENCY]) : 0,
+              TimeList(               frequency: (_formData[LABEL_FREQUENCY] != null && _formData[LABEL_FREQUENCY] != "") ? int.parse(_formData[LABEL_FREQUENCY]) : 0,
                   onChanged: (times) {
                     setState(() {
                       _formData[LABEL_TIMES] = times;
@@ -255,7 +252,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
           entity: Medication(
             done: false,
             name: _formData[LABEL_NAME],
-            dosage: (_formData[LABEL_DOSAGE] is int) ? int.parse(_formData[LABEL_DOSAGE]).toDouble() : double.parse(_formData[LABEL_DOSAGE]),
+            dosage: _formData[LABEL_DOSAGE] ,
             quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
             initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
@@ -272,7 +269,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
             id: widget.medication.id,
             done: false,
             name: _formData[LABEL_NAME],
-            dosage: (_formData[LABEL_DOSAGE] is int) ? int.parse(_formData[LABEL_DOSAGE]).toDouble() : double.parse(_formData[LABEL_DOSAGE]),
+            dosage: _formData[LABEL_DOSAGE] ,
             quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
             initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
