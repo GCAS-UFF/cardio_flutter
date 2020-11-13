@@ -8,6 +8,7 @@ class Exercise extends Equatable {
   final String executionTime;
   final String name;
   final int frequency;
+  final int frequencyPerWeek;
   final String intensity;
   final int durationInMinutes;
   final DateTime initialDate;
@@ -27,6 +28,7 @@ class Exercise extends Equatable {
     this.times,
     this.shortnessOfBreath,
     this.excessiveFatigue,
+    this.frequencyPerWeek,
     this.dizziness,
     this.bodyPain,
     this.executionTime,
@@ -46,6 +48,7 @@ class Exercise extends Equatable {
         observation,
         excessiveFatigue,
         dizziness,
+        frequencyPerWeek,
         bodyPain,
         name,
         times,

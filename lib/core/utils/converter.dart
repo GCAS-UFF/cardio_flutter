@@ -191,7 +191,7 @@ class Converter {
     if (!exercise.done) {
       result = {
         "Exercício": exercise.name,
-        "Frequência": exercise.frequency.toString(),
+        "Frequência": exercise.frequencyPerWeek.toString(),
         "Intensidade": (Arrays.intensities[exercise.intensity] == null) ? "Não Selecionado" : Arrays.intensities[exercise.intensity],
         "Horários Indicados": Converter.convertStringListToString(exercise.times),
         "Duração": "${exercise.durationInMinutes} minutos",

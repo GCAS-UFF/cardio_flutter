@@ -78,6 +78,7 @@ class Strings {
   static const final_date = "Data Final";
   static const hint_duration = "min";
   static const hint_frequency = "vezes ao dia";
+  static const hint_frequencyExercise = "vezes por semana";
   static const add = "Adicionar";
   static const time_title = "Horário";
   static const intended_time = "Horários indicados";

@@ -30,6 +30,7 @@ class AddExercisePage extends StatefulWidget {
 class _AddExercisePageState extends State<AddExercisePage> {
   static const String LABEL_NAME = "LABEL_NAME";
   static const String LABEL_FREQUENCY = "LABEL_LABEL_FREQUENCY";
+  static const String LABEL_FREQUENCY_PERWEEK = "LABEL_FREQUENCY_PERWEEK";
   static const String LABEL_INTENSITY = "LABEL_INTENSITY";
   static const String LABEL_DURATION = "LABEL_DURATION";
   static const String LABEL_INITIAL_DATE = "LABEL_INITIAL_DATE";
@@ -47,7 +48,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _nameController;
-  TextEditingController _frequencyController;
+  TextEditingController _frequencyPerWeerController;
   TextEditingController _durationController;
   final TextEditingController _initialDateController = new MultimaskedTextController(
     maskDefault: "##/##/####",
@@ -62,7 +63,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void initState() {
     if (widget.exercise != null) {
       _formData[LABEL_NAME] = widget.exercise.name;
-      _formData[LABEL_FREQUENCY] = widget.exercise.frequency.toString();
+      _formData[LABEL_FREQUENCY_PERWEEK] = widget.exercise.frequencyPerWeek.toString();
       _formData[LABEL_INTENSITY] = widget.exercise.intensity;
       _formData[LABEL_TIMES] = widget.exercise.times;
       _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
@@ -74,8 +75,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
     _nameController = TextEditingController(
       text: _formData[LABEL_NAME],
     );
-    _frequencyController = TextEditingController(
-      text: _formData[LABEL_FREQUENCY],
+    _frequencyPerWeerController = TextEditingController(
+      text: _formData[LABEL_FREQUENCY_PERWEEK],
     );
 
     _durationController = TextEditingController(
@@ -142,17 +143,17 @@ class _AddExercisePageState extends State<AddExercisePage> {
               CustomTextFormField(
                 isRequired: true,
                 keyboardType: TextInputType.number,
-                textEditingController: _frequencyController,
-                hintText: Strings.hint_frequency,
+                textEditingController: _frequencyPerWeerController,
+                hintText: Strings.hint_frequencyExercise,
                 title: Strings.frequency,
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_FREQUENCY] = value;
+                    _formData[LABEL_FREQUENCY_PERWEEK] = value;
                   });
                 },
               ),
               TimeList(
-                  frequency: (_formData[LABEL_FREQUENCY] != null && _formData[LABEL_FREQUENCY] != "") ? int.parse(_formData[LABEL_FREQUENCY]) : 0,
+                  frequency: 1,
                   onChanged: (times) {
                     setState(() {
                       _formData[LABEL_TIMES] = times;
@@ -250,7 +251,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
             times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
-            frequency: int.parse(_formData[LABEL_FREQUENCY]),
+            frequency: 1,
+            frequencyPerWeek: int.parse(_formData[LABEL_FREQUENCY_PERWEEK]),
             finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
             initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
             executionDay: DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
@@ -271,7 +273,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
             times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
-            frequency: int.parse(_formData[LABEL_FREQUENCY]),
+            frequency: 1,
+            frequencyPerWeek: int.parse(_formData[LABEL_FREQUENCY_PERWEEK]),
             finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
             initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
             executionDay: DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
