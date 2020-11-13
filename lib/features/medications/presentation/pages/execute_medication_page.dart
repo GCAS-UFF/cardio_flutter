@@ -154,7 +154,6 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                keyboardType: TextInputType.number,
                 enable: false,
                 textEditingController: _quantityController,
                 hintText: "",
@@ -292,7 +291,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
           entity: Medication(
             done: true,
             name: _formData[LABEL_NAME],
-            dosage: _formData[LABEL_DOSAGE],
+            dosage: double.parse(_formData[LABEL_DOSAGE]),
             quantity: _formData[LABEL_QUANTITY],
             executedDate: DateHelper.addTimeToDate(
               _formData[LABEL_EXECUTION_TIME],
@@ -310,7 +309,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             id: widget.medication.id,
             done: true,
             name: _formData[LABEL_NAME],
-            dosage: _formData[LABEL_DOSAGE],
+            dosage: double.parse(_formData[LABEL_DOSAGE]),
             quantity: _formData[LABEL_QUANTITY],
             executedDate: DateHelper.addTimeToDate(
               _formData[LABEL_EXECUTION_TIME],
