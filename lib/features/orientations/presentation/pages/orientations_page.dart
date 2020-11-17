@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/orientations/widgets/clickable_item.dart';
 import 'package:cardio_flutter/resources/cardio_colors.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 class OrientationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Mixpanel.trackEvent(MixpanelEvents.READ_ORIENTATIONS);
     return BasePage(
       recomendation: Strings.orientations,
       body: SingleChildScrollView(

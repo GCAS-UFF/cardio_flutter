@@ -5,8 +5,10 @@ import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mixpanel_analytics/mixpanel_analytics.dart';
+import 'package:package_info/package_info.dart';
 
 const MIXPANEL_TOKEN = '7c27b5a82c6705e36ef57be2c65901fd';
+const TCC = "f06f25864e88616b1384f5c2cb52b0a7";
 const DISTINCT_ID = "distinct_id";
 const PHONE_OS = "phoneOS";
 const LOCALE = "locale";
@@ -17,10 +19,10 @@ class Mixpanel {
   static MixpanelAnalytics _mixpanel;
   static StreamController<String> _user$ = StreamController<String>.broadcast();
 
-  static _init() {
+  static _init(String versionName) {
     // _user$ ??= StreamController<String>.broadcast();
     _mixpanel ??= MixpanelAnalytics(
-      token: MIXPANEL_TOKEN,
+      token: versionName == "2.0.0" ? TCC :  MIXPANEL_TOKEN,
       userId$: _user$.stream,
       verbose: true,
       shouldAnonymize: false,
@@ -31,8 +33,10 @@ class Mixpanel {
     );
   }
 
-  static Future<MixpanelResult> trackEvent(MixpanelEvents event, {String userId, Map<String, dynamic> data}) async {
-    _init();
+  static Future<MixpanelResult> trackEvent(MixpanelEvents event,
+      {String userId, Map<String, dynamic> data}) async {
+    String version = (await PackageInfo.fromPlatform()).version;
+    _init(version);
     if (userId == null) {
       try {
         userId = GetIt.instance<Settings>().getUserId();
@@ -47,12 +51,16 @@ class Mixpanel {
     data[PHONE_OS] = Platform.isAndroid ? "android" : "iOS";
     data[LOCALE] = Platform.localeName;
 
-    var result = await _mixpanel.track(event: _getEventString(event), properties: data);
-    return result ? MixpanelResult(isSuccessful: true) : MixpanelResult(errorText: "Erro no Mixpanel");
+    var result =
+        await _mixpanel.track(event: _getEventString(event), properties: data);
+    return result
+        ? MixpanelResult(isSuccessful: true)
+        : MixpanelResult(errorText: "Erro no Mixpanel");
   }
 
   static updateProfile(String userId, Map<String, dynamic> data) async {
-    _init();
+    String version = (await PackageInfo.fromPlatform()).version;
+    _init(version);
     _user$?.add(userId ?? 'Usuário não identificado');
     if (data == null) data = Map<String, dynamic>();
     data[DISTINCT_ID] = userId;
@@ -61,7 +69,9 @@ class Mixpanel {
       value: data,
       time: DateTime.now().toUtc(),
     );
-    return result ? MixpanelResult(isSuccessful: true) : MixpanelResult(errorText: "Erro no Mixpanel");
+    return result
+        ? MixpanelResult(isSuccessful: true)
+        : MixpanelResult(errorText: "Erro no Mixpanel");
   }
 }
 
@@ -74,29 +84,29 @@ class MixpanelResult {
 
 enum MixpanelEvents {
   // General actions
-  OPEN_APP, // feito
-  DO_LOGIN, // feito
-  DO_LOGOUT, // feito
-  READ_ORIENTATIONS, // feito
-  READ_INFORMATION, // feito
-  READ_QUESTIONS, // feito
-  OPEN_HISTORY, // feito
+  OPEN_APP, 
+  DO_LOGIN, 
+  DO_LOGOUT, 
+  READ_ORIENTATIONS, 
+  READ_INFORMATION, 
+  READ_QUESTIONS, 
+  OPEN_HISTORY, 
 
   // Professional actions
-  REGISTER_PROFESSIONAL, // feito
-  REGISTER_PATIENT, // feito
-  EDIT_PROFESSIONAL, // feito
-  EDIT_PATIENT, // feito
-  DELETE_PATIENT, // feito
-  OPEN_PATIENT, //feito
-  RECOMMEND_ACTION, //feito
-  EDIT_RECOMMENDATION, // feito
-  DELETE_RECOMMENDATION, // feito
+  REGISTER_PROFESSIONAL, 
+  REGISTER_PATIENT, 
+  EDIT_PROFESSIONAL, 
+  EDIT_PATIENT, 
+  DELETE_PATIENT, 
+  OPEN_PATIENT, 
+  RECOMMEND_ACTION, 
+  EDIT_RECOMMENDATION, 
+  DELETE_RECOMMENDATION, 
 
   // Patient actions
-  DO_ACTION, // feito
-  EDIT_ACTION, // feito
-  DELETE_ACTION, // feito
+  DO_ACTION, 
+  EDIT_ACTION, 
+  DELETE_ACTION, 
 }
 
 String _getEventString(MixpanelEvents event) {
