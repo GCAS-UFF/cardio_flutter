@@ -33,13 +33,9 @@ class _EditProfessionalPageState extends State<EditProfessionalPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _cpfController = new MultimaskedTextController(
-    maskDefault: null,
-    maskSecundary: "###.###.###-##",
+    maskDefault: "###.###.###-##",
     onlyDigitsDefault: false,
     onlyDigitsSecundary: true,
-    changeMask: (String text) {
-      return (text != null && text.length >= 1 && int.tryParse(text.substring(0, 1)) != null);
-    },
   ).maskedTextFieldController;
   TextEditingController _nameController;
   TextEditingController _regionalRegisterController;

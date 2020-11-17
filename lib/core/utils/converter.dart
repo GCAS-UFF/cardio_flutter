@@ -1,15 +1,14 @@
 import 'package:cardio_flutter/core/error/failure.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
-import 'package:cardio_flutter/features/calendar/presentation/models/calendar.dart'
-    as calendar;
+import 'package:cardio_flutter/features/calendar/presentation/models/calendar.dart' as calendar;
 import 'package:cardio_flutter/features/calendar/presentation/models/day.dart';
-import 'package:cardio_flutter/features/calendar/presentation/models/month.dart'
-    as month;
+import 'package:cardio_flutter/features/calendar/presentation/models/month.dart' as month;
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 class Converter {
@@ -79,19 +78,11 @@ class Converter {
     else
       mask = (changeMask(value)) ? maskSecundary : maskDefault;
 
-    return convertStringToMaskedString(
-        value: value,
-        mask: mask,
-        escapeCharacter: escapeCharacter,
-        onlyDigits: onlyDigits);
+    return convertStringToMaskedString(value: value, mask: mask, escapeCharacter: escapeCharacter, onlyDigits: onlyDigits);
   }
 
   static String cleanText(String text, {bool onlyDigits}) {
-    text = text
-        .replaceAll(".", "")
-        .replaceAll("-", "")
-        .replaceAll(" ", "")
-        .replaceAll(":", "");
+    text = text.replaceAll(".", "").replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "");
     if (onlyDigits != null && onlyDigits) {
       for (int i = 0; i < text.length; i++) {
         if (int.tryParse(text[i]) == null) {
@@ -103,34 +94,28 @@ class Converter {
     return text;
   }
 
-  static calendar.Calendar convertExerciseToCalendar(
-      List<Exercise> exerciseList) {
-    calendar.Calendar calendarObject =
-        calendar.Calendar(months: List<month.Month>());
+  static calendar.Calendar convertExerciseToCalendar(List<Exercise> exerciseList) {
+    calendar.Calendar calendarObject = calendar.Calendar(months: List<month.Month>());
 
     // Run through all exercice list
     for (var i = 0; i < exerciseList.length; i++) {
       // if the exercise was not done and doesnt have a initial date we shouldn't bother
       if (!exerciseList[i].done && exerciseList[i].initialDate != null) {
         // Run through all days for the initial date until the final date day by day
-        for (var j = exerciseList[i].initialDate.millisecondsSinceEpoch;
-            j <= exerciseList[i].finalDate.millisecondsSinceEpoch;
-            j += 86400000) {
+        for (var j = exerciseList[i].initialDate.millisecondsSinceEpoch; j <= exerciseList[i].finalDate.millisecondsSinceEpoch; j += 86400000) {
           // Get the month and day reference from date
           DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(j);
           addMonthIncalendar(calendarObject, exerciseList[i], currentDate);
         }
       } else if (exerciseList[i].done && exerciseList[i].executionDay != null) {
-        addMonthIncalendar(
-            calendarObject, exerciseList[i], exerciseList[i].executionDay);
+        addMonthIncalendar(calendarObject, exerciseList[i], exerciseList[i].executionDay);
       }
     }
     print("calendar " + calendarObject.toString());
     return calendarObject;
   }
 
-  static addMonthIncalendar(calendar.Calendar calendarObject, Exercise exercise,
-      DateTime currentDate) {
+  static addMonthIncalendar(calendar.Calendar calendarObject, Exercise exercise, DateTime currentDate) {
     int year = currentDate.year;
     print(year);
     int monthInt = currentDate.month;
@@ -162,8 +147,7 @@ class Converter {
       );
     } else {
       // if the month isn't null we should test if the day exists
-      int dayIndex =
-          calendarObject.months[monthIndex].days.indexWhere((dayItem) {
+      int dayIndex = calendarObject.months[monthIndex].days.indexWhere((dayItem) {
         return (dayItem.id == day);
       });
       // if the day doensn't exist we should add everything
@@ -222,7 +206,7 @@ class Converter {
     if (!exercise.done) {
       result = {
         "Exercício": exercise.name,
-        "Frequência": exercise.frequency.toString(),
+        "Frequência": exercise.frequencyPerWeek.toString(),
         "Intensidade": (Arrays.intensities[exercise.intensity] == null)
             ? "Não Selecionado"
             : Arrays.intensities[exercise.intensity],
@@ -231,16 +215,13 @@ class Converter {
         "Duração": "${exercise.durationInMinutes} minutos",
         "Data de Inicio": DateHelper.convertDateToString(exercise.initialDate),
         "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),
-        "Observação":
-            (exercise.observation != null) ? exercise.observation : "",
+        "Observação": (exercise.observation != null) ? exercise.observation : "",
       };
     } else {
       result = {
         "Hora da Realização": exercise.executionTime,
         "Exercício": exercise.name,
-        "Intensidade": (Arrays.intensities[exercise.intensity] == null)
-            ? "Não Selecionado"
-            : Arrays.intensities[exercise.intensity],
+        "Intensidade": (Arrays.intensities[exercise.intensity] == null) ? "Não Selecionado" : Arrays.intensities[exercise.intensity],
         "Duração": "${exercise.durationInMinutes} minutos",
         "Sintomas": symptom(exercise.symptoms),
         "Observação":
@@ -248,5 +229,15 @@ class Converter {
       };
     }
     return result;
+  }
+
+  static String getDateAsString(DateTime date) {
+    if (date == null) return null;
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
+
+  static int getAgeFromDate(DateTime date) {
+    if (date == null) return null;
+    return (new DateTime.now().difference(date)).inDays ~/ 365;
   }
 }

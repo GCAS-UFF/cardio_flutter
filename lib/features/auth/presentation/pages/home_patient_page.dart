@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
@@ -81,8 +82,10 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.biometric,
                 image: Images.ico_biometric,
                 destination: () {
-                  BlocProvider.of<generic.GenericBloc<Biometric>>(context).add(
-                    generic.Start<Biometric>(patient: patient),
+                  BlocProvider.of<generic.GenericBloc<Biometric>>(context).add(generic.Start<Biometric>(patient: patient));
+                  Mixpanel.trackEvent(
+                    MixpanelEvents.OPEN_HISTORY,
+                    data: {"actionType": "biometric"},
                   );
                   return Navigator.pushNamed(context, "/biometricPage");
                 },
@@ -93,8 +96,10 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.ingested_liquids,
                 image: Images.ico_liquid,
                 destination: () {
-                  BlocProvider.of<generic.GenericBloc<Liquid>>(context).add(
-                    generic.Start<Liquid>(patient: patient),
+                  BlocProvider.of<generic.GenericBloc<Liquid>>(context).add(generic.Start<Liquid>(patient: patient));
+                  Mixpanel.trackEvent(
+                    MixpanelEvents.OPEN_HISTORY,
+                    data: {"actionType": "liquid"},
                   );
                   return Navigator.pushNamed(context, "/liquidPage");
                 },
@@ -105,8 +110,10 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.medication,
                 image: Images.ico_medication,
                 destination: () {
-                  BlocProvider.of<generic.GenericBloc<Medication>>(context).add(
-                    generic.Start<Medication>(patient: patient),
+                  BlocProvider.of<generic.GenericBloc<Medication>>(context).add(generic.Start<Medication>(patient: patient));
+                  Mixpanel.trackEvent(
+                    MixpanelEvents.OPEN_HISTORY,
+                    data: {"actionType": "medicine"},
                   );
                   return Navigator.pushNamed(context, "/medicationPage");
                 },
@@ -117,8 +124,10 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.appointment,
                 image: Images.ico_appointment,
                 destination: () {
-                  BlocProvider.of<generic.GenericBloc<Appointment>>(context).add(
-                    generic.Start<Appointment>(patient: patient),
+                  BlocProvider.of<generic.GenericBloc<Appointment>>(context).add(generic.Start<Appointment>(patient: patient));
+                  Mixpanel.trackEvent(
+                    MixpanelEvents.OPEN_HISTORY,
+                    data: {"actionType": "appointment"},
                   );
                   return Navigator.pushNamed(context, "/appointmentPage");
                 },
@@ -129,8 +138,10 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.exercise,
                 image: Images.ico_exercise,
                 destination: () {
-                  BlocProvider.of<exercise.ExerciseBloc>(context).add(
-                    exercise.Start(patient: patient),
+                  BlocProvider.of<exercise.ExerciseBloc>(context).add(exercise.Start(patient: patient));
+                  Mixpanel.trackEvent(
+                    MixpanelEvents.OPEN_HISTORY,
+                    data: {"actionType": "exercise"},
                   );
                   return Navigator.pushNamed(context, "/exercisePage");
                 },
@@ -141,12 +152,8 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.orientations,
                 image: Images.ico_orientations,
                 destination: () {
-                  return Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OrientationsPage(),
-                    ),
-                  );
+                  Mixpanel.trackEvent(MixpanelEvents.READ_ORIENTATIONS);
+                  return Navigator.push(context, MaterialPageRoute(builder: (context) => OrientationsPage()));
                 },
               ),
 
@@ -155,33 +162,18 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.about,
                 image: Images.ico_about,
                 destination: () {
-                  return Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AppInfoPage(),
-                    ),
-                  );
+                  Mixpanel.trackEvent(MixpanelEvents.READ_INFORMATION);
+                  return Navigator.push(context, MaterialPageRoute(builder: (context) => AppInfoPage()));
                 },
               ),
               ItemMenu(
                 text: Strings.help,
                 image: Images.ico_help,
                 destination: () {
-                  (Provider.of<Settings>(context, listen: false)
-                              .getUserType() ==
-                          Keys.PROFESSIONAL_TYPE)
-                      ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfessionalHelpPage(),
-                          ),
-                        )
-                      : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PatientHelpPage(),
-                          ),
-                        );
+                  Mixpanel.trackEvent(MixpanelEvents.READ_QUESTIONS);
+                  (Provider.of<Settings>(context, listen: false).getUserType() == Keys.PROFESSIONAL_TYPE)
+                      ? Navigator.push(context, MaterialPageRoute(builder: (context) => ProfessionalHelpPage()))
+                      : Navigator.push(context, MaterialPageRoute(builder: (context) => PatientHelpPage()));
                 },
               ),
               SizedBox(

@@ -18,6 +18,7 @@ class ExerciseModel extends Exercise {
     @required String observation,
     @required String name,
     @required int frequency,
+    @required int frequencyPerWeek,
     @required String intensity,
     @required int durationInMinutes,
     @required DateTime initialDate,
@@ -33,6 +34,7 @@ class ExerciseModel extends Exercise {
           bodyPain: bodyPain,
           name: name,
           frequency: frequency,
+          frequencyPerWeek: frequencyPerWeek,
           times: times,
           observation: observation,
           intensity: intensity,
@@ -52,6 +54,7 @@ class ExerciseModel extends Exercise {
     if (finalDate != null) json['finalDate'] = finalDate.millisecondsSinceEpoch;
     if (name != null) json['name'] = name;
     if (frequency != null) json['frequency'] = frequency;
+    if (frequency != null) json['frequencyPerWeek'] = frequencyPerWeek;
     if (intensity != null) json['intensity'] = intensity;
     if (durationInMinutes != null)
       json['durationInMinutes'] = durationInMinutes;
@@ -93,6 +96,7 @@ class ExerciseModel extends Exercise {
       id: json['id'],
       name: json['name'],
       frequency: json['frequency'],
+      frequencyPerWeek: json['frequencyPerWeek'],
       intensity: json['intensity'],
       durationInMinutes: json['durationInMinutes'],
       symptoms: _symptomsList,
@@ -130,6 +134,7 @@ class ExerciseModel extends Exercise {
       id: exercise.id,
       finalDate: exercise.finalDate,
       frequency: exercise.frequency,
+      frequencyPerWeek: exercise.frequencyPerWeek,
       initialDate: exercise.initialDate,
       intensity: exercise.intensity,
       shortnessOfBreath: exercise.shortnessOfBreath,

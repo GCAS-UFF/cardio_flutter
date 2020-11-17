@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cardio_flutter/core/error/failure.dart';
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/usecases/usecase.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
@@ -52,14 +54,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield Loading();
       var userOrFailure = await signIn(sign_in.Params(email: event.email, password: event.password));
       yield* _eitherLoggedOrErrorState(userOrFailure);
+      _sendSignInEvent(userOrFailure);
     } else if (event is SignUpPatientEvent) {
       yield Loading();
       var userOrFailure = await signUpPatient(sign_patient.Params(patient: event.patient));
       yield* _eitherSignedUpOrErrorState(userOrFailure);
+      _sendSignUpEvent(userOrFailure);
     } else if (event is SignUpProfessionalEvent) {
       yield Loading();
       var userOrFailure = await signUpProfessional(sign_professional.Params(professional: event.professional, password: event.password));
       yield* _eitherSignedUpOrErrorState(userOrFailure);
+      _sendSignUpEvent(userOrFailure);
     } else if (event is GetUserStatusEvent) {
       var userOrFailure = await getCurrentUser(NoParams());
       yield* _eitherLoggedOrErrorState(userOrFailure);
@@ -91,5 +96,46 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }, (result) {
       return SignedUp(user: result);
     });
+  }
+
+  void _sendSignInEvent(dynamic userOrFailure) {
+    var user = userOrFailure.getOrElse(() => null);
+    _updateUserInMixpanel(userOrFailure);
+    if (user is Patient) {
+      Mixpanel.trackEvent(MixpanelEvents.DO_LOGIN, userId: user.id);
+    } else if (user is Professional) {
+      Mixpanel.trackEvent(MixpanelEvents.DO_LOGIN, userId: user.id);
+    }
+  }
+
+  void _sendSignUpEvent(dynamic userOrFailure) {
+    var user = userOrFailure.getOrElse(() => null);
+    _updateUserInMixpanel(userOrFailure);
+    if (user is Patient) {
+      Mixpanel.trackEvent(MixpanelEvents.REGISTER_PATIENT, userId: user.id);
+    } else if (user is Professional) {
+      Mixpanel.trackEvent(MixpanelEvents.REGISTER_PROFESSIONAL, userId: user.id);
+    }
+  }
+
+  void _updateUserInMixpanel(dynamic userOrFailure) {
+    var user = userOrFailure.getOrElse(() => null);
+    if (user is Patient) {
+      Mixpanel.updateProfile(user.id, {
+        "name": user.name,
+        "email": user.email,
+        "address": user.address,
+        "birthday": Converter.getDateAsString(user.birthdate),
+        "age": Converter.getAgeFromDate(user.birthdate),
+        "role": "patient",
+      });
+    } else if (user is Professional) {
+      Mixpanel.updateProfile(user.id, {
+        "name": user.name,
+        "email": user.email,
+        "expertise": user.expertise,
+        "role": "professional",
+      });
+    }
   }
 }

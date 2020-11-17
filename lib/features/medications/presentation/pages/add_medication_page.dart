@@ -150,7 +150,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                keyboardType: TextInputType.number,
                 textEditingController: _dosageController,
                 hintText: Strings.dosage_hint,
                 title: Strings.dosage,
@@ -162,7 +161,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                keyboardType: TextInputType.number,
                 textEditingController: _quantityController,
                 hintText: Strings.quantity_hint,
                 title: Strings.quantity,

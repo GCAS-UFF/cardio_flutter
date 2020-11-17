@@ -123,7 +123,7 @@ class CalendarConverter {
       if (!exercise.done) {
         result = {
           "Exercício": exercise.name,
-          "Frequência": "${exercise.frequency.toString()} vezes ao dia",
+          "Frequência": "${exercise.frequencyPerWeek.toString()} vezes por semana",
           "Intensidade": (Arrays.intensities[exercise.intensity] == null)
               ? "Não Selecionado"
               : Arrays.intensities[exercise.intensity],

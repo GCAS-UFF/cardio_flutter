@@ -163,7 +163,6 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                keyboardType: TextInputType.number,
                 enable: false,
                 textEditingController: _quantityController,
                 hintText: "",

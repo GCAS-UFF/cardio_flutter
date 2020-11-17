@@ -27,10 +27,8 @@ class AppointmentPage extends StatelessWidget {
     return BasePage(
       recomendation: Strings.appointment,
       addFunction: () {
-        if (Provider.of<Settings>(context, listen: false).getUserType() ==
-            Keys.PROFESSIONAL_TYPE) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddAppointmentPage()));
+        if (Provider.of<Settings>(context, listen: false).getUserType() == Keys.PROFESSIONAL_TYPE) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddAppointmentPage()));
         }
       },
       body: BlocListener<GenericBloc<Appointment>, GenericState<Appointment>>(
@@ -170,13 +168,8 @@ class AppointmentPage extends StatelessWidget {
     );
   }
 
-  Widget _bodybuilder(
-      BuildContext context, Patient patient, Calendar calendar) {
-    if (patient == null ||
-        calendar == null ||
-        calendar.months == null ||
-        calendar.months.isEmpty)
-      return EmptyPage(text: Strings.empty_appointment);
+  Widget _bodybuilder(BuildContext context, Patient patient, Calendar calendar) {
+    if (patient == null || calendar == null || calendar.months == null || calendar.months.isEmpty) return EmptyPage(text: Strings.empty_appointment);
     return Container(
       margin: Dimensions.getEdgeInsets(context, left: 15),
       child: SingleChildScrollView(

@@ -1,5 +1,6 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
+import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_dialog_widget.dart';
-import 'package:cardio_flutter/core/widgets/dialog_widget.dart';
 import 'package:cardio_flutter/core/input_validators/email_input_validator.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/home_patient_page.dart';
@@ -8,10 +9,6 @@ import 'package:cardio_flutter/resources/images.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/features/auth/presentation/bloc/auth_bloc.dart';
-import '../../../../core/widgets/button.dart';
-import '../../../../resources/cardio_colors.dart';
-import '../../../../resources/cardio_colors.dart';
-import '../../../../resources/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/manage_professional/presentation/bloc/manage_professional_bloc.dart' as professional;
@@ -66,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             );
           } else if (state is LoggedProfessional) {
+            Mixpanel.trackEvent(MixpanelEvents.OPEN_APP, userId: state.professional.id);
             BlocProvider.of<professional.ManageProfessionalBloc>(context).add(
               professional.Start(
                 professional: state.professional,
@@ -77,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
               (r) => false,
             );
           } else if (state is LoggedPatient) {
+            Mixpanel.trackEvent(MixpanelEvents.OPEN_APP, userId: state.patient.id);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
