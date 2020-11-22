@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_radio_list_form_text_field.dart';
@@ -40,6 +41,10 @@ class _ExecuteAppointmentPageState extends State<ExecuteAppointmentPage> {
           ? _formData[LABEL_JUSTIFICATION] = widget.appointment.justification
           : null;
     }
+    Mixpanel.trackEvent(
+      MixpanelEvents.OPEN_PAGE,
+      data: {"pageTitle": "ExecuteAppointmentPage"},
+    );
     super.initState();
   }
 

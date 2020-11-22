@@ -1,4 +1,5 @@
 import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
@@ -37,12 +38,14 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController _timeOfAppointmentController = new MultimaskedTextController(
+  TextEditingController _timeOfAppointmentController =
+      new MultimaskedTextController(
     maskDefault: "##:##",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
 
-  TextEditingController _appointmentDateController = new MultimaskedTextController(
+  TextEditingController _appointmentDateController =
+      new MultimaskedTextController(
     maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
@@ -52,12 +55,17 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
     if (widget.appointment != null) {
       _formData[LABEL_ADRESS] = widget.appointment.adress;
       _formData[LABEL_EXPERTISE] = widget.appointment.expertise;
-      _formData[LABEL_APPOINTMENT_DATE] = DateHelper.convertDateToString(widget.appointment.appointmentDate);
-      _formData[LABEL_TIME_OF_APPOINTMENT] = DateHelper.getTimeFromDate(widget.appointment.appointmentDate);
+      _formData[LABEL_APPOINTMENT_DATE] =
+          DateHelper.convertDateToString(widget.appointment.appointmentDate);
+      _formData[LABEL_TIME_OF_APPOINTMENT] =
+          DateHelper.getTimeFromDate(widget.appointment.appointmentDate);
       _timeOfAppointmentController.text = _formData[LABEL_TIME_OF_APPOINTMENT];
       _appointmentDateController.text = _formData[LABEL_APPOINTMENT_DATE];
     }
-
+    Mixpanel.trackEvent(
+      MixpanelEvents.OPEN_PAGE,
+      data: {"pageTitle": "AddAppointmentPage"},
+    );
     super.initState();
   }
 
@@ -66,7 +74,8 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
     return BasePage(
       recomendation: Strings.appointment,
       body: SingleChildScrollView(
-        child: BlocListener<GenericBloc<Appointment>, GenericState<Appointment>>(
+        child:
+            BlocListener<GenericBloc<Appointment>, GenericState<Appointment>>(
           listener: (context, state) {
             if (state is Error<Appointment>) {
               Scaffold.of(context).showSnackBar(
@@ -78,7 +87,8 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
               Navigator.pop(context);
             }
           },
-          child: BlocBuilder<GenericBloc<Appointment>, GenericState<Appointment>>(
+          child:
+              BlocBuilder<GenericBloc<Appointment>, GenericState<Appointment>>(
             builder: (context, state) {
               print(state);
               if (state is Loading<Appointment>) {
@@ -95,7 +105,8 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
 
   Widget _buildForm(BuildContext context) {
     return Container(
-      padding: Dimensions.getEdgeInsets(context, top: 10, left: 30, right: 30, bottom: 20),
+      padding: Dimensions.getEdgeInsets(context,
+          top: 10, left: 30, right: 30, bottom: 20),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -137,7 +148,8 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                   title: Strings.specialty,
                   onChanged: (value) {
                     setState(() {
-                      _formData[LABEL_EXPERTISE] = Arrays.expertises.keys.toList()[value];
+                      _formData[LABEL_EXPERTISE] =
+                          Arrays.expertises.keys.toList()[value];
                     });
                   }),
               CustomSelector(
@@ -146,14 +158,17 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                   title: Strings.adress,
                   onChanged: (value) {
                     setState(() {
-                      _formData[LABEL_ADRESS] = Arrays.adresses.keys.toList()[value];
+                      _formData[LABEL_ADRESS] =
+                          Arrays.adresses.keys.toList()[value];
                     });
                   }),
               SizedBox(
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (widget.appointment == null) ? Strings.add : Strings.edit_patient_done,
+                title: (widget.appointment == null)
+                    ? Strings.add
+                    : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm(context);
                 },
@@ -171,14 +186,16 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    } else if (_formData[LABEL_EXPERTISE] == null || Arrays.expertises[_formData[LABEL_EXPERTISE]] == null) {
+    } else if (_formData[LABEL_EXPERTISE] == null ||
+        Arrays.expertises[_formData[LABEL_EXPERTISE]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Favor selecionar a especialidade"),
         ),
       );
       return;
-    } else if (_formData[LABEL_ADRESS] == null || Arrays.adresses[_formData[LABEL_ADRESS]] == null) {
+    } else if (_formData[LABEL_ADRESS] == null ||
+        Arrays.adresses[_formData[LABEL_ADRESS]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Favor selecionar o endereço"),

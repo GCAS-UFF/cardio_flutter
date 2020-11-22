@@ -88,6 +88,7 @@ class MixpanelResult {
 enum MixpanelEvents {
   // General actions
   OPEN_APP,
+  OPEN_PAGE,
   DO_LOGIN,
   DO_LOGOUT,
   READ_ORIENTATIONS,
@@ -152,6 +153,8 @@ String _getEventString(MixpanelEvents event) {
       return "EDIT_ACTION";
     case MixpanelEvents.DELETE_ACTION:
       return "DELETE_ACTION";
+    case MixpanelEvents.OPEN_PAGE:
+      return "OPEN_PAGE";
     default:
       return "UNKNOWN_EVENT";
   }

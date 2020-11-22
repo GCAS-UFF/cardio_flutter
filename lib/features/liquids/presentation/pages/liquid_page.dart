@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
@@ -24,6 +25,10 @@ import 'package:provider/provider.dart';
 class LiquidPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Mixpanel.trackEvent(
+      MixpanelEvents.OPEN_PAGE,
+      data: {"pageTitle": "LiquidPage"},
+    );
     return BasePage(
       recomendation: Strings.liquid,
       addFunction: () {

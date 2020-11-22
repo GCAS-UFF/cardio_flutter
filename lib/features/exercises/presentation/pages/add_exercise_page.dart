@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
@@ -50,7 +51,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
   TextEditingController _nameController;
   TextEditingController _frequencyPerWeerController;
   TextEditingController _durationController;
-  final TextEditingController _initialDateController = new MultimaskedTextController(
+  final TextEditingController _initialDateController =
+      new MultimaskedTextController(
     maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
@@ -63,12 +65,15 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void initState() {
     if (widget.exercise != null) {
       _formData[LABEL_NAME] = widget.exercise.name;
-      _formData[LABEL_FREQUENCY_PERWEEK] = widget.exercise.frequencyPerWeek.toString();
+      _formData[LABEL_FREQUENCY_PERWEEK] =
+          widget.exercise.frequencyPerWeek.toString();
       _formData[LABEL_INTENSITY] = widget.exercise.intensity;
       _formData[LABEL_TIMES] = widget.exercise.times;
       _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
-      _formData[LABEL_INITIAL_DATE] = DateHelper.convertDateToString(widget.exercise.initialDate);
-      _formData[LABEL_FINAL_DATE] = DateHelper.convertDateToString(widget.exercise.finalDate);
+      _formData[LABEL_INITIAL_DATE] =
+          DateHelper.convertDateToString(widget.exercise.initialDate);
+      _formData[LABEL_FINAL_DATE] =
+          DateHelper.convertDateToString(widget.exercise.finalDate);
       _initialDateController.text = _formData[LABEL_INITIAL_DATE];
       _finalDateController.text = _formData[LABEL_FINAL_DATE];
     }
@@ -83,6 +88,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
       text: _formData[LABEL_DURATION],
     );
 
+    Mixpanel.trackEvent(
+      MixpanelEvents.OPEN_PAGE,
+      data: {"pageTitle": "AddExercisePage"},
+    );
     super.initState();
   }
 
@@ -119,7 +128,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   Widget _buildForm(BuildContext context) {
     return Container(
-      padding: Dimensions.getEdgeInsets(context, top: 10, left: 30, right: 30, bottom: 20),
+      padding: Dimensions.getEdgeInsets(context,
+          top: 10, left: 30, right: 30, bottom: 20),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -168,7 +178,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 subtitle: _formData[LABEL_INTENSITY],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_INTENSITY] = Arrays.intensities.keys.toList()[value];
+                    _formData[LABEL_INTENSITY] =
+                        Arrays.intensities.keys.toList()[value];
                   });
                 },
               ),
@@ -214,7 +225,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (widget.exercise == null) ? Strings.add : Strings.edit_patient_done,
+                title: (widget.exercise == null)
+                    ? Strings.add
+                    : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm(context);
                 },
@@ -232,7 +245,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    } else if (_formData[LABEL_INTENSITY] == null || Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
+    } else if (_formData[LABEL_INTENSITY] == null ||
+        Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Favor selecionar a intensidade"),
@@ -252,14 +266,20 @@ class _AddExercisePageState extends State<AddExercisePage> {
             dizziness: _formData[LABEL_DIZZINESS],
             shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
             bodyPain: _formData[LABEL_BODY_PAIN],
-            times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "##:##", value: time))
+                .toList(),
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             frequency: 1,
             frequencyPerWeek: int.parse(_formData[LABEL_FREQUENCY_PERWEEK]),
-            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            executionDay: DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            executionDay:
+                DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
           ),
         ),
       );
@@ -274,14 +294,20 @@ class _AddExercisePageState extends State<AddExercisePage> {
             dizziness: _formData[LABEL_DIZZINESS],
             shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
             bodyPain: _formData[LABEL_BODY_PAIN],
-            times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "##:##", value: time))
+                .toList(),
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             frequency: 1,
             frequencyPerWeek: int.parse(_formData[LABEL_FREQUENCY_PERWEEK]),
-            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            executionDay: DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
+            finalDate:
+                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            executionDay:
+                DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
           ),
         ),
       );
