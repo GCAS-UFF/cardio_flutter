@@ -118,37 +118,35 @@ class CalendarConverter {
     Map<String, String> result;
 
     if (entity is Exercise) {
-      Exercise exercise = entity as Exercise;
-
-      if (!exercise.done) {
+      if (!entity.done) {
         result = {
-          "Exercício": exercise.name,
-          "Frequência": "${exercise.frequencyPerWeek.toString()} vezes por semana",
-          "Intensidade": (Arrays.intensities[exercise.intensity] == null)
+          "Exercício": entity.name,
+          "Frequência": "${entity.frequencyPerWeek.toString()} vezes por semana",
+          "Intensidade": (Arrays.intensities[entity.intensity] == null)
               ? "Não Selecionado"
-              : Arrays.intensities[exercise.intensity],
+              : Arrays.intensities[entity.intensity],
           "Horários Indicados":
-              Converter.convertStringListToString(exercise.times),
-          "Duração": "${exercise.durationInMinutes} minutos",
+              Converter.convertStringListToString(entity.times),
+          "Duração": "${entity.durationInMinutes} minutos",
           "Data de Início":
-              DateHelper.convertDateToString(exercise.initialDate),
-          "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),
+              DateHelper.convertDateToString(entity.initialDate),
+          "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
         };
       } else {
         result = {
-          "Hora da Realização": exercise.executionTime,
-          "Exercício": exercise.name,
-          "Intensidade": (Arrays.intensities[exercise.intensity] == null)
+          "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
+          "Exercício": entity.name,
+          "Intensidade": (Arrays.intensities[entity.intensity] == null)
               ? "Não Selecionado"
-              : Arrays.intensities[exercise.intensity],
-          "Duração": "${exercise.durationInMinutes} minutos",
+              : Arrays.intensities[entity.intensity],
+          "Duração": "${entity.durationInMinutes} minutos",
           "Sintomas": "",
-          "   Falta de Ar Excessiva": symptom(exercise.shortnessOfBreath),
-          "   Fadiga Excessiva": symptom(exercise.excessiveFatigue),
-          "   Tontura": symptom(exercise.dizziness),
-          "   Dores Corporais": symptom(exercise.bodyPain),
+          "   Falta de Ar Excessiva": symptom(entity.shortnessOfBreath),
+          "   Fadiga Excessiva": symptom(entity.excessiveFatigue),
+          "   Tontura": symptom(entity.dizziness),
+          "   Dores Corporais": symptom(entity.bodyPain),
           "Observação":
-              (exercise.observation != null) ? exercise.observation : "",
+              (entity.observation != null) ? entity.observation : "",
         };
       }
     } else if (entity is Liquid) {
