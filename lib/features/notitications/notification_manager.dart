@@ -349,14 +349,28 @@ class NotificationManager {
             liquid.executedDate != null &&
             liquid.quantity != null &&
             liquid.reference != null) {
-          count =
-              count + (Arrays.reference[liquid.reference] * liquid.quantity);
-          print("count:$count");
-          print("todocount:$toDoCount");
+          if ((DateTime.now().isAfter(
+                  DateHelper.addTimeToDate("00:00", liquid.executedDate)) &&
+              DateTime.now().isBefore(
+                  DateHelper.addTimeToDate("23:59", liquid.executedDate)))) {
+            count =
+                count + (Arrays.reference[liquid.reference] * liquid.quantity);
+            print("count:$count");
+            print("todocount:$toDoCount");
+          }
         }
       });
       if (toDoCount == null || toDoCount == 0) return;
-      if (count >= (toDoCount * 0.8) && count < toDoCount * 0.9) {
+
+      if (count >= (toDoCount * 0.7) && count < toDoCount * 0.8) {
+        await singleNotification(
+            channel: channel,
+            datetime: DateTime.now().add(Duration(seconds: 3)),
+            title: "Limite de Líquidos ingeridos próximo",
+            body:
+                "Você já tomou mais de 70% do volume de líquidos ingeridos recomendado para hoje",
+            startId: startId);
+      } else if (count >= (toDoCount * 0.8) && count < toDoCount * 0.9) {
         await singleNotification(
             channel: channel,
             datetime: DateTime.now().add(Duration(seconds: 3)),
