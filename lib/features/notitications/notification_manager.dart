@@ -228,6 +228,7 @@ class NotificationManager {
         }
       });
     });
+    
     firebaseDatabase
         .reference()
         .child("Patient")

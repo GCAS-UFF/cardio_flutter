@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 class MedicationModel extends Medication {
   MedicationModel(
       {@required String name,
-      @required double dosage,
+      @required String dosage,
       @required String quantity,
       @required int frequency,
       @required DateTime initialDate,

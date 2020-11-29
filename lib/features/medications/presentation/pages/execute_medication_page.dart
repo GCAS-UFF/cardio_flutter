@@ -55,7 +55,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
   void initState() {
     if (widget.medication != null) {
       _formData[LABEL_NAME] = widget.medication.name;
-      _formData[LABEL_DOSAGE] = (widget.medication.dosage == null) ? null : widget.medication.dosage.toString();
+      _formData[LABEL_DOSAGE] = (widget.medication.dosage == null) ? null : widget.medication.dosage;
       _formData[LABEL_QUANTITY] = (widget.medication.quantity == null) ? null : widget.medication.quantity.toString();
       _formData[LABEL_EXECUTED_DATE] =
           (!widget.medication.done) ? DateHelper.convertDateToString(DateTime.now()) : DateHelper.convertDateToString(widget.medication.executedDate);
@@ -141,7 +141,6 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                keyboardType: TextInputType.number,
                 enable: false,
                 textEditingController: _dosageController,
                 hintText: "",
@@ -291,7 +290,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
           entity: Medication(
             done: true,
             name: _formData[LABEL_NAME],
-            dosage: double.parse(_formData[LABEL_DOSAGE]),
+            dosage: _formData[LABEL_DOSAGE],
             quantity: _formData[LABEL_QUANTITY],
             executedDate: DateHelper.addTimeToDate(
               _formData[LABEL_EXECUTION_TIME],
@@ -309,7 +308,7 @@ class _ExecuteMedicationPageState extends State<ExecuteMedicationPage> {
             id: widget.medication.id,
             done: true,
             name: _formData[LABEL_NAME],
-            dosage: double.parse(_formData[LABEL_DOSAGE]),
+            dosage: _formData[LABEL_DOSAGE],
             quantity: _formData[LABEL_QUANTITY],
             executedDate: DateHelper.addTimeToDate(
               _formData[LABEL_EXECUTION_TIME],
