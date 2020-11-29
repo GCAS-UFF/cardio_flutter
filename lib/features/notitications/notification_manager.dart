@@ -186,7 +186,7 @@ class NotificationManager {
       // Don't do nothing if theres no record
       if (snapshot == null) return;
 
-      print("[Biometic] ${snapshot.value}");
+      print("[Biometric] ${snapshot.value}");
 
       //Get list of all entries
       List<Biometric> biometrics = GenericConverter.genericFromDataSnapshotList(
@@ -225,6 +225,71 @@ class NotificationManager {
               }
             },
           );
+        }
+      });
+    });
+    firebaseDatabase
+        .reference()
+        .child("Patient")
+        .child(patientId)
+        .child('Done')
+        .child("Biometric")
+        .onValue
+        .listen((event) async {
+      // Get changed snapshot
+      var snapshot = event.snapshot;
+      // Don't do nothing if theres no record
+      if (snapshot == null) return;
+
+      print("[Biometric] ${snapshot.value}");
+
+      //Get list of all entries
+      List<Biometric> biometrics = GenericConverter.genericFromDataSnapshotList(
+          "biometric", snapshot, true);
+
+      Biometric lastInput;
+
+      // Set a new alarm for each combination of day and time
+      biometrics.forEach((biometric) {
+        if (biometric != null &&
+            biometric.executedDate != null &&
+            biometric.weight != null) {
+          DateTime exec = biometric.executedDate;
+          // Go through all the biometrics in the last three days
+          if (exec.isAfter(DateHelper.addTimeToDate(
+              '00:00', DateTime.now().subtract(Duration(days: 3))))) {
+            if (lastInput == null || exec.isAfter(lastInput.executedDate)) {
+              lastInput = biometric;
+            }
+          }
+        }
+      });
+      bool weightnotify = false;
+
+      biometrics.forEach((biometric) async {
+        if (biometric != null &&
+            biometric.executedDate != null &&
+            biometric.weight != null) {
+          print('lastinputmodificado');
+
+          DateTime exec = biometric.executedDate;
+          // Go through all the biometrics in the last three days
+          if (exec.isAfter(DateHelper.addTimeToDate(
+              '00:00', DateTime.now().subtract(Duration(days: 3))))) {
+            if (biometric.weight - lastInput.weight >= 2 ||
+                biometric.weight - lastInput.weight <= -2) {
+              weightnotify = true;
+            }
+            weightnotify
+                ? await singleNotification(
+                    channel: channel,
+                    datetime: DateTime.now().add(Duration(seconds: 3)),
+                    title: "Mudança de peso",
+                    body:
+                        "Seu peso variou mais de 2 kg nos últimos dias, consulte um profissional",
+                    startId: startId)
+                : null;
+          }
         }
       });
     });
