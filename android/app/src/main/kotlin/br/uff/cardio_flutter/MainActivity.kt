@@ -1,4 +1,4 @@
-package com.example.cardio_flutter
+package br.uff.cardio_flutter
 
 import android.os.Bundle
 

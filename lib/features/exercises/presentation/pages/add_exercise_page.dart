@@ -43,7 +43,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
   TextEditingController _nameController;
   TextEditingController _frequencyPerWeerController;
   TextEditingController _durationController;
-  final TextEditingController _initialDateController = new MultimaskedTextController(
+  final TextEditingController _initialDateController =
+      new MultimaskedTextController(
     maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
@@ -56,12 +57,15 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void initState() {
     if (widget.exercise != null) {
       _formData[LABEL_NAME] = widget.exercise.name;
-      _formData[LABEL_FREQUENCY_PERWEEK] = widget.exercise.frequencyPerWeek.toString();
+      _formData[LABEL_FREQUENCY_PERWEEK] =
+          widget.exercise.frequencyPerWeek.toString();
       _formData[LABEL_INTENSITY] = widget.exercise.intensity;
       _formData[LABEL_TIMES] = widget.exercise.times;
       _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
-      _formData[LABEL_INITIAL_DATE] = DateHelper.convertDateToString(widget.exercise.initialDate);
-      _formData[LABEL_FINAL_DATE] = DateHelper.convertDateToString(widget.exercise.finalDate);
+      _formData[LABEL_INITIAL_DATE] =
+          DateHelper.convertDateToString(widget.exercise.initialDate);
+      _formData[LABEL_FINAL_DATE] =
+          DateHelper.convertDateToString(widget.exercise.finalDate);
       _initialDateController.text = _formData[LABEL_INITIAL_DATE];
       _finalDateController.text = _formData[LABEL_FINAL_DATE];
     }
@@ -161,7 +165,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 subtitle: _formData[LABEL_INTENSITY],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_INTENSITY] = Arrays.intensities.keys.toList()[value];
+                    _formData[LABEL_INTENSITY] =
+                        Arrays.intensities.keys.toList()[value];
                   });
                 },
               ),
@@ -191,7 +196,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 },
               ),
               CustomTextFormField(
-                isRequired: true,
+                isRequired: false,
                 textEditingController: _finalDateController,
                 keyboardType: TextInputType.number,
                 validator: DateInputValidator(),
@@ -207,7 +212,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (widget.exercise == null) ? Strings.add : Strings.edit_patient_done,
+                title: (widget.exercise == null)
+                    ? Strings.add
+                    : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm(context);
                 },
@@ -223,7 +230,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    } else if (_formData[LABEL_INTENSITY] == null || Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
+    } else if (_formData[LABEL_INTENSITY] == null ||
+        Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Favor selecionar a intensidade"),
@@ -240,12 +248,19 @@ class _AddExercisePageState extends State<AddExercisePage> {
             name: _formData[LABEL_NAME],
             done: false,
             durationInMinutes: int.parse(_formData[LABEL_DURATION]),
-            times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "##:##", value: time))
+                .toList(),
             intensity: _formData[LABEL_INTENSITY],
             frequency: 1,
             frequencyPerWeek: int.parse(_formData[LABEL_FREQUENCY_PERWEEK]),
-            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            finalDate: _formData[LABEL_FINAL_DATE] != null &&
+                    _formData[LABEL_FINAL_DATE] != ""
+                ? DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE])
+                : DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
           ),
         ),
       );
@@ -258,12 +273,19 @@ class _AddExercisePageState extends State<AddExercisePage> {
             name: _formData[LABEL_NAME],
             done: false,
             durationInMinutes: int.parse(_formData[LABEL_DURATION]),
-            times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "##:##", value: time))
+                .toList(),
             intensity: _formData[LABEL_INTENSITY],
             frequency: 1,
             frequencyPerWeek: int.parse(_formData[LABEL_FREQUENCY_PERWEEK]),
-            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            finalDate: _formData[LABEL_FINAL_DATE] != null &&
+                    _formData[LABEL_FINAL_DATE] != ""
+                ? DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE])
+                : DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
           ),
         ),
       );
