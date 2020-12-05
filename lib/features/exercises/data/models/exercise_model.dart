@@ -43,12 +43,11 @@ class ExerciseModel extends Exercise {
           initialDate: initialDate,
           finalDate: finalDate,
           done: done,
-          executionTime: executionTime,
         );
 
   static Map<dynamic, dynamic> toJson(ExerciseModel model) {
     Map<dynamic, dynamic> json = {};
-    if (model.executionDay != null)
+    if (model.executedDate != null)
       json['executedDate'] = model.executedDate.millisecondsSinceEpoch;
     if (model.initialDate != null)
       json['initialDate'] = model.initialDate.millisecondsSinceEpoch;
@@ -67,8 +66,7 @@ class ExerciseModel extends Exercise {
       json['shortnessOfBreath'] = model.shortnessOfBreath;
     if (model.dizziness != null) json['dizziness'] = model.dizziness;
     if (model.bodyPain != null) json['bodyPain'] = model.bodyPain;
-    if (model.executionTime != null)
-      json['executionTime'] = model.executionTime;
+    if (model.executedDate != null) json['executionTime'] = model.executedDate;
     if (model.times != null) json['times'] = model.times;
     if (model.observation != null) json['observation'] = model.observation;
 
@@ -145,7 +143,6 @@ class ExerciseModel extends Exercise {
       shortnessOfBreath: exercise.shortnessOfBreath,
       executedDate: exercise.executedDate,
       done: exercise.done,
-      executionTime: exercise.executionTime,
       times: exercise.times,
       observation: exercise.observation,
     );
