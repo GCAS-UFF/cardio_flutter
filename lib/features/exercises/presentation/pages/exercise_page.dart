@@ -7,8 +7,9 @@ import 'package:cardio_flutter/features/calendar/presentation/models/activity.da
 import 'package:cardio_flutter/features/calendar/presentation/models/calendar.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/day.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/month.dart';
-import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
+import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/exercises/presentation/pages/add_exercise_page.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/empty_page.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/entity_card.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
@@ -38,9 +39,9 @@ class ExercisePage extends StatelessWidget {
               MaterialPageRoute(builder: (context) => AddExercisePage()));
         }
       },
-      body: BlocListener<ExerciseBloc, ExerciseState>(
+      body: BlocListener<GenericBloc<Exercise>, GenericState<Exercise>>(
         listener: (context, state) {
-          if (state is Error) {
+          if (state is Error<Exercise>) {
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -48,11 +49,11 @@ class ExercisePage extends StatelessWidget {
             );
           }
         },
-        child: BlocBuilder<ExerciseBloc, ExerciseState>(
+        child: BlocBuilder<GenericBloc<Exercise>, GenericState<Exercise>>(
           builder: (context, state) {
-            if (state is Loading) {
+            if (state is Loading<Exercise>) {
               return LoadingWidget(Container());
-            } else if (state is Loaded) {
+            } else if (state is Loaded<Exercise>) {
               return _bodybuilder(context, state.patient, state.calendar);
             } else {
               return _bodybuilder(context, null, null);
@@ -70,13 +71,33 @@ class ExercisePage extends StatelessWidget {
         return EntityCard(
           activity: activity,
           openExecuted: () {
-            Navigator.of(context).push(
+            Navigator.push(
+              context,
               MaterialPageRoute(
-                builder: (context) =>
-                    ExecuteExercisePage(exercise: activity.value),
+                builder: (context) => ExecuteExercisePage(
+                  exercise: activity.value,
+                ),
               ),
             );
           },
+          // delete: () {
+          //   BlocProvider.of<GenericBloc<Exercise>>(context).add(
+          //     DeleteEvent<Exercise>(
+          //       entity: activity.value,
+          //     ),
+          //   );
+          // },
+          // openRecomendation: () {
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) {
+          //       print('activity.value:${activity.value.id}');
+          //       return AddExercisePage(
+          //         exercise: activity.value,
+          //       );
+          //     }),
+          //   );
+          // },
         );
       }).toList(),
     );

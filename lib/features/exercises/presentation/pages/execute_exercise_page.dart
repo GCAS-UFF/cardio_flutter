@@ -1,5 +1,6 @@
 import 'package:cardio_flutter/core/input_validators/time_of_day_validator.dart';
 import 'package:cardio_flutter/core/platform/mixpanel.dart';
+import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
 import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_check_item.dart';
@@ -8,7 +9,7 @@ import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
-import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
@@ -36,7 +37,8 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   static const String LABEL_DIZZINESS = "DIZZINESS";
   static const String LABEL_SHORTNESS_OF_BREATH = "LABEL_SHORTNESS_OF_BREATH";
   static const String LABEL_EXCESSIVE_FATIGUE = "LABEL_EXCESSIVE_FATIGUE";
-  static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
+  // static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
+  static const String LABEL_EXECUTED_DATE = "LABEL_EXECUTED_DATE";
   static const String LABEL_OBSERVATION = "LABEL_OBSERVATION";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
@@ -46,7 +48,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
   TextEditingController _nameController;
   TextEditingController _durationController;
   TextEditingController _observationController;
-  TextEditingController _timeOfDayController = new MultimaskedTextController(
+  TextEditingController _executedDateController = new MultimaskedTextController(
     maskDefault: "##:##",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
@@ -57,6 +59,8 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
     _formData[LABEL_OBSERVATION] = widget.exercise.observation;
     _formData[LABEL_INTENSITY] = widget.exercise.intensity.toString();
     _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
+    _formData[LABEL_EXECUTED_DATE] =
+        DateHelper.getTimeFromDate(widget.exercise.executedDate);
 
     if (widget.exercise.done) {
       _formData[LABEL_SHORTNESS_OF_BREATH] = widget.exercise.shortnessOfBreath;
@@ -80,7 +84,7 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
     _durationController = TextEditingController(
       text: _formData[LABEL_DURATION],
     );
-    _timeOfDayController.text = _formData[LABEL_TIME_OF_DAY];
+    _executedDateController.text = _formData[LABEL_EXECUTED_DATE];
 
     Mixpanel.trackEvent(
       MixpanelEvents.OPEN_PAGE,
@@ -94,21 +98,21 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
     return BasePage(
       recomendation: Strings.exercise,
       body: SingleChildScrollView(
-        child: BlocListener<ExerciseBloc, ExerciseState>(
+        child: BlocListener<GenericBloc<Exercise>, GenericState<Exercise>>(
           listener: (context, state) {
-            if (state is Error) {
+            if (state is Error<Exercise>) {
               Scaffold.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
                 ),
               );
-            } else if (state is Loaded) {
+            } else if (state is Loaded<Exercise>) {
               Navigator.pop(context);
             }
           },
-          child: BlocBuilder<ExerciseBloc, ExerciseState>(
+          child: BlocBuilder<GenericBloc<Exercise>, GenericState<Exercise>>(
             builder: (context, state) {
-              if (state is Loading) {
+              if (state is Loading<Exercise>) {
                 return LoadingWidget(_buildForm(context));
               } else {
                 return _buildForm(context);
@@ -178,14 +182,14 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
               ),
               CustomTextFormField(
                 isRequired: true,
-                textEditingController: _timeOfDayController,
+                textEditingController: _executedDateController,
                 validator: TimeofDayValidator(),
                 hintText: Strings.time_hint,
                 title: Strings.time_title,
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_TIME_OF_DAY] = value;
+                    _formData[LABEL_EXECUTED_DATE] = value;
                   });
                 },
               ),
@@ -325,9 +329,9 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
     _formKey.currentState.save();
 
     if (!widget.exercise.done) {
-      BlocProvider.of<ExerciseBloc>(context).add(
-        ExecuteExerciseEvent(
-          exercise: Exercise(
+      BlocProvider.of<GenericBloc<Exercise>>(context).add(
+        ExecuteEvent<Exercise>(
+          entity: Exercise(
             done: true,
             name: _formData[LABEL_NAME],
             durationInMinutes: int.parse(_formData[LABEL_DURATION]),
@@ -336,16 +340,18 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
             bodyPain: _formData[LABEL_BODY_PAIN],
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
-            executionDay: DateTime.now(),
-            executionTime: _formData[LABEL_TIME_OF_DAY],
+            executedDate:
+                DateHelper.addTimeToCurrentDate(_formData[LABEL_EXECUTED_DATE]),
+            // executionDay: DateTime.now(),
+            // executionTime: _formData[LABEL_TIME_OF_DAY],
             observation: _formData[LABEL_OBSERVATION],
           ),
         ),
       );
     } else {
-      BlocProvider.of<ExerciseBloc>(context).add(
-        EditExecutedExerciseEvent(
-          exercise: Exercise(
+      BlocProvider.of<GenericBloc<Exercise>>(context).add(
+        EditExecutedEvent<Exercise>(
+          entity: Exercise(
             id: widget.exercise.id,
             done: true,
             name: _formData[LABEL_NAME],
@@ -355,8 +361,10 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
             bodyPain: _formData[LABEL_BODY_PAIN],
             intensity: _formData[LABEL_INTENSITY],
             excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
-            executionDay: DateTime.now(),
-            executionTime: _formData[LABEL_TIME_OF_DAY],
+            executedDate:
+                DateHelper.addTimeToCurrentDate(_formData[LABEL_EXECUTED_DATE]),
+            // executionDay: DateTime.now(),
+            // executionTime: _formData[LABEL_TIME_OF_DAY],
             observation: _formData[LABEL_OBSERVATION],
           ),
         ),

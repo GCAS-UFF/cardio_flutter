@@ -3,8 +3,7 @@ import 'package:cardio_flutter/features/appointments/domain/entities/appointment
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
-import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart'
-    as exercise;
+import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
 import 'package:cardio_flutter/features/orientations/presentation/pages/orientations_page.dart';
@@ -39,7 +38,6 @@ class _HomePatientPageState extends State<HomePatientPage> {
       key: _resumeDetectorKey,
       onFocusGained: () {
         debugPrint("onFocusGained");
-        
       },
       child: BasePage(
         hasDrawer: true,
@@ -139,7 +137,7 @@ class _HomePatientPageState extends State<HomePatientPage> {
                             generic.Start<Medication>(patient: widget.patient));
                     Mixpanel.trackEvent(
                       MixpanelEvents.OPEN_HISTORY,
-                      data: {"actionType": "medicine"},
+                      data: {"actionType": "medication"},
                     );
                     return Navigator.pushNamed(context, "/medicationPage");
                   },
@@ -166,8 +164,8 @@ class _HomePatientPageState extends State<HomePatientPage> {
                   text: Strings.exercise,
                   image: Images.ico_exercise,
                   destination: () {
-                    BlocProvider.of<exercise.ExerciseBloc>(context)
-                        .add(exercise.Start(patient: widget.patient));
+                    BlocProvider.of<generic.GenericBloc<Exercise>>(context)
+                        .add(generic.Start<Exercise>(patient: widget.patient));
                     Mixpanel.trackEvent(
                       MixpanelEvents.OPEN_HISTORY,
                       data: {"actionType": "exercise"},

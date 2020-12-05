@@ -21,7 +21,10 @@ class AuthRepositoryImpl implements AuthRepository {
   final NotificationManager notificationManager;
 
   AuthRepositoryImpl(
-      {@required this.localDataSource, @required this.remoteDataSource, @required this.networkInfo, @required this.notificationManager});
+      {@required this.localDataSource,
+      @required this.remoteDataSource,
+      @required this.networkInfo,
+      @required this.notificationManager});
 
   @override
   Future<Either<Failure, dynamic>> signIn(String email, String password) async {
@@ -60,15 +63,18 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, Patient>> signUpPatient(Patient patient, String password) async {
+  Future<Either<Failure, Patient>> signUpPatient(
+      Patient patient, String password) async {
     if (await networkInfo.isConnected) {
       try {
         String userId = await localDataSource.getUserId();
         String userType = await localDataSource.getUserType();
 
-        if (userId == null || userType == null || userType == Keys.PATIENT_TYPE) return Left(ServerFailure());
+        if (userId == null || userType == null || userType == Keys.PATIENT_TYPE)
+          return Left(ServerFailure());
 
-        Patient result = await remoteDataSource.signUpPatient(userId, PatientModel.fromEntity(patient), password);
+        Patient result = await remoteDataSource.signUpPatient(
+            userId, PatientModel.fromEntity(patient), password);
 
         return Right(result);
       } on PlatformException catch (e) {
@@ -84,10 +90,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, Professional>> signUpProfessional(Professional professional, String password) async {
+  Future<Either<Failure, Professional>> signUpProfessional(
+      Professional professional, String password) async {
     if (await networkInfo.isConnected) {
       try {
-        Professional result = await remoteDataSource.signUpProfessional(ProfessionalModel.fromEntity(professional), password);
+        Professional result = await remoteDataSource.signUpProfessional(
+            ProfessionalModel.fromEntity(professional), password);
         if (professional != null) {
           await localDataSource.saveUserId(professional.id);
           await localDataSource.saveUserType(Keys.PROFESSIONAL_TYPE);
@@ -124,6 +132,7 @@ class AuthRepositoryImpl implements AuthRepository {
         if (user != null) {
           await localDataSource.saveUserId(user.id);
           await localDataSource.saveUserType(type);
+          notificationManager.init();
           return Right(user);
         } else {
           return Left(ServerFailure());
