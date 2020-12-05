@@ -98,7 +98,7 @@ class GenericConverter {
     } else if (entity is Liquid) {
       return "liquid";
     } else if (entity is Medication) {
-      return "medicine";
+      return "medication";
     } else if (entity is Appointment) {
       return "appointment";
     } else if (entity is Exercise) {

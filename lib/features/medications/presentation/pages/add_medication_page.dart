@@ -279,9 +279,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
           entity: Medication(
             done: false,
             name: _formData[LABEL_NAME],
-            dosage: (_formData[LABEL_DOSAGE] is int)
-                ? int.parse(_formData[LABEL_DOSAGE]).toDouble()
-                : double.parse(_formData[LABEL_DOSAGE]),
+            dosage: _formData[LABEL_DOSAGE],
             quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
             initialDate:
@@ -303,9 +301,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
             id: widget.medication.id,
             done: false,
             name: _formData[LABEL_NAME],
-            dosage: (_formData[LABEL_DOSAGE] is int)
-                ? int.parse(_formData[LABEL_DOSAGE]).toDouble()
-                : double.parse(_formData[LABEL_DOSAGE]),
+            dosage: _formData[LABEL_DOSAGE],
             quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
             initialDate:

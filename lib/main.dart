@@ -7,7 +7,7 @@ import 'package:cardio_flutter/features/auth/presentation/pages/login_page.dart'
 import 'package:cardio_flutter/features/auth/presentation/pages/patient_sign_up_page.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/professional_signup_page.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
-import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
+import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/exercises/presentation/pages/exercise_page.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
@@ -43,8 +43,8 @@ Future<void> main() async {
           BlocProvider<ManageProfessionalBloc>(
             create: (_) => di.sl<ManageProfessionalBloc>(),
           ),
-          BlocProvider<ExerciseBloc>(
-            create: (_) => di.sl<ExerciseBloc>(),
+          BlocProvider<GenericBloc<Exercise>>(
+            create: (_) => di.sl<GenericBloc<Exercise>>(),
           ),
           BlocProvider<GenericBloc<Liquid>>(
             create: (_) => di.sl<GenericBloc<Liquid>>(),

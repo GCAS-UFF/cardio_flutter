@@ -261,7 +261,7 @@ class CalendarConverter {
       if (!entity.done) {
         result = {
           "Nome": entity.name,
-          "Dosagem": entity.dosage.toString(),
+          "Dosagem": entity.dosage,
           "Quantidade": entity.quantity.toString(),
           "Frequência": "${entity.frequency.toString()} vezes ao dia",
           "Horários Indicados":
@@ -273,7 +273,7 @@ class CalendarConverter {
       } else {
         result = {
           "Nome": entity.name,
-          "Dosagem": entity.dosage.toString(),
+          "Dosagem": entity.dosage,
           "Quantidade": entity.quantity.toString(),
           "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
           "Ingerido": (entity.tookIt != null && entity.tookIt) ? "Sim" : "Não",

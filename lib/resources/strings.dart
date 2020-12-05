@@ -17,9 +17,10 @@ class Strings {
   static const password_title = "Senha";
   static const password_hint = "Digite sua senha";
   static const cancel = "Cancelar";
-  static const signup_warning = "Caso seja um paciente ainda não cadastrado, entre em contato com seu profissional de saúde para que faça seu cadastro.\n\nCaso seja um profissional de saúde, entre em contato com a equipe de desenvolvimento para que faça seu cadastro.";
-      // "Caso seja um paciente ainda não cadastrado, entre em contato com seu profissional de saúde para que faça seu cadastro.\n\nCaso seja um profissional de saúde autorizado basta clicar em \"Continuar\" e seguir com seu cadastro.";
-      
+  static const signup_warning =
+      "Caso seja um paciente ainda não cadastrado, entre em contato com seu profissional de saúde para que faça seu cadastro.\n\nCaso seja um profissional de saúde, entre em contato com a equipe de desenvolvimento para que faça seu cadastro.";
+  // "Caso seja um paciente ainda não cadastrado, entre em contato com seu profissional de saúde para que faça seu cadastro.\n\nCaso seja um profissional de saúde autorizado basta clicar em \"Continuar\" e seguir com seu cadastro.";
+
   static const okbutton = "OK";
   static const warning = " ATENÇÃO";
   static const invalid_user_type = "Usuário inválido";
@@ -45,11 +46,14 @@ class Strings {
   static const patient_email = "email@email.com";
   static const new_patient_done = "Cadastrar";
   static const edit_patient_done = "Editar";
-  static const invalid_date_error_message = "A data que você digitou é inválida";
-  static const invalid_mounth_error_message = "O mês que você digitou é inválido";
+  static const invalid_date_error_message =
+      "A data que você digitou é inválida";
+  static const invalid_mounth_error_message =
+      "O mês que você digitou é inválido";
   static const invalid_year_error_message = "O ano que você digitou é inválido";
   static const invalid_day_error_message = "O dia que você digitou é inválido";
-  static const invalid_time_error_message = "O horário que você digitou é inválido";
+  static const invalid_time_error_message =
+      "O horário que você digitou é inválido";
 
   // Menu page
   static const biometric = " Como estou hoje";
@@ -63,9 +67,12 @@ class Strings {
   static const sign_up_done = "Concluir Cadastro";
 
   // Message to Failure
-  static const message_no_internet_connection = "Você não possui conexão com a internet.";
-  static const message_server_failure = "Tivemos um problema de comunicação com o servidor.";
-  static const message_cache_failure = "Tivemos um problema ao tentar recuperar seus dados.";
+  static const message_no_internet_connection =
+      "Você não possui conexão com a internet.";
+  static const message_server_failure =
+      "Tivemos um problema de comunicação com o servidor.";
+  static const message_cache_failure =
+      "Tivemos um problema ao tentar recuperar seus dados.";
   static const unexpected_error = "Ocorreu um erro inesperado";
 
   // Email validator
@@ -85,7 +92,7 @@ class Strings {
   static const final_date = "Data Final";
   static const hint_duration = "min";
   static const hint_frequency = "vezes ao dia";
-  static const hint_frequencyExercise = "vezes por semana";
+  static const hint_frequencyExercise = "vezes por dia";
   static const add = "Adicionar";
   static const time_title = "Horário";
   static const intended_time = "Horários indicados";
@@ -112,7 +119,7 @@ class Strings {
 
   static const medication_name = "Nome do medicamento";
   static const dosage = "Dosagem";
-  static const dosage_hint = "mg";
+  static const dosage_hint = "2 mg";
   static const quantity = "Quantidade";
   static const quantity_hint = "Ex: 2 Comprimidos";
   static const initial_time = "Hora Inicial";
@@ -178,10 +185,13 @@ class Strings {
   static const professional_help_answer7 =
       "Nesta tela você poderá ver uma lista dos exercícios recomendados organizados por data; os itens azuis representam os exercícios recomendados e os itens alaranjados, os exercícios que já foram realizados pelo paciente, com informações sobre sintomas. Ao clicar no exercício recomendado, será possível editá-lo."
       "\n\nPara adicionar novos exercícios clique no botão com ícone de \"+\" e informe, na tela que abrirá, a atividade física, a frequência diária, a intensidade, duração e período da recomendação.";
-  static const professional_help_answer8 = "No canto superior direito, está presente a opção de deslogar,"
+  static const professional_help_answer8 =
+      "No canto superior direito, está presente a opção de deslogar,"
       " para sair da sua conta, que está presente em todas as telas do aplicativo, exceto a de logon.";
-  static const professional_help_answer9 = "Nesta tela, você encontrará informações sobre a Insuficiência Cardíaca.";
-  static const professional_help_answer10 = "Nesta tela, você encontrará informações sobre a concepção do aplicativo e seus colaboradores.";
+  static const professional_help_answer9 =
+      "Nesta tela, você encontrará informações sobre a Insuficiência Cardíaca.";
+  static const professional_help_answer10 =
+      "Nesta tela, você encontrará informações sobre a concepção do aplicativo e seus colaboradores.";
 
   //Patient Help Page
 
@@ -345,7 +355,8 @@ class Strings {
       "favorecer o contato direto entre paciente e profissional de saúde."
       "\n\n"
       "Desenvolvido como projeto de Doutorado da Enfermeira Lyvia da Silva Figueiredo";
-  static const about_answer2_1 = "- Enfermeira Doutoranda Lyvia da Silva Figueiredo\n"
+  static const about_answer2_1 =
+      "- Enfermeira Doutoranda Lyvia da Silva Figueiredo\n"
       " - Prof Dra Ana Carla Dantas Cavalcanti \n(Escola de Enfermagem/UFF)\n"
       " - Prof Dra Paula Vanessa Peclat Flores \n(Escola de Enfermagem/UFF)";
   static const about_answer2_2 = "Prof Dr Flávio Luis Seixas\n"
