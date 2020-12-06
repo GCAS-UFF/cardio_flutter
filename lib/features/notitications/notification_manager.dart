@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:math';
-
+import 'dart:developer' as dev;
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/platform/settings.dart';
+import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
@@ -63,7 +66,10 @@ class NotificationManager {
     var initializeAndroid = AndroidInitializationSettings('app_logo');
     var initializeIOS = IOSInitializationSettings();
     var initSettings = InitializationSettings(initializeAndroid, initializeIOS);
-    await localNotificationsPlugin.initialize(initSettings);
+    await localNotificationsPlugin.initialize(initSettings,
+        onSelectNotification: (String payload) async {
+      Mixpanel.trackOnSelectNotification(payload);
+    });
   }
 
   static NotificationDetails _createChannel(String channelName) {
@@ -80,16 +86,34 @@ class NotificationManager {
     return NotificationDetails(androidChannel, iosChannel);
   }
 
-  Future singleNotification(
-      {@required NotificationDetails channel,
-      @required DateTime datetime,
-      @required String title,
-      @required String body,
-      @required int startId,
-      String sound}) async {
+  Future singleNotification({
+    @required NotificationDetails channel,
+    @required DateTime datetime,
+    @required String title,
+    @required String body,
+    @required int startId,
+    String entityId,
+    String sound,
+  }) async {
     int id = _generateNotificationId(startId);
-    localNotificationsPlugin.schedule(id, title, body, datetime, channel,
-        payload: id.toString());
+
+    Map<String, dynamic> map = Map<String, dynamic>();
+    map['notificationId'] = id;
+    map['title'] = title;
+    map['body'] = body;
+    map['entityId'] = entityId;
+    map['dateDisplayed'] = datetime.toUtc().toString();
+    map['channel'] = channel.android.channelId;
+    String payload = json.encode(map);
+
+    localNotificationsPlugin.schedule(
+      id,
+      title,
+      body,
+      datetime,
+      channel,
+      payload: payload,
+    );
   }
 
   int _generateNotificationId(int startId) {
@@ -147,6 +171,7 @@ class NotificationManager {
               body:
                   "Você possui uma consulta de ${appointment.expertise} às ${DateHelper.getTimeFromDate(appointment.appointmentDate)} em ${appointment.adress}",
               datetime: oneDayBefore,
+              entityId: appointment.id,
             );
           }
 
@@ -161,6 +186,7 @@ class NotificationManager {
               body:
                   "Você possui uma consulta de ${appointment.expertise} às ${DateHelper.getTimeFromDate(appointment.appointmentDate)} em ${appointment.adress}",
               datetime: hoursBefore,
+              entityId: appointment.id,
             );
           }
         }
@@ -220,6 +246,7 @@ class NotificationManager {
                     title: "Atenção!!",
                     body: "Não se esqueça de nos dizer como você está hoje",
                     datetime: notificationTime,
+                    entityId: biometric.id,
                   );
                 }
               }
@@ -288,7 +315,9 @@ class NotificationManager {
                     title: "Mudança de peso",
                     body:
                         "Seu peso variou mais de 2 kg nos últimos dias, consulte um profissional",
-                    startId: startId)
+                    startId: startId,
+                    entityId: biometric.id,
+                  )
                 : null;
           }
         }
@@ -347,6 +376,7 @@ class NotificationManager {
                     title: "Atenção!!",
                     body: "Não se esqueça de se exercitar hoje",
                     datetime: notificationTime,
+                    entityId: exercise.id,
                   );
                 }
               }
@@ -430,12 +460,13 @@ class NotificationManager {
 
       if (count >= (toDoCount * 0.7) && count < toDoCount * 0.8) {
         await singleNotification(
-            channel: channel,
-            datetime: DateTime.now().add(Duration(seconds: 3)),
-            title: "Limite de Líquidos ingeridos próximo",
-            body:
-                "Você já tomou mais de 70% do volume de líquidos ingeridos recomendado para hoje",
-            startId: startId);
+          channel: channel,
+          datetime: DateTime.now().add(Duration(seconds: 3)),
+          title: "Limite de Líquidos ingeridos próximo",
+          body:
+              "Você já tomou mais de 70% do volume de líquidos ingeridos recomendado para hoje",
+          startId: startId,
+        );
       } else if (count >= (toDoCount * 0.8) && count < toDoCount * 0.9) {
         await singleNotification(
             channel: channel,
@@ -520,6 +551,7 @@ class NotificationManager {
                     body:
                         "Você precisa consumir ${medication.quantity} de ${medication.dosage} de ${medication.name}",
                     datetime: notificationTime,
+                    entityId: medication.id,
                   );
                 }
               }

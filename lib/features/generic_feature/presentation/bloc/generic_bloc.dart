@@ -134,7 +134,7 @@ class GenericBloc<Entity extends BaseEntity>
         this.add(Refresh<Entity>());
         Mixpanel.trackEvent(
           MixpanelEvents.DO_ACTION,
-          data: {"actionType": "${GenericConverter.mapEntity(Entity)}"},
+          data: {"actionType": "${GenericConverter.mapEntity(result)}"},
         );
         return Loading<Entity>();
       });

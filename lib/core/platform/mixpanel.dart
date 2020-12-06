@@ -1,13 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:developer' as dev;
 
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mixpanel_analytics/mixpanel_analytics.dart';
 import 'package:package_info/package_info.dart';
 
-const MIXPANEL_TOKEN = 'f06f25864e88616b1384f5c2cb52b0a7';
+const MIXPANEL_TOKEN_DEV = 'f06f25864e88616b1384f5c2cb52b0a7';
+const MIXPANEL_TOKEN_PROD = '62ac1951cffac01b8373b44d03561b6d';
 const DISTINCT_ID = "distinct_id";
 const PHONE_OS = "phoneOS";
 const LOCALE = "locale";
@@ -21,7 +25,7 @@ class Mixpanel {
   static _init(String versionName) {
     // _user$ ??= StreamController<String>.broadcast();
     _mixpanel ??= MixpanelAnalytics(
-      token: MIXPANEL_TOKEN,
+      token: kReleaseMode ? MIXPANEL_TOKEN_PROD : MIXPANEL_TOKEN_DEV,
       userId$: _user$.stream,
       verbose: true,
       shouldAnonymize: false,
@@ -49,15 +53,24 @@ class Mixpanel {
     data[DISTINCT_ID] = userId;
     data[PHONE_OS] = Platform.isAndroid ? "android" : "iOS";
     data[LOCALE] = Platform.localeName;
-    data['timeStamp'] = DateTime.now();
+    var date = DateTime.now().toUtc();
+    print(date.toString());
+    data['timeStamp'] = date.toString();
 
     var result = await _mixpanel.track(
       event: _getEventString(event),
       properties: data,
+      time: date,
     );
-    return result
-        ? MixpanelResult(isSuccessful: true)
-        : MixpanelResult(errorText: "Erro no Mixpanel");
+    result
+        ? dev.log(
+            "Sucesso ao enviar evento ${_getEventString(event)} - ${data.toString()}!",
+            name: "Mixpanel - trackEvent",
+          )
+        : dev.log(
+            "Falha ao enviar evento ${_getEventString(event)} - ${data.toString()} :(",
+            name: "Mixpanel - trackEvent",
+          );
   }
 
   static updateProfile(String userId, Map<String, dynamic> data) async {
@@ -66,15 +79,28 @@ class Mixpanel {
     _user$?.add(userId ?? 'Usuário não identificado');
     if (data == null) data = Map<String, dynamic>();
     data[DISTINCT_ID] = userId;
-    data['timeStamp'] = DateTime.now();
     var result = await _mixpanel.engage(
       operation: MixpanelUpdateOperations.$set,
       value: data,
       time: DateTime.now().toUtc(),
     );
-    return result
-        ? MixpanelResult(isSuccessful: true)
-        : MixpanelResult(errorText: "Erro no Mixpanel");
+    result
+        ? dev.log(
+            "Sucesso ao enviar dados - ${data.toString()}!",
+            name: "Mixpanel - updateProfile",
+          )
+        : dev.log(
+            "Falha ao enviar dados - ${data.toString()} :(",
+            name: "Mixpanel - updateProfile",
+          );
+  }
+
+  static trackOnSelectNotification(String payload) async {
+    if (payload != null && payload.isNotEmpty) {
+      // Decodes JSON
+      Map<String, dynamic> map = json.decode(payload);
+      trackEvent(MixpanelEvents.OPEN_NOTIFICATION, data: map);
+    }
   }
 }
 
@@ -95,6 +121,7 @@ enum MixpanelEvents {
   READ_INFORMATION,
   READ_QUESTIONS,
   OPEN_HISTORY,
+  OPEN_NOTIFICATION,
 
   // Professional actions
   REGISTER_PROFESSIONAL,
@@ -155,6 +182,8 @@ String _getEventString(MixpanelEvents event) {
       return "DELETE_ACTION";
     case MixpanelEvents.OPEN_PAGE:
       return "OPEN_PAGE";
+    case MixpanelEvents.OPEN_NOTIFICATION:
+      return "OPEN_NOTIFICATION";
     default:
       return "UNKNOWN_EVENT";
   }

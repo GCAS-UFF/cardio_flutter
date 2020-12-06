@@ -104,7 +104,6 @@ class GenericConverter {
     } else if (entity is Exercise) {
       return "exercise";
     } else {
-      print("[JP - GenericConverter] entity estranha no mapEntity");
       return "unknown";
     }
   }
@@ -121,7 +120,6 @@ class GenericConverter {
     } else if (entity is Exercise) {
       return entity.done;
     } else {
-      print("[JP - GenericConverter] entity estranha no isAction");
       return false;
     }
   }

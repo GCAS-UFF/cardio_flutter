@@ -37,7 +37,10 @@ class _HomePatientPageState extends State<HomePatientPage> {
     return FocusDetector(
       key: _resumeDetectorKey,
       onFocusGained: () {
-        debugPrint("onFocusGained");
+        Mixpanel.trackEvent(
+          MixpanelEvents.OPEN_PAGE,
+          data: {"pageTitle": "HomePatientPage"},
+        );
       },
       child: BasePage(
         hasDrawer: true,
