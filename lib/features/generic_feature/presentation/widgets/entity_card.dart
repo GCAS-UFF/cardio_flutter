@@ -56,11 +56,12 @@ class _EntityCardState extends State<EntityCard> {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: ExpansionTile(
-                  key: UniqueKey(),
                   onExpansionChanged: (stateExpasionTitle) {
                     if (stateExpasionTitle) {
-                      Mixpanel.trackEvent(MixpanelEvents.OPEN_ENTITY_DETAIL,
-                          data: widget.activity.informations);
+                      Mixpanel.trackEvent(
+                        MixpanelEvents.OPEN_ACTION_DETAIL,
+                        data: widget.activity.informations,
+                      );
                     }
                   },
                   title: Text(
@@ -87,10 +88,10 @@ class _EntityCardState extends State<EntityCard> {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: ExpansionTile(
-                  key: UniqueKey(),
                   onExpansionChanged: (stateExpasionTitle) {
                     if (stateExpasionTitle) {
-                      Mixpanel.trackEvent(MixpanelEvents.OPEN_ENTITY_DETAIL,
+                      Mixpanel.trackEvent(
+                          MixpanelEvents.OPEN_RECOMENDATION_DETAIL,
                           data: widget.activity.informations);
                     }
                   },
