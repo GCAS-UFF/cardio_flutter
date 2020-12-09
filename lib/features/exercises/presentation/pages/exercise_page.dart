@@ -19,6 +19,7 @@ import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:focus_detector/focus_detector.dart';
 import 'package:provider/provider.dart';
 
 import 'execute_exercise_page.dart';
@@ -26,39 +27,44 @@ import 'execute_exercise_page.dart';
 class ExercisePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Mixpanel.trackEvent(
-      MixpanelEvents.OPEN_PAGE,
-      data: {"pageTitle": "ExercisePage"},
-    );
-    return BasePage(
-      recomendation: Strings.exercise,
-      addFunction: () {
-        if (Provider.of<Settings>(context, listen: false).getUserType() ==
-            Keys.PROFESSIONAL_TYPE) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddExercisePage()));
-        }
+    return FocusDetector(
+      key: UniqueKey(),
+      onFocusGained: () {
+        Mixpanel.trackEvent(
+          MixpanelEvents.OPEN_PAGE,
+          data: {"pageTitle": "ExercisePage"},
+        );
       },
-      body: BlocListener<GenericBloc<Exercise>, GenericState<Exercise>>(
-        listener: (context, state) {
-          if (state is Error<Exercise>) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
+      child: BasePage(
+        recomendation: Strings.exercise,
+        addFunction: () {
+          if (Provider.of<Settings>(context, listen: false).getUserType() ==
+              Keys.PROFESSIONAL_TYPE) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddExercisePage()));
           }
         },
-        child: BlocBuilder<GenericBloc<Exercise>, GenericState<Exercise>>(
-          builder: (context, state) {
-            if (state is Loading<Exercise>) {
-              return LoadingWidget(Container());
-            } else if (state is Loaded<Exercise>) {
-              return _bodybuilder(context, state.patient, state.calendar);
-            } else {
-              return _bodybuilder(context, null, null);
+        body: BlocListener<GenericBloc<Exercise>, GenericState<Exercise>>(
+          listener: (context, state) {
+            if (state is Error<Exercise>) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
             }
           },
+          child: BlocBuilder<GenericBloc<Exercise>, GenericState<Exercise>>(
+            builder: (context, state) {
+              if (state is Loading<Exercise>) {
+                return LoadingWidget(Container());
+              } else if (state is Loaded<Exercise>) {
+                return _bodybuilder(context, state.patient, state.calendar);
+              } else {
+                return _bodybuilder(context, null, null);
+              }
+            },
+          ),
         ),
       ),
     );

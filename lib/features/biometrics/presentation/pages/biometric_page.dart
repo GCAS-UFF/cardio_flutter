@@ -20,48 +20,54 @@ import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:focus_detector/focus_detector.dart';
 import 'package:provider/provider.dart';
 
 class BiometricPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Mixpanel.trackEvent(
-      MixpanelEvents.OPEN_PAGE,
-      data: {"pageTitle": "BiometricsPage"},
-    );
-    return BasePage(
-      recomendation: Strings.biometric,
-      addFunction: () {
-        if (Provider.of<Settings>(context, listen: false).getUserType() ==
-            Keys.PROFESSIONAL_TYPE) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddBiometricPage(),
-            ),
-          );
-        }
+    return FocusDetector(
+      key: UniqueKey(),
+      onFocusGained: () {
+        Mixpanel.trackEvent(
+          MixpanelEvents.OPEN_PAGE,
+          data: {"pageTitle": "BiometricsPage"},
+        );
       },
-      body: BlocListener<GenericBloc<Biometric>, GenericState<Biometric>>(
-        listener: (context, state) {
-          if (state is Error<Biometric>) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
+      child: BasePage(
+        recomendation: Strings.biometric,
+        addFunction: () {
+          if (Provider.of<Settings>(context, listen: false).getUserType() ==
+              Keys.PROFESSIONAL_TYPE) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddBiometricPage(),
               ),
             );
           }
         },
-        child: BlocBuilder<GenericBloc<Biometric>, GenericState<Biometric>>(
-          builder: (context, state) {
-            if (state is Loading<Biometric>) {
-              return LoadingWidget(Container());
-            } else if (state is Loaded<Biometric>) {
-              return _bodybuilder(context, state.patient, state.calendar);
-            } else {
-              return _bodybuilder(context, null, null);
+        body: BlocListener<GenericBloc<Biometric>, GenericState<Biometric>>(
+          listener: (context, state) {
+            if (state is Error<Biometric>) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
             }
           },
+          child: BlocBuilder<GenericBloc<Biometric>, GenericState<Biometric>>(
+            builder: (context, state) {
+              if (state is Loading<Biometric>) {
+                return LoadingWidget(Container());
+              } else if (state is Loaded<Biometric>) {
+                return _bodybuilder(context, state.patient, state.calendar);
+              } else {
+                return _bodybuilder(context, null, null);
+              }
+            },
+          ),
         ),
       ),
     );

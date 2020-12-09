@@ -16,6 +16,7 @@ import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:focus_detector/focus_detector.dart';
 import 'package:meta/meta.dart';
 
 class ExecuteExercisePage extends StatefulWidget {
@@ -86,38 +87,43 @@ class _ExecuteExercisePageState extends State<ExecuteExercisePage> {
     );
     _executedDateController.text = _formData[LABEL_EXECUTED_DATE];
 
-    Mixpanel.trackEvent(
-      MixpanelEvents.OPEN_PAGE,
-      data: {"pageTitle": "ExecuteExercisePage"},
-    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BasePage(
-      recomendation: Strings.exercise,
-      body: SingleChildScrollView(
-        child: BlocListener<GenericBloc<Exercise>, GenericState<Exercise>>(
-          listener: (context, state) {
-            if (state is Error<Exercise>) {
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
-              );
-            } else if (state is Loaded<Exercise>) {
-              Navigator.pop(context);
-            }
-          },
-          child: BlocBuilder<GenericBloc<Exercise>, GenericState<Exercise>>(
-            builder: (context, state) {
-              if (state is Loading<Exercise>) {
-                return LoadingWidget(_buildForm(context));
-              } else {
-                return _buildForm(context);
+    return FocusDetector(
+      key: UniqueKey(),
+      onFocusGained: () {
+        Mixpanel.trackEvent(
+          MixpanelEvents.OPEN_PAGE,
+          data: {"pageTitle": "ExecuteExercisePage"},
+        );
+      },
+      child: BasePage(
+        recomendation: Strings.exercise,
+        body: SingleChildScrollView(
+          child: BlocListener<GenericBloc<Exercise>, GenericState<Exercise>>(
+            listener: (context, state) {
+              if (state is Error<Exercise>) {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                  ),
+                );
+              } else if (state is Loaded<Exercise>) {
+                Navigator.pop(context);
               }
             },
+            child: BlocBuilder<GenericBloc<Exercise>, GenericState<Exercise>>(
+              builder: (context, state) {
+                if (state is Loading<Exercise>) {
+                  return LoadingWidget(_buildForm(context));
+                } else {
+                  return _buildForm(context);
+                }
+              },
+            ),
           ),
         ),
       ),

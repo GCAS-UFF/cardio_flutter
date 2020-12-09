@@ -13,6 +13,7 @@ import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:focus_detector/focus_detector.dart';
 
 class ExecuteLiquidPage extends StatefulWidget {
   final Liquid liquid;
@@ -65,39 +66,43 @@ class _ExecuteLiquidPageState extends State<ExecuteLiquidPage> {
       text: _formData[LABEL_QUANTITY],
     );
 
-    Mixpanel.trackEvent(
-      MixpanelEvents.OPEN_PAGE,
-      data: {"pageTitle": "ExecuteLiquidPage"},
-    );
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BasePage(
-      recomendation: Strings.liquid,
-      body: BlocListener<GenericBloc<Liquid>, GenericState<Liquid>>(
-        listener: (context, state) {
-          if (state is Error<Liquid>) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
-          } else if (state is Loaded<Liquid>) {
-            Navigator.pop(context);
-          }
-        },
-        child: BlocBuilder<GenericBloc<Liquid>, GenericState<Liquid>>(
-          builder: (context, state) {
-            print(state);
-            if (state is Loading<Liquid>) {
-              return LoadingWidget(_buildForm(context));
-            } else {
-              return _buildForm(context);
+    return FocusDetector(
+      key: UniqueKey(),
+      onFocusGained: () {
+        Mixpanel.trackEvent(
+          MixpanelEvents.OPEN_PAGE,
+          data: {"pageTitle": "ExecuteLiquidPage"},
+        );
+      },
+      child: BasePage(
+        recomendation: Strings.liquid,
+        body: BlocListener<GenericBloc<Liquid>, GenericState<Liquid>>(
+          listener: (context, state) {
+            if (state is Error<Liquid>) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            } else if (state is Loaded<Liquid>) {
+              Navigator.pop(context);
             }
           },
+          child: BlocBuilder<GenericBloc<Liquid>, GenericState<Liquid>>(
+            builder: (context, state) {
+              print(state);
+              if (state is Loading<Liquid>) {
+                return LoadingWidget(_buildForm(context));
+              } else {
+                return _buildForm(context);
+              }
+            },
+          ),
         ),
       ),
     );

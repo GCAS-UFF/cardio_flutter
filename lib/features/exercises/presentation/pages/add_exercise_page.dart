@@ -16,6 +16,7 @@ import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cardio_flutter/core/widgets/custom_selector.dart';
+import 'package:focus_detector/focus_detector.dart';
 
 class AddExercisePage extends StatefulWidget {
   final Exercise exercise;
@@ -88,38 +89,43 @@ class _AddExercisePageState extends State<AddExercisePage> {
       text: _formData[LABEL_DURATION],
     );
 
-    Mixpanel.trackEvent(
-      MixpanelEvents.OPEN_PAGE,
-      data: {"pageTitle": "AddExercisePage"},
-    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BasePage(
-      recomendation: Strings.exercise,
-      body: SingleChildScrollView(
-        child: BlocListener<GenericBloc<Exercise>, GenericState<Exercise>>(
-          listener: (context, state) {
-            if (state is Error<Exercise>) {
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
-              );
-            } else if (state is Loaded) {
-              Navigator.pop(context);
-            }
-          },
-          child: BlocBuilder<GenericBloc<Exercise>, GenericState<Exercise>>(
-            builder: (context, state) {
-              if (state is Loading) {
-                return LoadingWidget(_buildForm(context));
-              } else {
-                return _buildForm(context);
+    return FocusDetector(
+      key: UniqueKey(),
+      onFocusGained: () {
+        Mixpanel.trackEvent(
+          MixpanelEvents.OPEN_PAGE,
+          data: {"pageTitle": "AddExercisePage"},
+        );
+      },
+      child: BasePage(
+        recomendation: Strings.exercise,
+        body: SingleChildScrollView(
+          child: BlocListener<GenericBloc<Exercise>, GenericState<Exercise>>(
+            listener: (context, state) {
+              if (state is Error<Exercise>) {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                  ),
+                );
+              } else if (state is Loaded) {
+                Navigator.pop(context);
               }
             },
+            child: BlocBuilder<GenericBloc<Exercise>, GenericState<Exercise>>(
+              builder: (context, state) {
+                if (state is Loading) {
+                  return LoadingWidget(_buildForm(context));
+                } else {
+                  return _buildForm(context);
+                }
+              },
+            ),
           ),
         ),
       ),

@@ -20,44 +20,50 @@ import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:focus_detector/focus_detector.dart';
 import 'package:provider/provider.dart';
 
 class MedicationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Mixpanel.trackEvent(
-      MixpanelEvents.OPEN_PAGE,
-      data: {"pageTitle": "MedicationPage"},
-    );
-    return BasePage(
-      recomendation: Strings.medication,
-      addFunction: () {
-        if (Provider.of<Settings>(context, listen: false).getUserType() ==
-            Keys.PROFESSIONAL_TYPE) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddMedicationPage()));
-        }
+    return FocusDetector(
+      key: UniqueKey(),
+      onFocusGained: () {
+        Mixpanel.trackEvent(
+          MixpanelEvents.OPEN_PAGE,
+          data: {"pageTitle": "MedicationPage"},
+        );
       },
-      body: BlocListener<GenericBloc<Medication>, GenericState<Medication>>(
-        listener: (context, state) {
-          if (state is Error<Medication>) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
+      child: BasePage(
+        recomendation: Strings.medication,
+        addFunction: () {
+          if (Provider.of<Settings>(context, listen: false).getUserType() ==
+              Keys.PROFESSIONAL_TYPE) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddMedicationPage()));
           }
         },
-        child: BlocBuilder<GenericBloc<Medication>, GenericState<Medication>>(
-          builder: (context, state) {
-            if (state is Loading<Medication>) {
-              return LoadingWidget(Container());
-            } else if (state is Loaded<Medication>) {
-              return _bodybuilder(context, state.patient, state.calendar);
-            } else {
-              return _bodybuilder(context, null, null);
+        body: BlocListener<GenericBloc<Medication>, GenericState<Medication>>(
+          listener: (context, state) {
+            if (state is Error<Medication>) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
             }
           },
+          child: BlocBuilder<GenericBloc<Medication>, GenericState<Medication>>(
+            builder: (context, state) {
+              if (state is Loading<Medication>) {
+                return LoadingWidget(Container());
+              } else if (state is Loaded<Medication>) {
+                return _bodybuilder(context, state.patient, state.calendar);
+              } else {
+                return _bodybuilder(context, null, null);
+              }
+            },
+          ),
         ),
       ),
     );
