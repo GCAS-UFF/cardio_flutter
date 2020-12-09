@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/done_recomendation_detail_tile.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/widgets/recomendation_detail_tile.dart';
@@ -55,6 +56,13 @@ class _EntityCardState extends State<EntityCard> {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: ExpansionTile(
+                  key: UniqueKey(),
+                  onExpansionChanged: (stateExpasionTitle) {
+                    if (stateExpasionTitle) {
+                      Mixpanel.trackEvent(MixpanelEvents.OPEN_ENTITY_DETAIL,
+                          data: widget.activity.informations);
+                    }
+                  },
                   title: Text(
                     "Realizado",
                     style: _textStyle,
@@ -79,6 +87,13 @@ class _EntityCardState extends State<EntityCard> {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: ExpansionTile(
+                  key: UniqueKey(),
+                  onExpansionChanged: (stateExpasionTitle) {
+                    if (stateExpasionTitle) {
+                      Mixpanel.trackEvent(MixpanelEvents.OPEN_ENTITY_DETAIL,
+                          data: widget.activity.informations);
+                    }
+                  },
                   title: Text(
                     "Recomendação",
                     style: _textStyle,

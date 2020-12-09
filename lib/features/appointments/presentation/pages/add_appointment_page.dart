@@ -16,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cardio_flutter/core/widgets/custom_selector.dart';
+import 'package:focus_detector/focus_detector.dart';
 
 class AddAppointmentPage extends StatefulWidget {
   final Appointment appointment;
@@ -62,41 +63,47 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
       _timeOfAppointmentController.text = _formData[LABEL_TIME_OF_APPOINTMENT];
       _appointmentDateController.text = _formData[LABEL_APPOINTMENT_DATE];
     }
-    Mixpanel.trackEvent(
-      MixpanelEvents.OPEN_PAGE,
-      data: {"pageTitle": "AddAppointmentPage"},
-    );
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BasePage(
-      recomendation: Strings.appointment,
-      body: SingleChildScrollView(
-        child:
-            BlocListener<GenericBloc<Appointment>, GenericState<Appointment>>(
-          listener: (context, state) {
-            if (state is Error<Appointment>) {
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
-              );
-            } else if (state is Loaded<Appointment>) {
-              Navigator.pop(context);
-            }
-          },
+    return FocusDetector(
+      key: UniqueKey(),
+      onFocusGained: () {
+        Mixpanel.trackEvent(
+          MixpanelEvents.OPEN_PAGE,
+          data: {"pageTitle": "AddAppointmentPage"},
+        );
+      },
+      child: BasePage(
+        recomendation: Strings.appointment,
+        body: SingleChildScrollView(
           child:
-              BlocBuilder<GenericBloc<Appointment>, GenericState<Appointment>>(
-            builder: (context, state) {
-              print(state);
-              if (state is Loading<Appointment>) {
-                return LoadingWidget(_buildForm(context));
-              } else {
-                return _buildForm(context);
+              BlocListener<GenericBloc<Appointment>, GenericState<Appointment>>(
+            listener: (context, state) {
+              if (state is Error<Appointment>) {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                  ),
+                );
+              } else if (state is Loaded<Appointment>) {
+                Navigator.pop(context);
               }
             },
+            child: BlocBuilder<GenericBloc<Appointment>,
+                GenericState<Appointment>>(
+              builder: (context, state) {
+                print(state);
+                if (state is Loading<Appointment>) {
+                  return LoadingWidget(_buildForm(context));
+                } else {
+                  return _buildForm(context);
+                }
+              },
+            ),
           ),
         ),
       ),

@@ -122,6 +122,7 @@ enum MixpanelEvents {
   READ_QUESTIONS,
   OPEN_HISTORY,
   OPEN_NOTIFICATION,
+  OPEN_ENTITY_DETAIL,
 
   // Professional actions
   REGISTER_PROFESSIONAL,
@@ -184,6 +185,8 @@ String _getEventString(MixpanelEvents event) {
       return "OPEN_PAGE";
     case MixpanelEvents.OPEN_NOTIFICATION:
       return "OPEN_NOTIFICATION";
+    case MixpanelEvents.OPEN_ENTITY_DETAIL:
+      return "OPEN_ENTITY_DETAIL";
     default:
       return "UNKNOWN_EVENT";
   }

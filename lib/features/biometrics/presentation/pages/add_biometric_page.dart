@@ -15,6 +15,7 @@ import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:focus_detector/focus_detector.dart';
 
 class AddBiometricPage extends StatefulWidget {
   final Biometric biometric;
@@ -68,39 +69,44 @@ class _AddBiometricPageState extends State<AddBiometricPage> {
       text: _formData[LABEL_FREQUENCY],
     );
 
-    Mixpanel.trackEvent(
-      MixpanelEvents.OPEN_PAGE,
-      data: {"pageTitle": "AddBiometricsPage"},
-    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BasePage(
-      recomendation: Strings.biometric,
-      body: SingleChildScrollView(
-        child: BlocListener<GenericBloc<Biometric>, GenericState<Biometric>>(
-          listener: (context, state) {
-            if (state is Error<Biometric>) {
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
-              );
-            } else if (state is Loaded<Biometric>) {
-              Navigator.pop(context);
-            }
-          },
-          child: BlocBuilder<GenericBloc<Biometric>, GenericState<Biometric>>(
-            builder: (context, state) {
-              print(state);
-              if (state is Loading<Biometric>) {
-                return LoadingWidget(_buildForm(context));
-              } else {
-                return _buildForm(context);
+    return FocusDetector(
+      key: UniqueKey(),
+      onFocusGained: () {
+        Mixpanel.trackEvent(
+          MixpanelEvents.OPEN_PAGE,
+          data: {"pageTitle": "AddBiometricsPage"},
+        );
+      },
+      child: BasePage(
+        recomendation: Strings.biometric,
+        body: SingleChildScrollView(
+          child: BlocListener<GenericBloc<Biometric>, GenericState<Biometric>>(
+            listener: (context, state) {
+              if (state is Error<Biometric>) {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                  ),
+                );
+              } else if (state is Loaded<Biometric>) {
+                Navigator.pop(context);
               }
             },
+            child: BlocBuilder<GenericBloc<Biometric>, GenericState<Biometric>>(
+              builder: (context, state) {
+                print(state);
+                if (state is Loading<Biometric>) {
+                  return LoadingWidget(_buildForm(context));
+                } else {
+                  return _buildForm(context);
+                }
+              },
+            ),
           ),
         ),
       ),
