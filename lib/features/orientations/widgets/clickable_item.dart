@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:flutter/material.dart';
@@ -5,9 +6,10 @@ import 'package:flutter/material.dart';
 class ClickableItem extends StatefulWidget {
   final String title;
   final InlineSpan text;
-  bool isClicked;
+  final MixpanelEvents event;
+  bool isOpen;
 
-  ClickableItem({this.title, this.text, this.isClicked = false});
+  ClickableItem({this.title, this.text, this.event, this.isOpen = false});
   @override
   _ClickableItemState createState() => _ClickableItemState();
 }
@@ -45,10 +47,11 @@ class _ClickableItemState extends State<ClickableItem> {
                 ),
               ),
             ),
-            widget.isClicked
+            widget.isOpen
                 ? Container(
                     width: double.infinity,
-                    padding: Dimensions.getEdgeInsets(context, left: 10, top: 10, right: 15, bottom: 15),
+                    padding: Dimensions.getEdgeInsets(context,
+                        left: 10, top: 10, right: 15, bottom: 15),
                     color: CardioColors.grey_01,
                     child: RichText(
                       textAlign: TextAlign.justify,
@@ -66,65 +69,13 @@ class _ClickableItemState extends State<ClickableItem> {
           ],
         ),
         onTap: () {
-          setState(() => widget.isClicked = !widget.isClicked);
+          setState(() => widget.isOpen = !widget.isOpen);
+          if (widget.isOpen)
+            Mixpanel.trackEvent(
+              widget.event,
+              data: {"itemOpen": widget.title},
+            );
         },
-        // Container(
-        //   decoration: BoxDecoration(
-        //       border: Border.all(
-        //         color: Colors.black54,
-        //         width: Dimensions.getConvertedHeightSize(context, 2),
-        //       ),
-        //       borderRadius: BorderRadius.circular(8)),
-        //   alignment: Alignment.center,
-        //   child: (widget.isClicked)
-        //       ? Padding(
-        //           padding: const EdgeInsets.all(8.0),
-        //           child: Text(
-        //             widget.title,
-        //             textAlign: TextAlign.center,
-        //             style: TextStyle(
-        //                 color: Colors.indigo[900],
-        //                 fontSize: Dimensions.getTextSize(context, 16),
-        //                 fontWeight: FontWeight.bold),
-        //           ),
-        //         )
-        //       : Column(
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           children: <Widget>[
-        //             Padding(
-        //               padding: const EdgeInsets.all(8.0),
-        //               child: Text(
-        //                 widget.title,
-        //                 textAlign: TextAlign.center,
-        //                 style: TextStyle(
-        //                     color: Colors.indigo[900],
-        //                     fontSize: Dimensions.getTextSize(context, 16),
-        //                     fontWeight: FontWeight.bold),
-        //               ),
-        //             ),
-        //             Padding(
-        //               padding: const EdgeInsets.symmetric(horizontal: 10),
-        //               child: Divider(
-        //                 thickness: 2,
-        //                 color: Colors.blueGrey[600],
-        //               ),
-        //             ),
-        //             Padding(
-        //               padding: const EdgeInsets.all(8.0),
-        //               child: RichText(
-        //                 textAlign: TextAlign.justify,
-        //                 text: TextSpan(
-        //                   children: [widget.text],
-        //                   style: TextStyle(
-        //                     color: Colors.black,
-        //                     fontSize: Dimensions.getTextSize(context, 16),
-        //                   ),
-        //                 ),
-        //               ),
-        //             )
-        //           ],
-        //         ),
-        // ),
       ),
     );
   }

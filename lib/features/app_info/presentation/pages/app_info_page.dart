@@ -23,6 +23,7 @@ class AppInfoPage extends StatelessWidget {
                 ClickableItem(
                   title: Strings.about1,
                   text: TextSpan(text: Strings.about_answer1),
+                  event: MixpanelEvents.OPEN_HELP_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.about2,
@@ -63,6 +64,7 @@ class AppInfoPage extends StatelessWidget {
                       ),
                     ],
                   ),
+                  event: MixpanelEvents.OPEN_HELP_ITEM,
                 ),
               ],
             ),

@@ -21,30 +21,37 @@ class PatientHelpPage extends StatelessWidget {
                 ClickableItem(
                   title: Strings.help1,
                   text: TextSpan(text: Strings.help_answer1),
+                  event: MixpanelEvents.OPEN_HELP_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.help2,
                   text: TextSpan(text: Strings.help_answer2),
+                  event: MixpanelEvents.OPEN_HELP_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.help3,
                   text: TextSpan(text: Strings.help_answer3),
+                  event: MixpanelEvents.OPEN_HELP_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.help4,
                   text: TextSpan(text: Strings.help_answer4),
+                  event: MixpanelEvents.OPEN_HELP_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.help5,
                   text: TextSpan(text: Strings.help_answer5),
+                  event: MixpanelEvents.OPEN_HELP_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.help6,
                   text: TextSpan(text: Strings.help_answer6),
+                  event: MixpanelEvents.OPEN_HELP_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.help7,
                   text: TextSpan(text: Strings.help_answer7),
+                  event: MixpanelEvents.OPEN_HELP_ITEM,
                 ),
               ],
             ),

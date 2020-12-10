@@ -22,6 +22,7 @@ class OrientationsPage extends StatelessWidget {
                 ClickableItem(
                   title: Strings.orientation1,
                   text: TextSpan(text: Strings.orientation_answer1),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation2,
@@ -38,6 +39,7 @@ class OrientationsPage extends StatelessWidget {
                       TextSpan(text: Strings.orientation_answer2),
                     ],
                   ),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation3,
@@ -64,38 +66,47 @@ class OrientationsPage extends StatelessWidget {
                       TextSpan(text: Strings.orientation_answer3_3),
                     ],
                   ),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation4,
                   text: TextSpan(text: Strings.orientation_answer4),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation5,
                   text: TextSpan(text: Strings.orientation_answer5),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation6,
                   text: TextSpan(text: Strings.orientation_answer6),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation7,
                   text: TextSpan(text: Strings.orientation_answer7),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation8,
                   text: TextSpan(text: Strings.orientation_answer8),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation9,
                   text: TextSpan(text: Strings.orientation_answer9),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation10,
                   text: TextSpan(text: Strings.orientation_answer10),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation11,
                   text: TextSpan(text: Strings.orientation_answer11),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
                   title: Strings.orientation12,
@@ -113,13 +124,17 @@ class OrientationsPage extends StatelessWidget {
                       TextSpan(text: Strings.orientation_answer12_2),
                     ],
                   ),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
                 ClickableItem(
-                    title: Strings.orientation13,
-                    text: TextSpan(text: Strings.orientation_answer13)),
+                  title: Strings.orientation13,
+                  text: TextSpan(text: Strings.orientation_answer13),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
+                ),
                 ClickableItem(
                   title: Strings.orientation14,
                   text: TextSpan(text: Strings.orientation_answer14),
+                  event: MixpanelEvents.OPEN_ORIENTATION_ITEM,
                 ),
               ],
             ),

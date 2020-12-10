@@ -124,6 +124,9 @@ enum MixpanelEvents {
   OPEN_NOTIFICATION,
   OPEN_RECOMENDATION_DETAIL,
   OPEN_ACTION_DETAIL,
+  OPEN_ORIENTATION_ITEM,
+  OPEN_INFO_ITEM,
+  OPEN_HELP_ITEM,
 
   // Professional actions
   REGISTER_PROFESSIONAL,
@@ -190,6 +193,12 @@ String _getEventString(MixpanelEvents event) {
       return "OPEN_RECOMENDATION_DETAIL";
     case MixpanelEvents.OPEN_ACTION_DETAIL:
       return "OPEN_ACTION_DETAIL";
+    case MixpanelEvents.OPEN_ORIENTATION_ITEM:
+      return "OPEN_ORIENTATION_ITEM";
+    case MixpanelEvents.OPEN_HELP_ITEM:
+      return "OPEN_HELP_ITEM";
+    case MixpanelEvents.OPEN_INFO_ITEM:
+      return "OPEN_INFO_ITEM";
     default:
       return "UNKNOWN_EVENT";
   }
