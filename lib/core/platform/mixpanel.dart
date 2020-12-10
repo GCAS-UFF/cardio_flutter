@@ -117,9 +117,6 @@ enum MixpanelEvents {
   OPEN_PAGE,
   DO_LOGIN,
   DO_LOGOUT,
-  READ_ORIENTATIONS,
-  READ_INFORMATION,
-  READ_QUESTIONS,
   OPEN_HISTORY,
   OPEN_NOTIFICATION,
   OPEN_RECOMENDATION_DETAIL,
@@ -153,12 +150,6 @@ String _getEventString(MixpanelEvents event) {
       return "DO_LOGIN";
     case MixpanelEvents.DO_LOGOUT:
       return "DO_LOGOUT";
-    case MixpanelEvents.READ_ORIENTATIONS:
-      return "READ_ORIENTATIONS";
-    case MixpanelEvents.READ_INFORMATION:
-      return "READ_INFORMATION";
-    case MixpanelEvents.READ_QUESTIONS:
-      return "READ_QUESTIONS";
     case MixpanelEvents.OPEN_HISTORY:
       return "OPEN_HISTORY";
     case MixpanelEvents.REGISTER_PROFESSIONAL:

@@ -1,3 +1,4 @@
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:cardio_flutter/resources/cardio_colors.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
@@ -29,6 +30,7 @@ class SideMenuExitButton extends StatelessWidget {
           ),
         ),
         onTap: () {
+          Mixpanel.trackEvent(MixpanelEvents.DO_LOGOUT);
           BlocProvider.of<AuthBloc>(context).add(SignOutEvent());
           Navigator.of(context).pushNamedAndRemoveUntil("/", (r) => false);
         });

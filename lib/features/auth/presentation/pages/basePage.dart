@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/core/widgets/side_menu_exit_button.dart';
 import 'package:cardio_flutter/core/widgets/side_menu_header.dart';
@@ -22,7 +23,7 @@ class BasePage extends StatelessWidget {
   final bool hasDrawer;
   final Patient patient;
 
-  const BasePage({
+  BasePage({
     Key key,
     this.body,
     this.addFunction,
@@ -30,6 +31,8 @@ class BasePage extends StatelessWidget {
     this.hasDrawer = false,
     this.patient,
   }) : super(key: key);
+
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +44,7 @@ class BasePage extends StatelessWidget {
 
     return hasDrawer
         ? Scaffold(
+            key: _scaffoldKey,
             floatingActionButton: (addFunction != null)
                 ? ((Provider.of<Settings>(context, listen: false)
                             .getUserType() ==
@@ -70,6 +74,16 @@ class BasePage extends StatelessWidget {
                 style: _textStyle,
               ),
               backgroundColor: CardioColors.blue,
+              leading: new IconButton(
+                icon: new Icon(Icons.menu),
+                onPressed: () {
+                  Mixpanel.trackEvent(
+                    MixpanelEvents.OPEN_PAGE,
+                    data: {"pageTitle": "Drawer"},
+                  );
+                  _scaffoldKey.currentState.openDrawer();
+                },
+              ),
             ),
             drawer: Drawer(
               child: SafeArea(

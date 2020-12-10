@@ -182,11 +182,11 @@ class _HomePatientPageState extends State<HomePatientPage> {
                   text: Strings.orientations,
                   image: Images.ico_orientations,
                   destination: () {
-                    Mixpanel.trackEvent(MixpanelEvents.READ_ORIENTATIONS);
                     return Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => OrientationsPage()));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => OrientationsPage()),
+                    );
                   },
                 ),
 
