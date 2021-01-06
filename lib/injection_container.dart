@@ -9,13 +9,7 @@ import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_patient.dar
 import 'package:cardio_flutter/features/auth/domain/usecases/sign_up_professional.dart';
 import 'package:cardio_flutter/features/biometrics/data/models/biometric_model.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
-import 'package:cardio_flutter/features/exercises/data/datasources/exercise_remote_data_source.dart';
-import 'package:cardio_flutter/features/exercises/data/repository/exercise_repository_impl.dart';
-import 'package:cardio_flutter/features/exercises/domain/usecases/add_exercise.dart';
-import 'package:cardio_flutter/features/exercises/domain/usecases/edit_exercise_professional.dart';
-import 'package:cardio_flutter/features/exercises/domain/usecases/execute_exercise.dart';
-import 'package:cardio_flutter/features/exercises/domain/usecases/get_exercise_list.dart';
-import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
+import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/generic_feature/data/repositories/generic_repository_impl.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/add_recomendation.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/delete.dart';
@@ -47,9 +41,7 @@ import 'core/platform/network_info.dart';
 import 'features/auth/data/datasources/auth_local_data_source.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
-import 'features/exercises/domain/repository/exercise_repository.dart';
-import 'features/exercises/domain/usecases/delete_exercise.dart';
-import 'features/exercises/domain/usecases/edit_executed_exercise.dart';
+import 'features/exercises/data/models/exercise_model.dart';
 import 'features/generic_feature/data/datasources/generic_remote_data_source.dart';
 import 'features/generic_feature/domain/repositories/generic_repository.dart';
 import 'features/generic_feature/domain/usecases/edit_executed.dart';
@@ -64,7 +56,7 @@ Future<void> init() async {
 
   _initAuth();
   _initManageProfessional();
-  _initExerxise();
+  _initExercise();
   _initLiquid();
   _initBiometrics();
   _initAppointments();
@@ -192,41 +184,46 @@ void _initManageProfessional() {
   );
 }
 
-void _initExerxise() {
-  // Bloc
+void _initExercise() {
+ // Bloc
   sl.registerFactory(
-    () => ExerciseBloc(
-      deleteExercise: sl(),
-      editExerciseProfessional: sl(),
-      addExercise: sl(),
-      getExerciseList: sl(),
-      executeExercise: sl(),
-      editExecutedExercise: sl(),
+    () => GenericBloc<Exercise>(
+      addRecomendation: sl(),
+      editRecomendation: sl(),
+      delete: sl(),
+      getList: sl(),
+      execute: sl(),
+      editExecuted: sl(),
     ),
   );
 
   // Use Cases
-  sl.registerLazySingleton(() => ExecuteExercise(sl()));
-  sl.registerLazySingleton(() => EditExecutedExercise(sl()));
-  sl.registerLazySingleton(() => AddExercise(sl()));
-  sl.registerLazySingleton(() => DeleteExercise(sl()));
-  sl.registerLazySingleton(() => GetExerciseList(sl()));
-  sl.registerLazySingleton(() => EditExerciseProfessional(sl()));
+  sl.registerLazySingleton(() => AddRecomendation<Exercise>(sl()));
+  sl.registerLazySingleton(() => EditRecomendation<Exercise>(sl()));
+  sl.registerLazySingleton(() => Delete<Exercise>(sl()));
+  sl.registerLazySingleton(() => GetList<Exercise>(sl()));
+  sl.registerLazySingleton(() => Execute<Exercise>(sl()));
+  sl.registerLazySingleton(() => EditExecuted<Exercise>(sl()));
 
   // Repositories
-  sl.registerLazySingleton<ExerciseRepository>(
-    () => ExerciseRepositoryImpl(
+  sl.registerLazySingleton<GenericRepository<Exercise>>(
+    () => GenericRepositoryImpl<Exercise, ExerciseModel>(
+      type: "exercise",
       networkInfo: sl(),
       remoteDataSource: sl(),
     ),
   );
 
   // Data sources
-  sl.registerLazySingleton<ExerciseRemoteDataSource>(
-    () => ExerciseRemoteDataSourceImpl(
+  sl.registerLazySingleton<GenericRemoteDataSource<ExerciseModel>>(
+    () => GenericRemoteDataSourceImpl<ExerciseModel>(
+      type: "exercise",
       firebaseDatabase: sl(),
+      firebaseTag: "Exercise",
     ),
   );
+
+
 }
 
 void _initLiquid() {

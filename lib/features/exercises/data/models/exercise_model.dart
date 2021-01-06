@@ -6,14 +6,12 @@ import 'package:meta/meta.dart';
 
 class ExerciseModel extends Exercise {
   ExerciseModel({
-    @required DateTime executionDay,
     @required String id,
     @required bool shortnessOfBreath,
     @required bool excessiveFatigue,
     @required bool dizziness,
     @required bool bodyPain,
     @required List<String> times,
-    @required String executionTime,
     @required String observation,
     @required String name,
     @required int frequency,
@@ -22,9 +20,10 @@ class ExerciseModel extends Exercise {
     @required int durationInMinutes,
     @required DateTime initialDate,
     @required DateTime finalDate,
+    @required DateTime executedDate,
     @required bool done,
   }) : super(
-          executionDay: executionDay,
+          executedDate: executedDate,
           id: id,
           shortnessOfBreath: shortnessOfBreath,
           excessiveFatigue: excessiveFatigue,
@@ -40,30 +39,28 @@ class ExerciseModel extends Exercise {
           initialDate: initialDate,
           finalDate: finalDate,
           done: done,
-          executionTime: executionTime,
         );
 
-  Map<dynamic, dynamic> toJson() {
+static  Map<dynamic, dynamic> toJson(ExerciseModel model) {
     Map<dynamic, dynamic> json = {};
-    if (executionDay != null)
-      json['executionDay'] = executionDay.millisecondsSinceEpoch;
-    if (initialDate != null)
-      json['initialDate'] = initialDate.millisecondsSinceEpoch;
-    if (finalDate != null) json['finalDate'] = finalDate.millisecondsSinceEpoch;
-    if (name != null) json['name'] = name;
-    if (frequency != null) json['frequency'] = frequency;
-    if (frequency != null) json['frequencyPerWeek'] = frequencyPerWeek;
-    if (intensity != null) json['intensity'] = intensity;
-    if (durationInMinutes != null)
-      json['durationInMinutes'] = durationInMinutes;
-    if (excessiveFatigue != null) json['excessiveFatigue'] = excessiveFatigue;
-    if (shortnessOfBreath != null)
-      json['shortnessOfBreath'] = shortnessOfBreath;
-    if (dizziness != null) json['dizziness'] = dizziness;
-    if (bodyPain != null) json['bodyPain'] = bodyPain;
-    if (executionTime != null) json['executionTime'] = executionTime;
-    if (times != null) json['times'] = times;
-    if (observation != null) json['observation'] = observation;
+    if (model.executedDate != null)
+      json['executedDate'] = model.executedDate.millisecondsSinceEpoch;
+    if (model.initialDate != null)
+      json['initialDate'] = model.initialDate.millisecondsSinceEpoch;
+    if (model.finalDate != null) json['finalDate'] = model.finalDate.millisecondsSinceEpoch;
+    if (model.name != null) json['name'] = model.name;
+    if (model.frequency != null) json['frequency'] = model.frequency;
+    if (model.frequency != null) json['frequencyPerWeek'] = model.frequencyPerWeek;
+    if (model.intensity != null) json['intensity'] = model.intensity;
+    if (model.durationInMinutes != null)
+      json['durationInMinutes'] = model.durationInMinutes;
+    if (model.excessiveFatigue != null) json['excessiveFatigue'] = model.excessiveFatigue;
+    if (model.shortnessOfBreath != null)
+      json['shortnessOfBreath'] = model.shortnessOfBreath;
+    if (model.dizziness != null) json['dizziness'] = model.dizziness;
+    if (model.bodyPain != null) json['bodyPain'] = model.bodyPain;
+    if (model.times != null) json['times'] = model.times;
+    if (model.observation != null) json['observation'] = model.observation;
 
     return json;
   }
@@ -71,9 +68,9 @@ class ExerciseModel extends Exercise {
   factory ExerciseModel.fromJson(Map<dynamic, dynamic> json) {
     if (json == null) return null;
     return ExerciseModel(
-      executionDay: (json['executionDay'] == null)
+      executedDate: (json['executedDate'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(json['executionDay']),
+          : DateTime.fromMillisecondsSinceEpoch(json['executedDate']),
       initialDate: (json['initialDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['initialDate']),
@@ -91,7 +88,6 @@ class ExerciseModel extends Exercise {
       dizziness: json['dizziness'],
       bodyPain: json['bodyPain'],
       done: json['done'],
-      executionTime: json['executionTime'],
       times: Converter.convertListDynamicToListString(json['times']),
       observation: json['observation'],
     );
@@ -112,9 +108,8 @@ class ExerciseModel extends Exercise {
       initialDate: exercise.initialDate,
       intensity: exercise.intensity,
       shortnessOfBreath: exercise.shortnessOfBreath,
-      executionDay: exercise.executionDay,
+      executedDate: exercise.executedDate,
       done: exercise.done,
-      executionTime: exercise.executionTime,
       times: exercise.times,
       observation: exercise.observation,
     );

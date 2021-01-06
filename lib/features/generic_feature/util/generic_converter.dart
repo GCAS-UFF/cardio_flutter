@@ -2,6 +2,7 @@ import 'package:cardio_flutter/features/appointments/data/models/appointment_mod
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/biometrics/data/models/biometric_model.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
+import 'package:cardio_flutter/features/exercises/data/models/exercise_model.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/liquids/data/models/liquid_model.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
@@ -19,6 +20,8 @@ class GenericConverter {
       return AppointmentModel.toJson(model as AppointmentModel);
     } else if (type == "medication") {
       return MedicationModel.toJson(model as MedicationModel);
+    } else if (type == "exercise") {
+      return ExerciseModel.toJson(model as ExerciseModel);
     } else {
       return null;
     }
@@ -33,12 +36,15 @@ class GenericConverter {
       return AppointmentModel.fromJson(json) as Model;
     } else if (type == "medication") {
       return MedicationModel.fromJson(json) as Model;
+    } else if (type == "exercise") {
+      return ExerciseModel.fromJson(json) as Model;
     } else {
       return null;
     }
   }
 
-  static Model genericModelFromEntity<Entity, Model extends Entity>(String type, Entity entity) {
+  static Model genericModelFromEntity<Entity, Model extends Entity>(
+      String type, Entity entity) {
     if (type == "liquid") {
       return (LiquidModel.fromEntity(entity as Liquid) as Model);
     } else if (type == "biometric") {
@@ -47,15 +53,19 @@ class GenericConverter {
       return (AppointmentModel.fromEntity(entity as Appointment) as Model);
     } else if (type == "medication") {
       return (MedicationModel.fromEntity(entity as Medication) as Model);
+    } else if (type == "exercise") {
+      return (ExerciseModel.fromEntity(entity as Exercise) as Model);
     } else {
       return null;
     }
   }
 
-  static Model genericFromDataSnapshot<Model>(String type, DataSnapshot dataSnapshot, bool done) {
+  static Model genericFromDataSnapshot<Model>(
+      String type, DataSnapshot dataSnapshot, bool done) {
     if (dataSnapshot == null) return null;
 
-    Map<dynamic, dynamic> objectMap = dataSnapshot.value as Map<dynamic, dynamic>;
+    Map<dynamic, dynamic> objectMap =
+        dataSnapshot.value as Map<dynamic, dynamic>;
 
     objectMap['id'] = dataSnapshot.key;
     objectMap['done'] = done;
@@ -63,11 +73,13 @@ class GenericConverter {
     return genericFromJson<Model>(type, objectMap);
   }
 
-  static List<Model> genericFromDataSnapshotList<Model>(String type, DataSnapshot dataSnapshot, bool done) {
+  static List<Model> genericFromDataSnapshotList<Model>(
+      String type, DataSnapshot dataSnapshot, bool done) {
     if (dataSnapshot == null) return null;
 
     List<Model> result = List<Model>();
-    Map<dynamic, dynamic> objectTodoMap = dataSnapshot.value as Map<dynamic, dynamic>;
+    Map<dynamic, dynamic> objectTodoMap =
+        dataSnapshot.value as Map<dynamic, dynamic>;
     if (objectTodoMap != null) {
       for (MapEntry<dynamic, dynamic> entry in objectTodoMap.entries) {
         Map<dynamic, dynamic> map = entry.value;
@@ -86,7 +98,7 @@ class GenericConverter {
     } else if (entity is Liquid) {
       return "liquid";
     } else if (entity is Medication) {
-      return "medicine";
+      return "medication";
     } else if (entity is Appointment) {
       return "appointment";
     } else if (entity is Exercise) {

@@ -63,7 +63,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
       _formData[LABEL_INITIAL_DATE] = DateHelper.convertDateToString(widget.medication.initialDate);
       _formData[LABEL_FINAL_DATE] = DateHelper.convertDateToString(widget.medication.finalDate);
       _formData[LABEL_NAME] = widget.medication.name;
-      _formData[LABEL_DOSAGE] = (widget.medication.dosage == null) ? null : widget.medication.dosage.toString();
+      _formData[LABEL_DOSAGE] = (widget.medication.dosage == null) ? null : widget.medication.dosage;
       _formData[LABEL_QUANTITY] = (widget.medication.quantity == null) ? null : widget.medication.quantity.toString();
       _formData[LABEL_OBSERVATION] = widget.medication.observation;
 
@@ -253,7 +253,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
           entity: Medication(
             done: false,
             name: _formData[LABEL_NAME],
-            dosage: (_formData[LABEL_DOSAGE] is int) ? int.parse(_formData[LABEL_DOSAGE]).toDouble() : double.parse(_formData[LABEL_DOSAGE]),
+            dosage: _formData[LABEL_DOSAGE],
             quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
             initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
@@ -270,7 +270,7 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
             id: widget.medication.id,
             done: false,
             name: _formData[LABEL_NAME],
-            dosage: (_formData[LABEL_DOSAGE] is int) ? int.parse(_formData[LABEL_DOSAGE]).toDouble() : double.parse(_formData[LABEL_DOSAGE]),
+            dosage: _formData[LABEL_DOSAGE],
             quantity: _formData[LABEL_QUANTITY],
             frequency: int.parse(_formData[LABEL_FREQUENCY]),
             initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),

@@ -6,7 +6,7 @@ import 'package:cardio_flutter/features/appointments/domain/entities/appointment
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
-import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart' as exercise;
+import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/help/presentation/pages/patient_help_page.dart';
 import 'package:cardio_flutter/features/help/presentation/pages/professional_help_page.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
@@ -81,7 +81,7 @@ class HomePatientPage extends StatelessWidget {
                   BlocProvider.of<generic.GenericBloc<Medication>>(context).add(generic.Start<Medication>(patient: patient));
                   Mixpanel.trackEvent(
                     MixpanelEvents.OPEN_HISTORY,
-                    data: {"actionType": "medicine"},
+                    data: {"actionType": "medication"},
                   );
                   return Navigator.pushNamed(context, "/medicationPage");
                 },
@@ -102,7 +102,7 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.exercise,
                 image: Images.ico_exercise,
                 destination: () {
-                  BlocProvider.of<exercise.ExerciseBloc>(context).add(exercise.Start(patient: patient));
+                  BlocProvider.of<generic.GenericBloc<Exercise>>(context).add(generic.Start<Exercise>(patient: patient));
                   Mixpanel.trackEvent(
                     MixpanelEvents.OPEN_HISTORY,
                     data: {"actionType": "exercise"},

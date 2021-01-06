@@ -3,13 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cardio_flutter/core/platform/mixpanel.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
-import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
-import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
-import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
-import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/calendar.dart';
-import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/add_recomendation.dart' as add_recomendation;
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/delete.dart' as delete_class;
@@ -19,8 +14,6 @@ import 'package:cardio_flutter/features/generic_feature/domain/usecases/execute.
 import 'package:cardio_flutter/features/generic_feature/domain/usecases/get_list.dart' as get_list;
 import 'package:cardio_flutter/features/generic_feature/util/calendar_converter.dart';
 import 'package:cardio_flutter/features/generic_feature/util/generic_converter.dart';
-import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
-import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

@@ -8,7 +8,7 @@ import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/core/widgets/times_list.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
-import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart';
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
@@ -29,19 +29,12 @@ class AddExercisePage extends StatefulWidget {
 
 class _AddExercisePageState extends State<AddExercisePage> {
   static const String LABEL_NAME = "LABEL_NAME";
-  static const String LABEL_FREQUENCY = "LABEL_LABEL_FREQUENCY";
   static const String LABEL_FREQUENCY_PERWEEK = "LABEL_FREQUENCY_PERWEEK";
   static const String LABEL_INTENSITY = "LABEL_INTENSITY";
   static const String LABEL_DURATION = "LABEL_DURATION";
   static const String LABEL_INITIAL_DATE = "LABEL_INITIAL_DATE";
   static const String LABEL_FINAL_DATE = "LABEL_FINAL_DATE";
-  static const String LABEL_BODY_PAIN = "LABEL_BODY_PAIN";
-  static const String LABEL_DIZZINESS = "DIZZINESS";
-  static const String LABEL_SHORTNESS_OF_BREATH = "LABEL_SHORTNESS_OF_BREATH";
-  static const String LABEL_EXCESSIVE_FATIGUE = "LABEL_EXCESSIVE_FATIGUE";
-  static const String LABEL_EXECUTIONDAY = "LABEL_EXECUTIONDAY";
   static const String LABEL_TIMES = "LABEL_TIMES";
-  static const String LABEL_TIME_OF_DAY = "LABEL_TIME_OF_DAY";
 
   Map<String, dynamic> _formData = Map<String, dynamic>();
 
@@ -50,7 +43,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
   TextEditingController _nameController;
   TextEditingController _frequencyPerWeerController;
   TextEditingController _durationController;
-  final TextEditingController _initialDateController = new MultimaskedTextController(
+  final TextEditingController _initialDateController =
+      new MultimaskedTextController(
     maskDefault: "##/##/####",
     onlyDigitsDefault: true,
   ).maskedTextFieldController;
@@ -63,12 +57,15 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void initState() {
     if (widget.exercise != null) {
       _formData[LABEL_NAME] = widget.exercise.name;
-      _formData[LABEL_FREQUENCY_PERWEEK] = widget.exercise.frequencyPerWeek.toString();
+      _formData[LABEL_FREQUENCY_PERWEEK] =
+          widget.exercise.frequencyPerWeek.toString();
       _formData[LABEL_INTENSITY] = widget.exercise.intensity;
       _formData[LABEL_TIMES] = widget.exercise.times;
       _formData[LABEL_DURATION] = widget.exercise.durationInMinutes.toString();
-      _formData[LABEL_INITIAL_DATE] = DateHelper.convertDateToString(widget.exercise.initialDate);
-      _formData[LABEL_FINAL_DATE] = DateHelper.convertDateToString(widget.exercise.finalDate);
+      _formData[LABEL_INITIAL_DATE] =
+          DateHelper.convertDateToString(widget.exercise.initialDate);
+      _formData[LABEL_FINAL_DATE] =
+          DateHelper.convertDateToString(widget.exercise.finalDate);
       _initialDateController.text = _formData[LABEL_INITIAL_DATE];
       _finalDateController.text = _formData[LABEL_FINAL_DATE];
     }
@@ -88,24 +85,26 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   @override
   Widget build(BuildContext context) {
+    // print(widget.exercise.id);
     return BasePage(
       backgroundColor: Color(0xffc9fffd),
       body: SingleChildScrollView(
-        child: BlocListener<ExerciseBloc, ExerciseState>(
+        child: BlocListener<GenericBloc<Exercise>, GenericState<Exercise>>(
           listener: (context, state) {
-            if (state is Error) {
+            if (state is Error<Exercise>) {
               Scaffold.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
                 ),
               );
-            } else if (state is Loaded) {
+            } else if (state is Loaded<Exercise>) {
               Navigator.pop(context);
             }
           },
-          child: BlocBuilder<ExerciseBloc, ExerciseState>(
+          child: BlocBuilder<GenericBloc<Exercise>, GenericState<Exercise>>(
             builder: (context, state) {
-              if (state is Loading) {
+              print(state);
+              if (state is Loading<Exercise>) {
                 return LoadingWidget(_buildForm(context));
               } else {
                 return _buildForm(context);
@@ -166,7 +165,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 subtitle: _formData[LABEL_INTENSITY],
                 onChanged: (value) {
                   setState(() {
-                    _formData[LABEL_INTENSITY] = Arrays.intensities.keys.toList()[value];
+                    _formData[LABEL_INTENSITY] =
+                        Arrays.intensities.keys.toList()[value];
                   });
                 },
               ),
@@ -196,7 +196,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 },
               ),
               CustomTextFormField(
-                isRequired: true,
+                isRequired: false,
                 textEditingController: _finalDateController,
                 keyboardType: TextInputType.number,
                 validator: DateInputValidator(),
@@ -212,7 +212,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 height: Dimensions.getConvertedHeightSize(context, 20),
               ),
               Button(
-                title: (widget.exercise == null) ? Strings.add : Strings.edit_patient_done,
+                title: (widget.exercise == null)
+                    ? Strings.add
+                    : Strings.edit_patient_done,
                 onTap: () {
                   _submitForm(context);
                 },
@@ -228,7 +230,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void _submitForm(context) {
     if (!_formKey.currentState.validate()) {
       return;
-    } else if (_formData[LABEL_INTENSITY] == null || Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
+    } else if (_formData[LABEL_INTENSITY] == null ||
+        Arrays.intensities[_formData[LABEL_INTENSITY]] == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Favor selecionar a intensidade"),
@@ -239,45 +242,50 @@ class _AddExercisePageState extends State<AddExercisePage> {
     _formKey.currentState.save();
 
     if (widget.exercise == null) {
-      BlocProvider.of<ExerciseBloc>(context).add(
-        AddExerciseEvent(
-          exercise: Exercise(
+      BlocProvider.of<GenericBloc<Exercise>>(context).add(
+        AddRecomendationEvent<Exercise>(
+          entity: Exercise(
             name: _formData[LABEL_NAME],
             done: false,
             durationInMinutes: int.parse(_formData[LABEL_DURATION]),
-            dizziness: _formData[LABEL_DIZZINESS],
-            shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
-            bodyPain: _formData[LABEL_BODY_PAIN],
-            times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "##:##", value: time))
+                .toList(),
             intensity: _formData[LABEL_INTENSITY],
-            excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             frequency: 1,
             frequencyPerWeek: int.parse(_formData[LABEL_FREQUENCY_PERWEEK]),
-            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            executionDay: DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
+            finalDate: _formData[LABEL_FINAL_DATE] != null &&
+                    _formData[LABEL_FINAL_DATE] != ""
+                ? DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE])
+                : DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
           ),
         ),
       );
     } else {
-      BlocProvider.of<ExerciseBloc>(context).add(
-        EditExerciseProfessionalEvent(
-          exercise: Exercise(
+      print('2:${widget.exercise.id}');
+      BlocProvider.of<GenericBloc<Exercise>>(context).add(
+        EditRecomendationEvent<Exercise>(
+          entity: Exercise(
             id: widget.exercise.id,
             name: _formData[LABEL_NAME],
             done: false,
             durationInMinutes: int.parse(_formData[LABEL_DURATION]),
-            dizziness: _formData[LABEL_DIZZINESS],
-            shortnessOfBreath: _formData[LABEL_SHORTNESS_OF_BREATH],
-            bodyPain: _formData[LABEL_BODY_PAIN],
-            times: (_formData[LABEL_TIMES] as List).map((time) => Converter.convertStringToMaskedString(mask: "##:##", value: time)).toList(),
+            times: (_formData[LABEL_TIMES] as List)
+                .map((time) => Converter.convertStringToMaskedString(
+                    mask: "##:##", value: time))
+                .toList(),
             intensity: _formData[LABEL_INTENSITY],
-            excessiveFatigue: _formData[LABEL_EXCESSIVE_FATIGUE],
             frequency: 1,
             frequencyPerWeek: int.parse(_formData[LABEL_FREQUENCY_PERWEEK]),
-            finalDate: DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            initialDate: DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            executionDay: DateHelper.convertStringToDate(_formData[LABEL_EXECUTIONDAY]),
+            finalDate: _formData[LABEL_FINAL_DATE] != null &&
+                    _formData[LABEL_FINAL_DATE] != ""
+                ? DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE])
+                : DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
+            initialDate:
+                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
           ),
         ),
       );

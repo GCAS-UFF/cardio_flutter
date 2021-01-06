@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 class MedicationModel extends Medication {
   MedicationModel(
       {@required String name,
-      @required double dosage,
+      @required String dosage,
       @required String quantity,
       @required int frequency,
       @required DateTime initialDate,
@@ -25,7 +25,7 @@ class MedicationModel extends Medication {
             finalDate: finalDate,
             observation: observation,
             tookIt: tookIt,
-            times:times,
+            times: times,
             id: id,
             done: done,
             executedDate: executedDate);
@@ -54,9 +54,7 @@ class MedicationModel extends Medication {
     if (json == null) return null;
     return MedicationModel(
       name: json['name'],
-      dosage: (json['dosage'] is int)
-          ? (json['dosage'] as int).toDouble()
-          : json['dosage'],
+      dosage: json['dosage'] != null ? "${json['dosage']}" : null,
       frequency: json['frequency'],
       quantity: json['quantity'],
       initialDate: (json['initialDate'] == null)
