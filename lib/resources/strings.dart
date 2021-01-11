@@ -84,7 +84,7 @@ class Strings {
   static const final_date = "Data Final";
   static const hint_duration = "min";
   static const hint_frequency = "vezes ao dia";
-  static const hint_frequencyExercise = "vezes por dia";
+  static const hint_frequencyExercise = "vezes por semana";
   static const add = "Adicionar";
   static const time_title = "Horário";
   static const intended_time = "Horários indicados";
@@ -248,7 +248,7 @@ class Strings {
   static const orientation_answer2 =
       "Os sintomas podem aparecer aos poucos quando se realiza alguma atividade, ou até mesmo, em repouso.\n"
       "Exemplo de sintomas:\n"
-      "1. Falta de ar\n2. Tosse\n3. Náusea \n4. Palpitações \n5. Ganho de peso"
+      "1. Falta de ar\n2. Tosse\n3. Enjoo\n4. Palpitações \n5. Ganho de peso"
       "\n6. Inchaço nas pernas, pés ou tornozelos\n7. Tontura\n8. Cansaço \n9. Confusão mental";
   static const orientation_answer1 =
       "É a dificuldade do coração em se encher de sangue corretamente e bombeá-lo de "

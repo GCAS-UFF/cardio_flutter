@@ -62,7 +62,7 @@ class AppInfoPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "\nIdealizadoras",
+                    "\nIdealizadores",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.indigo[900],
@@ -79,7 +79,8 @@ class AppInfoPage extends StatelessWidget {
                   ),
                   Text(
                     " - Prof Dra Ana Carla Dantas Cavalcanti\n(Escola de Enfermagem/UFF)\n"
-                    " - Prof Dra Paula Vanessa Peclat Flores\n(Escola de Enfermagem/UFF)",
+                    " - Prof Dra Paula Vanessa Peclat Flores\n(Escola de Enfermagem/UFF)\n"
+                    " - Prof Dr Evandro Tinoco Mesquita\n(Faculdade de Medicina/UFF)",
                     textAlign: TextAlign.start,
                     style: TextStyle(fontSize: 15),
                   ),

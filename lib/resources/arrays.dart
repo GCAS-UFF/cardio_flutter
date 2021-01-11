@@ -15,12 +15,10 @@ class Arrays {
   ];
   static Map<String, dynamic> adresses = {
     "Selecione": null,
-    "Clínica Coração Valente1":
-        "1Av. Jansen de Melo, 174 - Centro, Niterói - RJ",
-    "Clínica Coração Valente2":
-        "2Av. Jansen de Melo, 174 - Centro, Niterói - RJ",
-    "Clínica Coração Valente3":
-        "3Av. Jansen de Melo, 174 - Centro, Niterói - RJ",
+    "Visita domiciliar": "Visita domiciliar",
+    "Consulta Telefônica": "Consulta Telefônica",
+    "Consulta Presencial - Clínica Coração Valente":
+        "Consulta Presencial - Clínica Coração Valente",
   };
 
   static Map<String, dynamic> expertises = {
