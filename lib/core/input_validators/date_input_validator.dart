@@ -15,8 +15,7 @@ class DateInputValidator extends BaseInputValidator {
         return Strings.invalid_day_error_message;
       if (mounth == null || mounth <= 0 || mounth > 12)
         return Strings.invalid_mounth_error_message;
-      if (year == null || year <= 0 || year > DateTime.now().year)
-        return Strings.invalid_year_error_message;
+      if (year == null || year <= 0) return Strings.invalid_year_error_message;
     }
 
     return null;
