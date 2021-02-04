@@ -44,6 +44,8 @@ class AuthRepositoryImpl implements AuthRepository {
           await localDataSource.saveUserId(user.id);
           await localDataSource.saveUserType(type);
 
+          notificationManager.init();
+
           return Right(user);
         } else {
           return Left(ServerFailure());
@@ -130,6 +132,8 @@ class AuthRepositoryImpl implements AuthRepository {
         if (user != null) {
           await localDataSource.saveUserId(user.id);
           await localDataSource.saveUserType(type);
+
+          notificationManager.init();
 
           return Right(user);
         } else {

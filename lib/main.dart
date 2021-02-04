@@ -1,6 +1,3 @@
-import 'dart:isolate';
-
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/login_page.dart';
@@ -29,9 +26,6 @@ import 'package:flutter/rendering.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
-  final int helloAlarmID = 0;
-  await AndroidAlarmManager.initialize();
-
   runApp(
     Provider<Settings>(
       create: (_) => di.sl<Settings>(),
@@ -63,17 +57,6 @@ Future<void> main() async {
       ),
     ),
   );
-  //await AndroidAlarmManager.periodic(
-  //    const Duration(seconds: 30), helloAlarmID, updateFirebase);
-}
-
-void updateFirebase() async {
-  final DateTime now = DateTime.now();
-  final int isolateId = Isolate.current.hashCode;
-  WidgetsFlutterBinding.ensureInitialized();
-  await di.initExternal();
-  await di.initNotificationsForced();
-  print("[$now] Hello, world! isolate=$isolateId function='$updateFirebase'");
 }
 
 class MyApp extends StatelessWidget {
