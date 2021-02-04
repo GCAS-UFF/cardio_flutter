@@ -58,47 +58,43 @@ class _EntityCardState extends State<EntityCard> {
                   : Colors.orangeAccent,
               borderRadius: BorderRadius.circular(7),
             ),
-            child: SingleChildScrollView(
-              physics: ClampingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: ((!widget.activity.value.done))
-                    ? [
-                        Text(
-                          " Recomendação",
-                          style: TextStyle(
-                              fontSize: Dimensions.getTextSize(context, 16),
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: widget.activity.informations.entries.map(
-                            (entry) {
-                              return _buildParameterItem(context, entry);
-                            },
-                          ).toList(),
-                        ),
-                      ]
-                    : [
-                        Text(
-                          " Realizado",
-                          style: TextStyle(
-                              fontSize: Dimensions.getTextSize(context, 16),
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: widget.activity.informations.entries.map(
-                            (entry) {
-                              return _buildParameterItem(context, entry);
-                            },
-                          ).toList(),
-                        )
-                      ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: ((!widget.activity.value.done))
+                  ? [
+                      Text(
+                        "Recomendação",
+                        style: TextStyle(
+                            fontSize: Dimensions.getTextSize(context, 16),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: widget.activity.informations.entries.map(
+                          (entry) {
+                            return _buildParameterItem(context, entry);
+                          },
+                        ).toList(),
+                      ),
+                    ]
+                  : [
+                      Text(
+                        "Realizado",
+                        style: TextStyle(
+                            fontSize: Dimensions.getTextSize(context, 16),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: widget.activity.informations.entries.map(
+                          (entry) {
+                            return _buildParameterItem(context, entry);
+                          },
+                        ).toList(),
+                      )
+                    ],
             ),
           ),
         ),
@@ -110,24 +106,25 @@ class _EntityCardState extends State<EntityCard> {
   }
 
   Widget _buildParameterItem(BuildContext context, MapEntry entry) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          " ${entry.key}:",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: Dimensions.getTextSize(context, 16),
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: "${entry.key}:",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Dimensions.getTextSize(context, 16),
+            ),
           ),
-        ),
-        Text(
-          " ${entry.value}",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: Dimensions.getTextSize(context, 16),
-          ),
-        )
-      ],
+          TextSpan(
+            text: " ${entry.value}",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Dimensions.getTextSize(context, 16),
+            ),
+          )
+        ],
+      ),
     );
   }
 

@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:983288482325:android:0cf33ea6aa779a17e69c1c",
         "android_client_info": {
-          "package_name": "com.example.cardio_flutter"
+          "package_name": "br.uff.cardio_flutter"
         }
       },
       "oauth_client": [
