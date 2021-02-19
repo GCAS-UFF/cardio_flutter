@@ -21,6 +21,8 @@ class CalendarConverter {
     for (var i = 0; i < entityList.length; i++) {
       // if the exercise was not done and doesnt have a initial date we shouldn't bother
       if (!entityList[i].done && entityList[i].initialDate != null) {
+        entityList.sort((a, b) =>
+            a.initialDate.toString().compareTo(b.initialDate.toString()));
         // Run through all days for the initial date until the final date day by day
         for (var j = entityList[i].initialDate.millisecondsSinceEpoch;
             j <= entityList[i].finalDate.millisecondsSinceEpoch;
@@ -30,6 +32,8 @@ class CalendarConverter {
           addMonthIncalendar(calendarObject, entityList[i], currentDate);
         }
       } else if (entityList[i].done && entityList[i].executedDate != null) {
+        entityList.sort((a, b) =>
+            a.executedDate.toString().compareTo(b.executedDate.toString()));
         addMonthIncalendar(
             calendarObject, entityList[i], entityList[i].executedDate);
       }
@@ -121,15 +125,15 @@ class CalendarConverter {
       if (!entity.done) {
         result = {
           "Exercício": entity.name,
-          "Frequência": "${entity.frequencyPerWeek.toString()} vezes por semana",
+          "Frequência":
+              "${entity.frequencyPerWeek.toString()} vezes por semana",
           "Intensidade": (Arrays.intensities[entity.intensity] == null)
               ? "Não Selecionado"
               : Arrays.intensities[entity.intensity],
           "Horários Indicados":
               Converter.convertStringListToString(entity.times),
           "Duração": "${entity.durationInMinutes} minutos",
-          "Data de Início":
-              DateHelper.convertDateToString(entity.initialDate),
+          "Data de Início": DateHelper.convertDateToString(entity.initialDate),
           "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
         };
       } else {
@@ -145,8 +149,7 @@ class CalendarConverter {
           "   Fadiga Excessiva": symptom(entity.excessiveFatigue),
           "   Tontura": symptom(entity.dizziness),
           "   Dores Corporais": symptom(entity.bodyPain),
-          "Observação":
-              (entity.observation != null) ? entity.observation : "",
+          "Observação": (entity.observation != null) ? entity.observation : "",
         };
       }
     } else if (entity is Liquid) {
@@ -161,8 +164,7 @@ class CalendarConverter {
           "Quantidade Ingerida": Arrays.reference[entity.reference] == null
               ? "Referência não selecionada"
               : '${(Arrays.reference[entity.reference] * entity.quantity)} ml',
-                        "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
-
+          "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
           "Bebida": entity.name,
         };
       }
@@ -189,9 +191,8 @@ class CalendarConverter {
             "Fadiga": (Arrays.fatigue[entity.fatigue] == null)
                 ? "Não Selecionado"
                 : Arrays.fatigue[entity.fatigue],
-                          "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
-
-
+            "Hora da Realização":
+                DateHelper.getTimeFromDate(entity.executedDate),
             "Observação":
                 (entity.observation != null) ? entity.observation : "",
           };
@@ -207,8 +208,8 @@ class CalendarConverter {
             "Fadiga": (Arrays.fatigue[entity.fatigue] == null)
                 ? "Não Selecionado"
                 : Arrays.fatigue[entity.fatigue],
-                          "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),
-
+            "Hora da Realização":
+                DateHelper.getTimeFromDate(entity.executedDate),
             "Observação":
                 (entity.observation != null) ? entity.observation : "",
           };
