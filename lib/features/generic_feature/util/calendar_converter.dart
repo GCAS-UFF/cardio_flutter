@@ -32,8 +32,6 @@ class CalendarConverter {
           addMonthIncalendar(calendarObject, entityList[i], currentDate);
         }
       } else if (entityList[i].done && entityList[i].executedDate != null) {
-        entityList.sort((a, b) =>
-            a.executedDate.toString().compareTo(b.executedDate.toString()));
         addMonthIncalendar(
             calendarObject, entityList[i], entityList[i].executedDate);
       }
