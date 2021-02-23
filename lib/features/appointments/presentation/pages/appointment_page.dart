@@ -25,8 +25,10 @@ class AppointmentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BasePage(
       addFunction: () {
-        if (Provider.of<Settings>(context, listen: false).getUserType() == Keys.PROFESSIONAL_TYPE) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddAppointmentPage()));
+        if (Provider.of<Settings>(context, listen: false).getUserType() ==
+            Keys.PROFESSIONAL_TYPE) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AddAppointmentPage()));
         }
       },
       backgroundColor: Color(0xffc9fffd),
@@ -95,6 +97,7 @@ class AppointmentPage extends StatelessWidget {
 
   Widget _buildMonthList(BuildContext context, List<Month> monthList) {
     if (monthList == null) return Container();
+    monthList.sort((b, a) => '${a.year}${a.id}'.compareTo('${b.year}${b.id}'));
     return Column(
       children: monthList.map((month) {
         return Column(
@@ -126,6 +129,7 @@ class AppointmentPage extends StatelessWidget {
 
   Widget _buildDayList(BuildContext context, List<Day> dayList) {
     if (dayList == null) return Container();
+    dayList.sort((b, a) => a.id.compareTo(b.id));
     return Column(
       children: dayList.map((day) {
         return Row(
@@ -151,8 +155,13 @@ class AppointmentPage extends StatelessWidget {
     );
   }
 
-  Widget _bodybuilder(BuildContext context, Patient patient, Calendar calendar) {
-    if (patient == null || calendar == null || calendar.months == null || calendar.months.isEmpty) return EmptyPage(text: Strings.empty_appointment);
+  Widget _bodybuilder(
+      BuildContext context, Patient patient, Calendar calendar) {
+    if (patient == null ||
+        calendar == null ||
+        calendar.months == null ||
+        calendar.months.isEmpty)
+      return EmptyPage(text: Strings.empty_appointment);
     return Container(
       child: SingleChildScrollView(
         padding: Dimensions.getEdgeInsetsAll(context, 15),

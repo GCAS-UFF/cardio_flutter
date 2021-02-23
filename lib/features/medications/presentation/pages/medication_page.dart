@@ -97,6 +97,7 @@ class MedicationPage extends StatelessWidget {
 
   Widget _buildMonthList(BuildContext context, List<Month> monthList) {
     if (monthList == null) return Container();
+    monthList.sort((b, a) => '${a.year}${a.id}'.compareTo('${b.year}${b.id}'));
     return Column(
       children: monthList.map((month) {
         return Column(
@@ -128,6 +129,7 @@ class MedicationPage extends StatelessWidget {
 
   Widget _buildDayList(BuildContext context, List<Day> dayList) {
     if (dayList == null) return Container();
+    dayList.sort((b, a) => a.id.compareTo(b.id));
     return Column(
       children: dayList.map((day) {
         return Row(
@@ -155,7 +157,8 @@ class MedicationPage extends StatelessWidget {
 
   Widget _bodybuilder(
       BuildContext context, Patient patient, Calendar calendar) {
-    if (patient == null || calendar == null||
+    if (patient == null ||
+        calendar == null ||
         calendar.months == null ||
         calendar.months.isEmpty)
       return EmptyPage(text: Strings.empty_medication);

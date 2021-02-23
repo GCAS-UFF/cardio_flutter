@@ -98,6 +98,7 @@ class ExercisePage extends StatelessWidget {
 
   Widget _buildMonthList(BuildContext context, List<Month> monthList) {
     if (monthList == null) return Container();
+    monthList.sort((b, a) => '${a.year}${a.id}'.compareTo('${b.year}${b.id}'));
     return Column(
       children: monthList.map((month) {
         return Column(
@@ -129,6 +130,7 @@ class ExercisePage extends StatelessWidget {
 
   Widget _buildDayList(BuildContext context, List<Day> dayList) {
     if (dayList == null) return Container();
+    dayList.sort((b, a) => a.id.compareTo(b.id));
     return Column(
       children: dayList.map((day) {
         return Row(
