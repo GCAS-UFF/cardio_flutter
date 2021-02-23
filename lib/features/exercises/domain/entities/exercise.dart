@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 class Exercise extends BaseEntity {
   final String name;
   final int frequency;
-  final int frequencyPerWeek;
+  // final int frequencyPerWeek;
   final String intensity;
   final int durationInMinutes;
   final List<String> times;
@@ -22,7 +22,7 @@ class Exercise extends BaseEntity {
     this.times,
     this.shortnessOfBreath,
     this.excessiveFatigue,
-    this.frequencyPerWeek,
+    // this.frequencyPerWeek,
     this.dizziness,
     this.bodyPain,
     @required this.name,
@@ -33,7 +33,7 @@ class Exercise extends BaseEntity {
     finalDate,
     executedDate,
     @required done,
-  }): super(
+  }) : super(
           initialDate: initialDate,
           finalDate: finalDate,
           executedDate: executedDate,
@@ -47,7 +47,7 @@ class Exercise extends BaseEntity {
         observation,
         excessiveFatigue,
         dizziness,
-        frequencyPerWeek,
+        // frequencyPerWeek,
         bodyPain,
         name,
         times,

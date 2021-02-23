@@ -15,7 +15,7 @@ class ExerciseModel extends Exercise {
     @required String observation,
     @required String name,
     @required int frequency,
-    @required int frequencyPerWeek,
+    // @required int frequencyPerWeek,
     @required String intensity,
     @required int durationInMinutes,
     @required DateTime initialDate,
@@ -31,7 +31,7 @@ class ExerciseModel extends Exercise {
           bodyPain: bodyPain,
           name: name,
           frequency: frequency,
-          frequencyPerWeek: frequencyPerWeek,
+          // frequencyPerWeek: frequencyPerWeek,
           times: times,
           observation: observation,
           intensity: intensity,
@@ -41,20 +41,22 @@ class ExerciseModel extends Exercise {
           done: done,
         );
 
-static  Map<dynamic, dynamic> toJson(ExerciseModel model) {
+  static Map<dynamic, dynamic> toJson(ExerciseModel model) {
     Map<dynamic, dynamic> json = {};
     if (model.executedDate != null)
       json['executedDate'] = model.executedDate.millisecondsSinceEpoch;
     if (model.initialDate != null)
       json['initialDate'] = model.initialDate.millisecondsSinceEpoch;
-    if (model.finalDate != null) json['finalDate'] = model.finalDate.millisecondsSinceEpoch;
+    if (model.finalDate != null)
+      json['finalDate'] = model.finalDate.millisecondsSinceEpoch;
     if (model.name != null) json['name'] = model.name;
     if (model.frequency != null) json['frequency'] = model.frequency;
-    if (model.frequency != null) json['frequencyPerWeek'] = model.frequencyPerWeek;
+    // if (model.frequency != null) json['frequencyPerWeek'] = model.frequencyPerWeek;
     if (model.intensity != null) json['intensity'] = model.intensity;
     if (model.durationInMinutes != null)
       json['durationInMinutes'] = model.durationInMinutes;
-    if (model.excessiveFatigue != null) json['excessiveFatigue'] = model.excessiveFatigue;
+    if (model.excessiveFatigue != null)
+      json['excessiveFatigue'] = model.excessiveFatigue;
     if (model.shortnessOfBreath != null)
       json['shortnessOfBreath'] = model.shortnessOfBreath;
     if (model.dizziness != null) json['dizziness'] = model.dizziness;
@@ -80,7 +82,7 @@ static  Map<dynamic, dynamic> toJson(ExerciseModel model) {
       id: json['id'],
       name: json['name'],
       frequency: json['frequency'],
-      frequencyPerWeek: json['frequencyPerWeek'],
+      // frequencyPerWeek: json['frequencyPerWeek'],
       intensity: json['intensity'],
       durationInMinutes: json['durationInMinutes'],
       shortnessOfBreath: json['shortnessOfBreath'],
@@ -104,7 +106,7 @@ static  Map<dynamic, dynamic> toJson(ExerciseModel model) {
       id: exercise.id,
       finalDate: exercise.finalDate,
       frequency: exercise.frequency,
-      frequencyPerWeek: exercise.frequencyPerWeek,
+      // frequencyPerWeek: exercise.frequencyPerWeek,
       initialDate: exercise.initialDate,
       intensity: exercise.intensity,
       shortnessOfBreath: exercise.shortnessOfBreath,

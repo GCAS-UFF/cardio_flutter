@@ -21,8 +21,6 @@ class CalendarConverter {
     for (var i = 0; i < entityList.length; i++) {
       // if the exercise was not done and doesnt have a initial date we shouldn't bother
       if (!entityList[i].done && entityList[i].initialDate != null) {
-        entityList.sort((b, a) => a.initialDate.compareTo(b.initialDate));
-
         // Run through all days for the initial date until the final date day by day
         for (var j = entityList[i].initialDate.millisecondsSinceEpoch;
             j <= entityList[i].finalDate.millisecondsSinceEpoch;
@@ -123,16 +121,14 @@ class CalendarConverter {
       if (!entity.done) {
         result = {
           "Exercício": entity.name,
-          "Frequência":
-              "${entity.frequencyPerWeek.toString()} vezes por semana",
+          "Frequência": "${entity.frequency.toString()} vezes por dia",
           "Intensidade": (Arrays.intensities[entity.intensity] == null)
               ? "Não Selecionado"
               : Arrays.intensities[entity.intensity],
           "Horários Indicados":
               Converter.convertStringListToString(entity.times),
           "Duração": "${entity.durationInMinutes} minutos",
-          "Data de Início": DateHelper.convertDateToString(entity.initialDate),
-          "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
+          "Data": DateHelper.convertDateToString(entity.initialDate),
         };
       } else {
         result = {
@@ -154,7 +150,7 @@ class CalendarConverter {
       if (!entity.done) {
         result = {
           "Quantide em ml": entity.mililitersPerDay.toString(),
-          "Data de Inicio": DateHelper.convertDateToString(entity.initialDate),
+          "Data de Início": DateHelper.convertDateToString(entity.initialDate),
           "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
         };
       } else {
@@ -172,7 +168,7 @@ class CalendarConverter {
           "Frequência": "${entity.frequency.toString()} vezes ao dia",
           "Horários Indicados":
               Converter.convertStringListToString(entity.times),
-          "Data de Inicio": DateHelper.convertDateToString(entity.initialDate),
+          "Data de Início": DateHelper.convertDateToString(entity.initialDate),
           "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
         };
       } else {
@@ -268,7 +264,7 @@ class CalendarConverter {
           "Frequência": "${entity.frequency.toString()} vezes ao dia",
           "Horários Indicados":
               Converter.convertStringListToString(entity.times),
-          "Data de Inicio": DateHelper.convertDateToString(entity.initialDate),
+          "Data de Início": DateHelper.convertDateToString(entity.initialDate),
           "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
           "Observação": (entity.observation != null) ? entity.observation : "",
         };

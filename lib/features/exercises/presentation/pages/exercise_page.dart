@@ -83,13 +83,12 @@ class ExercisePage extends StatelessWidget {
           openRecomendation: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) { 
-                  print('activity.value:${activity.value.id}');
-                  return AddExercisePage(
+              MaterialPageRoute(builder: (context) {
+                print('activity.value:${activity.value.id}');
+                return AddExercisePage(
                   exercise: activity.value,
-                );}
-              ),
+                );
+              }),
             );
           },
         );
@@ -157,10 +156,10 @@ class ExercisePage extends StatelessWidget {
 
   Widget _bodybuilder(
       BuildContext context, Patient patient, Calendar calendar) {
-    if (patient == null || calendar == null||
+    if (patient == null ||
+        calendar == null ||
         calendar.months == null ||
-        calendar.months.isEmpty)
-      return EmptyPage(text: Strings.empty_exercise);
+        calendar.months.isEmpty) return EmptyPage(text: Strings.empty_exercise);
     return Container(
       child: SingleChildScrollView(
         padding: Dimensions.getEdgeInsetsAll(context, 15),
