@@ -80,6 +80,7 @@ class CustomSelector extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Text(
                               options[index],
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize:
                                       Dimensions.getTextSize(context, 20)),
