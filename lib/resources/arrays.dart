@@ -19,6 +19,7 @@ class Arrays {
     "Consulta Telefônica": "Consulta Telefônica",
     "Consulta Presencial - Clínica Coração Valente":
         "Consulta Presencial - Clínica Coração Valente",
+    "Grupo de Orientação": "Grupo de Orientação",
   };
 
   static Map<String, dynamic> expertises = {
