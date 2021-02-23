@@ -142,8 +142,4 @@ class HomeProfessionalPage extends StatelessWidget {
       }).toList(),
     );
   }
-
-  void sortlist(List list) {
-    return list.sort((a, b) => a.toString().compareTo(b.toString()));
-  }
 }
