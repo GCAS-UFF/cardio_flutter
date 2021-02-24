@@ -119,17 +119,32 @@ class CalendarConverter {
 
     if (entity is Exercise) {
       if (!entity.done) {
-        result = {
-          "Exercício": entity.name,
-          "Frequência": "${entity.frequency.toString()} vezes por dia",
-          "Intensidade": (Arrays.intensities[entity.intensity] == null)
-              ? "Não Selecionado"
-              : Arrays.intensities[entity.intensity],
-          "Horários Indicados":
-              Converter.convertStringListToString(entity.times),
-          "Duração": "${entity.durationInMinutes} minutos",
-          "Data": DateHelper.convertDateToString(entity.initialDate),
-        };
+        if (entity.initialDate != entity.finalDate) {
+          result = {
+            "Exercício": entity.name,
+            "Frequência": "${entity.frequency.toString()} vezes por dia",
+            "Intensidade": (Arrays.intensities[entity.intensity] == null)
+                ? "Não Selecionado"
+                : Arrays.intensities[entity.intensity],
+            "Horários Indicados":
+                Converter.convertStringListToString(entity.times),
+            "Duração": "${entity.durationInMinutes} minutos",
+            'Data inicial': DateHelper.convertDateToString(entity.initialDate),
+            "Data final": DateHelper.convertDateToString(entity.finalDate)
+          };
+        } else {
+          result = {
+            "Exercício": entity.name,
+            "Frequência": "${entity.frequency.toString()} vezes por dia",
+            "Intensidade": (Arrays.intensities[entity.intensity] == null)
+                ? "Não Selecionado"
+                : Arrays.intensities[entity.intensity],
+            "Horários Indicados":
+                Converter.convertStringListToString(entity.times),
+            "Duração": "${entity.durationInMinutes} minutos",
+            'Data': DateHelper.convertDateToString(entity.initialDate),
+          };
+        }
       } else {
         result = {
           "Hora da Realização": DateHelper.getTimeFromDate(entity.executedDate),

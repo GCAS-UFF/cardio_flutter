@@ -82,6 +82,7 @@ class Strings {
   static const initial_date = "Data Inicial";
   static const executed_date = "Data";
   static const final_date = "Data Final";
+  static const final_date_optional = "Data Final (opcional)";
   static const hint_duration = "min";
   static const hint_frequency = "vezes ao dia";
   static const hint_frequencyExercise = "vezes por dia";
