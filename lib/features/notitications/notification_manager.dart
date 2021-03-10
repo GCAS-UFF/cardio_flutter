@@ -32,6 +32,10 @@ class NotificationManager {
 
   final FlutterLocalNotificationsPlugin localNotificationsPlugin;
   final FirebaseDatabase firebaseDatabase;
+  DatabaseReference lastNotificationref;
+  DataSnapshot data;
+  Map<dynamic, dynamic> lastNotifmap;
+
   final Settings settings;
 
   NotificationManager(
@@ -45,6 +49,13 @@ class NotificationManager {
       return;
     }
     String patientId = settings.getUserId();
+    lastNotificationref = firebaseDatabase
+        .reference()
+        .child("Patient")
+        .child(patientId)
+        .child('LastNotification');
+    data = await lastNotificationref.once();
+    if (data != null) lastNotifmap = data.value as Map<dynamic, dynamic>;
 
     await _initializeNotifications();
 
@@ -228,7 +239,7 @@ class NotificationManager {
         }
       });
     });
-    
+
     firebaseDatabase
         .reference()
         .child("Patient")
@@ -281,15 +292,31 @@ class NotificationManager {
                 biometric.weight - lastInput.weight <= -2) {
               weightnotify = true;
             }
-            weightnotify
-                ? await singleNotification(
-                    channel: channel,
-                    datetime: DateTime.now().add(Duration(seconds: 3)),
-                    title: "Mudança de peso",
-                    body:
-                        "Seu peso variou mais de 2 kg nos últimos dias, consulte um profissional",
-                    startId: startId)
-                : null;
+            if (weightnotify) {
+              if (lastNotifmap != null) {
+                if (lastNotifmap['weight'] != null) {
+                  if ((DateTime.fromMillisecondsSinceEpoch(
+                              lastNotifmap['weight'])
+                          .isAfter(DateHelper.addTimeToDate(
+                              "00:00", DateTime.now())) &&
+                      DateTime.fromMillisecondsSinceEpoch(
+                              lastNotifmap['weight'])
+                          .isBefore(DateHelper.addTimeToDate(
+                              "23:59", DateTime.now())))) {
+                    return;
+                  }
+                }
+              }
+              lastNotificationref
+                  .update({'weight': DateTime.now().millisecondsSinceEpoch});
+              await singleNotification(
+                  channel: channel,
+                  datetime: DateTime.now().add(Duration(seconds: 3)),
+                  title: "Mudança de peso",
+                  body:
+                      "Seu peso variou mais de 2 kg nos últimos dias, consulte um profissional",
+                  startId: startId);
+            }
           }
         }
       });
@@ -429,6 +456,20 @@ class NotificationManager {
       if (toDoCount == null || toDoCount == 0) return;
 
       if (count >= (toDoCount * 0.7) && count < toDoCount * 0.8) {
+        if (lastNotifmap != null) {
+          if (lastNotifmap['liquid70'] != null) {
+            if ((DateTime.fromMillisecondsSinceEpoch(lastNotifmap['liquid70'])
+                    .isAfter(
+                        DateHelper.addTimeToDate("00:00", DateTime.now())) &&
+                DateTime.fromMillisecondsSinceEpoch(lastNotifmap['liquid70'])
+                    .isBefore(
+                        DateHelper.addTimeToDate("23:59", DateTime.now())))) {
+              return;
+            }
+          }
+        }
+        lastNotificationref
+            .update({'liquid70': DateTime.now().millisecondsSinceEpoch});
         await singleNotification(
             channel: channel,
             datetime: DateTime.now().add(Duration(seconds: 3)),
@@ -437,6 +478,20 @@ class NotificationManager {
                 "Você já tomou mais de 70% do volume de líquidos ingeridos recomendado para hoje",
             startId: startId);
       } else if (count >= (toDoCount * 0.8) && count < toDoCount * 0.9) {
+        if (lastNotifmap != null) {
+          if (lastNotifmap['liquid80'] != null) {
+            if ((DateTime.fromMillisecondsSinceEpoch(lastNotifmap['liquid80'])
+                    .isAfter(
+                        DateHelper.addTimeToDate("00:00", DateTime.now())) &&
+                DateTime.fromMillisecondsSinceEpoch(lastNotifmap['liquid80'])
+                    .isBefore(
+                        DateHelper.addTimeToDate("23:59", DateTime.now())))) {
+              return;
+            }
+          }
+        }
+        lastNotificationref
+            .update({'liquid80': DateTime.now().millisecondsSinceEpoch});
         await singleNotification(
             channel: channel,
             datetime: DateTime.now().add(Duration(seconds: 3)),
@@ -445,6 +500,21 @@ class NotificationManager {
                 "Você já tomou mais de 80% do volume de líquidos ingeridos recomendado para hoje",
             startId: startId);
       } else if (count >= (toDoCount * 0.9) && count < toDoCount * 1) {
+        if (lastNotifmap != null) {
+          if (lastNotifmap['liquid90'] != null) {
+            if ((DateTime.fromMillisecondsSinceEpoch(lastNotifmap['liquid90'])
+                    .isAfter(
+                        DateHelper.addTimeToDate("00:00", DateTime.now())) &&
+                DateTime.fromMillisecondsSinceEpoch(lastNotifmap['liquid90'])
+                    .isBefore(
+                        DateHelper.addTimeToDate("23:59", DateTime.now())))) {
+              return;
+            }
+          }
+        }
+
+        lastNotificationref
+            .update({'liquid90': DateTime.now().millisecondsSinceEpoch});
         await singleNotification(
             channel: channel,
             datetime: DateTime.now().add(Duration(seconds: 3)),
@@ -453,7 +523,23 @@ class NotificationManager {
                 "Você já tomou mais de 90% do volume de líquidos ingeridos recomendado para hoje",
             startId: startId);
       } else if (count >= toDoCount) {
-        singleNotification(
+        if (lastNotifmap != null) {
+          if (lastNotifmap['liquid100'] != null) {
+            if ((DateTime.fromMillisecondsSinceEpoch(lastNotifmap['liquid100'])
+                    .isAfter(
+                        DateHelper.addTimeToDate("00:00", DateTime.now())) &&
+                DateTime.fromMillisecondsSinceEpoch(lastNotifmap['liquid100'])
+                    .isBefore(
+                        DateHelper.addTimeToDate("23:59", DateTime.now())))) {
+              return;
+            }
+          }
+        }
+
+        lastNotificationref
+            .update({'liquid100': DateTime.now().millisecondsSinceEpoch});
+
+        await singleNotification(
             channel: channel,
             datetime: DateTime.now().add(Duration(seconds: 3)),
             title: "Limite de Líquidos ingeridos excedido",
