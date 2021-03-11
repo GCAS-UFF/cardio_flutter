@@ -273,7 +273,7 @@ class Strings {
       "melhorar sua qualidade de vida! "
       "\n- Converse com seu Cardiologista e Fisioterapeuta e veja se está apto a praticar atividades e qual a mais apropriada para você.";
   static const orientation_answer6 =
-      "- Escolha um horário e crie o hábito de se pesar com roupas leves, isto deve ser feito diariamente."
+      "- Crie o hábito de se pesar todos os dias pela manhã com roupas leves."
       "\n- O ganho de peso em excesso pode indicar Insuficiência Cardíaca descompensada.";
   static const orientation_answer7 =
       "- O cigarro contém substâncias tóxicas que provocam aumento do trabalho do coração."
@@ -303,14 +303,14 @@ class Strings {
       "1.  Ansiedade e estresse são sentimentos comuns a todas as pessoas, porém se forem persistentes e interferirem "
       "nas atividades diárias ou nas relações com outras pessoas, devemos procurar ajuda. \n\n2. ";
   static const orientation_answer12_2 =
-      "\n- Procurar um Psicólogo, para tratar esses sentimentos"
+      "\n- Procure por um Psicólogo, para tratar esses sentimentos"
       "\n- Expresse suas emoções e sentimentos"
       "\n- Se estiver mais angustiado, triste ou ansioso, busque conversar com pessoas que geralmente têm uma postura mais otimista frente às dificuldades."
       "\n- Aceite apoio emocional quando oferecido e ofereça apoio sempre que puder"
       "\n- Planeje atividades para o dia, que não sobrecarreguem seu corpo e mente."
       "\n- Preencha seu tempo com informações otimistas e atividades prazerosas "
-      "\n- Não se isolar"
-      "\n- Realizar atividades que goste (Exemplo: ver filme, desenhar, bordar, cantar, ouvir música)"
+      "\n- Não se isole"
+      "\n- Realize atividades que goste (Exemplo: ver filme, desenhar, bordar, cantar, ouvir música)"
       "\n- Use técnicas de respiração e meditação"
       "\n- Suporte religioso, caso tenha crença religiosa";
   static const orientation_answer13 =

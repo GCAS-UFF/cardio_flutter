@@ -164,7 +164,7 @@ class CalendarConverter {
     } else if (entity is Liquid) {
       if (!entity.done) {
         result = {
-          "Quantide em ml": entity.mililitersPerDay.toString(),
+          "Quantidade em ml": entity.mililitersPerDay.toString(),
           "Data de Início": DateHelper.convertDateToString(entity.initialDate),
           "Data de Fim": DateHelper.convertDateToString(entity.finalDate),
         };
