@@ -4,7 +4,6 @@ import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 class SignUpPatient implements UseCase<Patient, Params> {
   final AuthRepository repository;
@@ -22,7 +21,7 @@ class SignUpPatient implements UseCase<Patient, Params> {
 class Params extends Equatable {
   final Patient patient;
 
-  Params({@required this.patient});
+  Params({required this.patient});
 
   @override
   List<Object> get props => [patient];

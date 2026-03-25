@@ -3,7 +3,6 @@ import 'package:cardio_flutter/core/usecases/usecase.dart';
 import 'package:cardio_flutter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 class SignIn implements UseCase<dynamic, Params> {
   final AuthRepository repository;
@@ -20,7 +19,7 @@ class Params extends Equatable {
   final String email;
   final String password;
 
-  Params({@required this.email, @required this.password});
+  Params({required this.email, required this.password});
 
   @override
   List<Object> get props => [email, password];

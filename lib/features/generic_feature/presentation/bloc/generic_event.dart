@@ -2,63 +2,68 @@ part of 'generic_bloc.dart';
 
 abstract class GenericEvent<Entity> extends Equatable {
   const GenericEvent();
-  List<Object> get props => [];
+
+  @override
+  List<Object?> get props => [];
 }
 
 class Start<Entity> extends GenericEvent<Entity> {
   final Patient patient;
 
-  Start({@required this.patient});
+  // 1. Trocado @required por required nativo
+  const Start({required this.patient});
 
-  List<Object> get props => [patient];
+  @override
+  List<Object?> get props => [patient];
 }
 
-class Refresh<Entity> extends GenericEvent<Entity> {}
+class Refresh<Entity> extends GenericEvent<Entity> {
+  @override
+  List<Object?> get props => [];
+}
 
 class AddRecomendationEvent<Entity> extends GenericEvent<Entity> {
   final Entity entity;
-  AddRecomendationEvent({
-    @required this.entity,
-  });
-  List<Object> get props => [entity];
+
+  const AddRecomendationEvent({required this.entity});
+
+  @override
+  // 2. List<Object?> permite que o tipo genérico Entity seja incluído sem erro de cast
+  List<Object?> get props => [entity];
 }
 
 class EditRecomendationEvent<Entity> extends GenericEvent<Entity> {
   final Entity entity;
 
-  EditRecomendationEvent({
-    @required this.entity,
-  });
+  const EditRecomendationEvent({required this.entity});
 
-  List<Object> get props => [entity];
+  @override
+  List<Object?> get props => [entity];
 }
 
 class DeleteEvent<Entity> extends GenericEvent<Entity> {
   final Entity entity;
 
-  DeleteEvent({
-    @required this.entity,
-  });
+  const DeleteEvent({required this.entity});
 
-  List<Object> get props => [entity];
+  @override
+  List<Object?> get props => [entity];
 }
 
 class ExecuteEvent<Entity> extends GenericEvent<Entity> {
   final Entity entity;
 
-  ExecuteEvent({
-    @required this.entity,
-  });
+  const ExecuteEvent({required this.entity});
 
-  List<Object> get props => [entity];
+  @override
+  List<Object?> get props => [entity];
 }
 
 class EditExecutedEvent<Entity> extends GenericEvent<Entity> {
   final Entity entity;
 
-  EditExecutedEvent({
-    @required this.entity,
-  });
+  const EditExecutedEvent({required this.entity});
 
-  List<Object> get props => [entity];
+  @override
+  List<Object?> get props => [entity];
 }

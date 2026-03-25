@@ -5,7 +5,6 @@ import 'package:cardio_flutter/features/generic_feature/domain/entities/base_ent
 import 'package:cardio_flutter/features/generic_feature/domain/repositories/generic_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 class EditRecomendation<Entity extends BaseEntity>
     extends UseCase<Entity, Params> {
@@ -23,8 +22,8 @@ class Params<Entity> extends Equatable {
   final Entity entity;
   final Patient patient;
 
-  Params({@required this.entity, @required this.patient});
+  Params({required this.entity, required this.patient});
 
   @override
-  List<Object> get props => [entity, patient];
+  List<Object?> get props => [entity, patient];
 }

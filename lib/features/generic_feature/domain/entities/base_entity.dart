@@ -1,18 +1,20 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 abstract class BaseEntity extends Equatable {
-  final String id;
-  final DateTime initialDate;
-  final DateTime finalDate;
-  final DateTime executedDate;
+  final String? id;
+  final DateTime initialDate; // Sem o '?', é obrigatório
+  final DateTime finalDate;   // Sem o '?', é obrigatório
+  final DateTime? executedDate;
   final bool done;
 
-  BaseEntity(
-      {@required this.id,
-      @required this.initialDate,
-      @required this.finalDate,
-      @required this.executedDate,
-      @required this.done})
-      : assert(done != null);
+  const BaseEntity({
+    this.id,
+    required this.initialDate, // Adicionado 'required'
+    required this.finalDate,   // Adicionado 'required'
+    this.executedDate,
+    required this.done,
+  });
+
+  @override
+  List<Object?> get props => [id, initialDate, finalDate, executedDate, done];
 }

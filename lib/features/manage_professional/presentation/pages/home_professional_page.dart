@@ -9,18 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flushbar/flushbar.dart';
 
 class HomeProfessionalPage extends StatelessWidget {
+  const HomeProfessionalPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ManageProfessionalBloc, ManageProfessionalState>(
       listener: (context, state) {
         if (state is Error) {
-          Flushbar(
-            message: state.message,
-            duration: Duration(seconds: 3),
-          )..show(context);
+          // 1. Substituindo Flushbar pelo ScaffoldMessenger (nativo e moderno)
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
         }
       },
       child: BlocBuilder<ManageProfessionalBloc, ManageProfessionalState>(
@@ -37,17 +38,20 @@ class HomeProfessionalPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context, Professional professional,
-      List<Patient> patientList) {
+  // 2. Parâmetros alterados para opcionais (?) para aceitar os estados de Loading/Empty
+  Widget _buildBody(BuildContext context, Professional? professional,
+      List<Patient>? patientList) {
     return BasePage(
       edit: IconButton(
-        icon: Icon(Icons.edit),
+        icon: const Icon(Icons.edit),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return EditProfessionalPage(
-              professional: professional,
-            );
-          }));
+          if (professional != null) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return EditProfessionalPage(
+                professional: professional,
+              );
+            }));
+          }
         },
       ),
       backgroundColor: Colors.white,
@@ -62,13 +66,17 @@ class HomeProfessionalPage extends StatelessWidget {
                   width: double.infinity),
               InkWell(
                 borderRadius: BorderRadius.circular(20),
+                onTap: () {
+                  // 3. Removido o 'return' desnecessário que causava erro de tipo
+                  Navigator.pushNamed(context, "/patientSignUp");
+                },
                 child: Container(
                   width: Dimensions.getConvertedWidthSize(context, 280),
                   height: Dimensions.getConvertedHeightSize(context, 60),
                   decoration: BoxDecoration(
-                      color: Color(0xffc9fffd),
+                      color: const Color(0xffc9fffd),
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: <BoxShadow>[
+                      boxShadow: const <BoxShadow>[
                         BoxShadow(
                             offset: Offset(3, 3),
                             color: Colors.blue,
@@ -77,22 +85,15 @@ class HomeProfessionalPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Icon(
-                        Icons.person_add,
-                        //color: Colors.white,
-                      ),
+                      const Icon(Icons.person_add),
                       Text(
                         Strings.new_patient,
                         style: TextStyle(
-                            //color: Colors.white,
                             fontSize: Dimensions.getTextSize(context, 18)),
                       )
                     ],
                   ),
                 ),
-                onTap: () {
-                  return Navigator.pushNamed(context, "/patientSignUp");
-                },
               ),
               _buildProfessionalHeader(context, professional),
               SizedBox(
@@ -110,14 +111,13 @@ class HomeProfessionalPage extends StatelessWidget {
   }
 
   Widget _buildProfessionalHeader(
-      BuildContext context, Professional professional) {
-    if (professional == null) return Container();
-    String name = (professional.name != null)
-        ? professional.name
-        : "Sem Nome Especificado";
-    String expertise = ((professional.expertise != null))
-        ? professional.expertise
-        : "Sem Especialidade Especificada";
+      BuildContext context, Professional? professional) {
+    if (professional == null) return const SizedBox.shrink();
+    
+    // 4. Simplificação com valores padrão (Null-aware)
+    String name = professional.name ?? "Sem Nome Especificado";
+    String expertise = professional.expertise ?? "Sem Especialidade Especificada";
+
     return Padding(
       padding: Dimensions.getEdgeInsetsAll(context, 8),
       child: Text(
@@ -130,20 +130,20 @@ class HomeProfessionalPage extends StatelessWidget {
     );
   }
 
-  Widget _buildPatientList(BuildContext context, List<Patient> patientList) {
-    if (patientList == null) return Container();
-    patientList.sort((a, b) => a.name.toString().compareTo(b.name.toString()));
+  Widget _buildPatientList(BuildContext context, List<Patient>? patientList) {
+    if (patientList == null || patientList.isEmpty) return const SizedBox.shrink();
+
+    // 5. Cópia da lista para ordenação segura (sort altera a lista original)
+    final sortedList = List<Patient>.from(patientList);
+    sortedList.sort((a, b) => (a.name ?? "").compareTo(b.name ?? ""));
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: patientList.map((patient) {
+      children: sortedList.map((patient) {
         return PatientTile(
           patient: patient,
         );
       }).toList(),
     );
-  }
-
-  void sortlist(List list) {
-    return list.sort((a, b) => a.toString().compareTo(b.toString()));
   }
 }

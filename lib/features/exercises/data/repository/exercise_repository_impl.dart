@@ -9,99 +9,125 @@ import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart'
 import 'package:cardio_flutter/features/exercises/domain/repository/exercise_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 
 class ExerciseRepositoryImpl implements ExerciseRepository {
   final NetworkInfo networkInfo;
   final ExerciseRemoteDataSource remoteDataSource;
 
   ExerciseRepositoryImpl({
-    @required this.networkInfo,
-    @required this.remoteDataSource,
+    required this.networkInfo,
+    required this.remoteDataSource,
   });
 
   @override
   Future<Either<Failure, Exercise>> addExercise(
       Patient patient, Exercise exercise) async {
-    try {
-      return Right(await remoteDataSource.addExercise(
-          PatientModel.fromEntity(patient),
-          ExerciseModel.fromEntity(exercise)));
-    } on PlatformException catch (e) {
-      return Left(PlatformFailure(message: e.message));
-    } on ServerException {
-      return Left(ServerFailure());
+    if (await networkInfo.isConnected) {
+      try {
+        // Usamos o ! pois garantimos que a entidade vinda do domínio não é nula
+        return Right(await remoteDataSource.addExercise(
+            PatientModel.fromEntity(patient)!,
+            ExerciseModel.fromEntity(exercise)!));
+      } on PlatformException catch (e) {
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NoInternetConnectionFailure());
     }
   }
 
   @override
   Future<Either<Failure, Exercise>> editExerciseProfessional(
       Exercise exercise, Patient patient) async {
-    try {
-      return Right(await remoteDataSource.editExerciseProfessional(
-        ExerciseModel.fromEntity(exercise),
-        PatientModel.fromEntity(patient),
-      ));
-    } on PlatformException catch (e) {
-      return Left(PlatformFailure(message: e.message));
-    } on ServerException {
-      return Left(ServerFailure());
+    if (await networkInfo.isConnected) {
+      try {
+        return Right(await remoteDataSource.editExerciseProfessional(
+          ExerciseModel.fromEntity(exercise)!,
+          PatientModel.fromEntity(patient)!,
+        ));
+      } on PlatformException catch (e) {
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NoInternetConnectionFailure());
     }
   }
 
   @override
   Future<Either<Failure, Exercise>> executeExercise(
       Exercise exercise, Patient patient) async {
-    try {
-      return Right(await remoteDataSource.executeExercise(
-        ExerciseModel.fromEntity(exercise),
-        PatientModel.fromEntity(patient),
-      ));
-    } on PlatformException catch (e) {
-      return Left(PlatformFailure(message: e.message));
-    } on ServerException {
-      return Left(ServerFailure());
+    if (await networkInfo.isConnected) {
+      try {
+        return Right(await remoteDataSource.executeExercise(
+          ExerciseModel.fromEntity(exercise)!,
+          PatientModel.fromEntity(patient)!,
+        ));
+      } on PlatformException catch (e) {
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NoInternetConnectionFailure());
     }
   }
 
   @override
   Future<Either<Failure, List<Exercise>>> getExerciseList(
       Patient patient) async {
-    try {
-      return Right(await remoteDataSource.getExerciseList(
-        PatientModel.fromEntity(patient),
-      ));
-    } on PlatformException catch (e) {
-      return Left(PlatformFailure(message: e.message));
-    } on ServerException {
-      return Left(ServerFailure());
+    if (await networkInfo.isConnected) {
+      try {
+        return Right(await remoteDataSource.getExerciseList(
+          PatientModel.fromEntity(patient)!,
+        ));
+      } on PlatformException catch (e) {
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NoInternetConnectionFailure());
     }
   }
 
   @override
-  Future<Either<Failure, void>> deleteExercise(Patient patient, Exercise exercise)  async {
-    try {
-      return Right(await remoteDataSource.deleteExercise(
-          PatientModel.fromEntity(patient),
-          ExerciseModel.fromEntity(exercise)));
-    } on PlatformException catch (e) {
-      return Left(PlatformFailure(message: e.message));
-    } on ServerException {
-      return Left(ServerFailure());
+  Future<Either<Failure, void>> deleteExercise(
+      Patient patient, Exercise exercise) async {
+    if (await networkInfo.isConnected) {
+      try {
+        return Right(await remoteDataSource.deleteExercise(
+            PatientModel.fromEntity(patient)!,
+            ExerciseModel.fromEntity(exercise)!));
+      } on PlatformException catch (e) {
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NoInternetConnectionFailure());
     }
   }
 
   @override
-  Future<Either<Failure, Exercise>> editExecutedExercise(Exercise exercise, Patient patient) async {
-    try {
-      return Right(await remoteDataSource.editExecutedExercise(
-        ExerciseModel.fromEntity(exercise),
-        PatientModel.fromEntity(patient),
-      ));
-    } on PlatformException catch (e) {
-      return Left(PlatformFailure(message: e.message));
-    } on ServerException {
-      return Left(ServerFailure());
+  Future<Either<Failure, Exercise>> editExecutedExercise(
+      Exercise exercise, Patient patient) async {
+    if (await networkInfo.isConnected) {
+      try {
+        return Right(await remoteDataSource.editExecutedExercise(
+          ExerciseModel.fromEntity(exercise)!,
+          PatientModel.fromEntity(patient)!,
+        ));
+      } on PlatformException catch (e) {
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NoInternetConnectionFailure());
     }
   }
 }

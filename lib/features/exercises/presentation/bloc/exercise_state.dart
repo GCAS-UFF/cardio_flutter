@@ -19,7 +19,7 @@ class Loaded extends ExerciseState {
 final Patient patient;
 final Calendar calendar;
 
-  Loaded({@required this.patient, @required this.calendar});
+  Loaded({required this.patient, required this.calendar});
 
 
   List<Object> get props => [patient, calendar];
@@ -29,7 +29,7 @@ final Calendar calendar;
 class Error extends ExerciseState {
   final String message;
 
-  Error({@required this.message});
+  Error({required this.message});
 
   List<Object> get props => [message];
 

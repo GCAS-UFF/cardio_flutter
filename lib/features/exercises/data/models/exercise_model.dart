@@ -1,99 +1,79 @@
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 class ExerciseModel extends Exercise {
   ExerciseModel({
-    @required DateTime executionDay,
-    @required String id,
-    @required bool shortnessOfBreath,
-    @required bool excessiveFatigue,
-    @required bool dizziness,
-    @required bool bodyPain,
-    @required List<String> times,
-    @required String executionTime,
-    @required String observation,
-    @required String name,
-    @required int frequency,
-    @required String intensity,
-    @required int durationInMinutes,
-    @required DateTime initialDate,
-    @required DateTime finalDate,
-    @required bool done,
-  }) : super(
-          executionDay: executionDay,
-          id: id,
-          shortnessOfBreath: shortnessOfBreath,
-          excessiveFatigue: excessiveFatigue,
-          dizziness: dizziness,
-          bodyPain: bodyPain,
-          name: name,
-          frequency: frequency,
-          times: times,
-          observation: observation,
-          intensity: intensity,
-          durationInMinutes: durationInMinutes,
-          initialDate: initialDate,
-          finalDate: finalDate,
-          done: done,
-          executionTime: executionTime,
-        );
+    required super.executionDay,
+    required super.id,
+    required super.shortnessOfBreath,
+    required super.excessiveFatigue,
+    required super.dizziness,
+    required super.bodyPain,
+    required super.times,
+    required super.executionTime,
+    required super.observation,
+    required super.name,
+    required super.frequency,
+    required super.intensity,
+    required super.durationInMinutes,
+    required super.initialDate,
+    required super.finalDate,
+    required super.done,
+  });
 
   Map<dynamic, dynamic> toJson() {
-    Map<dynamic, dynamic> json = {};
-    if (executionDay != null)
-      json['executionDay'] = executionDay.millisecondsSinceEpoch;
-    if (initialDate != null)
-      json['initialDate'] = initialDate.millisecondsSinceEpoch;
-    if (finalDate != null) json['finalDate'] = finalDate.millisecondsSinceEpoch;
-    if (name != null) json['name'] = name;
-    if (frequency != null) json['frequency'] = frequency;
-    if (intensity != null) json['intensity'] = intensity;
-    if (durationInMinutes != null)
-      json['durationInMinutes'] = durationInMinutes;
-    if (excessiveFatigue != null) json['excessiveFatigue'] = excessiveFatigue;
-    if (shortnessOfBreath != null)
-      json['shortnessOfBreath'] = shortnessOfBreath;
-    if (dizziness != null) json['dizziness'] = dizziness;
-    if (bodyPain != null) json['bodyPain'] = bodyPain;
-    if (executionTime != null) json['executionTime'] = executionTime;
-    if (times != null) json['times'] = times;
-    if (observation != null) json['observation'] = observation;
-
-    return json;
+    return {
+      // Usamos o '!' pois o construtor do ExerciseModel já garantiu que esses campos não são nulos
+      'executionDay': executionDay!.millisecondsSinceEpoch,
+      'initialDate': initialDate!.millisecondsSinceEpoch,
+      'finalDate': finalDate!.millisecondsSinceEpoch,
+      'name': name,
+      'frequency': frequency,
+      'intensity': intensity,
+      'durationInMinutes': durationInMinutes,
+      'excessiveFatigue': excessiveFatigue,
+      'shortnessOfBreath': shortnessOfBreath,
+      'dizziness': dizziness,
+      'bodyPain': bodyPain,
+      'executionTime': executionTime,
+      'times': times,
+      'observation': observation,
+      'done': done,
+    };
   }
 
-  factory ExerciseModel.fromJson(Map<dynamic, dynamic> json) {
-    if (json == null) return null;
+  factory ExerciseModel.fromJson(Map<dynamic, dynamic>? json) {
+    if (json == null) throw Exception("JSON de Exercício nulo");
+
     return ExerciseModel(
       executionDay: (json['executionDay'] == null)
-          ? null
+          ? DateTime.now()
           : DateTime.fromMillisecondsSinceEpoch(json['executionDay']),
       initialDate: (json['initialDate'] == null)
-          ? null
+          ? DateTime.now()
           : DateTime.fromMillisecondsSinceEpoch(json['initialDate']),
       finalDate: (json['finalDate'] == null)
-          ? null
+          ? DateTime.now()
           : DateTime.fromMillisecondsSinceEpoch(json['finalDate']),
-      id: json['id'],
-      name: json['name'],
-      frequency: json['frequency'],
-      intensity: json['intensity'],
-      durationInMinutes: json['durationInMinutes'],
-      shortnessOfBreath: json['shortnessOfBreath'],
-      excessiveFatigue: json['excessiveFatigue'],
-      dizziness: json['dizziness'],
-      bodyPain: json['bodyPain'],
-      done: json['done'],
-      executionTime: json['executionTime'],
-      times: Converter.convertListDynamicToListString(json['times']),
-      observation: json['observation'],
+      id: json['id'] ?? "",
+      name: json['name'] ?? "",
+      frequency: json['frequency'] ?? 0,
+      intensity: json['intensity'] ?? "",
+      durationInMinutes: json['durationInMinutes'] ?? 0,
+      shortnessOfBreath: json['shortnessOfBreath'] ?? false,
+      excessiveFatigue: json['excessiveFatigue'] ?? false,
+      dizziness: json['dizziness'] ?? false,
+      bodyPain: json['bodyPain'] ?? false,
+      done: json['done'] ?? false,
+      executionTime: json['executionTime'] ?? "",
+      times: Converter.convertListDynamicToListString(json['times']) ?? [],
+      observation: json['observation'] ?? "",
     );
   }
 
-  factory ExerciseModel.fromEntity(Exercise exercise) {
+  // Mudado para static para permitir retorno nulo se a entidade for nula
+  static ExerciseModel? fromEntity(Exercise? exercise) {
     if (exercise == null) return null;
     return ExerciseModel(
       name: exercise.name,
@@ -116,31 +96,29 @@ class ExerciseModel extends Exercise {
   }
 
   factory ExerciseModel.fromDataSnapshot(DataSnapshot dataSnapshot, bool done) {
-    if (dataSnapshot == null) return null;
+    final value = dataSnapshot.value;
+    if (value == null) throw Exception("Snapshot vazio");
 
-    Map<dynamic, dynamic> objectMap =
-        dataSnapshot.value as Map<dynamic, dynamic>;
+    final Map<dynamic, dynamic> objectMap = Map<dynamic, dynamic>.from(value as Map);
 
     objectMap['id'] = dataSnapshot.key;
     objectMap['done'] = done;
 
     return ExerciseModel.fromJson(objectMap);
   }
-  static List<ExerciseModel> fromDataSnapshotList(
-      DataSnapshot dataSnapshot, bool done) {
-    if (dataSnapshot == null) return null;
 
-    List<ExerciseModel> result = List<ExerciseModel>();
-    Map<dynamic, dynamic> objectTodoMap =
-        dataSnapshot.value as Map<dynamic, dynamic>;
-    if (objectTodoMap != null) {
-      for (MapEntry<dynamic, dynamic> entry in objectTodoMap.entries) {
-        Map<dynamic, dynamic> exerciseMap = entry.value;
-        exerciseMap['id'] = entry.key;
-        exerciseMap['done'] = done;
-        print(exerciseMap);
-        result.add(ExerciseModel.fromJson(exerciseMap));
-      }
+  static List<ExerciseModel> fromDataSnapshotList(DataSnapshot dataSnapshot, bool done) {
+    final value = dataSnapshot.value;
+    if (value == null) return [];
+
+    final List<ExerciseModel> result = [];
+    final Map<dynamic, dynamic> objectTodoMap = Map<dynamic, dynamic>.from(value as Map);
+
+    for (var entry in objectTodoMap.entries) {
+      final Map<dynamic, dynamic> exerciseMap = Map<dynamic, dynamic>.from(entry.value as Map);
+      exerciseMap['id'] = entry.key;
+      exerciseMap['done'] = done;
+      result.add(ExerciseModel.fromJson(exerciseMap));
     }
 
     return result;

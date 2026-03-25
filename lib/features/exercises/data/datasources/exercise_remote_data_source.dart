@@ -1,10 +1,8 @@
-
 import 'package:cardio_flutter/core/error/exception.dart';
 import 'package:cardio_flutter/features/auth/data/models/patient_model.dart';
 import 'package:cardio_flutter/features/exercises/data/models/exercise_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 
 abstract class ExerciseRemoteDataSource {
   Future<ExerciseModel> addExercise(
@@ -16,33 +14,36 @@ abstract class ExerciseRemoteDataSource {
   Future<List<ExerciseModel>> getExerciseList(PatientModel patientModel);
   Future<ExerciseModel> executeExercise(
       ExerciseModel exerciseModel, PatientModel patientModel);
-      Future<ExerciseModel> editExecutedExercise(
+  Future<ExerciseModel> editExecutedExercise(
       ExerciseModel exerciseModel, PatientModel patientModel);
 }
 
 class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
   final FirebaseDatabase firebaseDatabase;
-  final DatabaseReference patientRootRef =
-      FirebaseDatabase.instance.reference().child('Patient');
-  final DatabaseReference professionalRootRef =
-      FirebaseDatabase.instance.reference().child('Professional');
 
-  ExerciseRemoteDataSourceImpl({@required this.firebaseDatabase});
+  // 1. Centralizando as referências usando a instância injetada
+  DatabaseReference get _patientRootRef => firebaseDatabase.ref('Patient');
+
+  ExerciseRemoteDataSourceImpl({required this.firebaseDatabase});
 
   @override
   Future<ExerciseModel> addExercise(
       PatientModel patientModel, ExerciseModel exerciseModel) async {
     try {
-      DatabaseReference exerciseRef = patientRootRef
-          .child(patientModel.id)
+      // 2. IDs podem ser nulos na Entidade, então usamos '!' após garantir que existem
+      final String patientId = patientModel.id!;
+      
+      DatabaseReference exerciseRef = _patientRootRef
+          .child(patientId)
           .child('ToDo')
           .child('Exercise')
           .push();
-      await exerciseRef.set(exerciseModel.toJson());
-      DataSnapshot exerciseSnapshot = await exerciseRef.once();
-      var result = ExerciseModel.fromDataSnapshot(exerciseSnapshot, false);
 
-      return result;
+      await exerciseRef.set(exerciseModel.toJson());
+
+      // 3. once() agora retorna DatabaseEvent
+      DatabaseEvent event = await exerciseRef.once();
+      return ExerciseModel.fromDataSnapshot(event.snapshot, false);
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
@@ -51,23 +52,24 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
     }
   }
 
-
   @override
   Future<List<ExerciseModel>> getExerciseList(PatientModel patientModel) async {
     try {
-      List<ExerciseModel> result = List<ExerciseModel>();
+      // 4. List<ExerciseModel>() não existe mais no Dart 3, usamos []
+      List<ExerciseModel> result = [];
+      final String patientId = patientModel.id!;
 
+      // Buscando lista "A fazer"
       DatabaseReference refExerciseToDoList =
-          patientRootRef.child(patientModel.id).child('ToDo').child('Exercise');
-      DataSnapshot exerciseToDoListSnapshot = await refExerciseToDoList.once();
-      result.addAll(
-          ExerciseModel.fromDataSnapshotList(exerciseToDoListSnapshot, false));
+          _patientRootRef.child(patientId).child('ToDo').child('Exercise');
+      DatabaseEvent toDoEvent = await refExerciseToDoList.once();
+      result.addAll(ExerciseModel.fromDataSnapshotList(toDoEvent.snapshot, false));
 
+      // Buscando lista "Realizados"
       DatabaseReference refExerciseDoneList =
-          patientRootRef.child(patientModel.id).child('Done').child('Exercise');
-      DataSnapshot exerciseDoneListSnapshot = await refExerciseDoneList.once();
-      result.addAll(
-          ExerciseModel.fromDataSnapshotList(exerciseDoneListSnapshot, true));
+          _patientRootRef.child(patientId).child('Done').child('Exercise');
+      DatabaseEvent doneEvent = await refExerciseDoneList.once();
+      result.addAll(ExerciseModel.fromDataSnapshotList(doneEvent.snapshot, true));
 
       return result;
     } on PlatformException catch (e) {
@@ -82,16 +84,19 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
   Future<ExerciseModel> editExerciseProfessional(
       ExerciseModel exerciseModel, PatientModel patientModel) async {
     try {
-      var exerciseref = patientRootRef
-          .child(patientModel.id)
+      final String patientId = patientModel.id!;
+      final String exerciseId = exerciseModel.id!;
+
+      var exerciseRef = _patientRootRef
+          .child(patientId)
           .child('ToDo')
           .child('Exercise')
-          .child(exerciseModel.id);
-      await exerciseref.set(exerciseModel.toJson());
-      DataSnapshot exerciseSnapshot = await exerciseref.once();
-      ExerciseModel result =
-          ExerciseModel.fromDataSnapshot(exerciseSnapshot, false);
-      return result;
+          .child(exerciseId);
+
+      await exerciseRef.set(exerciseModel.toJson());
+      
+      DatabaseEvent event = await exerciseRef.once();
+      return ExerciseModel.fromDataSnapshot(event.snapshot, false);
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
@@ -104,40 +109,18 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
   Future<ExerciseModel> executeExercise(
       ExerciseModel exerciseModel, PatientModel patientModel) async {
     try {
-      DatabaseReference exerciseDoneRef = patientRootRef
-          .child(patientModel.id)
+      final String patientId = patientModel.id!;
+
+      DatabaseReference exerciseDoneRef = _patientRootRef
+          .child(patientId)
           .child('Done')
           .child('Exercise')
           .push();
           
       await exerciseDoneRef.set(exerciseModel.toJson());
 
-      DataSnapshot exerciseSnapshot = await exerciseDoneRef.once();
-      ExerciseModel result =
-          ExerciseModel.fromDataSnapshot(exerciseSnapshot, true);
-      return result;
-    } on PlatformException catch (e) {
-      throw e;
-    } catch (e) {
-      print("[ExerciseRemoteDataSource] ${e.toString()}");
-      throw ServerException();
-    }
-  }
-
-   @override
-  Future<ExerciseModel> editExecutedExercise(
-      ExerciseModel exerciseModel, PatientModel patientModel) async {
-    try {
-      DatabaseReference exerciseDoneRef = patientRootRef
-          .child(patientModel.id)
-          .child('Done')
-          .child('Exercise')
-          .child(exerciseModel.id);          
-      await exerciseDoneRef.set(exerciseModel.toJson());
-      DataSnapshot exerciseSnapshot = await exerciseDoneRef.once();
-      ExerciseModel result =
-          ExerciseModel.fromDataSnapshot(exerciseSnapshot, true);
-      return result;
+      DatabaseEvent event = await exerciseDoneRef.once();
+      return ExerciseModel.fromDataSnapshot(event.snapshot, true);
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
@@ -147,23 +130,45 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
   }
 
   @override
-  Future<void> deleteExercise(PatientModel patientModel, ExerciseModel exerciseModel)async {
+  Future<ExerciseModel> editExecutedExercise(
+      ExerciseModel exerciseModel, PatientModel patientModel) async {
     try {
-      if (!exerciseModel.done) {
-        DatabaseReference exerciseRefDel = patientRootRef
-            .child(patientModel.id)
-            .child("ToDo")
-            .child('Exercise')
-            .child(exerciseModel.id);
-       await exerciseRefDel.remove();
-      } else {
-        DatabaseReference exerciseRefDel = patientRootRef
-            .child(patientModel.id)
-            .child("Done")
-            .child('Exercise')
-            .child(exerciseModel.id);
-       await  exerciseRefDel.remove();
-      }
+      final String patientId = patientModel.id!;
+      final String exerciseId = exerciseModel.id!;
+
+      DatabaseReference exerciseDoneRef = _patientRootRef
+          .child(patientId)
+          .child('Done')
+          .child('Exercise')
+          .child(exerciseId);     
+               
+      await exerciseDoneRef.set(exerciseModel.toJson());
+      
+      DatabaseEvent event = await exerciseDoneRef.once();
+      return ExerciseModel.fromDataSnapshot(event.snapshot, true);
+    } on PlatformException catch (e) {
+      throw e;
+    } catch (e) {
+      print("[ExerciseRemoteDataSource] ${e.toString()}");
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<void> deleteExercise(PatientModel patientModel, ExerciseModel exerciseModel) async {
+    try {
+      final String patientId = patientModel.id!;
+      final String exerciseId = exerciseModel.id!;
+
+      String collection = exerciseModel.done ? 'Done' : 'ToDo';
+
+      DatabaseReference exerciseRefDel = _patientRootRef
+          .child(patientId)
+          .child(collection)
+          .child('Exercise')
+          .child(exerciseId);
+
+      await exerciseRefDel.remove();
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {

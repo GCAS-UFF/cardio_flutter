@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 class Activity<T> extends Equatable {
   final Map<String, String> informations;
@@ -8,11 +7,11 @@ class Activity<T> extends Equatable {
   final Function onClick;
 
   Activity(
-      {@required this.informations,
-      @required this.type,
-      @required this.value,
-      @required this.onClick});
+      {required this.informations,
+      required this.type,
+      required this.value,
+      required this.onClick});
 
   @override
-  List<Object> get props => [informations, type, value, onClick];
+  List<Object?> get props => [informations, type, value, onClick];
 }

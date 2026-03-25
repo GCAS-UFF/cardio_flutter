@@ -1,95 +1,81 @@
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
-import 'package:meta/meta.dart';
 
 class MedicationModel extends Medication {
-  MedicationModel(
-      {@required String name,
-      @required double dosage,
-      @required String quantity,
-      @required int frequency,
-      @required DateTime initialDate,
-      @required DateTime finalDate,
-      @required String observation,
-      @required List<String> times,
-      @required bool tookIt,
-      @required String id,
-      @required bool done,
-      @required DateTime executedDate})
-      : super(
-            name: name,
-            dosage: dosage,
-            quantity: quantity,
-            frequency: frequency,
-            initialDate: initialDate,
-            finalDate: finalDate,
-            observation: observation,
-            tookIt: tookIt,
-            times:times,
-            id: id,
-            done: done,
-            executedDate: executedDate);
+  MedicationModel({
+    required super.name,
+    required super.dosage,
+    required super.quantity,
+    required super.frequency,
+    required super.initialDate,
+    required super.finalDate,
+    required super.observation,
+    required super.times,
+    required super.tookIt,
+    required super.id,
+    required super.done,
+    super.executedDate, // Opcional vindo da BaseEntity
+  });
 
-  static Map<dynamic, dynamic> toJson(MedicationModel model) {
-    Map<dynamic, dynamic> json = {};
-    if (model.name != null) json['name'] = model.name;
-    if (model.dosage != null) json['dosage'] = model.dosage;
-    if (model.quantity != null) json['quantity'] = model.quantity;
-    if (model.frequency != null) json['frequency'] = model.frequency;
-    if (model.initialDate != null)
-      json['initialDate'] = model.initialDate.millisecondsSinceEpoch;
-    if (model.finalDate != null)
-      json['finalDate'] = model.finalDate.millisecondsSinceEpoch;
-    if (model.executedDate != null)
-      json['executedDate'] = model.executedDate.millisecondsSinceEpoch;
-    if (model.observation != null) json['observation'] = model.observation;
-    if (model.tookIt != null) json['tookIt'] = model.tookIt;
-    if (model.id != null) json['id'] = model.id;
-    if (model.done != null) json['done'] = model.done;
-    if (model.times != null) json['times'] = model.times;
-    return json;
+  // 1. Mudança para método de instância (removido static)
+  Map<dynamic, dynamic> toJson() {
+    return {
+      'name': name,
+      'dosage': dosage,
+      'quantity': quantity,
+      'frequency': frequency,
+      'initialDate': initialDate.millisecondsSinceEpoch,
+      'finalDate': finalDate.millisecondsSinceEpoch,
+      // Usamos ?. pois executedDate pode ser nulo antes de ser realizado
+      'executedDate': executedDate?.millisecondsSinceEpoch,
+      'observation': observation,
+      'tookIt': tookIt,
+      'id': id,
+      'done': done,
+      'times': times,
+    };
   }
 
-  factory MedicationModel.fromJson(Map<dynamic, dynamic> json) {
-    if (json == null) return null;
+  factory MedicationModel.fromJson(Map<dynamic, dynamic>? json) {
+    if (json == null) throw Exception("JSON de Medicamento nulo");
+
     return MedicationModel(
-      name: json['name'],
-      dosage: (json['dosage'] is int)
-          ? (json['dosage'] as int).toDouble()
-          : json['dosage'],
-      frequency: json['frequency'],
-      quantity: json['quantity'],
+      name: json['name'] ?? "",
+      dosage: (json['dosage'] as num?)?.toDouble() ?? 0.0,
+      frequency: json['frequency'] ?? 0,
+      quantity: json['quantity'] ?? "",
       initialDate: (json['initialDate'] == null)
-          ? null
+          ? DateTime.now()
           : DateTime.fromMillisecondsSinceEpoch(json['initialDate']),
       finalDate: (json['finalDate'] == null)
-          ? null
+          ? DateTime.now()
           : DateTime.fromMillisecondsSinceEpoch(json['finalDate']),
       executedDate: (json['executedDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['executedDate']),
-      observation: json['observation'],
-      tookIt: json['tookIt'],
-      id: json['id'],
-      done: json['done'],
-      times: Converter.convertListDynamicToListString(json['times']),
+      observation: json['observation'] ?? "",
+      tookIt: json['tookIt'] ?? false,
+      id: json['id'] ?? "",
+      done: json['done'] ?? false,
+      times: Converter.convertListDynamicToListString(json['times']) ?? [],
     );
   }
 
-  factory MedicationModel.fromEntity(Medication medication) {
+  // 2. Mudado para static retornando opcional para evitar erro de 'Null'
+  static MedicationModel? fromEntity(Medication? medication) {
     if (medication == null) return null;
     return MedicationModel(
-        name: medication.name,
-        dosage: medication.dosage,
-        frequency: medication.frequency,
-        quantity: medication.quantity,
-        initialDate: medication.initialDate,
-        finalDate: medication.finalDate,
+        name: medication.name ?? "",
+        dosage: medication.dosage ?? 0.0,
+        frequency: medication.frequency ?? 0,
+        quantity: medication.quantity ?? "",
+        initialDate: medication.initialDate ?? DateTime.now(),
+        finalDate: medication.finalDate ?? DateTime.now(),
         executedDate: medication.executedDate,
-        observation: medication.observation,
-        tookIt: medication.tookIt,
-        times: medication.times,
-        id: medication.id,
+        observation: medication.observation ?? "",
+        tookIt: medication.tookIt ?? false,
+        times: medication.times ?? [],
+        id: medication.id ?? "",
         done: medication.done);
   }
 }

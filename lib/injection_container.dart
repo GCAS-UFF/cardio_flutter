@@ -35,14 +35,13 @@ import 'package:cardio_flutter/features/medications/data/models/medication_model
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
 import 'package:cardio_flutter/features/notitications/external_notification_manager.dart';
 import 'package:cardio_flutter/features/notitications/notification_manager.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'core/platform/network_info.dart';
 import 'features/auth/data/datasources/auth_local_data_source.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
@@ -80,14 +79,22 @@ Future<void> init() async {
 }
 
 Future<void> initExternal() async {
-  SharedPreferences.setMockInitialValues({});
+  // 1. Remova o setMockInitialValues (ele é só para testes unitários)
+  // SharedPreferences.setMockInitialValues({}); 
+
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.allowReassignment = true;
+  
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => FirebaseDatabase.instance);
   sl.registerLazySingleton(() => FirebaseAuth.instance);
-  sl.registerLazySingleton(() => FirebaseMessaging());
-  sl.registerLazySingleton(() => DataConnectionChecker());
+  
+  // 2. FirebaseMessaging agora usa .instance em vez de construtor
+  sl.registerLazySingleton(() => FirebaseMessaging.instance);
+  
+  // 3. InternetConnection (do pacote plus) substitui o DataConnectionChecker
+  sl.registerLazySingleton(() => InternetConnection());
+  
   sl.registerLazySingleton(() => Settings(sharedPreferences: sl()));
   sl.registerLazySingleton(() => FlutterLocalNotificationsPlugin());
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cardio_flutter/resources/strings.dart';
-
 import '../../resources/dimensions.dart';
 
 class DialogWidget extends StatelessWidget {
   final String text;
-  final Function onPressed;
+  // 1. Mudamos para VoidCallback para bater com o tipo esperado pelo TextButton
+  final VoidCallback onPressed;
 
-  DialogWidget({@required this.text, @required this.onPressed});
+  // 2. Trocamos @required por required e removemos o import de meta (se houvesse)
+  DialogWidget({required this.text, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,7 @@ class DialogWidget extends StatelessWidget {
             color: Colors.red,
             size: Dimensions.getConvertedHeightSize(context, 25),
           ),
+          const SizedBox(width: 10), // Adicionado um espacinho entre o ícone e o texto
           Text(
             Strings.warning,
             style: TextStyle(
@@ -39,7 +41,8 @@ class DialogWidget extends StatelessWidget {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        // 3. FlatButton agora é TextButton
+        TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
@@ -51,7 +54,7 @@ class DialogWidget extends StatelessWidget {
                 fontSize: Dimensions.getTextSize(context, 15)),
           ),
         ),
-        FlatButton(
+        TextButton(
           onPressed: onPressed,
           child: Text(
             Strings.okbutton,

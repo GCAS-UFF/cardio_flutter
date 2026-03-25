@@ -5,11 +5,17 @@ import 'package:cardio_flutter/resources/dimensions.dart';
 class CustomSelector extends StatelessWidget {
   final String title;
   final List<String> options;
-  final Function onChanged;
-  final String subtitle;
+  // 1. Mudamos de Function para ValueChanged<int>, que é o que o CupertinoPicker espera
+  final ValueChanged<int> onChanged;
+  final String? subtitle; // 2. Subtitle pode ser nulo
 
-  const CustomSelector(
-      {this.title, this.options, this.onChanged, this.subtitle});
+  const CustomSelector({
+    required this.title,
+    required this.options,
+    required this.onChanged,
+    this.subtitle,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,43 +35,41 @@ class CustomSelector extends StatelessWidget {
         ),
         InkWell(
           child: Container(
-            margin: Dimensions.getEdgeInsetsSymetric(context, horizontal: 15),
-            padding: Dimensions.getEdgeInsetsSymetric(context, horizontal: 15),
+            // 3. Atenção: Corrigi 'Symetric' para 'Symmetric' (confira no seu arquivo Dimensions se o nome do método está certo lá também!)
+            margin: Dimensions.getEdgeInsetsSymmetric(context, horizontal: 15),
+            padding: Dimensions.getEdgeInsetsSymmetric(context, horizontal: 15),
             decoration: BoxDecoration(
-              boxShadow: <BoxShadow>[
+              boxShadow: const <BoxShadow>[
                 BoxShadow(
                     color: Colors.indigo, offset: Offset(3, 3), blurRadius: 5)
               ],
               color: Colors.white,
-              borderRadius: BorderRadius.circular(
-                10,
-              ),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  (subtitle == null) ? "Selecione" : subtitle,
+                  (subtitle == null) ? "Selecione" : subtitle!,
                   style: TextStyle(
                     fontSize: Dimensions.getTextSize(context, 20),
                   ),
                 ),
-                Icon(Icons.keyboard_arrow_down)
+                const Icon(Icons.keyboard_arrow_down)
               ],
             ),
             height: Dimensions.getConvertedHeightSize(context, 50),
             alignment: Alignment.centerLeft,
           ),
           onTap: () {
-            // subtitle = options[0];
             showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0)),
-                    title: Container(
-                      width: MediaQuery.of(context).size.width - 1,
+                    title: SizedBox( // Container trocado por SizedBox (mais leve aqui)
+                      width: MediaQuery.of(context).size.width,
                       height: Dimensions.getConvertedHeightSize(context, 150),
                       child: CupertinoPicker.builder(
                         useMagnifier: true,
@@ -92,9 +96,10 @@ class CustomSelector extends StatelessWidget {
                       Container(
                         margin: Dimensions.getEdgeInsets(context,
                             bottom: 10, right: 10),
-                        child: FlatButton(
+                        // 4. FlatButton agora é TextButton
+                        child: TextButton(
                           onPressed: () {
-                            return Navigator.pop(context);
+                            Navigator.pop(context);
                           },
                           child: Text(
                             "Ok",

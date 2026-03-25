@@ -13,7 +13,7 @@ class Empty extends AuthState {}
 class LoggedPatient extends AuthState {
   final Patient patient;
 
-  LoggedPatient({@required this.patient});
+  LoggedPatient({required this.patient});
 
   List<Object> get props => [patient];
 }
@@ -21,7 +21,7 @@ class LoggedPatient extends AuthState {
 class LoggedProfessional extends AuthState {
   final Professional professional;
 
-  LoggedProfessional({@required this.professional});
+  LoggedProfessional({required this.professional});
 
   List<Object> get props => [professional];
 }
@@ -31,7 +31,7 @@ class Loading extends AuthState {}
 class SignedUp extends AuthState {
   final dynamic user;
 
-  SignedUp({@required this.user});
+  SignedUp({required this.user});
 
   List<Object> get props => [user];
 }
@@ -39,7 +39,7 @@ class SignedUp extends AuthState {
 class Error extends AuthState {
   final String message;
 
-  Error({@required this.message});
+  Error({required this.message});
 
   List<Object> get props => [message];
 }

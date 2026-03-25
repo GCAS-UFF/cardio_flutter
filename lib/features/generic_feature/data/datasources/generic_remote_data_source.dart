@@ -3,11 +3,10 @@ import 'package:cardio_flutter/features/generic_feature/util/generic_converter.d
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cardio_flutter/core/error/exception.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 
 abstract class GenericRemoteDataSource<Model> {
-  Future<Model> addRecomendation(PatientModel patientModel, Model model);
-  Future<Model> editRecomendation(
+  Future<Model> addRecommendation(PatientModel patientModel, Model model);
+  Future<Model> editRecommendation(
       PatientModel patientModel, Model model, String id);
   Future<List<Model>> getList(PatientModel patientModel);
   Future<void> delete(PatientModel patientModel, bool done, String id);
@@ -21,27 +20,32 @@ class GenericRemoteDataSourceImpl<Model>
   final String firebaseTag;
   final String type;
 
-  final DatabaseReference patientRootRef =
-      FirebaseDatabase.instance.reference().child('Patient');
+  // 1. Uso de ref() e instância injetada para melhor arquitetura
+  DatabaseReference get _patientRootRef => firebaseDatabase.ref('Patient');
 
-  GenericRemoteDataSourceImpl(
-      {@required this.firebaseDatabase,
-      @required this.firebaseTag,
-      @required this.type});
+  GenericRemoteDataSourceImpl({
+    required this.firebaseDatabase,
+    required this.firebaseTag,
+    required this.type,
+  });
 
   @override
-  Future<Model> addRecomendation(PatientModel patientModel, Model model) async {
+  Future<Model> addRecommendation(PatientModel patientModel, Model model) async {
     try {
-      DatabaseReference recomendationRef = patientRootRef
-          .child(patientModel.id)
+      // 2. Garantindo que o ID do paciente não é nulo com '!'
+      DatabaseReference recommendationRef = _patientRootRef
+          .child(patientModel.id!)
           .child('ToDo')
           .child(firebaseTag)
           .push();
-      await recomendationRef
+
+      await recommendationRef
           .set(GenericConverter.genericToJson<Model>(type, model));
-      DataSnapshot recomendationSnapshot = await recomendationRef.once();
+
+      // 3. Capturando o snapshot através do DatabaseEvent
+      DatabaseEvent event = await recommendationRef.once();
       var result = GenericConverter.genericFromDataSnapshot(
-          type, recomendationSnapshot, false);
+          type, event.snapshot, false);
 
       return result;
     } on PlatformException catch (e) {
@@ -55,23 +59,28 @@ class GenericRemoteDataSourceImpl<Model>
   @override
   Future<List<Model>> getList(PatientModel patientModel) async {
     try {
-      List<Model> result = List<Model>();
+      // 4. Inicialização de lista compatível com Dart 3
+      List<Model> result = [];
 
-      DatabaseReference refToDoList = patientRootRef
-          .child(patientModel.id)
+      final String patientId = patientModel.id!;
+
+      // Busca na lista ToDo
+      DatabaseReference refToDoList = _patientRootRef
+          .child(patientId)
           .child('ToDo')
           .child(firebaseTag);
-      DataSnapshot toDoListSnapshot = await refToDoList.once();
+      DatabaseEvent toDoEvent = await refToDoList.once();
       result.addAll(GenericConverter.genericFromDataSnapshotList(
-          type, toDoListSnapshot, false));
+          type, toDoEvent.snapshot, false));
 
-      DatabaseReference refDoneList = patientRootRef
-          .child(patientModel.id)
+      // Busca na lista Done
+      DatabaseReference refDoneList = _patientRootRef
+          .child(patientId)
           .child('Done')
           .child(firebaseTag);
-      DataSnapshot doneListSnapshot = await refDoneList.once();
+      DatabaseEvent doneEvent = await refDoneList.once();
       result.addAll(GenericConverter.genericFromDataSnapshotList(
-          type, doneListSnapshot, true));
+          type, doneEvent.snapshot, true));
 
       return result;
     } on PlatformException catch (e) {
@@ -83,18 +92,20 @@ class GenericRemoteDataSourceImpl<Model>
   }
 
   @override
-  Future<Model> editRecomendation(
+  Future<Model> editRecommendation(
       PatientModel patientModel, Model model, String id) async {
     try {
-      DatabaseReference doneRef = patientRootRef
-          .child(patientModel.id)
+      DatabaseReference ref = _patientRootRef
+          .child(patientModel.id!)
           .child('ToDo')
           .child(firebaseTag)
           .child(id);
-      await doneRef.set(GenericConverter.genericToJson<Model>(type, model));
-      DataSnapshot snapshot = await doneRef.once();
+
+      await ref.set(GenericConverter.genericToJson<Model>(type, model));
+      
+      DatabaseEvent event = await ref.once();
       Model result =
-          GenericConverter.genericFromDataSnapshot(type, snapshot, false);
+          GenericConverter.genericFromDataSnapshot(type, event.snapshot, false);
       return result;
     } on PlatformException catch (e) {
       throw e;
@@ -107,21 +118,13 @@ class GenericRemoteDataSourceImpl<Model>
   @override
   Future<void> delete(PatientModel patientModel, bool done, String id) async {
     try {
-      if (!done) {
-        DatabaseReference refDel = patientRootRef
-            .child(patientModel.id)
-            .child("ToDo")
-            .child(firebaseTag)
-            .child(id);
-        await refDel.remove();
-      } else {
-        DatabaseReference refDel = patientRootRef
-            .child(patientModel.id)
-            .child("Done")
-            .child(firebaseTag)
-            .child(id);
-        await refDel.remove();
-      }
+      String path = done ? "Done" : "ToDo";
+      DatabaseReference refDel = _patientRootRef
+          .child(patientModel.id!)
+          .child(path)
+          .child(firebaseTag)
+          .child(id);
+      await refDel.remove();
     } on PlatformException catch (e) {
       throw e;
     } catch (e) {
@@ -134,15 +137,17 @@ class GenericRemoteDataSourceImpl<Model>
   Future<Model> editExecuted(
       PatientModel patientModel, Model model, String id) async {
     try {
-      DatabaseReference doneRef = patientRootRef
-          .child(patientModel.id)
+      DatabaseReference doneRef = _patientRootRef
+          .child(patientModel.id!)
           .child('Done')
           .child(firebaseTag)
           .child(id);
+
       await doneRef.set(GenericConverter.genericToJson<Model>(type, model));
-      DataSnapshot snapshot = await doneRef.once();
+      
+      DatabaseEvent event = await doneRef.once();
       Model result =
-          GenericConverter.genericFromDataSnapshot(type, snapshot, true);
+          GenericConverter.genericFromDataSnapshot(type, event.snapshot, true);
       return result;
     } on PlatformException catch (e) {
       throw e;
@@ -155,16 +160,17 @@ class GenericRemoteDataSourceImpl<Model>
   @override
   Future<Model> execute(PatientModel patientModel, Model model) async {
     try {
-      DatabaseReference doneRef = patientRootRef
-          .child(patientModel.id)
+      DatabaseReference doneRef = _patientRootRef
+          .child(patientModel.id!)
           .child('Done')
           .child(firebaseTag)
           .push();
 
       await doneRef.set(GenericConverter.genericToJson<Model>(type, model));
-      DataSnapshot snapshot = await doneRef.once();
+      
+      DatabaseEvent event = await doneRef.once();
       Model result =
-          GenericConverter.genericFromDataSnapshot(type, snapshot, true);
+          GenericConverter.genericFromDataSnapshot(type, event.snapshot, true);
       return result;
     } on PlatformException catch (e) {
       throw e;

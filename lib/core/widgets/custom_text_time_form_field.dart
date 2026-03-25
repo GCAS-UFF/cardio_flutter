@@ -5,10 +5,11 @@ import 'package:cardio_flutter/resources/strings.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextTimeFormField extends StatefulWidget {
-  final TextEditingController textEditingController;
-  final BaseInputValidator validator;
+  // 1. Adicionamos '?' para permitir que sejam nulos se não forem passados
+  final TextEditingController? textEditingController;
+  final BaseInputValidator? validator;
   final bool isRequired;
-  final Function onChanged;
+  final ValueChanged<String>? onChanged; // Mudamos Function para ValueChanged<String>
 
   CustomTextTimeFormField({
     this.textEditingController,
@@ -18,22 +19,21 @@ class CustomTextTimeFormField extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() {
-    return _CustomTextTimeFormFieldState();
-  }
+  _CustomTextTimeFormFieldState createState() => _CustomTextTimeFormFieldState();
 }
 
 class _CustomTextTimeFormFieldState extends State<CustomTextTimeFormField> {
   bool _shouldValidate = false;
 
-  String _validate(String value) {
-    if (widget.isRequired != null && widget.isRequired) {
-      String message = EmptyInputValidator().validate(value);
+  // 2. Ajuste de assinatura: String? tanto no retorno quanto no parâmetro
+  String? _validate(String? value) {
+    if (widget.isRequired) { // Removida checagem redundante != null
+      String? message = EmptyInputValidator().validate(value);
       if (message != null) return message;
     }
 
     if (widget.validator != null) {
-      return widget.validator.validate(value);
+      return widget.validator!.validate(value); // Adicionado '!' para confirmar que não é nulo
     }
 
     return null;
@@ -42,35 +42,38 @@ class _CustomTextTimeFormFieldState extends State<CustomTextTimeFormField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: Dimensions.getEdgeInsetsSymetric(context, horizontal: 5),
+      // 3. Nome corrigido para Symmetric
+      padding: Dimensions.getEdgeInsetsSymmetric(context, horizontal: 5),
       child: Stack(
         alignment: Alignment.topLeft,
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-              boxShadow: <BoxShadow>[
+              boxShadow: const <BoxShadow>[
                 BoxShadow(
                     color: Colors.indigo, offset: Offset(3, 3), blurRadius: 5)
               ],
               color: Colors.white,
-              borderRadius: BorderRadius.circular(
-                10,
-              ),
+              borderRadius: BorderRadius.circular(10),
             ),
             height: Dimensions.getConvertedHeightSize(context, 50),
             width: Dimensions.getConvertedWidthSize(context, 70),
             alignment: Alignment.centerLeft,
           ),
-          Container(
+          SizedBox( // Container trocado por SizedBox (mais eficiente para largura fixa)
             width: Dimensions.getConvertedWidthSize(context, 70),
-            child: TextFormField(textAlign: TextAlign.center,
+            child: TextFormField(
+              textAlign: TextAlign.center,
               controller: widget.textEditingController,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: Dimensions.getTextSize(context, 20),
               ),
               keyboardType: TextInputType.number,
-              autovalidate: _shouldValidate,
+              // 4. autovalidate virou autovalidateMode
+              autovalidateMode: _shouldValidate 
+                  ? AutovalidateMode.always 
+                  : AutovalidateMode.disabled,
               decoration: InputDecoration(
                 hintText: Strings.time_hint,
                 errorStyle: TextStyle(
@@ -85,7 +88,10 @@ class _CustomTextTimeFormFieldState extends State<CustomTextTimeFormField> {
                 border: InputBorder.none,
               ),
               validator: _validate,
-              onChanged: widget.onChanged,
+              onChanged: (val) {
+                if (!_shouldValidate) setState(() => _shouldValidate = true);
+                if (widget.onChanged != null) widget.onChanged!(val);
+              },
             ),
           ),
         ],

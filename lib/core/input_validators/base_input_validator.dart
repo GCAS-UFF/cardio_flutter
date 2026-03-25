@@ -1,3 +1,3 @@
 abstract class BaseInputValidator {
-  String validate(String value);
+  String? validate(String? value);
 }

@@ -11,7 +11,7 @@ class SignInEvent extends AuthEvent {
   final String email;
   final String password;
 
-  SignInEvent({@required this.email, @required this.password});
+  SignInEvent({required this.email, required this.password});
 
   List<Object> get props => [email, password];
 }
@@ -19,7 +19,7 @@ class SignInEvent extends AuthEvent {
 class SignUpPatientEvent extends AuthEvent {
   final Patient patient;
 
-  SignUpPatientEvent({@required this.patient});
+  SignUpPatientEvent({required this.patient});
 
   List<Object> get props => [patient];
 }
@@ -29,7 +29,7 @@ class SignUpProfessionalEvent extends AuthEvent {
   final String password;
 
   SignUpProfessionalEvent(
-      {@required this.professional, @required this.password});
+      {required this.professional, required this.password});
 
   List<Object> get props => [professional, password];
 }

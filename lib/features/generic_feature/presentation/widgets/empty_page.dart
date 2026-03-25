@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 class EmptyPage extends StatelessWidget {
   final String text;
 
-  const EmptyPage({@required this.text});
+  const EmptyPage({required this.text});
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: Dimensions.getEdgeInsetsSymetric(context, horizontal: 40),
+      padding: Dimensions.getEdgeInsetsSymmetric(context, horizontal: 40),
       alignment: Alignment.center,
       child: Text(
         text,

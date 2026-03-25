@@ -5,7 +5,6 @@ import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart'
 import 'package:cardio_flutter/features/exercises/domain/repository/exercise_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 class GetExerciseList extends UseCase<List<Exercise>, Params> {
   final ExerciseRepository repository;
@@ -20,7 +19,7 @@ class GetExerciseList extends UseCase<List<Exercise>, Params> {
 class Params extends Equatable {
   final Patient patient;
 
-  Params({@required this.patient}) : super();
+  Params({required this.patient}) : super();
 
   @override
   List<Object> get props => [patient];

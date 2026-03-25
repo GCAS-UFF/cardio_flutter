@@ -3,43 +3,49 @@ import 'package:flutter/material.dart';
 
 class MultimaskedTextController {
   final String maskDefault;
-  final String maskSecundary;
-  final Function changeMask;
+  final String? maskSecondary; // 1. Opcional, então precisa da ? e corrigi o nome
+  final bool Function(String?)? changeMask; // 2. Tipagem correta para bater com o Converter
   final String escapeCharacter;
   final bool onlyDigitsDefault;
-  final bool onlyDigitsSecundary;
+  final bool onlyDigitsSecondary;
 
-  var lastTextSize = 0;
-  var mask;
+  int lastTextSize = 0; // var -> int
+  String? mask; // var -> String?
 
-  TextEditingController _maskedTextFieldController;
+  // 3. 'late' avisa o Dart que vamos inicializar isso no construtor antes de usar
+  late TextEditingController _maskedTextFieldController;
 
   TextEditingController get maskedTextFieldController =>
       _maskedTextFieldController;
 
-  MultimaskedTextController(
-      {@required this.maskDefault,
-      this.maskSecundary,
-      this.changeMask,
-      this.escapeCharacter: "x",
-      this.onlyDigitsDefault = false,
-      this.onlyDigitsSecundary = false}) {
-    this._maskedTextFieldController = new TextEditingController();
+  MultimaskedTextController({
+    required this.maskDefault, // 4. @required -> required
+    this.maskSecondary,
+    this.changeMask,
+    this.escapeCharacter = "x", // 5. Troquei ':' por '='
+    this.onlyDigitsDefault = false,
+    this.onlyDigitsSecondary = false,
+  }) {
+    _maskedTextFieldController = TextEditingController();
     _maskedTextFieldController.addListener(onChanged);
   }
 
   void onChanged() {
     String text = _maskedTextFieldController.text;
-    bool change = (changeMask == null) ? false : changeMask(text);
-    mask = change ? maskSecundary : maskDefault;
+    
+    // 6. Lógica de nulos para o changeMask
+    bool change = (changeMask == null) ? false : changeMask!(text);
+    mask = change ? maskSecondary : maskDefault;
+    
     if (mask == null) return;
+
     if (text.length <= lastTextSize) {
       lastTextSize = text.length;
       return;
     } else {
       String newText = _buildText(text);
       lastTextSize = newText.length;
-     _maskedTextFieldController.value =
+      _maskedTextFieldController.value =
           _maskedTextFieldController.value.copyWith(
         text: newText,
         selection: TextSelection.collapsed(offset: newText.length),
@@ -49,14 +55,15 @@ class MultimaskedTextController {
   }
 
   String _buildText(String text) {
-    bool change = (changeMask == null) ? false : changeMask(text);
-    bool onlyDigits = change ? onlyDigitsSecundary : onlyDigitsDefault;
+    bool change = (changeMask == null) ? false : changeMask!(text);
+    bool onlyDigits = change ? onlyDigitsSecondary : onlyDigitsDefault;
 
     return Converter.convertStringToMultimaskedString(
         value: text,
         maskDefault: maskDefault,
-        maskSecundary: maskSecundary,
+        maskSecondary: maskSecondary ?? maskDefault, // 7. Fallback caso a secundária seja null
         changeMask: changeMask,
-        onlyDigits: onlyDigits);
+        onlyDigits: onlyDigits,
+        escapeCharacter: escapeCharacter);
   }
 }

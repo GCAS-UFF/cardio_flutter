@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
@@ -11,8 +10,10 @@ import 'package:cardio_flutter/features/medications/domain/entities/medication.d
 import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:meta/meta.dart';
+
 
 class NotificationManager {
   static const int APPOINTMENT_NOTIFICATION_ID = 50;
@@ -21,432 +22,292 @@ class NotificationManager {
   static const int LIQUID_NOTIFICATION_ID = 80;
   static const int MEDICATION_NOTIFICATION_ID = 90;
 
-  final int dayInMiliseconds = 24 * 60 * 60 * 1000;
+  final int dayInMilliseconds = 24 * 60 * 60 * 1000;
 
-  // Create channels
-  var _appointmentChannel = _createChannel("Appointments");
-  var _biometricChannel = _createChannel("Biometrics");
-  var _exerciseChannel = _createChannel("Exercise");
-  var _liquidChannel = _createChannel("Liquids");
-  var _medicationChannel = _createChannel("Medication");
+  late NotificationDetails _appointmentChannel;
+  late NotificationDetails _biometricChannel;
+  late NotificationDetails _exerciseChannel;
+  late NotificationDetails _liquidChannel;
+  late NotificationDetails _medicationChannel;
 
   final FlutterLocalNotificationsPlugin localNotificationsPlugin;
   final FirebaseDatabase firebaseDatabase;
   final Settings settings;
 
-  NotificationManager(
-      {@required this.localNotificationsPlugin,
-      @required this.firebaseDatabase,
-      @required this.settings});
+  NotificationManager({
+    required this.localNotificationsPlugin,
+    required this.firebaseDatabase,
+    required this.settings,
+  });
 
   Future<void> init() async {
-    if (settings.getUserType() == null ||
-        settings.getUserType() != Keys.PATIENT_TYPE) {
+    tz.initializeTimeZones();
+
+    _appointmentChannel = _createChannel("Appointments");
+    _biometricChannel = _createChannel("Biometrics");
+    _exerciseChannel = _createChannel("Exercise");
+    _liquidChannel = _createChannel("Liquids");
+    _medicationChannel = _createChannel("Medication");
+
+    if (settings.getUserType() == null || settings.getUserType() != Keys.PATIENT_TYPE) {
       return;
     }
-    String patientId = settings.getUserId();
+    
+    String? patientId = settings.getUserId();
+    if (patientId == null) return;
 
     await _initializeNotifications();
 
-    await _initializeAppointment(
-        patientId, APPOINTMENT_NOTIFICATION_ID, _appointmentChannel);
-    await _initializeBiometric(
-        patientId, BIOMETRIC_NOTIFICATION_ID, _biometricChannel);
-    await _initializeExercise(
-        patientId, EXERCISE_NOTIFICATION_ID, _exerciseChannel);
-    await _initializeLiquid(patientId, LIQUID_NOTIFICATION_ID, _liquidChannel);
-    await _initializeMedication(
-        patientId, MEDICATION_NOTIFICATION_ID, _medicationChannel);
+    _initializeAppointment(patientId, APPOINTMENT_NOTIFICATION_ID, _appointmentChannel);
+    _initializeBiometric(patientId, BIOMETRIC_NOTIFICATION_ID, _biometricChannel);
+    _initializeExercise(patientId, EXERCISE_NOTIFICATION_ID, _exerciseChannel);
+    _initializeLiquid(patientId, LIQUID_NOTIFICATION_ID, _liquidChannel);
+    _initializeMedication(patientId, MEDICATION_NOTIFICATION_ID, _medicationChannel);
   }
 
   Future<void> _initializeNotifications() async {
-    var initializeAndroid = AndroidInitializationSettings('app_logo');
-    var initializeIOS = IOSInitializationSettings();
-    var initSettings = InitializationSettings(initializeAndroid, initializeIOS);
-    await localNotificationsPlugin.initialize(initSettings);
+    const android = AndroidInitializationSettings('app_logo');
+    const iOS = DarwinInitializationSettings();
+    const initSettings = InitializationSettings(android: android, iOS: iOS);
+    
+    // Na v21 o parâmetro é NOMEADO. Tente 'initializationSettings' ou 'settings'
+    // O seu erro diz que 'settings' é o que ele espera:
+    await localNotificationsPlugin.initialize(
+      settings: initSettings, 
+    );
   }
 
   static NotificationDetails _createChannel(String channelName) {
     var androidChannel = AndroidNotificationDetails(
       channelName,
       channelName,
-      channelName,
-      styleInformation: BigTextStyleInformation(""),
-      importance: Importance.Max,
-      priority: Priority.Max,
+      channelDescription: channelName,
+      styleInformation: const BigTextStyleInformation(""),
+      importance: Importance.max,
+      priority: Priority.max,
       ongoing: true,
     );
-    var iosChannel = IOSNotificationDetails();
-    return NotificationDetails(androidChannel, iosChannel);
+    return NotificationDetails(android: androidChannel, iOS: const DarwinNotificationDetails());
   }
 
-  Future singleNotification(
-      {@required NotificationDetails channel,
-      @required DateTime datetime,
-      @required String title,
-      @required String body,
-      @required int startId,
-      String sound}) async {
+  Future<void> singleNotification({
+    required NotificationDetails channel,
+    required DateTime datetime,
+    required String title,
+    required String body,
+    required int startId,
+  }) async {
     int id = _generateNotificationId(startId);
-    localNotificationsPlugin.schedule(id, title, body, datetime, channel,
-        payload: id.toString());
+    
+    await localNotificationsPlugin.zonedSchedule(
+      id: id, // Nomeado agora!
+      title: title,
+      body: body,
+      scheduledDate: tz.TZDateTime.from(datetime, tz.local),
+      notificationDetails: channel,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      payload: id.toString(),
+    );
   }
 
   int _generateNotificationId(int startId) {
-    var rng = new Random();
-    String id = "$startId${rng.nextInt(99999)}";
-    return int.parse(id);
+    var rng = Random();
+    return int.parse("$startId${rng.nextInt(99999)}");
   }
 
   Future<void> _cleanNotifications(int startId) async {
-    var notifications =
-        await localNotificationsPlugin.pendingNotificationRequests();
-    notifications.forEach(
-      (element) {
-        String currentId = element.id.toString();
-        if (currentId.startsWith(startId.toString())) {
-          localNotificationsPlugin.cancel(element.id);
-        }
-      },
-    );
+    var notifications = await localNotificationsPlugin.pendingNotificationRequests();
+    for (var element in notifications) {
+      if (element.id.toString().startsWith(startId.toString())) {
+        await localNotificationsPlugin.cancel(id: element.id);
+      }
+    }
   }
 
-  Future<void> _initializeAppointment(
-      String patientId, int startId, NotificationDetails channel) async {
+  Future<void> _initializeAppointment(String patientId, int startId, NotificationDetails channel) async {
     await _cleanNotifications(startId);
-
-    firebaseDatabase
-        .reference()
-        .child("Patient")
-        .child(patientId)
-        .child('ToDo')
-        .child("Appointment")
-        .onValue
-        .listen((event) async {
+    firebaseDatabase.ref().child("Patient").child(patientId).child('ToDo').child("Appointment").onValue.listen((event) async {
       var snapshot = event.snapshot;
-      if (snapshot == null) return;
+      if (snapshot.value == null) return;
 
-      print("[Appointment] ${snapshot.value}");
+      List<Appointment> appointments = GenericConverter.genericFromDataSnapshotList("appointment", snapshot, false);
 
-      List<Appointment> appointments =
-          GenericConverter.genericFromDataSnapshotList(
-              "appointment", snapshot, false);
-
-      appointments.forEach((appointment) async {
-        if (appointment.appointmentDate != null &&
-            appointment.appointmentDate.millisecondsSinceEpoch >
-                DateTime.now().millisecondsSinceEpoch) {
-          DateTime oneDayBefore =
-              appointment.appointmentDate.subtract(new Duration(days: 1));
+      for (var appointment in appointments) {
+        if (appointment.appointmentDate != null && appointment.appointmentDate!.isAfter(DateTime.now())) {
+          // Notificação 1 dia antes
+          DateTime oneDayBefore = appointment.appointmentDate!.subtract(const Duration(days: 1));
           if (oneDayBefore.isAfter(DateTime.now())) {
             await singleNotification(
               channel: channel,
               startId: startId,
-              title:
-                  "${appointment.expertise} no dia ${DateHelper.convertDateToString(appointment.appointmentDate)}",
-              body:
-                  "Você possui uma consulta de ${appointment.expertise} às ${DateHelper.getTimeFromDate(appointment.appointmentDate)} em ${appointment.adress}",
+              title: "Consulta amanhã!",
+              body: "Você tem ${appointment.expertise} em ${appointment.address}",
               datetime: oneDayBefore,
             );
           }
-
-          DateTime hoursBefore =
-              appointment.appointmentDate.subtract(new Duration(hours: 2));
+          // Notificação 2 horas antes
+          DateTime hoursBefore = appointment.appointmentDate!.subtract(const Duration(hours: 2));
           if (hoursBefore.isAfter(DateTime.now())) {
             await singleNotification(
               channel: channel,
               startId: startId,
-              title:
-                  "${appointment.expertise} no dia ${DateHelper.convertDateToString(appointment.appointmentDate)}",
-              body:
-                  "Você possui uma consulta de ${appointment.expertise} às ${DateHelper.getTimeFromDate(appointment.appointmentDate)} em ${appointment.adress}",
+              title: "Consulta em breve!",
+              body: "Sua consulta é em 2 horas em ${appointment.address}",
               datetime: hoursBefore,
             );
           }
         }
-      });
-    });
-  }
-
-  Future<void> _initializeBiometric(
-      String patientId, int startId, NotificationDetails channel) async {
-    //Clean all current notifications
-    await _cleanNotifications(startId);
-    // Getting firebase reference and start listen for changes
-    firebaseDatabase
-        .reference()
-        .child("Patient")
-        .child(patientId)
-        .child('ToDo')
-        .child("Biometric")
-        .onValue
-        .listen((event) async {
-      // Get changed snapshot
-      var snapshot = event.snapshot;
-      // Don't do nothing if theres no record
-      if (snapshot == null) return;
-
-      print("[Biometic] ${snapshot.value}");
-
-      //Get list of all entries
-      List<Biometric> biometrics = GenericConverter.genericFromDataSnapshotList(
-          "biometric", snapshot, false);
-
-      // Set a new alarm for each combination of day and time
-      biometrics.forEach((biometric) {
-        if (biometric != null &&
-            biometric.initialDate != null &&
-            biometric.finalDate != null &&
-            biometric.times != null) {
-          // Go through all the times registred
-          biometric.times.forEach(
-            (time) async {
-              int initialTime =
-                  DateHelper.addTimeToDate(time, biometric.initialDate)
-                      .millisecondsSinceEpoch;
-              int finalTime =
-                  DateHelper.addTimeToDate(time, biometric.finalDate)
-                      .millisecondsSinceEpoch;
-              // Go to all days corresponding to all times
-              for (int i = initialTime;
-                  i <= finalTime;
-                  i = i + dayInMiliseconds) {
-                DateTime notificationTime =
-                    DateTime.fromMillisecondsSinceEpoch(i);
-                if (notificationTime.isAfter(DateTime.now())) {
-                  await singleNotification(
-                    channel: channel,
-                    startId: startId,
-                    title: "Atenção!!",
-                    body: "Não se esqueça de nos dizer como você está hoje",
-                    datetime: notificationTime,
-                  );
-                }
-              }
-            },
-          );
-        }
-      });
-    });
-  }
-
-  Future<void> _initializeExercise(
-      String patientId, int startId, NotificationDetails channel) async {
-    //Clean all current notifications
-    await _cleanNotifications(startId);
-    // Getting firebase reference and start listen for changes
-    firebaseDatabase
-        .reference()
-        .child("Patient")
-        .child(patientId)
-        .child('ToDo')
-        .child("Exercise")
-        .onValue
-        .listen((event) async {
-      // Get changed snapshot
-      var snapshot = event.snapshot;
-      // Don't do nothing if theres no record
-      if (snapshot == null) return;
-
-      print("[Exercise] ${snapshot.value}");
-
-      //Get list of all entries
-      List<Exercise> exercises = GenericConverter.genericFromDataSnapshotList(
-          "exercise", snapshot, false);
-
-      // Set a new alarm for each combination of day and time
-      exercises.forEach((exercise) {
-        if (exercise != null &&
-            exercise.initialDate != null &&
-            exercise.finalDate != null &&
-            exercise.times != null) {
-          // Go through all the times registred
-          exercise.times.forEach(
-            (time) async {
-              int initialTime =
-                  DateHelper.addTimeToDate(time, exercise.initialDate)
-                      .millisecondsSinceEpoch;
-              int finalTime = DateHelper.addTimeToDate(time, exercise.finalDate)
-                  .millisecondsSinceEpoch;
-              // Go to all days corresponding to all times
-              for (int i = initialTime;
-                  i <= finalTime;
-                  i = i + dayInMiliseconds) {
-                DateTime notificationTime =
-                    DateTime.fromMillisecondsSinceEpoch(i);
-                if (notificationTime.isAfter(DateTime.now())) {
-                  await singleNotification(
-                    channel: channel,
-                    startId: startId,
-                    title: "Atenção!!",
-                    body: "Não se esqueça de se exercitar hoje",
-                    datetime: notificationTime,
-                  );
-                }
-              }
-            },
-          );
-        }
-      });
-    });
-  }
-
-  Future<void> _initializeLiquid(
-      String patientId, int startId, NotificationDetails channel) async {
-    //Clean all current notifications
-    await _cleanNotifications(startId);
-    int toDoCount;
-
-    //Count mililiters recomenden to drink that day
-    firebaseDatabase
-        .reference()
-        .child("Patient")
-        .child(patientId)
-        .child('ToDo')
-        .child("Liquid")
-        .orderByChild("initialdate")
-        .onValue
-        .listen((event) async {
-      toDoCount = 0;
-      var toDoSsnapshot = event.snapshot;
-      if (toDoSsnapshot == null) return;
-      List<Liquid> toDoLiquids = GenericConverter.genericFromDataSnapshotList(
-          "liquid", toDoSsnapshot, false);
-      toDoLiquids.forEach((toDoLiquid) {
-        if (DateTime.now().isAfter(
-                DateHelper.addTimeToDate("00:00", toDoLiquid.initialDate)) &&
-            DateTime.now().isBefore(
-                DateHelper.addTimeToDate("23:59", toDoLiquid.finalDate))) {
-          toDoCount = toDoCount + toDoLiquid.mililitersPerDay;
-        }
-      });
-    });
-    // Getting firebase reference and start listen for changes
-    firebaseDatabase
-        .reference()
-        .child("Patient")
-        .child(patientId)
-        .child('Done')
-        .child("Liquid")
-        .orderByChild("executedDate")
-        .onValue
-        .listen((event) async {
-      int count = 0;
-      // Get changed snapshot
-      var snapshot = event.snapshot;
-      // Don't do nothing if theres no record
-      if (snapshot == null) return;
-
-      print("[Liquid] ${snapshot.value}");
-
-      //Get list of all entries
-      List<Liquid> liquids = GenericConverter.genericFromDataSnapshotList(
-          "liquid", snapshot, true);
-
-      // Set a new alarm for each combination of day and time, só que não
-      liquids.forEach((liquid) async {
-        if (liquid != null &&
-            liquid.executedDate != null &&
-            liquid.quantity != null &&
-            liquid.reference != null) {
-          count =
-              count + (Arrays.reference[liquid.reference] * liquid.quantity);
-          print("count:$count");
-          print("todocount:$toDoCount");
-        }
-      });
-      if (toDoCount == null || toDoCount == 0) return;
-      if (count >= (toDoCount * 0.8) && count < toDoCount * 0.9) {
-        await singleNotification(
-            channel: channel,
-            datetime: DateTime.now().add(Duration(seconds: 3)),
-            title: "Limite de Líquidos ingeridos próximo",
-            body:
-                "Você já tomou mais de 80% do volume de líquidos ingeridos recomendado para hoje",
-            startId: startId);
-      } else if (count >= (toDoCount * 0.9) && count < toDoCount * 1) {
-        await singleNotification(
-            channel: channel,
-            datetime: DateTime.now().add(Duration(seconds: 3)),
-            title: "Limite de Líquidos ingeridos próximo",
-            body:
-                "Você já tomou mais de 90% do volume de líquidos ingeridos recomendado para hoje",
-            startId: startId);
-      } else if (count >= toDoCount) {
-        singleNotification(
-            channel: channel,
-            datetime: DateTime.now().add(Duration(seconds: 3)),
-            title: "Limite de Líquidos ingeridos excedido",
-            body:
-                "Você já excedeu o volume de líquidos ingeridos recomendado para hoje",
-            startId: startId);
-      } else {
-        return;
       }
     });
   }
 
-  Future<void> _initializeMedication(
-      String patientId, int startId, NotificationDetails channel) async {
-    //Clean all current notifications
+  Future<void> _initializeBiometric(String patientId, int startId, NotificationDetails channel) async {
     await _cleanNotifications(startId);
-    // Getting firebase reference and start listen for changes
-    firebaseDatabase
-        .reference()
-        .child("Patient")
-        .child(patientId)
-        .child('ToDo')
-        .child("Medication")
-        .onValue
-        .listen((event) async {
-      // Get changed snapshot
+    firebaseDatabase.ref().child("Patient").child(patientId).child('ToDo').child("Biometric").onValue.listen((event) async {
       var snapshot = event.snapshot;
-      // Don't do nothing if theres no record
-      if (snapshot == null) return;
+      if (snapshot.value == null) return;
 
-      print("[Medication] ${snapshot.value}");
+      List<Biometric> biometrics = GenericConverter.genericFromDataSnapshotList("biometric", snapshot, false);
 
-      //Get list of all entries
-      List<Medication> medications =
-          GenericConverter.genericFromDataSnapshotList(
-              "medication", snapshot, false);
+      for (var biometric in biometrics) {
+        if (biometric.initialDate != null && biometric.finalDate != null && biometric.times != null) {
+          for (var time in biometric.times!) {
+            DateTime? initial = DateHelper.addTimeToDate(time, biometric.initialDate);
+            DateTime? finalDate = DateHelper.addTimeToDate(time, biometric.finalDate);
+            if (initial == null || finalDate == null) continue;
 
-      // Set a new alarm for each combination of day and time
-      medications.forEach((medication) {
-        if (medication != null &&
-            medication.initialDate != null &&
-            medication.finalDate != null &&
-            medication.times != null) {
-          // Go through all the times registred
-          medication.times.forEach(
-            (time) {
-              int initialTime =
-                  DateHelper.addTimeToDate(time, medication.initialDate)
-                      .millisecondsSinceEpoch;
-              int finalTime =
-                  DateHelper.addTimeToDate(time, medication.finalDate)
-                      .millisecondsSinceEpoch;
-              // Go to all days corresponding to all times
-              for (int i = initialTime;
-                  i <= finalTime;
-                  i = i + dayInMiliseconds) {
-                DateTime notificationTime =
-                    DateTime.fromMillisecondsSinceEpoch(i);
-                if (notificationTime.isAfter(DateTime.now())) {
-                  singleNotification(
-                    channel: channel,
-                    startId: startId,
-                    title: medication.name,
-                    body:
-                        "Você precisa consumir ${medication.quantity} de ${medication.dosage} de ${medication.name}",
-                    datetime: notificationTime,
-                  );
-                }
+            for (int i = initial.millisecondsSinceEpoch; i <= finalDate.millisecondsSinceEpoch; i += dayInMilliseconds) {
+              DateTime notificationTime = DateTime.fromMillisecondsSinceEpoch(i);
+              if (notificationTime.isAfter(DateTime.now())) {
+                await singleNotification(
+                  channel: channel,
+                  startId: startId,
+                  title: "Atenção!!",
+                  body: "Não se esqueça de nos dizer como você está hoje",
+                  datetime: notificationTime,
+                );
               }
-            },
-          );
+            }
+          }
         }
-      });
+      }
+    });
+  }
+
+  Future<void> _initializeExercise(String patientId, int startId, NotificationDetails channel) async {
+    await _cleanNotifications(startId);
+    firebaseDatabase.ref().child("Patient").child(patientId).child('ToDo').child("Exercise").onValue.listen((event) async {
+      var snapshot = event.snapshot;
+      if (snapshot.value == null) return;
+
+      List<Exercise> exercises = GenericConverter.genericFromDataSnapshotList("exercise", snapshot, false);
+
+      for (var exercise in exercises) {
+        if (exercise.initialDate != null && exercise.finalDate != null && exercise.times != null) {
+          for (var time in exercise.times!) {
+            DateTime? initial = DateHelper.addTimeToDate(time, exercise.initialDate);
+            DateTime? finalDate = DateHelper.addTimeToDate(time, exercise.finalDate);
+            if (initial == null || finalDate == null) continue;
+
+            for (int i = initial.millisecondsSinceEpoch; i <= finalDate.millisecondsSinceEpoch; i += dayInMilliseconds) {
+              DateTime notificationTime = DateTime.fromMillisecondsSinceEpoch(i);
+              if (notificationTime.isAfter(DateTime.now())) {
+                await singleNotification(
+                  channel: channel,
+                  startId: startId,
+                  title: "Atenção!!",
+                  body: "Não se esqueça de se exercitar hoje",
+                  datetime: notificationTime,
+                );
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  Future<void> _initializeLiquid(String patientId, int startId, NotificationDetails channel) async {
+    await _cleanNotifications(startId);
+    int toDoCount = 0; 
+
+    firebaseDatabase.ref().child("Patient").child(patientId).child('ToDo').child("Liquid").orderByChild("initialdate").onValue.listen((event) {
+      toDoCount = 0;
+      var snapshot = event.snapshot;
+      if (snapshot.value == null) return;
+      List<Liquid> toDoLiquids = GenericConverter.genericFromDataSnapshotList("liquid", snapshot, false);
+      for (var liq in toDoLiquids) {
+        DateTime? initDate = DateHelper.addTimeToDate("00:00", liq.initialDate);
+        DateTime? finDate = DateHelper.addTimeToDate("23:59", liq.finalDate);
+        if (initDate != null && finDate != null && DateTime.now().isAfter(initDate) && DateTime.now().isBefore(finDate)) {
+          toDoCount += (liq.mililitersPerDay ?? 0);
+        }
+      }
+    });
+
+    firebaseDatabase.ref().child("Patient").child(patientId).child('Done').child("Liquid").orderByChild("executedDate").onValue.listen((event) async {
+      int count = 0;
+      var snapshot = event.snapshot;
+      if (snapshot.value == null) return;
+
+      List<Liquid> liquids = GenericConverter.genericFromDataSnapshotList("liquid", snapshot, true);
+      for (var liquid in liquids) {
+        if (liquid.quantity != null && liquid.reference != null) {
+          int refValue = Arrays.reference[liquid.reference] ?? 0;
+          count += (refValue * liquid.quantity!);
+        }
+      }
+
+      if (toDoCount == 0) return;
+      
+      if (count >= (toDoCount * 0.8) && count < toDoCount * 0.9) {
+        await singleNotification(
+            channel: channel,
+            datetime: DateTime.now().add(const Duration(seconds: 3)),
+            title: "Limite de Líquidos próximo",
+            body: "Você já tomou mais de 80% do volume recomendado para hoje",
+            startId: startId);
+      } else if (count >= toDoCount) {
+        await singleNotification(
+            channel: channel,
+            datetime: DateTime.now().add(const Duration(seconds: 3)),
+            title: "Limite de Líquidos excedido",
+            body: "Você já excedeu o volume de líquidos recomendado para hoje",
+            startId: startId);
+      }
+    });
+  }
+
+  Future<void> _initializeMedication(String patientId, int startId, NotificationDetails channel) async {
+    await _cleanNotifications(startId);
+    firebaseDatabase.ref().child("Patient").child(patientId).child('ToDo').child("Medication").onValue.listen((event) async {
+      var snapshot = event.snapshot;
+      if (snapshot.value == null) return;
+
+      List<Medication> medications = GenericConverter.genericFromDataSnapshotList("medication", snapshot, false);
+
+      for (var medication in medications) {
+        if (medication.initialDate != null && medication.finalDate != null && medication.times != null) {
+          for (var time in medication.times!) {
+            DateTime? initial = DateHelper.addTimeToDate(time, medication.initialDate);
+            DateTime? finalDate = DateHelper.addTimeToDate(time, medication.finalDate);
+            if (initial == null || finalDate == null) continue;
+
+            for (int i = initial.millisecondsSinceEpoch; i <= finalDate.millisecondsSinceEpoch; i += dayInMilliseconds) {
+              DateTime notificationTime = DateTime.fromMillisecondsSinceEpoch(i);
+              if (notificationTime.isAfter(DateTime.now())) {
+                await singleNotification(
+                  channel: channel,
+                  startId: startId,
+                  title: medication.name ?? "Medicamento",
+                  body: "Hora de tomar seu medicamento: ${medication.name}",
+                  datetime: notificationTime,
+                );
+              }
+            }
+          }
+        }
+      }
     });
   }
 }

@@ -1,104 +1,90 @@
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
-import 'package:meta/meta.dart';
 
 class BiometricModel extends Biometric {
-  BiometricModel(
-      {@required int frequency,
-      @required DateTime initialDate,
-      @required DateTime finalDate,
-      @required DateTime executedDate,
-      @required bool done,
-      @required int weight,
-      @required int bpm,
-      @required String id,
-      @required List<String> times,
-      @required String observation,
-      @required String bloodPressure,
-      @required String swelling,
-      @required String swellingLocalization,
-      @required String fatigue})
-      : super(
-            frequency: frequency,
-            initialDate: initialDate,
-            finalDate: finalDate,
-            weight: weight,
-            observation: observation,
-            bpm: bpm,
-            times: times,
-            bloodPressure: bloodPressure,
-            swelling: swelling,
-            fatigue: fatigue,
-            id: id,
-            executedDate: executedDate,
-            swellingLocalization: swellingLocalization,
-            done: done);
+  BiometricModel({
+    required super.frequency,
+    required super.initialDate,
+    required super.finalDate,
+    super.executedDate, // Opcional na BaseEntity
+    required super.done,
+    required super.weight,
+    required super.bpm,
+    super.id,           // Opcional na BaseEntity
+    required super.times,
+    required super.observation,
+    required super.bloodPressure,
+    required super.swelling,
+    required super.swellingLocalization,
+    required super.fatigue,
+  });
 
-  static Map<dynamic, dynamic> toJson(BiometricModel model) {
-    Map<dynamic, dynamic> json = {};
-    if (model.initialDate != null)
-      json['initialDate'] = model.initialDate.millisecondsSinceEpoch;
-    if (model.finalDate != null)
-      json['finalDate'] = model.finalDate.millisecondsSinceEpoch;
-    if (model.executedDate != null)
-      json['executedDate'] = model.executedDate.millisecondsSinceEpoch;
-    if (model.frequency != null) json['frequency'] = model.frequency;
-    if (model.weight != null) json['weight'] = model.weight;
-    if (model.bloodPressure != null)
-      json['bloodPressure'] = model.bloodPressure;
-    if (model.bpm != null) json['bpm'] = model.bpm;
-    if (model.swelling != null) json['swelling'] = model.swelling;
-    if (model.fatigue != null) json['fatigue'] = model.fatigue;
-    if (model.observation != null) json['observation'] = model.observation;
-    if (model.swellingLocalization != null)
-      json['swellingLocalization'] = model.swellingLocalization;
-    if (model.times != null) json['times'] = model.times;
-
-    return json;
+  Map<dynamic, dynamic> toJson() {
+    return {
+      'initialDate': initialDate.millisecondsSinceEpoch,
+      'finalDate': finalDate.millisecondsSinceEpoch,
+      'executedDate': executedDate?.millisecondsSinceEpoch,
+      'frequency': frequency,
+      'weight': weight,
+      'bloodPressure': bloodPressure,
+      'bpm': bpm,
+      'swelling': swelling,
+      'fatigue': fatigue,
+      'observation': observation,
+      'swellingLocalization': swellingLocalization,
+      'times': times,
+      'done': done,
+      'id': id,
+    };
   }
 
-  factory BiometricModel.fromJson(Map<dynamic, dynamic> json) {
-    if (json == null) return null;
+  factory BiometricModel.fromJson(Map<dynamic, dynamic>? json) {
+    if (json == null) throw Exception("JSON de Biometria nulo");
+
     return BiometricModel(
-      frequency: json['frequency'],
+      frequency: json['frequency'] ?? 0,
       initialDate: (json['initialDate'] == null)
-          ? null
+          ? DateTime.now()
           : DateTime.fromMillisecondsSinceEpoch(json['initialDate']),
       finalDate: (json['finalDate'] == null)
-          ? null
+          ? DateTime.now()
           : DateTime.fromMillisecondsSinceEpoch(json['finalDate']),
+      // 2. Aqui permitimos null se não houver data de execução
       executedDate: (json['executedDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['executedDate']),
-      weight: json['weight'],
-      bloodPressure: json['bloodPressure'],
-      bpm: json['bpm'],
-      swelling: json['swelling'],
-      fatigue: json['fatigue'],
+      weight: json['weight'] ?? 0,
+      bloodPressure: json['bloodPressure'] ?? "",
+      bpm: json['bpm'] ?? 0,
+      swelling: json['swelling'] ?? "",
+      fatigue: json['fatigue'] ?? "",
       id: json['id'],
-      done: json['done'],
-      observation: json['observation'],
-      swellingLocalization: json['swellingLocalization'],
-      times: Converter.convertListDynamicToListString(json['times']),
+      done: json['done'] ?? false,
+      observation: json['observation'] ?? "",
+      swellingLocalization: json['swellingLocalization'] ?? "",
+      // 3. Garantimos que a lista de horários nunca seja nula
+      times: Converter.convertListDynamicToListString(json['times']) ?? [],
     );
   }
 
-  factory BiometricModel.fromEntity(Biometric biometric) {
+  // 4. Mudado para static para suportar retorno nulo se a entidade for nula
+  static BiometricModel? fromEntity(Biometric? biometric) {
     if (biometric == null) return null;
     return BiometricModel(
-        finalDate: biometric.finalDate,
-        frequency: biometric.frequency,
-        initialDate: biometric.initialDate,
-        weight: biometric.weight,
-        bloodPressure: biometric.bloodPressure,
-        bpm: biometric.bpm,
-        swelling: biometric.swelling,
-        fatigue: biometric.fatigue,
-        id: biometric.id,
-        done: biometric.done,
-        observation: biometric.observation,
-        swellingLocalization: biometric.swellingLocalization,
-        times: biometric.times,
-        executedDate: biometric.executedDate);
+      finalDate: biometric.finalDate,
+      frequency: biometric.frequency,
+      initialDate: biometric.initialDate,
+      weight: biometric.weight,
+      bloodPressure: biometric.bloodPressure,
+      bpm: biometric.bpm,
+      swelling: biometric.swelling,
+      fatigue: biometric.fatigue,
+      id: biometric.id,
+      done: biometric.done,
+      observation: biometric.observation,
+      swellingLocalization: biometric.swellingLocalization,
+      times: biometric.times,
+      executedDate: biometric.executedDate,
+    );
   }
 }

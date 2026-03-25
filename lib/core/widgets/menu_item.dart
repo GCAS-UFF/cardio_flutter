@@ -5,11 +5,16 @@ import 'package:cardio_flutter/resources/images.dart';
 class ItemMenu extends StatelessWidget {
   final String text;
   final String image;
-  final Function destination;
+  // 1. Mudamos de Function para VoidCallback? (o ? indica que pode ser nulo)
+  final VoidCallback? destination;
 
-  const ItemMenu(
-      {Key key, this.text = "", this.image = Images.app_logo, this.destination})
-      : super(key: key);
+  // 2. Usamos a sintaxe 'super.key' que é mais moderna e resolve o erro do Key
+  const ItemMenu({
+    super.key, 
+    this.text = "", 
+    this.image = Images.app_logo, 
+    this.destination,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +23,7 @@ class ItemMenu extends StatelessWidget {
       child: InkWell(
         onTap: destination,
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration( // Adicionado const para performance
             boxShadow: <BoxShadow>[
               BoxShadow(
                 offset: Offset(3, 3),
@@ -27,7 +32,7 @@ class ItemMenu extends StatelessWidget {
               ),
             ],
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.all(Radius.circular(10)), // Ajuste leve na sintaxe
           ),
           alignment: Alignment.topLeft,
           width: Dimensions.getConvertedWidthSize(context, 300),

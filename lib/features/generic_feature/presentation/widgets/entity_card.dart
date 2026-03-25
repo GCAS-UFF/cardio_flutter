@@ -1,31 +1,24 @@
 import 'package:cardio_flutter/core/platform/settings.dart';
 import 'package:cardio_flutter/features/calendar/presentation/models/activity.dart';
-import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
 import 'package:cardio_flutter/resources/dimensions.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
 
-class EntityCard extends StatefulWidget {
+class EntityCard extends StatelessWidget {
   final Activity activity;
-  final Function openExecuted;
-  final Function openRecomendation;
-  final Function delete;
+  final VoidCallback openExecuted;
+  final VoidCallback openRecommendation; // Nome corrigido
+  final VoidCallback delete;
 
-  const EntityCard(
-      {Key key,
-      @required this.activity,
-      @required this.openExecuted,
-      @required this.openRecomendation,
-      @required this.delete})
-      : super(key: key);
+  const EntityCard({
+    super.key, // Sintaxe moderna para keys
+    required this.activity,
+    required this.openExecuted,
+    required this.openRecommendation,
+    required this.delete,
+  });
 
-  @override
-  _EntityCardState createState() => _EntityCardState();
-}
-
-class _EntityCardState extends State<EntityCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,71 +26,52 @@ class _EntityCardState extends State<EntityCard> {
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            if (!widget.activity.value.done) {
+            if (!activity.value.done) {
               if (Provider.of<Settings>(context, listen: false).getUserType() ==
-                  (Keys.PROFESSIONAL_TYPE)) {
-                return _showOptionsProfessional(context);
+                  Keys.PROFESSIONAL_TYPE) {
+                _showOptionsProfessional(context);
               } else {
-                if (widget.openExecuted != null) {
-                  widget.openExecuted();
-                }
+                openExecuted();
               }
             } else {
               if (Provider.of<Settings>(context, listen: false).getUserType() ==
-                  (Keys.PROFESSIONAL_TYPE)) {
+                  Keys.PROFESSIONAL_TYPE) {
+                // Profissionais não fazem nada em cards já realizados
               } else {
-                return _showOptionsPatient(context, widget.activity.value);
+                _showOptionsPatient(context);
               }
             }
           },
           child: Container(
             padding: Dimensions.getEdgeInsetsFromLTRB(context, 10, 10, 10, 10),
             decoration: BoxDecoration(
-              color: (!widget.activity.value.done)
+              color: (!activity.value.done)
                   ? Colors.lightBlue
                   : Colors.orangeAccent,
               borderRadius: BorderRadius.circular(7),
             ),
             child: SingleChildScrollView(
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: ((!widget.activity.value.done))
-                    ? [
-                        Text(
-                          " Recomendação",
-                          style: TextStyle(
-                              fontSize: Dimensions.getTextSize(context, 16),
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: widget.activity.informations.entries.map(
-                            (entry) {
-                              return _buildParameterItem(context, entry);
-                            },
-                          ).toList(),
-                        ),
-                      ]
-                    : [
-                        Text(
-                          " Realizado",
-                          style: TextStyle(
-                              fontSize: Dimensions.getTextSize(context, 16),
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: widget.activity.informations.entries.map(
-                            (entry) {
-                              return _buildParameterItem(context, entry);
-                            },
-                          ).toList(),
-                        )
-                      ],
+                children: [
+                  Text(
+                    (!activity.value.done) ? " Recomendação" : " Realizado",
+                    style: TextStyle(
+                        fontSize: Dimensions.getTextSize(context, 16),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: activity.informations.entries.map(
+                      (entry) {
+                        return _buildParameterItem(context, entry);
+                      },
+                    ).toList(),
+                  ),
+                ],
               ),
             ),
           ),
@@ -131,51 +105,34 @@ class _EntityCardState extends State<EntityCard> {
     );
   }
 
-  void _showOptionsPatient(BuildContext context, BaseEntity entity) {
+  void _showOptionsPatient(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return BottomSheet(
-            onClosing: () {},
-            builder: (context) {
-              return Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            if (widget.openExecuted != null) {
-                              widget.openExecuted();
-                            }
-                          },
-                          child: Text(
-                            "Editar",
-                            style: TextStyle(color: Colors.red, fontSize: 20),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: FlatButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          if (widget.delete != null) {
-                            widget.delete();
-                          }
-                        },
-                        child: Text(
-                          "Excluir ",
-                          style: TextStyle(color: Colors.red, fontSize: 20),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            });
+        return Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.edit, color: Colors.red),
+                title: const Text("Editar", style: TextStyle(color: Colors.red, fontSize: 20)),
+                onTap: () {
+                  Navigator.pop(context);
+                  openExecuted();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: const Text("Excluir", style: TextStyle(color: Colors.red, fontSize: 20)),
+                onTap: () {
+                  Navigator.pop(context);
+                  delete();
+                },
+              ),
+            ],
+          ),
+        );
       },
     );
   }
@@ -184,47 +141,29 @@ class _EntityCardState extends State<EntityCard> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return BottomSheet(
-          onClosing: () {},
-          builder: (context) {
-            return Container(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: FlatButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          if (widget.openRecomendation != null) {
-                            widget.openRecomendation();
-                          }
-                        },
-                        child: Text(
-                          "Editar",
-                          style: TextStyle(color: Colors.red, fontSize: 20),
-                        )),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        if (widget.delete != null) {
-                          widget.delete();
-                        }
-                      },
-                      child: Text(
-                        "Excluir ",
-                        style: TextStyle(color: Colors.red, fontSize: 20),
-                      ),
-                    ),
-                  ),
-                ],
+        return Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.edit, color: Colors.red),
+                title: const Text("Editar", style: TextStyle(color: Colors.red, fontSize: 20)),
+                onTap: () {
+                  Navigator.pop(context);
+                  openRecommendation();
+                },
               ),
-            );
-          },
+              ListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: const Text("Excluir", style: TextStyle(color: Colors.red, fontSize: 20)),
+                onTap: () {
+                  Navigator.pop(context);
+                  delete();
+                },
+              ),
+            ],
+          ),
         );
       },
     );

@@ -21,6 +21,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class LiquidPage extends StatelessWidget {
+  const LiquidPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BasePage(
@@ -28,14 +30,15 @@ class LiquidPage extends StatelessWidget {
         if (Provider.of<Settings>(context, listen: false).getUserType() ==
             Keys.PROFESSIONAL_TYPE) {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddLiquidPage()));
+              MaterialPageRoute(builder: (context) => const AddLiquidPage()));
         }
       },
-      backgroundColor: Color(0xffc9fffd),
+      backgroundColor: const Color(0xffc9fffd),
       body: BlocListener<GenericBloc<Liquid>, GenericState<Liquid>>(
         listener: (context, state) {
           if (state is Error<Liquid>) {
-            Scaffold.of(context).showSnackBar(
+            // 1. Correção: ScaffoldMessenger
+            ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
               ),
@@ -57,8 +60,9 @@ class LiquidPage extends StatelessWidget {
     );
   }
 
-  Widget _buildExerciseList(BuildContext context, List<Activity> activityList) {
-    if (activityList == null) return Container();
+  // 2. Correção: Parâmetros aceitando Nulo para os estados de Loading/Empty
+  Widget _buildExerciseList(BuildContext context, List<Activity>? activityList) {
+    if (activityList == null) return const SizedBox();
     return Column(
       children: activityList.map((activity) {
         return EntityCard(
@@ -80,7 +84,8 @@ class LiquidPage extends StatelessWidget {
               ),
             );
           },
-          openRecomendation: () {
+          // 3. Correção: Nome do parâmetro e ortografia (Recommendation)
+          openRecommendation: () {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -95,8 +100,8 @@ class LiquidPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMonthList(BuildContext context, List<Month> monthList) {
-    if (monthList == null) return Container();
+  Widget _buildMonthList(BuildContext context, List<Month>? monthList) {
+    if (monthList == null) return const SizedBox();
     return Column(
       children: monthList.map((month) {
         return Column(
@@ -110,7 +115,7 @@ class LiquidPage extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 "${Arrays.months[month.id - 1]} ${month.year}",
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
             SizedBox(
@@ -126,21 +131,19 @@ class LiquidPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDayList(BuildContext context, List<Day> dayList) {
-    if (dayList == null) return Container();
+  Widget _buildDayList(BuildContext context, List<Day>? dayList) {
+    if (dayList == null) return const SizedBox();
     return Column(
       children: dayList.map((day) {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              child: CircleAvatar(
-                backgroundColor: Colors.blue[900],
-                radius: 35,
-                child: Text(
-                  (day.id.toString()),
-                  style: TextStyle(fontSize: 22),
-                ),
+            CircleAvatar(
+              backgroundColor: Colors.blue[900],
+              radius: 35,
+              child: Text(
+                (day.id.toString()),
+                style: const TextStyle(fontSize: 22),
               ),
             ),
             SizedBox(
@@ -154,28 +157,24 @@ class LiquidPage extends StatelessWidget {
   }
 
   Widget _bodybuilder(
-      BuildContext context, Patient patient, Calendar calendar) {
-    if (patient == null || calendar == null||
-        calendar.months == null ||
-        calendar.months.isEmpty)
+      BuildContext context, Patient? patient, Calendar? calendar) {
+    // 4. Correção: Operandos null safety
+    if (patient == null || calendar == null || calendar.months.isEmpty) {
       return EmptyPage(text: Strings.empty_liquid);
-    return Container(
-      child: SingleChildScrollView(
-        padding: Dimensions.getEdgeInsetsAll(context, 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(
-              height: Dimensions.getConvertedHeightSize(context, 10),
-            ),
-            Column(
-              children: <Widget>[_buildMonthList(context, calendar.months)],
-            ),
-            SizedBox(
-              width: Dimensions.getConvertedWidthSize(context, 15),
-            )
-          ],
-        ),
+    }
+    return SingleChildScrollView(
+      padding: Dimensions.getEdgeInsetsAll(context, 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          SizedBox(
+            height: Dimensions.getConvertedHeightSize(context, 10),
+          ),
+          _buildMonthList(context, calendar.months),
+          SizedBox(
+            width: Dimensions.getConvertedWidthSize(context, 15),
+          )
+        ],
       ),
     );
   }

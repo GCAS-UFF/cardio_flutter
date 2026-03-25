@@ -10,7 +10,6 @@ import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart'
 import 'package:cardio_flutter/resources/arrays.dart';
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:cardio_flutter/resources/strings.dart';
-import 'package:meta/meta.dart';
 
 class Converter {
   static String convertFailureToMessage(Failure failure) {
@@ -27,34 +26,36 @@ class Converter {
     }
   }
 
-  static List<String> convertListDynamicToListString(List<dynamic> inputs) {
+  // 1. Mudamos para List<String>? e corrigimos o construtor da List
+  static List<String>? convertListDynamicToListString(List<dynamic>? inputs) {
     if (inputs == null) return null;
-    List<String> result = List<String>();
-    for (String string in inputs) {
-      result.add(string);
+    List<String> result = []; // Usar [] em vez de List()
+    for (var element in inputs) {
+      result.add(element.toString());
     }
-
     return result;
   }
 
-  static String convertStringListToString(List<String> list) {
-    final String string =list.join(', ');
-    return string ;
-   }
+  static String convertStringListToString(List<String>? list) {
+    if (list == null) return "";
+    return list.join(', ');
+  }
 
-  static String convertStringToMaskedString(
-      {@required String value,
-      @required String mask,
-      String escapeCharacter = "x",
-      bool onlyDigits}) {
+  // 2. Trocamos @required por required e bool por bool? ou damos valor default
+  static String convertStringToMaskedString({
+    required String? value,
+    required String? mask,
+    String escapeCharacter = "x",
+    bool onlyDigits = false, // Valor default para não ser nulo
+  }) {
     if (value == null || mask == null) return "";
-    value = cleanText(value, onlyDigits: onlyDigits);
+    String cleanedValue = cleanText(value, onlyDigits: onlyDigits);
     int i = 0;
     int j = 0;
     String result = "";
-    for (; i < value.length && j < mask.length; i++, j++) {
+    for (; i < cleanedValue.length && j < mask.length; i++, j++) {
       if (mask[j] == escapeCharacter) {
-        result = result + value[i];
+        result = result + cleanedValue[i];
         while (j + 1 < mask.length && mask[j + 1] != escapeCharacter) {
           ++j;
           result = result + mask[j];
@@ -66,18 +67,20 @@ class Converter {
     return result;
   }
 
-  static String convertStringToMultimaskedString(
-      {@required String value,
-      @required String maskDefault,
-      @required String maskSecundary,
-      @required Function changeMask,
-      bool onlyDigits,
-      String escapeCharacter = "x"}) {
+  static String convertStringToMultimaskedString({
+    required String? value,
+    required String maskDefault,
+    required String maskSecondary, // Corrigido erro de digitação
+    required bool Function(String?)? changeMask,
+    bool onlyDigits = false,
+    String escapeCharacter = "x",
+  }) {
     String mask;
-    if (changeMask == null)
+    if (changeMask == null) {
       mask = maskDefault;
-    else
-      mask = (changeMask(value)) ? maskSecundary : maskDefault;
+    } else {
+      mask = (changeMask(value)) ? maskSecondary : maskDefault;
+    }
 
     return convertStringToMaskedString(
         value: value,
@@ -86,60 +89,46 @@ class Converter {
         onlyDigits: onlyDigits);
   }
 
-  static String cleanText(String text, {bool onlyDigits}) {
-    text = text
+  static String cleanText(String text, {bool onlyDigits = false}) {
+    String result = text
         .replaceAll(".", "")
         .replaceAll("-", "")
         .replaceAll(" ", "")
         .replaceAll(":", "");
-    if (onlyDigits != null && onlyDigits) {
-      for (int i = 0; i < text.length; i++) {
-        if (int.tryParse(text[i]) == null) {
-          text = text.replaceAll(text[i], "");
-        }
-      }
+    
+    if (onlyDigits) {
+      result = result.replaceAll(RegExp(r'[^0-9]'), ''); // Forma mais moderna de limpar
     }
 
-    return text;
+    return result;
   }
 
-  static calendar.Calendar convertExerciseToCalendar(
-      List<Exercise> exerciseList) {
-    calendar.Calendar calendarObject =
-        calendar.Calendar(months: List<month.Month>());
+  static calendar.Calendar convertExerciseToCalendar(List<Exercise> exerciseList) {
+    calendar.Calendar calendarObject = calendar.Calendar(months: []);
 
-    // Run through all exercice list
     for (var i = 0; i < exerciseList.length; i++) {
-      // if the exercise was not done and doesnt have a initial date we shouldn't bother
-      if (!exerciseList[i].done && exerciseList[i].initialDate != null) {
-        // Run through all days for the initial date until the final date day by day
-        for (var j = exerciseList[i].initialDate.millisecondsSinceEpoch;
-            j <= exerciseList[i].finalDate.millisecondsSinceEpoch;
+      final exercise = exerciseList[i];
+      if (!exercise.done && exercise.initialDate != null && exercise.finalDate != null) {
+        for (var j = exercise.initialDate!.millisecondsSinceEpoch;
+            j <= exercise.finalDate!.millisecondsSinceEpoch;
             j += 86400000) {
-          // Get the month and day reference from date
           DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(j);
-          addMonthIncalendar(calendarObject, exerciseList[i], currentDate);
+          addMonthIncalendar(calendarObject, exercise, currentDate);
         }
-      } else if (exerciseList[i].done && exerciseList[i].executionDay != null) {
-        addMonthIncalendar(
-            calendarObject, exerciseList[i], exerciseList[i].executionDay);
+      } else if (exercise.done && exercise.executionDay != null) {
+        addMonthIncalendar(calendarObject, exercise, exercise.executionDay!);
       }
     }
-    print("calendar " + calendarObject.toString());
     return calendarObject;
   }
 
-  static addMonthIncalendar(calendar.Calendar calendarObject, Exercise exercise,
-      DateTime currentDate) {
+  static void addMonthIncalendar(calendar.Calendar calendarObject, Exercise exercise, DateTime currentDate) {
     int year = currentDate.year;
-    print(year);
     int monthInt = currentDate.month;
     int day = currentDate.day;
-    //Test if the month is alredy in the calendar
-    int monthIndex = calendarObject.months.indexWhere((monthItem) {
-      return (monthItem.id == monthInt);
-    });
-    // if the mounth doesnt exist in calendar we should add everything
+
+    int monthIndex = calendarObject.months.indexWhere((monthItem) => monthItem.id == monthInt);
+
     if (monthIndex < 0) {
       calendarObject.months.add(
         month.Month(
@@ -161,12 +150,7 @@ class Converter {
         ),
       );
     } else {
-      // if the month isn't null we should test if the day exists
-      int dayIndex =
-          calendarObject.months[monthIndex].days.indexWhere((dayItem) {
-        return (dayItem.id == day);
-      });
-      // if the day doensn't exist we should add everything
+      int dayIndex = calendarObject.months[monthIndex].days.indexWhere((dayItem) => dayItem.id == day);
       if (dayIndex < 0) {
         calendarObject.months[monthIndex].days.add(
           Day(
@@ -182,7 +166,6 @@ class Converter {
           ),
         );
       } else {
-        // We should add in the existing day
         calendarObject.months[monthIndex].days[dayIndex].activities.add(
           Activity(
             informations: exerciseToActivity(exercise),
@@ -195,14 +178,9 @@ class Converter {
     }
   }
 
-  static String symptom(bool symptom) {
-    String string;
-    if (symptom == null) {
-      return null;
-    } else {
-      (symptom == true) ? string = "Houve" : string = "Não houve";
-      return string;
-    }
+  static String? symptom(bool? symptomValue) {
+    if (symptomValue == null) return null;
+    return (symptomValue) ? "Houve" : "Não houve";
   }
 
   static Map<String, String> exerciseToActivity(Exercise exercise) {
@@ -210,33 +188,31 @@ class Converter {
 
     if (!exercise.done) {
       result = {
-        "Exercício": exercise.name,
+        "Exercício": exercise.name ?? "Sem nome",
         "Frequência": exercise.frequency.toString(),
         "Intensidade": (Arrays.intensities[exercise.intensity] == null)
             ? "Não Selecionado"
-            : Arrays.intensities[exercise.intensity],
-          "Horários Indicados": Converter.convertStringListToString(exercise.times),
+            : Arrays.intensities[exercise.intensity]!,
+        "Horários Indicados": convertStringListToString(exercise.times),
         "Duração": "${exercise.durationInMinutes} minutos",
         "Data de Inicio": DateHelper.convertDateToString(exercise.initialDate),
         "Data de Fim": DateHelper.convertDateToString(exercise.finalDate),
-        "Observação":
-            (exercise.observation != null) ? exercise.observation : "",
+        "Observação": exercise.observation ?? "",
       };
     } else {
       result = {
-        "Hora da Realização": exercise.executionTime,
-        "Exercício": exercise.name,
+        "Hora da Realização": exercise.executionTime ?? "--:--",
+        "Exercício": exercise.name ?? "Sem nome",
         "Intensidade": (Arrays.intensities[exercise.intensity] == null)
             ? "Não Selecionado"
-            : Arrays.intensities[exercise.intensity],
+            : Arrays.intensities[exercise.intensity]!,
         "Duração": "${exercise.durationInMinutes} minutos",
         "Sintomas": "",
-        "   Falta de Ar Excessiva": symptom(exercise.shortnessOfBreath),
-        "   Fadiga Excessiva": symptom(exercise.excessiveFatigue),
-        "   Tontura": symptom(exercise.dizziness),
-        "   Dores Corporais": symptom(exercise.bodyPain),
-        "Observação":
-            (exercise.observation != null) ? exercise.observation : "",
+        "   Falta de Ar Excessiva": symptom(exercise.shortnessOfBreath) ?? "Não informado",
+        "   Fadiga Excessiva": symptom(exercise.excessiveFatigue) ?? "Não informado",
+        "   Tontura": symptom(exercise.dizziness) ?? "Não informado",
+        "   Dores Corporais": symptom(exercise.bodyPain) ?? "Não informado",
+        "Observação": exercise.observation ?? "",
       };
     }
     return result;

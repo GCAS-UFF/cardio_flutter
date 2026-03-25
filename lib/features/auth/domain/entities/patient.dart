@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 class Patient extends Equatable {
-  final String id;
+  final String? id;
   final String name;
   final String cpf;
   final String address;
@@ -11,12 +10,12 @@ class Patient extends Equatable {
 
   Patient(
       {this.id,
-      @required this.name,
-      @required this.cpf,
-      @required this.address,
-      @required this.birthdate,
-      @required this.email});
+      required this.name,
+      required this.cpf,
+      required this.address,
+      required this.birthdate,
+      required this.email});
 
   @override
-  List<Object> get props => [name, cpf, address, birthdate, email];
+  List<Object?> get props => [id, name, cpf, address, birthdate, email];
 }

@@ -16,7 +16,7 @@ class Loaded<Entity> extends GenericState<Entity> {
   final Patient patient;
   final Calendar calendar;
 
-  Loaded({@required this.patient, @required this.calendar});
+  Loaded({required this.patient, required this.calendar});
 
   List<Object> get props => [patient, calendar];
 }
@@ -24,7 +24,7 @@ class Loaded<Entity> extends GenericState<Entity> {
 class Error<Entity> extends GenericState<Entity> {
   final String message;
 
-  Error({@required this.message});
+  Error({required this.message});
 
   List<Object> get props => [message];
 }

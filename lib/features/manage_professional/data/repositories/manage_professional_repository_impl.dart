@@ -3,7 +3,7 @@ import 'package:cardio_flutter/core/error/failure.dart';
 import 'package:cardio_flutter/core/platform/network_info.dart';
 import 'package:cardio_flutter/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:cardio_flutter/features/auth/data/models/patient_model.dart';
-import 'package:cardio_flutter/features/auth/data/models/profissional_model.dart';
+import 'package:cardio_flutter/features/auth/data/models/professional_model.dart';
 import 'package:cardio_flutter/features/auth/data/models/user_model.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/domain/entities/professional.dart';
@@ -13,32 +13,37 @@ import 'package:cardio_flutter/features/manage_professional/domain/repositories/
 import 'package:cardio_flutter/resources/keys.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 
 class ManageProfessionalRepositoryImpl implements ManageProfessionalRepository {
   final ManageProfessionalRemoteDataSource remoteDataSource;
   final AuthLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
-  ManageProfessionalRepositoryImpl(
-      {@required this.localDataSource,
-      @required this.remoteDataSource,
-      @required this.networkInfo});
+  // 1. Uso nativo do 'required' no lugar de '@required'
+  ManageProfessionalRepositoryImpl({
+    required this.localDataSource,
+    required this.remoteDataSource,
+    required this.networkInfo,
+  });
+
   @override
   Future<Either<Failure, void>> deletePatientList(Patient patient) async {
     if (await networkInfo.isConnected) {
       try {
-        String userId = await localDataSource.getUserId();
-        String userType = await localDataSource.getUserType();
+        // 2. Tipagem ajustada para String? pois os dados locais podem não existir
+        String? userId = await localDataSource.getUserId();
+        String? userType = await localDataSource.getUserType();
 
-        if (userId == null ||
-            userType == null ||
-            userType != Keys.PROFESSIONAL_TYPE) return Left(ServerFailure());
+        if (userId == null || userType != Keys.PROFESSIONAL_TYPE) {
+          return Left(ServerFailure());
+        }
 
+        // 3. Exclamação (!) adicionada para garantir que o modelo gerado não é nulo
         return Right(await remoteDataSource.deletePatient(
-            userId, PatientModel.fromEntity(patient)));
+            userId, PatientModel.fromEntity(patient)!));
       } on PlatformException catch (e) {
-        return Left(PlatformFailure(message: e.message));
+        // 4. Fallback '??' caso a exceção nativa não tenha mensagem
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
       } on ServerException {
         return Left(ServerFailure());
       } on CacheException {
@@ -54,9 +59,9 @@ class ManageProfessionalRepositoryImpl implements ManageProfessionalRepository {
     if (await networkInfo.isConnected) {
       try {
         return Right(await remoteDataSource
-            .editPatient(PatientModel.fromEntity(patient)));
+            .editPatient(PatientModel.fromEntity(patient)!));
       } on PlatformException catch (e) {
-        return Left(PlatformFailure(message: e.message));
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
       } on ServerException {
         return Left(ServerFailure());
       } on CacheException {
@@ -73,9 +78,9 @@ class ManageProfessionalRepositoryImpl implements ManageProfessionalRepository {
     if (await networkInfo.isConnected) {
       try {
         return Right(await remoteDataSource
-            .editProfessional(ProfessionalModel.fromEntity(professional)));
+            .editProfessional(ProfessionalModel.fromEntity(professional)!));
       } on PlatformException catch (e) {
-        return Left(PlatformFailure(message: e.message));
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
       } on ServerException {
         return Left(ServerFailure());
       } on CacheException {
@@ -90,16 +95,16 @@ class ManageProfessionalRepositoryImpl implements ManageProfessionalRepository {
   Future<Either<Failure, List<Patient>>> getPatientList() async {
     if (await networkInfo.isConnected) {
       try {
-        String userId = await localDataSource.getUserId();
-        String userType = await localDataSource.getUserType();
+        String? userId = await localDataSource.getUserId();
+        String? userType = await localDataSource.getUserType();
 
-        if (userId == null ||
-            userType == null ||
-            userType != Keys.PROFESSIONAL_TYPE) return Left(ServerFailure());
+        if (userId == null || userType != Keys.PROFESSIONAL_TYPE) {
+          return Left(ServerFailure());
+        }
 
         return Right(await remoteDataSource.getPatientList(userId));
       } on PlatformException catch (e) {
-        return Left(PlatformFailure(message: e.message));
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
       } on ServerException {
         return Left(ServerFailure());
       } on CacheException {
@@ -111,13 +116,13 @@ class ManageProfessionalRepositoryImpl implements ManageProfessionalRepository {
   }
 
   @override
-  Future<Either<Failure, Professional>> getProfessional(User user) async{
+  Future<Either<Failure, Professional>> getProfessional(User user) async {
     if (await networkInfo.isConnected) {
       try {
         return Right(await remoteDataSource
-            .getProfessional(UserModel.fromEntity(user)));
+            .getProfessional(UserModel.fromEntity(user)!));
       } on PlatformException catch (e) {
-        return Left(PlatformFailure(message: e.message));
+        return Left(PlatformFailure(message: e.message ?? "Erro de plataforma"));
       } on ServerException {
         return Left(ServerFailure());
       } on CacheException {

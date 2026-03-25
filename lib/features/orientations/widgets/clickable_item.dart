@@ -4,14 +4,32 @@ import 'package:flutter/material.dart';
 class ClickableItem extends StatefulWidget {
   final String title;
   final InlineSpan text;
-  bool isClicked;
+  // 1. Mudamos para final para respeitar a imutabilidade do widget
+  final bool initialIsClicked;
 
-  ClickableItem({this.title, this.text, this.isClicked = false});
+  // 2. Usamos 'required' e 'super.key'
+  const ClickableItem({
+    super.key,
+    required this.title,
+    required this.text,
+    this.initialIsClicked = false,
+  });
+
   @override
   _ClickableItemState createState() => _ClickableItemState();
 }
 
 class _ClickableItemState extends State<ClickableItem> {
+  // 3. O estado real da variável mora aqui no State
+  late bool _isClicked;
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicializamos com o valor passado pelo widget pai
+    _isClicked = widget.initialIsClicked;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -19,9 +37,8 @@ class _ClickableItemState extends State<ClickableItem> {
       child: GestureDetector(
         onTap: () {
           setState(() {
-            (widget.isClicked)
-                ? widget.isClicked = false
-                : widget.isClicked = true;
+            // 4. Invertemos o valor de forma simples
+            _isClicked = !_isClicked;
           });
         },
         child: Container(
@@ -29,7 +46,8 @@ class _ClickableItemState extends State<ClickableItem> {
               border: Border.all(color: Colors.black54, width: 2),
               borderRadius: BorderRadius.circular(8)),
           alignment: Alignment.center,
-          child: (widget.isClicked)
+          // 5. Usamos a variável local _isClicked
+          child: (_isClicked)
               ? Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -42,6 +60,7 @@ class _ClickableItemState extends State<ClickableItem> {
                   ),
                 )
               : Column(
+                  mainAxisSize: MainAxisSize.min, // Ajuste para não ocupar a tela toda
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Padding(

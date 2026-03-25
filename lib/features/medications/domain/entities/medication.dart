@@ -1,38 +1,33 @@
 import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
-import 'package:meta/meta.dart';
 
 class Medication extends BaseEntity {
-  final String name;
-  final double dosage;
-  final String quantity;
-  final List<String> times;
-  final int frequency;
-  final String observation;
-  final bool tookIt;
+  // 1. Campos marcados com '?' para permitir que sejam nulos (opcionais)
+  final String? name;
+  final double? dosage;
+  final String? quantity;
+  final List<String>? times;
+  final int? frequency;
+  final String? observation;
+  final bool? tookIt;
 
   Medication({
-    @required this.name,
-    @required this.dosage,
-    @required this.quantity,
+    this.name,
+    this.dosage,
+    this.quantity,
     this.frequency,
-    initialDate,
     this.times,
-    finalDate,
-    executedDate,
     this.observation,
     this.tookIt,
-    id,
-    @required done,
-  }) : super(
-          initialDate: initialDate,
-          finalDate: finalDate,
-          executedDate: executedDate,
-          id: id,
-          done: done,
-        );
+    super.id,
+    required super.initialDate, // Assumindo que datas são obrigatórias na sua BaseEntity
+    required super.finalDate,
+    super.executedDate,
+    required super.done,
+  });
 
   @override
-  List<Object> get props => [
+  // 2. Mudado para List<Object?> para aceitar campos nuláveis na comparação
+  List<Object?> get props => [
         observation,
         name,
         dosage,

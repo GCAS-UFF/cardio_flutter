@@ -10,7 +10,7 @@ class Refresh extends ManageProfessionalEvent{}
 class Start extends ManageProfessionalEvent {
   final Professional professional;
 
-  Start({@required this.professional});
+  Start({required this.professional});
 
   List<Object> get props => [professional];
 }
@@ -18,7 +18,7 @@ class Start extends ManageProfessionalEvent {
 class EditPatientEvent extends ManageProfessionalEvent {
   final Patient patient;
 
-  EditPatientEvent({@required this.patient});
+  EditPatientEvent({required this.patient});
 
   List<Object> get props => [patient];
 }
@@ -26,7 +26,7 @@ class EditPatientEvent extends ManageProfessionalEvent {
 class DeletePatientEvent extends ManageProfessionalEvent {
   final Patient patient;
 
-  DeletePatientEvent({@required this.patient});
+  DeletePatientEvent({required this.patient});
 
   List<Object> get props => [patient];
 }
@@ -34,7 +34,7 @@ class DeletePatientEvent extends ManageProfessionalEvent {
 class EditProfessionalEvent extends ManageProfessionalEvent {
   final Professional professional;
 
-  EditProfessionalEvent({@required this.professional});
+  EditProfessionalEvent({required this.professional});
 
   List<Object> get props => [professional];
 }

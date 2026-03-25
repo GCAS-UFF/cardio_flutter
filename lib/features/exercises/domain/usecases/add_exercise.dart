@@ -5,7 +5,6 @@ import 'package:cardio_flutter/features/exercises/domain/entities/exercise.dart'
 import 'package:cardio_flutter/features/exercises/domain/repository/exercise_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 class AddExercise extends UseCase<Exercise, Params> {
   final ExerciseRepository repository;
@@ -22,7 +21,7 @@ class Params extends Equatable {
   final Patient patient; 
   final Exercise exercise;
 
-  Params({@required this.patient, @required this.exercise}) : super();
+  Params({required this.patient, required this.exercise}) : super();
 
   @override
   

@@ -1,40 +1,41 @@
 import 'package:cardio_flutter/core/error/exception.dart';
 import 'package:cardio_flutter/resources/keys.dart';
-import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthLocalDataSource {
   Future<bool> saveUserId(String id);
   Future<bool> saveUserType(String userType);
-  Future<String> getUserId();
-  Future<String> getUserType();
+  // 1. Mudamos o retorno para String? (anulável)
+  Future<String?> getUserId();
+  Future<String?> getUserType();
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   final SharedPreferences sharedPreferences;
 
-  AuthLocalDataSourceImpl({@required this.sharedPreferences});
+  AuthLocalDataSourceImpl({required this.sharedPreferences});
 
   @override
-  Future<bool> saveUserId(String id) {
+  Future<bool> saveUserId(String id) async {
     try {
-      return sharedPreferences.setString(Keys.CACHED_USER_ID, id);
+      return await sharedPreferences.setString(Keys.CACHED_USER_ID, id);
     } catch (e) {
       throw CacheException();
     }
   }
 
   @override
-  Future<bool> saveUserType(String userType) {
+  Future<bool> saveUserType(String userType) async {
     try {
-      return sharedPreferences.setString(Keys.CACHED_USER_TYPE, userType);
+      return await sharedPreferences.setString(Keys.CACHED_USER_TYPE, userType);
     } catch (e) {
       throw CacheException();
     }
   }
 
   @override
-  Future<String> getUserId() async {
+  // 2. Aceitamos o retorno opcional da String
+  Future<String?> getUserId() async {
     try {
       return sharedPreferences.getString(Keys.CACHED_USER_ID);
     } catch (e) {
@@ -43,7 +44,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   }
 
   @override
-  Future<String> getUserType() async {
+  Future<String?> getUserType() async {
     try {
       return sharedPreferences.getString(Keys.CACHED_USER_TYPE);
     } catch (e) {

@@ -21,6 +21,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentPage extends StatelessWidget {
+  const AppointmentPage({super.key}); // Adicionado super.key
+
   @override
   Widget build(BuildContext context) {
     return BasePage(
@@ -28,17 +30,16 @@ class AppointmentPage extends StatelessWidget {
         if (Provider.of<Settings>(context, listen: false).getUserType() ==
             Keys.PROFESSIONAL_TYPE) {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddAppointmentPage()));
+              MaterialPageRoute(builder: (context) => const AddAppointmentPage()));
         }
       },
-      backgroundColor: Color(0xffc9fffd),
+      backgroundColor: const Color(0xffc9fffd),
       body: BlocListener<GenericBloc<Appointment>, GenericState<Appointment>>(
         listener: (context, state) {
           if (state is Error<Appointment>) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
+            // 1. Scaffold.of mudou para ScaffoldMessenger
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
             );
           }
         },
@@ -57,8 +58,9 @@ class AppointmentPage extends StatelessWidget {
     );
   }
 
-  Widget _buildExerciseList(BuildContext context, List<Activity> activityList) {
-    if (activityList == null) return Container();
+  // 2. Transformamos os parâmetros em opcionais (?) para aceitar os 'null' do Loading/Initial
+  Widget _buildExerciseList(BuildContext context, List<Activity>? activityList) {
+    if (activityList == null || activityList.isEmpty) return const SizedBox();
     return Column(
       children: activityList.map((activity) {
         return EntityCard(
@@ -80,7 +82,7 @@ class AppointmentPage extends StatelessWidget {
               ),
             );
           },
-          openRecomendation: () {
+          openRecommendation: () { // Corrigido spelling de Recommendation
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -95,8 +97,8 @@ class AppointmentPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMonthList(BuildContext context, List<Month> monthList) {
-    if (monthList == null) return Container();
+  Widget _buildMonthList(BuildContext context, List<Month>? monthList) {
+    if (monthList == null || monthList.isEmpty) return const SizedBox();
     return Column(
       children: monthList.map((month) {
         return Column(
@@ -110,42 +112,33 @@ class AppointmentPage extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 "${Arrays.months[month.id - 1]} ${month.year}",
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
-            SizedBox(
-              height: Dimensions.getConvertedHeightSize(context, 15),
-            ),
-            _buildDayList(
-              context,
-              month.days,
-            )
+            SizedBox(height: Dimensions.getConvertedHeightSize(context, 15)),
+            _buildDayList(context, month.days)
           ],
         );
       }).toList(),
     );
   }
 
-  Widget _buildDayList(BuildContext context, List<Day> dayList) {
-    if (dayList == null) return Container();
+  Widget _buildDayList(BuildContext context, List<Day>? dayList) {
+    if (dayList == null || dayList.isEmpty) return const SizedBox();
     return Column(
       children: dayList.map((day) {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              child: CircleAvatar(
-                backgroundColor: Colors.blue[900],
-                radius: 35,
-                child: Text(
-                  (day.id.toString()),
-                  style: TextStyle(fontSize: 22),
-                ),
+            CircleAvatar(
+              backgroundColor: Colors.blue[900],
+              radius: 35,
+              child: Text(
+                (day.id.toString()),
+                style: const TextStyle(fontSize: 22),
               ),
             ),
-            SizedBox(
-              width: Dimensions.getConvertedWidthSize(context, 15),
-            ),
+            SizedBox(width: Dimensions.getConvertedWidthSize(context, 15)),
             Expanded(child: _buildExerciseList(context, day.activities)),
           ],
         );
@@ -153,30 +146,23 @@ class AppointmentPage extends StatelessWidget {
     );
   }
 
+  // 3. Patient e Calendar agora são opcionais aqui para bater com o BlocBuilder
   Widget _bodybuilder(
-      BuildContext context, Patient patient, Calendar calendar) {
+      BuildContext context, Patient? patient, Calendar? calendar) {
     if (patient == null ||
         calendar == null ||
-        calendar.months == null ||
-        calendar.months.isEmpty)
+        calendar.months.isEmpty) {
       return EmptyPage(text: Strings.empty_appointment);
-    return Container(
-      child: SingleChildScrollView(
-        padding: Dimensions.getEdgeInsetsAll(context, 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(
-              height: Dimensions.getConvertedHeightSize(context, 10),
-            ),
-            Column(
-              children: <Widget>[_buildMonthList(context, calendar.months)],
-            ),
-            SizedBox(
-              width: Dimensions.getConvertedWidthSize(context, 15),
-            )
-          ],
-        ),
+    }
+    return SingleChildScrollView(
+      padding: Dimensions.getEdgeInsetsAll(context, 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          SizedBox(height: Dimensions.getConvertedHeightSize(context, 10)),
+          _buildMonthList(context, calendar.months),
+          SizedBox(width: Dimensions.getConvertedWidthSize(context, 15))
+        ],
       ),
     );
   }

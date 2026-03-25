@@ -6,63 +6,66 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BasePage extends StatelessWidget {
-  final Widget body;
-  final Widget edit;
-  final Color backgroundColor;
+  // 1. Definimos como opcionais (?) os itens que nem toda página terá
+  final Widget? body;
+  final Widget? edit;
+  final Color? backgroundColor;
   final bool signOutButton;
-  final Function addFunction;
+  final VoidCallback? addFunction; // 2. VoidCallback é o tipo correto para botões
 
   const BasePage({
-    Key key,
+    super.key, // Sintaxe moderna para chaves
     this.body,
     this.edit,
     this.backgroundColor,
     this.signOutButton = true,
     this.addFunction,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: (addFunction != null)
-          ? ((Provider.of<Settings>(context, listen: false).getUserType() ==
-                  Keys.PROFESSIONAL_TYPE)
-              ? FloatingActionButton(
-                  onPressed: addFunction,
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.black,
-                  ),
-                  backgroundColor: Colors.lightBlueAccent[200],
-                )
-              : null)
-          : null,
+      // 3. Lógica do FAB simplificada para evitar ternários aninhados confusos
+      floatingActionButton: _buildFab(context),
       body: body,
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black87,
         ),
         actions: <Widget>[
-          (edit == null) ? Container() : edit,
-          (signOutButton)
-              ? IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/");
-                  },
-                  icon: Icon(
-                    Icons.exit_to_app,
-                  ),
-                )
-              : Container()
+          if (edit != null) edit!, // 4. 'if' dentro da lista é mais elegante que ternário
+          if (signOutButton)
+            IconButton(
+              onPressed: () => Navigator.pushNamed(context, "/"),
+              icon: const Icon(Icons.exit_to_app),
+            ),
         ],
         title: Text(
           Strings.app_name,
           style: TextStyle(
-              fontSize: Dimensions.getTextSize(context, 20),
-              color: Colors.black87),
+            fontSize: Dimensions.getTextSize(context, 20),
+            color: Colors.black87,
+          ),
         ),
         backgroundColor: Colors.lightBlueAccent[100],
+      ),
+    );
+  }
+
+  // Método auxiliar para deixar o código do Scaffold mais limpo
+  Widget? _buildFab(BuildContext context) {
+    if (addFunction == null) return null;
+
+    final userType = Provider.of<Settings>(context, listen: false).getUserType();
+    if (userType != Keys.PROFESSIONAL_TYPE) return null;
+
+    return FloatingActionButton(
+      onPressed: addFunction,
+      backgroundColor: Colors.lightBlueAccent[200],
+      child: const Icon(
+        Icons.add,
+        color: Colors.black,
       ),
     );
   }

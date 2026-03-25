@@ -1,62 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
-class Notification extends StatefulWidget {
+class NotificationWidget extends StatefulWidget {
+  const NotificationWidget({super.key});
+
   @override
-  _NotificationState createState() => _NotificationState();
+  _NotificationWidgetState createState() => _NotificationWidgetState();
 }
-class _NotificationState extends State<Notification> {
+
+class _NotificationWidgetState extends State<NotificationWidget> {
   FlutterLocalNotificationsPlugin localNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  DateTime datetime;
-  String message;
-  String subtext;
-  int hashcode;
 
-  initializeNotifications() async {
-    var initializeAndroid = AndroidInitializationSettings('app_logo');
-    var initializeIOS = IOSInitializationSettings();
-    var initSettings = InitializationSettings(initializeAndroid, initializeIOS);
-    await localNotificationsPlugin.initialize(initSettings);
+  Future<void> initializeNotifications() async {
+    tz.initializeTimeZones();
+    
+    var initializeAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializeDarwin = const DarwinInitializationSettings(); 
+    
+    var initSettings = InitializationSettings(
+      android: initializeAndroid, 
+      iOS: initializeDarwin,
+    );
+
+    // CORREÇÃO FINAL: O parâmetro obrigatório é 'settings'
+    await localNotificationsPlugin.initialize(
+      settings: initSettings, 
+    );
   }
-   @override
+
+  @override
   void initState() {
     super.initState();
     initializeNotifications();
   }
 
-  Future singleNotification(
-      DateTime datetime, String message, String subtext, int hashcode,
-      {String sound}) async {
-    var androidChannel = AndroidNotificationDetails(
+  Future<void> singleNotification(
+      DateTime datetime, String message, String subtext, int hashcode) async {
+    
+    var androidChannel = const AndroidNotificationDetails(
       'channel-id',
       'channel-name',
-      'channel-description',
-      importance: Importance.Max,
-      priority: Priority.Max,
+      channelDescription: 'channel-description',
+      importance: Importance.max,
+      priority: Priority.max,
     );
 
-    var iosChannel = IOSNotificationDetails();
-    var platformChannel = NotificationDetails(androidChannel, iosChannel);
-    localNotificationsPlugin.schedule(
-        hashcode, message, subtext, datetime, platformChannel,
-        payload: hashcode.toString());
+    var platformChannel = NotificationDetails(
+      android: androidChannel, 
+      iOS: const DarwinNotificationDetails(),
+    );
+
+    // CORREÇÃO: Parâmetros nomeados conforme a versão estável mais recente
+    await localNotificationsPlugin.zonedSchedule(
+      id: hashcode,
+      title: message,
+      body: subtext,
+      scheduledDate: tz.TZDateTime.from(datetime, tz.local),
+      notificationDetails: platformChannel,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      payload: hashcode.toString(),
+    );
   }
 
-   @override
-  Widget build(BuildContext context)   {
-    DateTime now = DateTime.parse("2020-04-19 20:15:00Z");
-           singleNotification(
-            now,
-            "Tomar Remédio",
-            "Não esqueça que o cookie caiu",
-            98123871,
-          );
-    return Container();
-  }
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -64,11 +79,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   FlutterLocalNotificationsPlugin localNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  initializeNotifications() async {
-    var initializeAndroid = AndroidInitializationSettings('app_logo');
-    var initializeIOS = IOSInitializationSettings();
-    var initSettings = InitializationSettings(initializeAndroid, initializeIOS);
-    await localNotificationsPlugin.initialize(initSettings);
+
+  Future<void> initializeNotifications() async {
+    tz.initializeTimeZones();
+    var android = const AndroidInitializationSettings('@mipmap/ic_launcher');
+    var darwin = const DarwinInitializationSettings();
+    var initSettings = InitializationSettings(android: android, iOS: darwin);
+    
+    // Ajuste do parâmetro nomeado para 'settings'
+    await localNotificationsPlugin.initialize(settings: initSettings); 
   }
 
   @override
@@ -77,43 +96,45 @@ class _MyHomePageState extends State<MyHomePage> {
     initializeNotifications();
   }
 
-  Future singleNotification(
-      DateTime datetime, String message, String subtext, int hashcode,
-      {String sound}) async {
-    var androidChannel = AndroidNotificationDetails(
+  Future<void> singleNotification(
+      DateTime datetime, String message, String subtext, int hashcode) async {
+    
+    var androidChannel = const AndroidNotificationDetails(
       'channel-id',
       'channel-name',
-      'channel-description',
-      importance: Importance.Max,
-      priority: Priority.Max,
+      channelDescription: 'channel-description',
+      importance: Importance.max,
+      priority: Priority.max,
     );
 
-    var iosChannel = IOSNotificationDetails();
-    var platformChannel = NotificationDetails(androidChannel, iosChannel);
-    localNotificationsPlugin.schedule(
-        hashcode, message, subtext, datetime, platformChannel,
-        payload: hashcode.toString());
+    var platformChannel = NotificationDetails(
+      android: androidChannel, 
+      iOS: const DarwinNotificationDetails(),
+    );
+
+    await localNotificationsPlugin.zonedSchedule(
+      id: hashcode,
+      title: message,
+      body: subtext,
+      scheduledDate: tz.TZDateTime.from(datetime, tz.local),
+      notificationDetails: platformChannel,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Notification/Alarm Example'),
-      ),
-      body: Center(
-        child: Container(
-          child: Text('Notification App'),
-        ),
-      ),
+      appBar: AppBar(title: const Text('Notification Example')),
+      body: const Center(child: Text('Notification App')),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.notifications),
+        child: const Icon(Icons.notifications),
         onPressed: () async {
-          DateTime now = DateTime.parse("2020-04-19 19:40:00Z");
+          DateTime scheduledDate = DateTime.now().add(const Duration(seconds: 5));
           await singleNotification(
-            now,
+            scheduledDate,
             "Tomar Remédio",
-            "Não esqueça que o cookie caiu",
+            "Não esqueça da medicação",
             98123871,
           );
         },

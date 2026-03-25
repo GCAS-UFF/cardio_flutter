@@ -1,31 +1,27 @@
 import 'package:cardio_flutter/features/generic_feature/domain/entities/base_entity.dart';
-import 'package:meta/meta.dart';
 
 class Liquid extends BaseEntity {
-  final int mililitersPerDay;
-  final String name;
-  final int quantity;
-  final String reference;
+  // 1. Campos marcados como nuláveis (?) para evitar erro de inicialização
+  final int? mililitersPerDay;
+  final String? name;
+  final int? quantity;
+  final String? reference;
 
   Liquid({
     this.name,
     this.quantity,
     this.reference,
     this.mililitersPerDay,
-    id,
-    initialDate,
-    finalDate,
-    executedDate,
-    @required done,
-  }) : super(
-            id: id,
-            initialDate: initialDate,
-            finalDate: finalDate,
-            executedDate: executedDate,
-            done: done);
+    super.id,
+    required super.initialDate,
+    required super.finalDate,
+    super.executedDate,
+    required super.done, // 'done' costuma ser obrigatório por lógica de negócio
+  });
 
   @override
-  List<Object> get props => [
+  // 2. Mudado para List<Object?> para aceitar os campos com '?'
+  List<Object?> get props => [
         mililitersPerDay,
         initialDate,
         finalDate,
@@ -34,5 +30,6 @@ class Liquid extends BaseEntity {
         name,
         quantity,
         reference,
+        id,
       ];
 }

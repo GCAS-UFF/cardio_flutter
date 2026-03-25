@@ -1,50 +1,46 @@
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:meta/meta.dart';
 
 class PatientModel extends Patient {
   PatientModel({
-    @required id,
-    @required name,
-    @required cpf,
-    @required address,
-    @required birthdate,
-    @required email,
-  }) : super(
-            id: id,
-            name: name,
-            cpf: cpf,
-            birthdate: birthdate,
-            address: address,
-            email: email);
+    required super.id,
+    required super.name,
+    required super.cpf,
+    required super.address,
+    required super.birthdate,
+    required super.email,
+  });
 
+  // 1. toJson simplificado: sem checagens redundantes de nulo para campos obrigatórios
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> json = {};
-    if (id != null) json['id'] = id;
-    if (name != null) json['name'] = name;
-    if (cpf != null) json['cpf'] = cpf;
-    if (address != null) json['address'] = address;
-    if (birthdate != null) json['birthdate'] = birthdate.millisecondsSinceEpoch;
-    if (email != null) json['email'] = email;
-
-    return json;
+    return {
+      'id': id,
+      'name': name,
+      'cpf': cpf,
+      'address': address,
+      'birthdate': birthdate.millisecondsSinceEpoch,
+      'email': email,
+    };
   }
 
-  factory PatientModel.fromJson(Map<dynamic, dynamic> json) {
-    if (json == null) return null;
+  // 2. factory não pode retornar null. Usamos valores padrão ou lançamos erro.
+  factory PatientModel.fromJson(Map<dynamic, dynamic>? json) {
+    if (json == null) throw Exception("JSON de paciente é nulo");
+
     return PatientModel(
-      id: json['id'],
-      name: json['name'],
-      cpf: json['cpf'],
+      id: json['id'] ?? "",
+      name: json['name'] ?? "",
+      cpf: json['cpf'] ?? "",
+      address: json['address'] ?? "",
       birthdate: (json['birthdate'] == null)
-          ? null
+          ? DateTime.now() // Ou outro fallback que faça sentido na sua regra
           : DateTime.fromMillisecondsSinceEpoch(json['birthdate']),
-      address: json['address'],
-      email: json['email'],
+      email: json['email'] ?? "",
     );
   }
 
-  factory PatientModel.fromEntity(Patient patient) {
+  // 3. Mudado para static para permitir o retorno nulo opcional
+  static PatientModel? fromEntity(Patient? patient) {
     if (patient == null) return null;
     return PatientModel(
       id: patient.id,
@@ -56,12 +52,15 @@ class PatientModel extends Patient {
     );
   }
 
+  // 4. Lógica de extração do valor do DataSnapshot atualizada
   factory PatientModel.fromDataSnapshot(DataSnapshot dataSnapshot) {
-    if (dataSnapshot == null) return null;
+    final value = dataSnapshot.value;
+    if (value == null) throw Exception("Snapshot vazio");
 
-    Map<dynamic, dynamic> objectMap =
-        dataSnapshot.value as Map<dynamic, dynamic>;
+    // Convertendo Object? para Map
+    final Map<dynamic, dynamic> objectMap = Map<dynamic, dynamic>.from(value as Map);
 
+    // Injetando a chave do nó como ID
     objectMap['id'] = dataSnapshot.key;
 
     return PatientModel.fromJson(objectMap);

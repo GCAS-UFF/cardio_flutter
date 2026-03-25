@@ -1,38 +1,34 @@
 import 'package:flutter/material.dart';
 
 class Dimensions {
-  //The height size of the base screen.
-  //The base screen is the screen of the cellphone using to define the designs
   static final double baseScreenHeight = 592.0;
-  //The width size of the base screen.
-  //The base screen is the screen of the tablet using to define the designs
   static final double baseScreenWidth = 360.0;
 
+  // 1. Mudamos para double? para permitir que o programador passe nulo se quiser
   static double getConvertedHeightSize(
-      BuildContext context, double sizeInPixel) {
-    //Getting the current screen height
+      BuildContext context, double? sizeInPixel) {
     MediaQueryData queryData = MediaQuery.of(context);
     double currentScreenHeight = queryData.size.height;
-    if (sizeInPixel == null) sizeInPixel = 0.0;
+    
+    // 2. Usamos o operador ?? para garantir que se for nulo, vire 0.0
+    double size = sizeInPixel ?? 0.0;
 
-    //Expression to get the current height proportion
-    return (sizeInPixel * (currentScreenHeight)) / baseScreenHeight;
+    return (size * currentScreenHeight) / baseScreenHeight;
   }
 
   static double getConvertedWidthSize(
-      BuildContext context, double sizeInPixel) {
-    //Getting the current screen width
+      BuildContext context, double? sizeInPixel) {
     MediaQueryData queryData = MediaQuery.of(context);
     double currentScreenWidth = queryData.size.width;
 
-    if (sizeInPixel == null) sizeInPixel = 0.0;
+    double size = sizeInPixel ?? 0.0;
 
-    //Expression to get the current width proportion
-    return (sizeInPixel * (currentScreenWidth)) / baseScreenWidth;
+    return (size * currentScreenWidth) / baseScreenWidth;
   }
 
+  // 3. Adicionamos valores padrão (= 0) para os parâmetros nomeados
   static EdgeInsets getEdgeInsets(BuildContext context,
-      {double top, double bottom, double left, double right}) {
+      {double top = 0, double bottom = 0, double left = 0, double right = 0}) {
     return EdgeInsets.only(
         top: getConvertedHeightSize(context, top),
         bottom: getConvertedHeightSize(context, bottom),
@@ -40,8 +36,9 @@ class Dimensions {
         right: getConvertedWidthSize(context, right));
   }
 
-  static EdgeInsets getEdgeInsetsSymetric(BuildContext context,
-      {double vertical, double horizontal}) {
+  // Nome corrigido para Symmetric
+  static EdgeInsets getEdgeInsetsSymmetric(BuildContext context,
+      {double vertical = 0, double horizontal = 0}) {
     return EdgeInsets.symmetric(
       vertical: getConvertedHeightSize(context, vertical),
       horizontal: getConvertedWidthSize(context, horizontal),

@@ -5,8 +5,7 @@ import 'package:cardio_flutter/features/appointments/domain/entities/appointment
 import 'package:cardio_flutter/features/auth/domain/entities/patient.dart';
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/biometrics/domain/entities/biometric.dart';
-import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart'
-    as exercise;
+import 'package:cardio_flutter/features/exercises/presentation/bloc/exercise_bloc.dart' as exercise;
 import 'package:cardio_flutter/features/help/presentation/pages/patient_help_page.dart';
 import 'package:cardio_flutter/features/help/presentation/pages/professional_help_page.dart';
 import 'package:cardio_flutter/features/liquids/domain/entities/liquid.dart';
@@ -20,21 +19,23 @@ import 'package:flutter/material.dart';
 import 'package:cardio_flutter/core/widgets/menu_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart'
-    as generic;
+import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart' as generic;
 
 class HomePatientPage extends StatelessWidget {
   final Patient patient;
 
+  // 1. Uso do 'required' nativo e 'super.key'
   const HomePatientPage({
-    @required this.patient,
+    super.key,
+    required this.patient,
   });
+
   @override
   Widget build(BuildContext context) {
     return BasePage(
       backgroundColor: Colors.blueGrey[200],
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           width: Dimensions.getConvertedWidthSize(context, 412),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,7 +43,8 @@ class HomePatientPage extends StatelessWidget {
               Padding(
                 padding: Dimensions.getEdgeInsetsAll(context, 8),
                 child: Text(
-                  "Paciente: ${(patient != null || patient.name != null) ? patient.name : ""}\nIdade: ${(patient != null) ? DateHelper.ageFromDate(patient.birthdate) : ""}",
+                  // 2. Simplificação da lógica de exibição (patient é required, então não é null)
+                  "Paciente: ${patient.name}\nIdade: ${DateHelper.ageFromDate(patient.birthdate)}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.indigo[900],
@@ -51,13 +53,14 @@ class HomePatientPage extends StatelessWidget {
                   ),
                 ),
               ),
+              // 3. Removidos os 'return' das funções destination para evitar erro de Future
               ItemMenu(
                 text: Strings.biometric,
                 image: Images.ico_biometric,
                 destination: () {
                   BlocProvider.of<generic.GenericBloc<Biometric>>(context)
                       .add(generic.Start<Biometric>(patient: patient));
-                  return Navigator.pushNamed(context, "/biometricPage");
+                  Navigator.pushNamed(context, "/biometricPage");
                 },
               ),
               ItemMenu(
@@ -66,7 +69,7 @@ class HomePatientPage extends StatelessWidget {
                 destination: () {
                   BlocProvider.of<generic.GenericBloc<Liquid>>(context)
                       .add(generic.Start<Liquid>(patient: patient));
-                  return Navigator.pushNamed(context, "/liquidPage");
+                  Navigator.pushNamed(context, "/liquidPage");
                 },
               ),
               ItemMenu(
@@ -75,7 +78,7 @@ class HomePatientPage extends StatelessWidget {
                 destination: () {
                   BlocProvider.of<generic.GenericBloc<Medication>>(context)
                       .add(generic.Start<Medication>(patient: patient));
-                  return Navigator.pushNamed(context, "/medicationPage");
+                  Navigator.pushNamed(context, "/medicationPage");
                 },
               ),
               ItemMenu(
@@ -84,7 +87,7 @@ class HomePatientPage extends StatelessWidget {
                 destination: () {
                   BlocProvider.of<generic.GenericBloc<Appointment>>(context)
                       .add(generic.Start<Appointment>(patient: patient));
-                  return Navigator.pushNamed(context, "/appointmentPage");
+                  Navigator.pushNamed(context, "/appointmentPage");
                 },
               ),
               ItemMenu(
@@ -93,14 +96,14 @@ class HomePatientPage extends StatelessWidget {
                 destination: () {
                   BlocProvider.of<exercise.ExerciseBloc>(context)
                       .add(exercise.Start(patient: patient));
-                  return Navigator.pushNamed(context, "/exercisePage");
+                  Navigator.pushNamed(context, "/exercisePage");
                 },
               ),
               ItemMenu(
                 text: Strings.orientations,
                 image: Images.ico_orientations,
                 destination: () {
-                  return Navigator.push(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => OrientationsPage()));
@@ -110,7 +113,7 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.about,
                 image: Images.ico_about,
                 destination: () {
-                  return Navigator.push(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => AppInfoPage()));
                 },
               ),
@@ -118,17 +121,18 @@ class HomePatientPage extends StatelessWidget {
                 text: Strings.help,
                 image: Images.ico_help,
                 destination: () {
-                  (Provider.of<Settings>(context, listen: false)
-                              .getUserType() ==
-                          Keys.PROFESSIONAL_TYPE)
-                      ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfessionalHelpPage()))
-                      : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PatientHelpPage()));
+                  if (Provider.of<Settings>(context, listen: false).getUserType() ==
+                      Keys.PROFESSIONAL_TYPE) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfessionalHelpPage()));
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PatientHelpPage()));
+                  }
                 },
               ),
               SizedBox(

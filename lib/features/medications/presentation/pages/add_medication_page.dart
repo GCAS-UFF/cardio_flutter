@@ -1,5 +1,4 @@
 import 'package:cardio_flutter/core/input_validators/date_input_validator.dart';
-import 'package:cardio_flutter/core/input_validators/time_of_day_validator.dart';
 import 'package:cardio_flutter/core/utils/converter.dart';
 import 'package:cardio_flutter/core/utils/date_helper.dart';
 import 'package:cardio_flutter/core/utils/multimasked_text_controller.dart';
@@ -7,7 +6,6 @@ import 'package:cardio_flutter/core/widgets/button.dart';
 import 'package:cardio_flutter/core/widgets/custom_text_form_field.dart';
 import 'package:cardio_flutter/core/widgets/loading_widget.dart';
 import 'package:cardio_flutter/core/widgets/times_list.dart';
-
 import 'package:cardio_flutter/features/auth/presentation/pages/basePage.dart';
 import 'package:cardio_flutter/features/generic_feature/presentation/bloc/generic_bloc.dart';
 import 'package:cardio_flutter/features/medications/domain/entities/medication.dart';
@@ -17,14 +15,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddMedicationPage extends StatefulWidget {
-  final Medication medication;
+  final Medication? medication; // 1. Marcado como opcional (?)
 
-  AddMedicationPage({this.medication});
+  const AddMedicationPage({super.key, this.medication});
 
   @override
-  State<StatefulWidget> createState() {
-    return _AddMedicationPageState();
-  }
+  State<StatefulWidget> createState() => _AddMedicationPageState();
 }
 
 class _AddMedicationPageState extends State<AddMedicationPage> {
@@ -37,83 +33,78 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   static const String LABEL_TIMES = "LABEL_TIMES";
   static const String LABEL_OBSERVATION = "LABEL_OBSERVATION";
 
-  Map<String, dynamic> _formData = Map<String, dynamic>();
-
+  final Map<String, dynamic> _formData = {};
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController _nameController;
-  TextEditingController _dosageController;
-  TextEditingController _quantityController;
-  TextEditingController _frequencyController;
-  final TextEditingController _initialdateController =
-      new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
-    onlyDigitsDefault: true,
-  ).maskedTextFieldController;
-  final TextEditingController _finalDateController =
-      new MultimaskedTextController(
-    maskDefault: "xx/xx/xxxx",
-    onlyDigitsDefault: true,
-  ).maskedTextFieldController;
-
-  TextEditingController _observationController;
+  // 2. Controladores marcados com 'late'
+  late TextEditingController _nameController;
+  late TextEditingController _dosageController;
+  late TextEditingController _quantityController;
+  late TextEditingController _frequencyController;
+  late TextEditingController _initialDateController;
+  late TextEditingController _finalDateController;
+  late TextEditingController _observationController;
 
   @override
   void initState() {
-    if (widget.medication != null) {
-      _formData[LABEL_FREQUENCY] = (widget.medication.frequency == null)
-          ? null
-          : widget.medication.frequency.toString();
-      _formData[LABEL_INITIAL_DATE] =
-          DateHelper.convertDateToString(widget.medication.initialDate);
-      _formData[LABEL_FINAL_DATE] =
-          DateHelper.convertDateToString(widget.medication.finalDate);
-      _formData[LABEL_NAME] = widget.medication.name;
-      _formData[LABEL_DOSAGE] = (widget.medication.dosage == null)
-          ? null
-          : widget.medication.dosage.toString();
-      _formData[LABEL_QUANTITY] = (widget.medication.quantity == null)
-          ? null
-          : widget.medication.quantity.toString();
-      _formData[LABEL_OBSERVATION] = widget.medication.observation;
+    super.initState();
 
-      _initialdateController.text = _formData[LABEL_INITIAL_DATE];
-      _finalDateController.text = _formData[LABEL_FINAL_DATE];
+    // Inicialização dos controladores de máscara
+    _initialDateController = MultimaskedTextController(
+      maskDefault: "xx/xx/xxxx",
+      onlyDigitsDefault: true,
+    ).maskedTextFieldController;
+
+    _finalDateController = MultimaskedTextController(
+      maskDefault: "xx/xx/xxxx",
+      onlyDigitsDefault: true,
+    ).maskedTextFieldController;
+
+    if (widget.medication != null) {
+      final med = widget.medication!;
+      _formData[LABEL_FREQUENCY] = med.frequency?.toString();
+      _formData[LABEL_INITIAL_DATE] = DateHelper.convertDateToString(med.initialDate);
+      _formData[LABEL_FINAL_DATE] = DateHelper.convertDateToString(med.finalDate);
+      _formData[LABEL_NAME] = med.name;
+      _formData[LABEL_DOSAGE] = med.dosage?.toString();
+      _formData[LABEL_QUANTITY] = med.quantity;
+      _formData[LABEL_OBSERVATION] = med.observation;
+      _formData[LABEL_TIMES] = med.times;
+
+      _initialDateController.text = _formData[LABEL_INITIAL_DATE] ?? "";
+      _finalDateController.text = _formData[LABEL_FINAL_DATE] ?? "";
     }
 
-    _frequencyController = TextEditingController(
-      text: _formData[LABEL_FREQUENCY],
-    );
+    _frequencyController = TextEditingController(text: _formData[LABEL_FREQUENCY]);
+    _nameController = TextEditingController(text: _formData[LABEL_NAME]);
+    _dosageController = TextEditingController(text: _formData[LABEL_DOSAGE]);
+    _quantityController = TextEditingController(text: _formData[LABEL_QUANTITY]);
+    _observationController = TextEditingController(text: _formData[LABEL_OBSERVATION]);
+  }
 
-    _nameController = TextEditingController(
-      text: _formData[LABEL_NAME],
-    );
-
-    _dosageController = TextEditingController(
-      text: _formData[LABEL_DOSAGE],
-    );
-    _quantityController = TextEditingController(
-      text: _formData[LABEL_QUANTITY],
-    );
-    _observationController = TextEditingController(
-      text: _formData[LABEL_OBSERVATION],
-    );
-
-    super.initState();
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _dosageController.dispose();
+    _quantityController.dispose();
+    _frequencyController.dispose();
+    _initialDateController.dispose();
+    _finalDateController.dispose();
+    _observationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Color(0xffc9fffd),
+      backgroundColor: const Color(0xffc9fffd),
       body: SingleChildScrollView(
         child: BlocListener<GenericBloc<Medication>, GenericState<Medication>>(
           listener: (context, state) {
             if (state is Error<Medication>) {
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
+              // 3. Uso do ScaffoldMessenger
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
               );
             } else if (state is Loaded<Medication>) {
               Navigator.pop(context);
@@ -121,7 +112,6 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
           },
           child: BlocBuilder<GenericBloc<Medication>, GenericState<Medication>>(
             builder: (context, state) {
-              print(state);
               if (state is Loading<Medication>) {
                 return LoadingWidget(_buildForm(context));
               } else {
@@ -137,179 +127,116 @@ class _AddMedicationPageState extends State<AddMedicationPage> {
   Widget _buildForm(BuildContext context) {
     return Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 10),
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                textEditingController: _nameController,
-                hintText: Strings.medication_hint,
-                title: Strings.medication_name,
-                onChanged: (value) {
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: Dimensions.getConvertedHeightSize(context, 10)),
+            CustomTextFormField(
+              isRequired: true,
+              textEditingController: _nameController,
+              hintText: Strings.medication_hint,
+              title: Strings.medication_name,
+              onChanged: (value) => setState(() => _formData[LABEL_NAME] = value),
+            ),
+            CustomTextFormField(
+              isRequired: true,
+              keyboardType: TextInputType.number,
+              textEditingController: _dosageController,
+              hintText: Strings.dosage_hint,
+              title: Strings.dosage,
+              onChanged: (value) => setState(() => _formData[LABEL_DOSAGE] = value),
+            ),
+            CustomTextFormField(
+              isRequired: true,
+              keyboardType: TextInputType.text,
+              textEditingController: _quantityController,
+              hintText: Strings.quantity_hint,
+              title: Strings.quantity,
+              onChanged: (value) => setState(() => _formData[LABEL_QUANTITY] = value),
+            ),
+            CustomTextFormField(
+              isRequired: true,
+              keyboardType: TextInputType.number,
+              textEditingController: _initialDateController,
+              hintText: Strings.date,
+              validator: DateInputValidator(),
+              title: Strings.initial_date,
+              onChanged: (value) => setState(() => _formData[LABEL_INITIAL_DATE] = value),
+            ),
+            CustomTextFormField(
+              isRequired: true,
+              keyboardType: TextInputType.number,
+              textEditingController: _frequencyController,
+              hintText: Strings.hint_frequency,
+              title: Strings.frequency,
+              onChanged: (value) => setState(() => _formData[LABEL_FREQUENCY] = value),
+            ),
+            // Componente de lista de horários
+            TimeList(
+                frequency: (int.tryParse(_formData[LABEL_FREQUENCY] ?? "0") ?? 0),
+                onChanged: (times) {
                   setState(() {
-                    _formData[LABEL_NAME] = value;
+                    _formData[LABEL_TIMES] = times;
                   });
                 },
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                keyboardType: TextInputType.number,
-                textEditingController: _dosageController,
-                hintText: Strings.dosage_hint,
-                title: Strings.dosage,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_DOSAGE] = value;
-                  });
-                },
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                keyboardType: TextInputType.number,
-                textEditingController: _quantityController,
-                hintText: Strings.quantity_hint,
-                title: Strings.quantity,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_QUANTITY] = value;
-                  });
-                },
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                keyboardType: TextInputType.number,
-                textEditingController: _initialdateController,
-                hintText: Strings.date,
-                validator: DateInputValidator(),
-                title: Strings.initial_date,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_INITIAL_DATE] = value;
-                  });
-                },
-              ),
-              CustomTextFormField(
-                isRequired: true,
-                keyboardType: TextInputType.number,
-                textEditingController: _frequencyController,
-                hintText: Strings.hint_frequency,
-                title: Strings.frequency,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_FREQUENCY] = value;
-                  });
-                },
-              ),
-              TimeList(
-                  frequency: (_formData[LABEL_FREQUENCY] != null &&
-                          _formData[LABEL_FREQUENCY] != "")
-                      ? int.parse(_formData[LABEL_FREQUENCY])
-                      : 0,
-                  onChanged: (times) {
-                    setState(() {
-                      _formData[LABEL_TIMES] = times;
-                    });
-                  },
-                  initialvalues: _formData[LABEL_TIMES]),
-              CustomTextFormField(
-                isRequired: true,
-                keyboardType: TextInputType.number,
-                textEditingController: _finalDateController,
-                hintText: Strings.date,
-                title: Strings.final_date,
-                validator: DateInputValidator(),
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_FINAL_DATE] = value;
-                  });
-                },
-              ),
-              CustomTextFormField(
-                textEditingController: _observationController,
-                hintText: Strings.observation_hint,
-                title: Strings.observation,
-                onChanged: (value) {
-                  setState(() {
-                    _formData[LABEL_OBSERVATION] = value;
-                  });
-                },
-              ),
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 20),
-              ),
-              Button(
-                title: (widget.medication == null)
-                    ? Strings.add
-                    : Strings.edit_patient_done,
-                onTap: () {
-                  _submitForm();
-                },
-              ),
-              SizedBox(
-                height: Dimensions.getConvertedHeightSize(context, 20),
-              ),
-            ],
-          ),
+                initialvalues: _formData[LABEL_TIMES]),
+            CustomTextFormField(
+              isRequired: true,
+              keyboardType: TextInputType.number,
+              textEditingController: _finalDateController,
+              hintText: Strings.date,
+              title: Strings.final_date,
+              validator: DateInputValidator(),
+              onChanged: (value) => setState(() => _formData[LABEL_FINAL_DATE] = value),
+            ),
+            CustomTextFormField(
+              textEditingController: _observationController,
+              hintText: Strings.observation_hint,
+              title: Strings.observation,
+              onChanged: (value) => setState(() => _formData[LABEL_OBSERVATION] = value),
+            ),
+            SizedBox(height: Dimensions.getConvertedHeightSize(context, 20)),
+            Button(
+              title: (widget.medication == null) ? Strings.add : Strings.edit_patient_done,
+              onTap: _submitForm,
+            ),
+            SizedBox(height: Dimensions.getConvertedHeightSize(context, 20)),
+          ],
         ));
   }
 
   void _submitForm() {
-    if (!_formKey.currentState.validate()) {
-      return;
-    }
-    _formKey.currentState.save();
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    _formKey.currentState?.save();
+
+    // 4. Tratamento seguro de datas e listas
+    final initialDate = DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]) ?? DateTime.now();
+    final finalDate = DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]) ?? DateTime.now();
+    
+    final rawTimes = _formData[LABEL_TIMES] as List?;
+    final List<String> formattedTimes = rawTimes?.map((time) => 
+      Converter.convertStringToMaskedString(mask: "xx:xx", value: time.toString())
+    ).toList() ?? [];
+
+    final medicationEntity = Medication(
+      id: widget.medication?.id,
+      done: false,
+      name: _formData[LABEL_NAME] ?? "",
+      dosage: double.tryParse(_formData[LABEL_DOSAGE]?.toString() ?? "0") ?? 0.0,
+      quantity: _formData[LABEL_QUANTITY] ?? "",
+      frequency: int.tryParse(_formData[LABEL_FREQUENCY]?.toString() ?? "0") ?? 0,
+      initialDate: initialDate,
+      finalDate: finalDate,
+      times: formattedTimes,
+      observation: _formData[LABEL_OBSERVATION] ?? "",
+    );
 
     if (widget.medication == null) {
       BlocProvider.of<GenericBloc<Medication>>(context).add(
-        AddRecomendationEvent<Medication>(
-          entity: Medication(
-            done: false,
-            name: _formData[LABEL_NAME],
-            dosage: (_formData[LABEL_DOSAGE] is int)
-                ? int.parse(_formData[LABEL_DOSAGE]).toDouble()
-                : double.parse(_formData[LABEL_DOSAGE]),
-            quantity: _formData[LABEL_QUANTITY],
-            frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            initialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            times: (_formData[LABEL_TIMES] as List)
-                .map((time) => Converter.convertStringToMaskedString(
-                    mask: "xx:xx", value: time))
-                .toList(),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            observation: _formData[LABEL_OBSERVATION],
-          ),
-        ),
+        AddRecomendationEvent<Medication>(entity: medicationEntity),
       );
     } else {
       BlocProvider.of<GenericBloc<Medication>>(context).add(
-        EditRecomendationEvent<Medication>(
-          entity: Medication(
-            id: widget.medication.id,
-            done: false,
-            name: _formData[LABEL_NAME],
-            dosage: (_formData[LABEL_DOSAGE] is int)
-                ? int.parse(_formData[LABEL_DOSAGE]).toDouble()
-                : double.parse(_formData[LABEL_DOSAGE]),
-            quantity: _formData[LABEL_QUANTITY],
-            frequency: int.parse(_formData[LABEL_FREQUENCY]),
-            initialDate:
-                DateHelper.convertStringToDate(_formData[LABEL_INITIAL_DATE]),
-            times: (_formData[LABEL_TIMES] as List)
-                .map((time) => Converter.convertStringToMaskedString(
-                    mask: "xx:xx", value: time))
-                .toList(),
-            finalDate:
-                DateHelper.convertStringToDate(_formData[LABEL_FINAL_DATE]),
-            observation: _formData[LABEL_OBSERVATION],
-          ),
-        ),
+        EditRecomendationEvent<Medication>(entity: medicationEntity),
       );
     }
   }

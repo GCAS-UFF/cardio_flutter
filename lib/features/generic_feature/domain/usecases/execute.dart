@@ -5,7 +5,6 @@ import 'package:cardio_flutter/features/generic_feature/domain/entities/base_ent
 import 'package:cardio_flutter/features/generic_feature/domain/repositories/generic_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 class Execute<Entity extends BaseEntity> extends UseCase<Entity, Params> {
   final GenericRepository<Entity> repository;
@@ -22,8 +21,8 @@ class Params<Entity> extends Equatable {
   final Patient patient;
   final Entity entity;
 
-  Params({@required this.patient, @required this.entity}) : super();
+  Params({required this.patient, required this.entity}) : super();
 
   @override
-  List<Object> get props => [patient, entity];
+  List<Object?> get props => [patient, entity];
 }

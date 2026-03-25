@@ -39,7 +39,7 @@ class Strings {
   static const edit_patient_done = "Editar";
   static const invalid_date_error_message =
       "A data que você digitou é inválida";
-  static const invalid_mounth_error_message =
+  static const invalid_month_error_message =
       "O mês que você digitou é inválido";
   static const invalid_year_error_message = "O ano que você digitou é inválido";
   static const invalid_day_error_message = "O dia que você digitou é inválido";

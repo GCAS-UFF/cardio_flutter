@@ -1,40 +1,48 @@
 import 'package:cardio_flutter/features/auth/domain/entities/user.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:meta/meta.dart';
 
 class UserModel extends User {
-  UserModel({@required id, @required email, @required type})
-      : super(id: id, email: email, type: type);
+  UserModel({
+    required super.id, 
+    required super.email, 
+    required super.type,
+  });
 
-  Map<dynamic, dynamic> toJson() {
-    Map<String, dynamic> json = {};
-    if (id != null) json['id'] = id;
-    if (email != null) json['email'] = email;
-    if (type != null) json['type'] = type;
-
-    return json;
+  // 1. toJson limpo: Se os campos são obrigatórios, não precisamos de 'if != null'
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'email': email,
+      'type': type,
+    };
   }
 
-  factory UserModel.fromJson(Map<dynamic, dynamic> json) {
-    if (json == null) return null;
+  // 2. factory não pode retornar null. Usamos valores padrão ou lançamos erro.
+  factory UserModel.fromJson(Map<dynamic, dynamic>? json) {
+    if (json == null) throw Exception("JSON de usuário nulo");
+    
     return UserModel(
-      id: json['id'],
-      email: json['email'],
-      type: json['type'],
+      id: json['id'] ?? "",
+      email: json['email'] ?? "",
+      type: json['type'] ?? "",
     );
   }
 
-  factory UserModel.fromEntity(User user) {
+  // 3. Mudado para static para permitir o retorno nulo se a entidade for nula
+  static UserModel? fromEntity(User? user) {
     if (user == null) return null;
     return UserModel(id: user.id, email: user.email, type: user.type);
   }
 
+  // 4. Tratamento do DataSnapshot atualizado para o Firebase moderno
   factory UserModel.fromDataSnapshot(DataSnapshot dataSnapshot) {
-    if (dataSnapshot == null) return null;
+    final value = dataSnapshot.value;
+    if (value == null) throw Exception("Snapshot de usuário vazio");
 
-    Map<dynamic, dynamic> objectMap =
-        dataSnapshot.value as Map<dynamic, dynamic>;
+    // Convertendo Object? para Map
+    final Map<dynamic, dynamic> objectMap = Map<dynamic, dynamic>.from(value as Map);
 
+    // Injetando o ID que vem da chave do nó
     objectMap['id'] = dataSnapshot.key;
 
     return UserModel.fromJson(objectMap);

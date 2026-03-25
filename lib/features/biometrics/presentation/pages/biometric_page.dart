@@ -21,24 +21,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class BiometricPage extends StatelessWidget {
+  const BiometricPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BasePage(
       addFunction: () {
         if (Provider.of<Settings>(context, listen: false).getUserType() ==
             Keys.PROFESSIONAL_TYPE) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddBiometricPage()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AddBiometricPage()));
         }
       },
-      backgroundColor: Color(0xffc9fffd),
+      backgroundColor: const Color(0xffc9fffd),
       body: BlocListener<GenericBloc<Biometric>, GenericState<Biometric>>(
         listener: (context, state) {
           if (state is Error<Biometric>) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
+            // 1. ScaffoldMessenger corrigido
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
             );
           }
         },
@@ -57,8 +60,8 @@ class BiometricPage extends StatelessWidget {
     );
   }
 
-  Widget _buildExerciseList(BuildContext context, List<Activity> activityList) {
-    if (activityList == null) return Container();
+  Widget _buildExerciseList(BuildContext context, List<Activity>? activityList) {
+    if (activityList == null) return const SizedBox();
     return Column(
       children: activityList.map((activity) {
         return EntityCard(
@@ -80,7 +83,8 @@ class BiometricPage extends StatelessWidget {
               ),
             );
           },
-          openRecomendation: () {
+          // 2. Corrigido para 'openRecommendation' (com dois 'm')
+          openRecommendation: () {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -95,8 +99,8 @@ class BiometricPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMonthList(BuildContext context, List<Month> monthList) {
-    if (monthList == null) return Container();
+  Widget _buildMonthList(BuildContext context, List<Month>? monthList) {
+    if (monthList == null) return const SizedBox();
     return Column(
       children: monthList.map((month) {
         return Column(
@@ -110,7 +114,7 @@ class BiometricPage extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 "${Arrays.months[month.id - 1]} ${month.year}",
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
             SizedBox(
@@ -126,21 +130,19 @@ class BiometricPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDayList(BuildContext context, List<Day> dayList) {
-    if (dayList == null) return Container();
+  Widget _buildDayList(BuildContext context, List<Day>? dayList) {
+    if (dayList == null) return const SizedBox();
     return Column(
       children: dayList.map((day) {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              child: CircleAvatar(
-                backgroundColor: Colors.blue[900],
-                radius: 35,
-                child: Text(
-                  (day.id.toString()),
-                  style: TextStyle(fontSize: 22),
-                ),
+            CircleAvatar(
+              backgroundColor: Colors.blue[900],
+              radius: 35,
+              child: Text(
+                (day.id.toString()),
+                style: const TextStyle(fontSize: 22),
               ),
             ),
             SizedBox(
@@ -153,29 +155,27 @@ class BiometricPage extends StatelessWidget {
     );
   }
 
+  // 3. Ajustado parâmetros para aceitarem nulo (Patient? e Calendar?)
   Widget _bodybuilder(
-      BuildContext context, Patient patient, Calendar calendar) {
-    if (patient == null || calendar == null||
-        calendar.months == null ||
-        calendar.months.isEmpty)
+      BuildContext context, Patient? patient, Calendar? calendar) {
+    if (patient == null ||
+        calendar == null ||
+        calendar.months.isEmpty) {
       return EmptyPage(text: Strings.empty_biometrics);
-    return Container(
-      child: SingleChildScrollView(
-        padding: Dimensions.getEdgeInsetsAll(context, 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(
-              height: Dimensions.getConvertedHeightSize(context, 10),
-            ),
-            Column(
-              children: <Widget>[_buildMonthList(context, calendar.months)],
-            ),
-            SizedBox(
-              width: Dimensions.getConvertedWidthSize(context, 15),
-            )
-          ],
-        ),
+    }
+    return SingleChildScrollView(
+      padding: Dimensions.getEdgeInsetsAll(context, 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          SizedBox(
+            height: Dimensions.getConvertedHeightSize(context, 10),
+          ),
+          _buildMonthList(context, calendar.months),
+          SizedBox(
+            width: Dimensions.getConvertedWidthSize(context, 15),
+          )
+        ],
       ),
     );
   }

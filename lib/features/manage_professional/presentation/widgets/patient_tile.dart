@@ -12,35 +12,40 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PatientTile extends StatefulWidget {
   final Patient patient;
 
-  PatientTile({@required this.patient});
+  // 1. Correção: Uso do 'required' nativo e super.key
+  const PatientTile({super.key, required this.patient});
+
   @override
   _PatientTileState createState() => _PatientTileState();
 }
 
 class _PatientTileState extends State<PatientTile> {
-  
-  @override
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () => _showOptions(context, widget.patient),
       child: Card(
         child: Padding(
           padding: Dimensions.getEdgeInsetsAll(context, 8),
           child: Row(
             children: <Widget>[
-              Container(
+              SizedBox(
                 width: Dimensions.getConvertedHeightSize(context, 60),
                 height: Dimensions.getConvertedWidthSize(context, 60),
                 child: CircleAvatar(
-                    backgroundColor: Color(0xffc9fffd),
-                    radius: Dimensions.getConvertedHeightSize(context, 25),
-                    child: Text(
-                      widget.patient.name.substring(0, 1).toUpperCase(),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: Dimensions.getTextSize(context, 20),
-                      ),
-                    )),
+                  backgroundColor: const Color(0xffc9fffd),
+                  radius: Dimensions.getConvertedHeightSize(context, 25),
+                  child: Text(
+                    // Pegamos a inicial de forma segura
+                    (widget.patient.name.isNotEmpty)
+                        ? widget.patient.name.substring(0, 1).toUpperCase()
+                        : "?",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Dimensions.getTextSize(context, 20),
+                    ),
+                  ),
+                ),
               ),
               Padding(
                 padding: Dimensions.getEdgeInsetsAll(context, 5),
@@ -48,29 +53,21 @@ class _PatientTileState extends State<PatientTile> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      (widget.patient.name != null) ? widget.patient.name : "",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      widget.patient.name, // Checagem removida pois o tipo garante valor
+                      style: const TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      (widget.patient.cpf != null)
-                          ? Converter.convertStringToMaskedString(
-                              value: widget.patient.cpf, mask: "xxx.xxx.xxx-xx")
-                          : "",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
+                      Converter.convertStringToMaskedString(
+                          value: widget.patient.cpf, mask: "xxx.xxx.xxx-xx"),
+                      style: const TextStyle(fontSize: 18),
                     ),
-                    Text(
-                      (DateHelper.convertDateToString(
-                                  widget.patient.birthdate) !=
-                              null)
-                          ? "${DateHelper.ageFromDate(widget.patient.birthdate).toString()} anos"
-                          : "",
-                      style: TextStyle(
-                        fontSize: 18,
+                    // Exibição da idade
+                    if (widget.patient.birthdate != null)
+                      Text(
+                        "${DateHelper.ageFromDate(widget.patient.birthdate!)} anos",
+                        style: const TextStyle(fontSize: 18),
                       ),
-                    ),
                   ],
                 ),
               )
@@ -78,94 +75,63 @@ class _PatientTileState extends State<PatientTile> {
           ),
         ),
       ),
-      onTap: () {
-DateTime now = DateTime.now().toUtc().add(
-                Duration(seconds: 10),
-              );
-        _showOptions(
-          
-            context,
-            widget.patient,
-          
-            );
-      },
     );
   }
 }
 
-void _showOptions(
-    BuildContext context, Patient patient,
-    ) {
+// 2. Função de opções atualizada
+void _showOptions(BuildContext context, Patient patient) {
   showModalBottomSheet(
     context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
     builder: (context) {
-      return BottomSheet(
-          onClosing: () {},
-          builder: (context) {
-            return Container(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: FlatButton(
-                        onPressed: ()  {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    HomePatientPage(patient: patient)),
-                          );
-                        },
-                        child: Text(
-                          "Abrir",
-                          style: TextStyle(color: Colors.red, fontSize: 20),
-                        )),
+      return Container(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            // 3. FlatButton -> TextButton
+            ListTile(
+              leading: const Icon(Icons.open_in_new, color: Colors.blue),
+              title: const Text("Abrir", style: TextStyle(fontSize: 20)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomePatientPage(patient: patient)),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.edit, color: Colors.orange),
+              title: const Text("Editar", style: TextStyle(fontSize: 20)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PatientSignUpPage(patient: patient),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: FlatButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PatientSignUpPage(
-                                patient: patient,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Editar",
-                          style: TextStyle(color: Colors.red, fontSize: 20),
-                        )),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        BlocProvider.of<professional.ManageProfessionalBloc>(
-                                context)
-                            .add(
-                          professional.DeletePatientEvent(
-                            patient: patient,
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "Excluir ",
-                        style: TextStyle(color: Colors.red, fontSize: 20),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          });
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete, color: Colors.red),
+              title: const Text("Excluir",
+                  style: TextStyle(color: Colors.red, fontSize: 20)),
+              onTap: () {
+                Navigator.pop(context);
+                BlocProvider.of<professional.ManageProfessionalBloc>(context)
+                    .add(professional.DeletePatientEvent(patient: patient));
+              },
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      );
     },
   );
 }

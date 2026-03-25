@@ -1,72 +1,72 @@
 class DateHelper {
-  static DateTime convertStringToDate(String dateStr) {
-    if (dateStr == null) return null;
-    if (dateStr.length != 10) return null;
+  // 1. Mudamos para DateTime? porque o retorno pode ser nulo se a string for inválida
+  static DateTime? convertStringToDate(String? dateStr) {
+    if (dateStr == null || dateStr.length != 10) return null;
 
-    int day = int.tryParse(dateStr.substring(0, 2));
-    int mounth = int.tryParse(dateStr.substring(3, 5));
-    int year = int.tryParse(dateStr.substring(6, 10));
+    // 2. int.tryParse retorna int?, então usamos 'final' ou 'int?'
+    final day = int.tryParse(dateStr.substring(0, 2));
+    final month = int.tryParse(dateStr.substring(3, 5));
+    final year = int.tryParse(dateStr.substring(6, 10));
 
-    return DateTime(year, mounth, day);
+    // 3. Se qualquer um falhar na conversão, retornamos null
+    if (day == null || month == null || year == null) return null;
+
+    return DateTime(year, month, day);
   }
 
-  static String convertDateToString(DateTime dateTime) {
+  static String convertDateToString(DateTime? dateTime) {
     if (dateTime == null) return "";
-    String day = (dateTime.day < 10) ? "0${dateTime.day}" : "${dateTime.day}";
-    String month =
-        (dateTime.month < 10) ? "0${dateTime.month}" : "${dateTime.month}";
-    String year = "${dateTime.year}";
+    
+    // Adicionamos o padLeft para garantir os dois dígitos (mais limpo que o IF)
+    String day = dateTime.day.toString().padLeft(2, '0');
+    String month = dateTime.month.toString().padLeft(2, '0');
+    String year = dateTime.year.toString();
+    
     return "$day/$month/$year";
   }
 
-  static int ageFromDate(DateTime dateTime) {
-    int age;
-    bool birthdayDone = false;
-    if (dateTime == null)
-      return 0;
-    else if (DateTime.now().month > dateTime.month) {
-      birthdayDone = true;
-    } else if (DateTime.now().month == dateTime.month) {
-      if (DateTime.now().day <= dateTime.day) {
-        birthdayDone = true;
-      }
+  static int ageFromDate(DateTime? dateTime) {
+    if (dateTime == null) return 0;
+    
+    DateTime now = DateTime.now();
+    int age = now.year - dateTime.year;
+    
+    // Lógica simplificada: se ainda não fez aniversário este ano, subtrai 1
+    if (now.month < dateTime.month || 
+       (now.month == dateTime.month && now.day < dateTime.day)) {
+      age--;
     }
-    if (birthdayDone) {
-      age = DateTime.now().year - dateTime.year;
-    } else {
-      age = (DateTime.now().year - dateTime.year) - 1;
-    }
+    
     return age;
   }
 
-  static DateTime addTimeToCurrentDate(String time) {
+  static DateTime? addTimeToCurrentDate(String? time) {
     if (time == null || time.length != 5) return null;
 
-    int hour = int.tryParse(time.substring(0, 2));
-    int minute = int.tryParse(time.substring(3, 5));
+    final hour = int.tryParse(time.substring(0, 2));
+    final minute = int.tryParse(time.substring(3, 5));
+
+    if (hour == null || minute == null) return null;
 
     DateTime result = DateTime.now();
-
     return DateTime(result.year, result.month, result.day, hour, minute);
   }
 
-  static DateTime addTimeToDate(String time, DateTime dateTime) {
-    if (time == null || time.length < 5) return null;
+  static DateTime? addTimeToDate(String? time, DateTime? dateTime) {
+    if (time == null || time.length < 5 || dateTime == null) return null;
 
-    int hour = int.tryParse(time.substring(0, 2));
-    int minute = int.tryParse(time.substring(3, 5));
+    final hour = int.tryParse(time.substring(0, 2));
+    final minute = int.tryParse(time.substring(3, 5));
 
-    DateTime result = dateTime;
+    if (hour == null || minute == null) return null;
 
-    return DateTime(result.year, result.month, result.day, hour, minute);
+    return DateTime(dateTime.year, dateTime.month, dateTime.day, hour, minute);
   }
 
-  static String getTimeFromDate(DateTime dateTime) {
+  static String getTimeFromDate(DateTime? dateTime) {
     if (dateTime == null) return "";
-    String hour =
-        (dateTime.hour < 10) ? "0${dateTime.hour}" : "${dateTime.hour}";
-    String minute =
-        (dateTime.minute < 10) ? "0${dateTime.minute}" : "${dateTime.minute}";
+    String hour = dateTime.hour.toString().padLeft(2, '0');
+    String minute = dateTime.minute.toString().padLeft(2, '0');
     return "$hour:$minute";
   }
 }

@@ -1,69 +1,72 @@
-import 'package:meta/meta.dart';
 import 'package:cardio_flutter/features/appointments/domain/entities/appointment.dart';
 
 class AppointmentModel extends Appointment {
-  AppointmentModel(
-      {
-      @required DateTime appointmentDate,
-      @required String adress,
-      @required String expertise,
-      @required String justification,
-      @required bool went,
-      @required String id,
-      @required bool done, 
-      @required DateTime executedDate})
-      : super(
-            id: id,
-            went: went,
-            executedDate: executedDate,
-            done : done,
-            justification:justification,
-            appointmentDate: appointmentDate,
-            adress: adress,
-            expertise: expertise);
+  AppointmentModel({
+    required DateTime appointmentDate,
+    required String address,
+    required String expertise,
+    String? justification,
+    bool? went,
+    String? id,           // 1. Mudado de String para String?
+    required bool done,
+    DateTime? executedDate, // 2. Mudado de DateTime para DateTime?
+  }) : super(
+          id: id,
+          went: went,
+          executedDate: executedDate,
+          done: done,
+          justification: justification,
+          appointmentDate: appointmentDate,
+          address: address,
+          expertise: expertise,
+        );
 
-  static Map<dynamic, dynamic> toJson(AppointmentModel appointmentModel) {
-    Map<dynamic, dynamic> json = {};
-    if (appointmentModel.executedDate != null)
-      json['executedDate'] = appointmentModel.executedDate.millisecondsSinceEpoch;
-    if (appointmentModel.appointmentDate != null)
-      json['appointmentDate'] = appointmentModel.appointmentDate.millisecondsSinceEpoch;
-    if (appointmentModel.adress != null) json['adress'] = appointmentModel.adress;
-    if (appointmentModel.expertise != null) json['expertise'] = appointmentModel.expertise;
-    if (appointmentModel.went != null) json['went'] = appointmentModel.went;
-    if (appointmentModel.justification != null) json['justification'] = appointmentModel.justification;
-
-    return json;
+  Map<dynamic, dynamic> toJson() {
+    return {
+      'id': id,
+      'done': done,
+      'executedDate': executedDate?.millisecondsSinceEpoch,
+      'appointmentDate': appointmentDate?.millisecondsSinceEpoch,
+      'expertise': expertise,
+      'address': address,
+      'went': went,
+      'justification': justification,
+      'initialDate': initialDate.millisecondsSinceEpoch,
+      'finalDate': finalDate.millisecondsSinceEpoch,
+    };
   }
 
-  factory AppointmentModel.fromJson(Map<dynamic, dynamic> json) {
-    if (json == null) return null;
+  factory AppointmentModel.fromJson(Map<dynamic, dynamic>? json) {
+    if (json == null) throw Exception("JSON is null");
+
     return AppointmentModel(
-      adress: json['adress'],
+      address: json['address'] ?? json['adress'] ?? "",
       appointmentDate: (json['appointmentDate'] == null)
-          ? null
+          ? DateTime.now()
           : DateTime.fromMillisecondsSinceEpoch(json['appointmentDate']),
+      // 4. Se executado for nulo, mantemos null (correto para tarefas pendentes)
       executedDate: (json['executedDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['executedDate']),
-      expertise: json['expertise'],
+      expertise: json['expertise'] ?? "",
       went: json['went'],
       id: json['id'],
-      done : json['done'],
-      justification : json['justification'],
+      done: json['done'] ?? false,
+      justification: json['justification'],
     );
   }
 
-  factory AppointmentModel.fromEntity(Appointment appointment) {
+  static AppointmentModel? fromEntity(Appointment? appointment) {
     if (appointment == null) return null;
     return AppointmentModel(
-        adress: appointment.adress,
-        appointmentDate: appointment.appointmentDate,
-        expertise: appointment.expertise,
-        executedDate: appointment.executedDate,
-        done: appointment.done,
-        id: appointment.id,
-        justification: appointment.justification,
-        went: appointment.went);
+      address: appointment.address,
+      appointmentDate: appointment.appointmentDate,
+      expertise: appointment.expertise,
+      executedDate: appointment.executedDate, // Agora ambos são DateTime?
+      done: appointment.done,
+      id: appointment.id,                     // Agora ambos são String?
+      justification: appointment.justification,
+      went: appointment.went,
+    );
   }
 }

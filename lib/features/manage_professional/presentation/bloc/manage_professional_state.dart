@@ -14,7 +14,7 @@ class Loaded extends ManageProfessionalState {
   final Professional professional;
   final List<Patient> patientList;
 
-  Loaded({@required this.professional, @required this.patientList});
+  Loaded({required this.professional, required this.patientList});
 
   List<Object> get props => [professional, patientList];
 }
@@ -22,7 +22,7 @@ class Loaded extends ManageProfessionalState {
 class Error extends ManageProfessionalState {
   final String message;
 
-  Error({@required this.message});
+  Error({required this.message});
 
   List<Object> get props => [message];
 }
